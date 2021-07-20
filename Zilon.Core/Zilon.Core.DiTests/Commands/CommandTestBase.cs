@@ -55,7 +55,7 @@ namespace Zilon.Core.Tests.Commands
             var cooldownResolvedAct = CreateActWithResolvedCooldown();
 
             var combatActModuleMock = new Mock<ICombatActModule>();
-            combatActModuleMock.Setup(x => x.CalcCombatActs())
+            combatActModuleMock.Setup(x => x.GetCurrentCombatActs())
                 .Returns(new[] { simpleAct, cooldownAct, cooldownResolvedAct });
             var combatActModule = combatActModuleMock.Object;
 
@@ -118,9 +118,9 @@ namespace Zilon.Core.Tests.Commands
 
         protected abstract void RegisterSpecificServices(IMap testMap, Mock<ISectorUiState> playerStateMock);
 
-        private static ITacticalAct CreateActWithCooldown()
+        private static ICombatAct CreateActWithCooldown()
         {
-            var actMock = new Mock<ITacticalAct>();
+            var actMock = new Mock<ICombatAct>();
             var actStatScheme = new TestTacticalActStatsSubScheme
             {
                 Range = new Range<int>(1, 2)
@@ -131,9 +131,9 @@ namespace Zilon.Core.Tests.Commands
             return act;
         }
 
-        private static ITacticalAct CreateActWithResolvedCooldown()
+        private static ICombatAct CreateActWithResolvedCooldown()
         {
-            var actMock = new Mock<ITacticalAct>();
+            var actMock = new Mock<ICombatAct>();
             var actStatScheme = new TestTacticalActStatsSubScheme
             {
                 Range = new Range<int>(1, 2)
@@ -144,9 +144,9 @@ namespace Zilon.Core.Tests.Commands
             return act;
         }
 
-        private static ITacticalAct CreateSimpleAct()
+        private static ICombatAct CreateSimpleAct()
         {
-            var actMock = new Mock<ITacticalAct>();
+            var actMock = new Mock<ICombatAct>();
             var actStatScheme = new TestTacticalActStatsSubScheme
             {
                 Range = new Range<int>(1, 2)

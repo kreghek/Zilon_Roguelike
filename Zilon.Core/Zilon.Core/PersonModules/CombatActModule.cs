@@ -38,7 +38,7 @@ namespace Zilon.Core.PersonModules
             _evolutionModule = evolutionModule;
         }
 
-        private static IEnumerable<ITacticalAct> CalcActs(ITacticalActScheme defaultActScheme,
+        private static IEnumerable<ICombatAct> CalcActs(ITacticalActScheme defaultActScheme,
             IEnumerable<Equipment?> equipments,
             IConditionsModule сonditionModule,
             IEnumerable<IPerk> perks)
@@ -53,7 +53,7 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static IEnumerable<ITacticalAct> CalcActsFromEquipments(
+        private static IEnumerable<ICombatAct> CalcActsFromEquipments(
             IEnumerable<Equipment?> equipments,
             IConditionsModule сondition,
             IEnumerable<IPerk> perks)
@@ -169,7 +169,7 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static ITacticalAct CreateTacticalAct([NotNull] ITacticalActScheme scheme,
+        private static ICombatAct CreateTacticalAct([NotNull] ITacticalActScheme scheme,
             [MaybeNull] Equipment? equipment,
             [NotNull] IConditionsModule сonditionModule,
             [NotNull] IEnumerable<IPerk> perks)
@@ -186,7 +186,7 @@ namespace Zilon.Core.PersonModules
                 efficientRollUnmodified.Count,
                 efficientModifierValue);
 
-            return new TacticalAct(scheme, efficientRoll, toHitRoll, equipment);
+            return new CombatAct(scheme, efficientRoll, toHitRoll, equipment);
         }
 
         private static Roll CreateTacticalActRoll(int dice, int count, int modifierValue)
@@ -296,7 +296,7 @@ namespace Zilon.Core.PersonModules
         public bool IsActive { get; set; }
         public bool IsCombatMode { get; set; }
 
-        public IEnumerable<ITacticalAct> CalcCombatActs()
+        public IEnumerable<ICombatAct> GetCurrentCombatActs()
         {
             var perks = GetPerksSafe();
             return CalcActs(_defaultActScheme, _equipmentModule, _сonditionsModule, perks);

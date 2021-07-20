@@ -15,7 +15,7 @@ namespace CDT.LAST.MonoGameClient.Engine
             Texture2D icon,
             Texture2D selectedMarkerTexture,
             CombatActButtonGroup buttonGroup,
-            ITacticalAct tacticalAct,
+            ICombatAct tacticalAct,
             Rectangle rect) : base(texture, rect)
         {
             _icon = icon;
@@ -24,7 +24,7 @@ namespace CDT.LAST.MonoGameClient.Engine
             TacticalAct = tacticalAct;
         }
 
-        public ITacticalAct TacticalAct { get; }
+        public ICombatAct TacticalAct { get; }
 
         protected override void DrawContent(SpriteBatch spriteBatch, Rectangle contentRect, Color color)
         {

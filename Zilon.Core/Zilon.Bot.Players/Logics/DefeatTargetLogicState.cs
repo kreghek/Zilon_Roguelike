@@ -95,7 +95,7 @@ namespace Zilon.Bot.Players.Logics
 
             var inventory = actor.Person.GetModuleSafe<IInventoryModule>();
 
-            var acts = combatActModule.CalcCombatActs();
+            var acts = combatActModule.GetCurrentCombatActs();
             var act = SelectActHelper.SelectBestAct(acts, inventory);
 
             var isInDistance = act.CheckDistance(actor.Node, target.Node, map);
@@ -113,7 +113,7 @@ namespace Zilon.Bot.Players.Logics
         private class AttackParams
         {
             public bool IsAvailable { get; set; }
-            public ITacticalAct TacticalAct { get; set; }
+            public ICombatAct TacticalAct { get; set; }
         }
     }
 }

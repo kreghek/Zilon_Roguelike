@@ -37,6 +37,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             return new Vector2((float)x, (float)y) * amplitude;
         }
 
+        /// <inheritdoc />
+        /// <remarks> The state engine has no blockers. So we can't remove it with no aftermaths. </remarks>
+        public bool CanBeReplaced => true;
+
         /// <summary>
         /// This engine is infinite.
         /// </summary>
@@ -70,6 +74,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 var positionInt = new Vector2((int)positionFloat.X, (int)positionFloat.Y);
                 _graphicsRoot.Position = positionInt;
             }
+        }
+
+        public void Cancel()
+        {
+            // There is no blockers. So do nothing.
         }
     }
 }

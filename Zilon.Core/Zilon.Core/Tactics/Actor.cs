@@ -146,7 +146,7 @@ namespace Zilon.Core.Tactics
         }
 
         [ExcludeFromCodeCoverage]
-        private void DoUseAct(IGraphNode targetNode, ITacticalAct tacticalAct)
+        private void DoUseAct(IGraphNode targetNode, ICombatAct tacticalAct)
         {
             var args = new UsedActEventArgs(targetNode, tacticalAct);
             UsedAct?.Invoke(this, args);
@@ -398,7 +398,7 @@ namespace Zilon.Core.Tactics
         }
 
         /// <inheritdoc />
-        public void UseAct(IGraphNode targetNode, ITacticalAct tacticalAct)
+        public void UseAct(IGraphNode targetNode, ICombatAct tacticalAct)
         {
             DoUseAct(targetNode, tacticalAct);
         }

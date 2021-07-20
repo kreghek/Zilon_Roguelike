@@ -6,11 +6,14 @@ on:
   push:
     branches:
       - master
+    branches-ignore:
+      - dependabot/nuget/**
   pull_request:
     types:
       - opened
       - synchronize
       - reopened
+
 env:
     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

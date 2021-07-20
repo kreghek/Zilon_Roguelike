@@ -26,7 +26,7 @@ namespace Zilon.Bot.Players.Logics.Tests
 
             var acts = new[]
             {
-                new TacticalAct(new TestTacticalActScheme
+                new CombatAct(new TestTacticalActScheme
                     {
                         Sid = "default",
                         Stats = new TestTacticalActStatsSubScheme
@@ -45,7 +45,7 @@ namespace Zilon.Bot.Players.Logics.Tests
                     new Roll(3, 3),
                     null
                 ),
-                new TacticalAct(new TestTacticalActScheme
+                new CombatAct(new TestTacticalActScheme
                     {
                         Sid = "resource-required",
                         Stats = new TestTacticalActStatsSubScheme
@@ -85,7 +85,7 @@ namespace Zilon.Bot.Players.Logics.Tests
 
             var acts = new[]
             {
-                new TacticalAct(new TestTacticalActScheme
+                new CombatAct(new TestTacticalActScheme
                     {
                         Sid = "default",
                         Stats = new TestTacticalActStatsSubScheme
@@ -104,7 +104,7 @@ namespace Zilon.Bot.Players.Logics.Tests
                     new Roll(3, 3),
                     null
                 ),
-                new TacticalAct(new TestTacticalActScheme
+                new CombatAct(new TestTacticalActScheme
                     {
                         Sid = "resource-required",
                         Stats = new TestTacticalActStatsSubScheme

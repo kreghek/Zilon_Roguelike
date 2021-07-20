@@ -70,11 +70,29 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add nickname.
+        /// </summary>
+        internal static string AddPlayerNicknameButton {
+            get {
+                return ResourceManager.GetString("AddPlayerNicknameButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Below normal.
         /// </summary>
         internal static string BelowNormalAttributeValueTitle {
             get {
                 return ResourceManager.GetString("BelowNormalAttributeValueTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear.
+        /// </summary>
+        internal static string ClearPlayerNicknameButton {
+            get {
+                return ResourceManager.GetString("ClearPlayerNicknameButton", resourceCulture);
             }
         }
         
@@ -243,11 +261,38 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Leaderboard menu.
+        /// </summary>
+        internal static string LeaderboardMenuTitle {
+            get {
+                return ResourceManager.GetString("LeaderboardMenuTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Low.
         /// </summary>
         internal static string LowAttributeValueTitle {
             get {
                 return ResourceManager.GetString("LowAttributeValueTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Main menu.
+        /// </summary>
+        internal static string MainMenuButtonTitle {
+            get {
+                return ResourceManager.GetString("MainMenuButtonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next.
+        /// </summary>
+        internal static string NextScreenButtonTitle {
+            get {
+                return ResourceManager.GetString("NextScreenButtonTitle", resourceCulture);
             }
         }
         
@@ -301,11 +346,56 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please, enter your nickname.
+        /// </summary>
+        internal static string PlayerInputNicknamePrompt {
+            get {
+                return ResourceManager.GetString("PlayerInputNicknamePrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Put into {0}.
         /// </summary>
         internal static string PutPropInContainerButtonTitleTemplate {
             get {
                 return ResourceManager.GetString("PutPropInContainerButtonTitleTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Score menu.
+        /// </summary>
+        internal static string ScoreMenuTitle {
+            get {
+                return ResourceManager.GetString("ScoreMenuTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nickname.
+        /// </summary>
+        internal static string ScoreTableNickColumnTitle {
+            get {
+                return ResourceManager.GetString("ScoreTableNickColumnTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number.
+        /// </summary>
+        internal static string ScoreTableNumberColumnTitle {
+            get {
+                return ResourceManager.GetString("ScoreTableNumberColumnTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Score.
+        /// </summary>
+        internal static string ScoreTableScoreColumnTitle {
+            get {
+                return ResourceManager.GetString("ScoreTableScoreColumnTitle", resourceCulture);
             }
         }
         

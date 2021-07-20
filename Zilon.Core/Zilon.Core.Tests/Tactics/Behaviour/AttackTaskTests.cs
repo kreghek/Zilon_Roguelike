@@ -37,7 +37,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             // Подготовка. Два актёра через клетку. Радиус действия 1-2, достаёт.
             _testMap = await SquareMapFactory.CreateAsync(3).ConfigureAwait(false);
 
-            var tacticalActMock = new Mock<ITacticalAct>();
+            var tacticalActMock = new Mock<ICombatAct>();
             tacticalActMock.SetupGet(x => x.Stats).Returns(new TestTacticalActStatsSubScheme
             {
                 Range = new Range<int>(1, 2)
@@ -45,7 +45,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var tacticalAct = tacticalActMock.Object;
 
             var combatActModuleMock = new Mock<ICombatActModule>();
-            combatActModuleMock.Setup(x => x.CalcCombatActs())
+            combatActModuleMock.Setup(x => x.GetCurrentCombatActs())
                 .Returns(new[] { tacticalAct });
             var combatActModule = combatActModuleMock.Object;
 
@@ -57,8 +57,8 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var actorNode = _testMap.Nodes.SelectByHexCoords(0, 0);
             actorMock.SetupGet(x => x.Node).Returns(actorNode);
             actorMock.SetupGet(x => x.Person).Returns(person);
-            actorMock.Setup(x => x.UseAct(It.IsAny<IGraphNode>(), It.IsAny<ITacticalAct>()))
-                .Raises<IGraphNode, ITacticalAct>(x => x.UsedAct += null,
+            actorMock.Setup(x => x.UseAct(It.IsAny<IGraphNode>(), It.IsAny<ICombatAct>()))
+                .Raises<IGraphNode, ICombatAct>(x => x.UsedAct += null,
                     (target1, act1) => new UsedActEventArgs(target1, act1));
             _actor = actorMock.Object;
 

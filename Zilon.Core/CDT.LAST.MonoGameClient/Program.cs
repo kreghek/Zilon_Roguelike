@@ -2,9 +2,11 @@
 using System.Globalization;
 using System.Threading;
 
+using CDT.LAST.MonoGameClient.Database;
 using CDT.LAST.MonoGameClient.Engine;
 using CDT.LAST.MonoGameClient.Screens;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -37,6 +39,7 @@ namespace CDT.LAST.MonoGameClient
             serviceContainer.AddSingleton<IPlayer, HumanPlayer>();
             serviceContainer.AddSingleton<IMonsterIdentifierGenerator, MonsterIdentifierGenerator>();
             serviceContainer.AddSingleton<IActorInteractionBus, ActorInteractionBus>();
+            serviceContainer.AddSingleton<DbContext>();
 
             RegisterCommands(serviceContainer);
             RegisterUiContentStorages(serviceContainer);

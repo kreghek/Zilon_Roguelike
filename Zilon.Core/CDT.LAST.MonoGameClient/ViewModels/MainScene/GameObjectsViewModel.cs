@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using CDT.LAST.MonoGameClient.Screens;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,18 +19,6 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    internal record GameObjectParams
-    {
-        public Camera? Camera { get; init; }
-        public Game? Game { get; init; }
-        public IPersonSoundContentStorage? PersonSoundStorage { get; init; }
-        public IPersonVisualizationContentStorage? PersonVisualizationContentStorage { get; internal set; }
-        public IPlayer? Player { get; init; }
-        public SectorViewModelContext? SectorViewModelContext { get; init; }
-        public SpriteBatch? SpriteBatch { get; init; }
-        public ISectorUiState? UiState { get; init; }
-    }
-
     internal class GameObjectsViewModel
     {
         private readonly Camera _camera;
@@ -104,24 +93,53 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 throw new InvalidOperationException();
             }
 
-            var gameObjectsMaterialized =
-                _viewModelContext.GameObjects.OrderBy(x => ((HexNode)x.Node).OffsetCoords.Y).ToArray();
-            var visibleNodesMaterializedList = visibleFowNodeData.Nodes.ToArray();
-            foreach (var gameObject in gameObjectsMaterialized)
+            try
             {
-                var fowNode = visibleNodesMaterializedList.SingleOrDefault(x => x.Node == gameObject.Node);
+                var gameObjectsMaterialized =
+                    _viewModelContext.GameObjects.OrderBy(x => ((HexNode)x.Node).OffsetCoords.Y).ToArray();
+                var visibleNodesMaterializedList = visibleFowNodeData.Nodes.ToArray();
 
-                if (fowNode is null)
+                foreach (var gameObject in gameObjectsMaterialized)
                 {
-                    continue;
-                }
+                    var fowNode = visibleNodesMaterializedList.SingleOrDefault(x => x.Node == gameObject.Node);
 
-                if (fowNode.State != SectorMapNodeFowState.Observing && gameObject.HiddenByFow)
-                {
-                    continue;
-                }
+                    if (fowNode is null)
+                    {
+                        continue;
+                    }
 
-                gameObject.Draw(gameTime, _camera.Transform);
+                    if (fowNode.State != SectorMapNodeFowState.Observing && gameObject.HiddenByFow)
+                    {
+                        continue;
+                    }
+
+                    var visualEffects = _viewModelContext.EffectManager.VisualEffects
+                        .Where(x => x.BoundGameObjects.Contains(gameObject)).ToArray();
+                    _spriteBatch.Begin(transformMatrix: _camera.Transform);
+
+                    foreach (var visualEffect in visualEffects)
+                    {
+                        visualEffect.Draw(_spriteBatch, backing: true);
+                    }
+
+                    _spriteBatch.End();
+
+                    gameObject.Draw(gameTime, _camera.Transform);
+
+                    _spriteBatch.Begin(transformMatrix: _camera.Transform);
+
+                    foreach (var visualEffect in visualEffects)
+                    {
+                        visualEffect.Draw(_spriteBatch, backing: false);
+                    }
+
+                    _spriteBatch.End();
+                }
+            }
+            catch
+            {
+                // Smell. Handle multithread access to fow data.
+                // Just ignore this frame and try to draw next correctly.
             }
         }
 
@@ -185,8 +203,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private void ActorManager_Removed(object? sender, ManagerItemsChangedEventArgs<IActor> e)
         {
-            _viewModelContext.GameObjects.RemoveAll(x =>
-                x is IActorViewModel viewModel && e.Items.Contains(viewModel.Actor));
+            var gameObjects = _viewModelContext.GameObjects
+                .Where(x => x is IActorViewModel viewModel && e.Items.Contains(viewModel.Actor)).ToArray();
+
+            foreach (var gameObject in gameObjects)
+            {
+                gameObject.HandleRemove();
+                _viewModelContext.GameObjects.Remove(gameObject);
+            }
         }
 
         private void StaticObjectManager_Added(object? sender, ManagerItemsChangedEventArgs<IStaticObject> e)

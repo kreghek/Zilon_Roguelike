@@ -34,6 +34,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         private Texture2D[]? _modalBottomTextures;
         private Texture2D? _modalShadowTexture;
         private Texture2D[]? _modalTopTextures;
+        private Texture2D? _personMarkerTextureSheet;
         private Texture2D? _selectedButtonMarker;
         private Texture2D? _smallVerticalButtonBackgroundTexture;
         private Texture2D? _smallVerticalButtonIconsTexture;
@@ -96,7 +97,8 @@ namespace CDT.LAST.MonoGameClient.Screens
                 ["penetrating-thrust"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/PenetratingThrust"),
                 ["weak-block"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/WeakBlock"),
                 ["weak-parry"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/WeakParry"),
-                ["weak-swing"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/WeakSwing")
+                ["weak-swing"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/WeakSwing"),
+                ["pierce"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/NormalPierce")
             };
         }
 
@@ -253,6 +255,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                 contentManager.Load<Texture2D>("Sprites/ui/SmallVerticalButtonBackground");
             _bottomPanelBackground = contentManager.Load<Texture2D>("Sprites/ui/BottomPanelBackground");
             _selectedButtonMarker = contentManager.Load<Texture2D>("Sprites/ui/SelectedButtonMarker");
+            _personMarkerTextureSheet = contentManager.Load<Texture2D>("Sprites/ui/PersonMarkers");
 
             _contextualMenuItemFont = contentManager.Load<SpriteFont>("Fonts/ContextualMenu");
             _contextualMenuBorderTexture = contentManager.Load<Texture2D>("Sprites/ui/ContextualMenuBorder");
@@ -364,6 +367,12 @@ namespace CDT.LAST.MonoGameClient.Screens
         public SpriteFont GetAuxTextFont()
         {
             return _auxFont ?? throw new InvalidOperationException("Aux font was not loaded.");
+        }
+
+        public Texture2D GetPersonMarkerTextureSheet()
+        {
+            return _personMarkerTextureSheet ??
+                   throw new InvalidOperationException("Person marker texture was not loaded.");
         }
     }
 }

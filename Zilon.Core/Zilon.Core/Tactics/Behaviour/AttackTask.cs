@@ -16,7 +16,7 @@ namespace Zilon.Core.Tactics.Behaviour
         public AttackTask(IActor actor,
             IActorTaskContext context,
             IAttackTarget target,
-            ITacticalAct tacticalAct,
+            ICombatAct tacticalAct,
             ITacticalActUsageService actService) :
             base(actor, context)
         {
@@ -28,7 +28,7 @@ namespace Zilon.Core.Tactics.Behaviour
             TargetNode = target.Node;
         }
 
-        public ITacticalAct TacticalAct { get; }
+        public ICombatAct TacticalAct { get; }
 
         public IGraphNode TargetNode { get; }
 
@@ -98,11 +98,11 @@ namespace Zilon.Core.Tactics.Behaviour
             return stopToUseAct;
         }
 
-        private IEnumerable<ITacticalAct> GetSecondaryUsedActs()
+        private IEnumerable<ICombatAct> GetSecondaryUsedActs()
         {
             var equipmentModule = Actor.Person.GetModuleSafe<IEquipmentModule>();
             var combatActModule = Actor.Person.GetModule<ICombatActModule>();
-            var currentActs = combatActModule.CalcCombatActs();
+            var currentActs = combatActModule.GetCurrentCombatActs();
 
             if (equipmentModule == null)
             {

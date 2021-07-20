@@ -258,4 +258,34 @@
   <data name="FakeContainerName" xml:space="preserve">
     <value>мешок</value>
   </data>
+  <data name="MainMenuButtonTitle" xml:space="preserve">
+    <value>Главное меню</value>
+  </data>
+  <data name="NextScreenButtonTitle" xml:space="preserve">
+    <value>Дальше</value>
+  </data>
+  <data name="ScoreMenuTitle" xml:space="preserve">
+    <value>Меню очков</value>
+  </data>
+  <data name="LeaderboardMenuTitle" xml:space="preserve">
+    <value>Меню лидеров</value>
+  </data>
+  <data name="ScoreTableScoreColumnTitle" xml:space="preserve">
+    <value>Очки</value>
+  </data>
+  <data name="ScoreTableNumberColumnTitle" xml:space="preserve">
+    <value>Номер</value>
+  </data>
+  <data name="ScoreTableNickColumnTitle" xml:space="preserve">
+    <value>Псевдоним</value>
+  </data>
+  <data name="AddPlayerNicknameButton" xml:space="preserve">
+    <value>Добавить прозвище</value>
+  </data>
+  <data name="ClearPlayerNicknameButton" xml:space="preserve">
+    <value>Очистить</value>
+  </data>
+  <data name="PlayerInputNicknamePrompt" xml:space="preserve">
+    <value>Введите свое прозвище</value>
+  </data>
 </root>

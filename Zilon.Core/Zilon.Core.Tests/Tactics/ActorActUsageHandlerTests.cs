@@ -62,7 +62,7 @@ namespace Zilon.Core.Tests.Tactics
                 }
             };
 
-            var actMock = new Mock<ITacticalAct>();
+            var actMock = new Mock<ICombatAct>();
             actMock.SetupGet(x => x.Stats).Returns(actScheme);
             var act = actMock.Object;
 
@@ -104,8 +104,8 @@ namespace Zilon.Core.Tests.Tactics
             var actorMock = new Mock<IActor>();
             actorMock.SetupGet(x => x.Node).Returns(new HexNode(0, 0));
             actorMock.SetupGet(x => x.Person).Returns(person);
-            actorMock.Setup(x => x.UseAct(It.IsAny<IGraphNode>(), It.IsAny<ITacticalAct>()))
-                .Raises<IGraphNode, ITacticalAct>(x => x.UsedAct += null,
+            actorMock.Setup(x => x.UseAct(It.IsAny<IGraphNode>(), It.IsAny<ICombatAct>()))
+                .Raises<IGraphNode, ICombatAct>(x => x.UsedAct += null,
                     (target1, act1) => new UsedActEventArgs(target1, act1));
             var actor = actorMock.Object;
 
@@ -116,7 +116,7 @@ namespace Zilon.Core.Tests.Tactics
                 Targets = TacticalActTargets.Self
             };
 
-            var tacticalActMock = new Mock<ITacticalAct>();
+            var tacticalActMock = new Mock<ICombatAct>();
             tacticalActMock.SetupGet(x => x.Stats).Returns(actStatScheme);
             var tacticalAct = tacticalActMock.Object;
 
@@ -213,7 +213,7 @@ namespace Zilon.Core.Tests.Tactics
                 }
             };
 
-            var actMock = new Mock<ITacticalAct>();
+            var actMock = new Mock<ICombatAct>();
             actMock.SetupGet(x => x.Stats).Returns(actScheme);
             var act = actMock.Object;
 
@@ -268,7 +268,7 @@ namespace Zilon.Core.Tests.Tactics
                 }
             };
 
-            var actMock = new Mock<ITacticalAct>();
+            var actMock = new Mock<ICombatAct>();
             actMock.SetupGet(x => x.Stats).Returns(actScheme);
             var act = actMock.Object;
 
@@ -365,7 +365,7 @@ namespace Zilon.Core.Tests.Tactics
             return monsterMock;
         }
 
-        private static ITacticalAct CreateTestAct()
+        private static ICombatAct CreateTestAct()
         {
             var actScheme = new TestTacticalActStatsSubScheme
             {
@@ -377,7 +377,7 @@ namespace Zilon.Core.Tests.Tactics
                 }
             };
 
-            var actMock = new Mock<ITacticalAct>();
+            var actMock = new Mock<ICombatAct>();
             actMock.SetupGet(x => x.Stats).Returns(actScheme);
             var act = actMock.Object;
             return act;

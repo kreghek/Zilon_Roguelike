@@ -11,6 +11,8 @@
 [![Coverage Status](https://coveralls.io/repos/github/kreghek/Zilon_Roguelike/badge.svg?branch=master)](https://coveralls.io/github/kreghek/Zilon_Roguelike?branch=master)
 [![codecov](https://codecov.io/gh/kreghek/Zilon_Roguelike/branch/master/graph/badge.svg?token=mSMGtnXFOZ)](https://codecov.io/gh/kreghek/Zilon_Roguelike)
 ![GitHub branch checks state](https://img.shields.io/github/checks-status/kreghek/Zilon_Roguelike/master?label=Github%20Actions)
+[![CodeScene Code Health](https://codescene.io/projects/13325/status-badges/code-health)](https://codescene.io/projects/13325)
+[![CodeScene System Mastery](https://codescene.io/projects/13325/status-badges/system-mastery)](https://codescene.io/projects/13325)
 
 ![Poster A3 horizontal](https://user-images.githubusercontent.com/2405499/58764985-41faf600-8598-11e9-9220-277923ca7f5b.png)
 
