@@ -21,14 +21,12 @@ namespace Zilon.Core.PersonGeneration
             IPropFactory propFactory,
             IDropResolver dropResolver,
             IPersonPerkInitializator personPerkInitializator,
-            IDice dice,
-            ICombatActRandomSource combatActRandomSource) : base(
+            IDice dice) : base(
             schemeService,
             survivalRandomSource,
             propFactory,
             dropResolver,
             personPerkInitializator,
-            combatActRandomSource,
             dice)
         {
         }

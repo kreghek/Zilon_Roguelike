@@ -276,14 +276,11 @@ namespace Zilon.Core.Tactics
                     continue;
                 }
 
-                if (combatActModule.IsCombatMode)
-                {
-                    var combatActs = combatActModule.GetCurrentCombatActs();
+                var combatActs = combatActModule.GetCurrentCombatActs();
 
-                    foreach (var act in combatActs)
-                    {
-                        act.UpdateCooldown();
-                    }
+                foreach (var act in combatActs)
+                {
+                    act.UpdateCooldown();
                 }
             }
         }
@@ -432,8 +429,6 @@ namespace Zilon.Core.Tactics
         public IActorManager ActorManager { get; }
         public IStaticObjectManager StaticObjectManager { get; }
         public IEnumerable<IDisease> Diseases => _diseases;
-
-        public IEnumerable<ICombat> ActiveCombats => Array.Empty<ICombat>();
 
         public void AddDisease(IDisease disease)
         {

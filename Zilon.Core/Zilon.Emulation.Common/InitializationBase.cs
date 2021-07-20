@@ -271,7 +271,6 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>();
             RegisterPersonFactory<TemplateBasedPersonFactory>(container);
             container.AddSingleton<IPersonPerkInitializator, PersonPerkInitializator>();
-            container.AddSingleton<ICombatActRandomSource, CombatActRandomSource>();
 
             container.AddSingleton<IMapFactorySelector, SwitchMapFactorySelector>();
             container.AddSingleton<RoomMapFactory>();

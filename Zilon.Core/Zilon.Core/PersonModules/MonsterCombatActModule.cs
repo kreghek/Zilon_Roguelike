@@ -28,28 +28,10 @@ namespace Zilon.Core.PersonModules
 
         public bool IsCombatMode { get; set; }
 
-        public event EventHandler? CombatBegan;
-
-        public void BeginCombat()
-        {
-        }
-
-        public void EndCombat()
-        {
-        }
-
         /// <inheritdoc />
         public IEnumerable<ICombatAct> GetCurrentCombatActs()
         {
             return _acts;
-        }
-
-        public void Update()
-        {
-        }
-
-        public void UseAct(ICombatAct combatAct)
-        {
         }
     }
 }

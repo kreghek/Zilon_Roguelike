@@ -15,32 +15,6 @@ using Zilon.Core.Schemes;
 
 namespace Zilon.Core.PersonModules
 {
-    public interface ICombatActRandomSource
-    {
-        IEnumerable<ICombatAct> Shuffle(IEnumerable<ICombatAct> combatActs);
-    }
-
-    public sealed class CombatActRandomSource : ICombatActRandomSource
-    {
-        private readonly IDice _dice;
-
-        public CombatActRandomSource(IDice dice)
-        {
-            _dice = dice;
-        }
-
-        public IEnumerable<ICombatAct> Shuffle(IEnumerable<ICombatAct> combatActs)
-        {
-            var openList = new List<ICombatAct>(combatActs);
-            while (openList.Any())
-            {
-                var act = _dice.RollFromList(openList);
-                openList.Remove(act);
-                yield return act;
-            }
-        }
-    }
-
     /// <summary>
     /// Базовая реализация объекта для хранения сведений о тактических действиях персонажа.
     /// </summary>
@@ -48,7 +22,6 @@ namespace Zilon.Core.PersonModules
     {
         private const int ROUND_ACT_COUNT = 4;
         private const int REGENERATE_DURATION = 10;
-        private readonly ICombatActRandomSource _combatActrandomSource;
         private readonly ITacticalActScheme _defaultActScheme;
         private readonly IEquipmentModule _equipmentModule;
         private readonly IEvolutionModule _evolutionModule;
@@ -62,8 +35,7 @@ namespace Zilon.Core.PersonModules
             ITacticalActScheme defaultActScheme,
             IEquipmentModule equipmentModule,
             IConditionsModule сonditionsModule,
-            IEvolutionModule evolutionModule,
-            ICombatActRandomSource combatActrandomSource)
+            IEvolutionModule evolutionModule)
         {
             IsActive = true;
 
@@ -71,7 +43,6 @@ namespace Zilon.Core.PersonModules
             _equipmentModule = equipmentModule;
             _сonditionsModule = сonditionsModule;
             _evolutionModule = evolutionModule;
-            _combatActrandomSource = combatActrandomSource;
         }
 
         private static IEnumerable<ICombatAct> CalcActs(ITacticalActScheme defaultActScheme,
@@ -205,22 +176,6 @@ namespace Zilon.Core.PersonModules
             }
         }
 
-        private static void ClearCombatActList(IList<ICombatAct> combatActList)
-        {
-            combatActList.Clear();
-        }
-
-        private void ClearCombatState()
-        {
-            if (_combatActs is null)
-            {
-                // Begin initialize combat mode list.
-                throw new InvalidOperationException("End combat must be called after begin.");
-            }
-
-            ClearCombatActList(_combatActs);
-        }
-
         private static ICombatAct CreateTacticalAct([NotNull] ITacticalActScheme scheme,
             [MaybeNull] Equipment? equipment,
             [NotNull] IConditionsModule сonditionModule,
@@ -341,76 +296,6 @@ namespace Zilon.Core.PersonModules
                 }
 
                 GetRuleModifierValue(rule, equipment, ref toHitModifierValue, ref efficientModifierValue);
-            }
-        }
-
-        private void RegenerateCombatActList(IList<ICombatAct> combatActList)
-        {
-            ClearCombatActList(combatActList);
-
-            _iterationCount = REGENERATE_DURATION;
-
-            var perks = GetPerksSafe();
-            var allActs = CalcActs(_defaultActScheme, _equipmentModule, _сonditionsModule, perks);
-
-            var shuffledActs = _combatActrandomSource.Shuffle(allActs).ToArray();
-            var roundActs = shuffledActs.Take(ROUND_ACT_COUNT).ToArray();
-            foreach (var act in roundActs)
-            {
-                combatActList.Add(act);
-            }
-        }
-
-        public event EventHandler? CombatBegan;
-
-        public void Update()
-        {
-            if (_combatActs is null || !IsCombatMode)
-            {
-                throw new InvalidOperationException("Combat module can update only after person is in combat mode.");
-            }
-
-            if (_iterationCount > 0)
-            {
-                _iterationCount--;
-            }
-            else
-            {
-                RegenerateCombatActList(_combatActs);
-            }
-        }
-
-        public void BeginCombat()
-        {
-            IsCombatMode = true;
-
-            _combatActs = new List<ICombatAct>();
-
-            RegenerateCombatActList(_combatActs);
-
-            CombatBegan?.Invoke(this, EventArgs.Empty);
-        }
-
-        public void EndCombat()
-        {
-            IsCombatMode = false;
-
-            ClearCombatState();
-
-            _combatActs = null;
-        }
-
-        public void UseAct(ICombatAct combatAct)
-        {
-            if (_combatActs is null)
-            {
-                throw new InvalidOperationException();
-            }
-
-            var itemIsInList = _combatActs.Remove(combatAct);
-            if (!itemIsInList)
-            {
-                throw new InvalidOperationException("Combat action is not in the available list.");
             }
         }
 

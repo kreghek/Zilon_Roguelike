@@ -15,7 +15,6 @@ namespace Zilon.Core.PersonGeneration
 {
     public abstract class FullPersonFactoryBase : IPersonFactory
     {
-        private readonly ICombatActRandomSource _combatActRandomSource;
         private readonly IPersonPerkInitializator _personPerkInitializator;
         private readonly IPropFactory _propFactory;
         private readonly ISurvivalRandomSource _survivalRandomSource;
@@ -27,7 +26,6 @@ namespace Zilon.Core.PersonGeneration
             IPropFactory propFactory,
             IDropResolver dropResolver,
             IPersonPerkInitializator personPerkInitializator,
-            ICombatActRandomSource combatActRandomSource,
             IDice dice)
         {
             SchemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
@@ -37,7 +35,6 @@ namespace Zilon.Core.PersonGeneration
             DropResolver = dropResolver ?? throw new ArgumentNullException(nameof(dropResolver));
             _personPerkInitializator = personPerkInitializator ??
                                        throw new ArgumentNullException(nameof(personPerkInitializator));
-            _combatActRandomSource = combatActRandomSource;
             Dice = dice ?? throw new ArgumentNullException(nameof(dice));
         }
 
@@ -244,8 +241,7 @@ namespace Zilon.Core.PersonGeneration
                 defaultActScheme,
                 equipmentModule,
                 effectsModule,
-                evolutionModule,
-                _combatActRandomSource);
+                evolutionModule);
 
             person.AddModule(combatActModule);
 

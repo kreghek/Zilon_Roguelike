@@ -10,7 +10,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
-using Zilon.Core.Commands.Sector;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Tactics;
@@ -19,39 +18,15 @@ using Zilon.Core.World;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    public sealed class CommandAdaptor
-    {
-        private readonly ServiceProviderCommandFactory _commandFactory;
-        private readonly ICommandPool _commandPool;
-
-        public CommandAdaptor(ICommandPool commandPool, ServiceProviderCommandFactory commandFactory)
-        {
-            _commandPool = commandPool;
-            _commandFactory = commandFactory;
-        }
-
-        public void SwitchIntoCombatMode()
-        {
-            var switchIntoCombatCommand = _commandFactory.GetCommand<SwitchToCombatModeCommand>();
-
-            var canExecuteResult = switchIntoCombatCommand.CanExecute();
-            if (canExecuteResult.IsSuccess)
-            {
-                _commandPool.Push(switchIntoCombatCommand);
-            }
-        }
-    }
-
     internal sealed class SectorViewModel
     {
         private readonly Camera _camera;
-        private readonly CommandAdaptor _commandAdaptor;
+        private readonly CommandInput _commandInput;
         private readonly GameObjectsViewModel _gameObjectsViewModel;
         private readonly IActorInteractionBus _intarectionBus;
 
         private readonly MapViewModel _mapViewModel;
         private readonly IPlayer _player;
-        private readonly SectorInterator _sectorInterator;
         private readonly SpriteBatch _spriteBatch;
         private readonly ISectorUiState _uiState;
 
@@ -109,11 +84,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var commandFactory = new ServiceProviderCommandFactory(((LivGame)game).ServiceProvider);
 
             var commandPool = serviceScope.GetRequiredService<ICommandPool>();
-            var sectorInterator =
-                new SectorInterator(_uiState, commandPool, _camera, Sector, ViewModelContext, commandFactory);
-            _sectorInterator = sectorInterator;
-
-            _commandAdaptor = new CommandAdaptor(commandPool, commandFactory);
+            var commandInput =
+                new CommandInput(_uiState, commandPool, _camera, Sector, ViewModelContext, commandFactory);
+            _commandInput = commandInput;
         }
 
         public ISector Sector { get; }
@@ -164,12 +137,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 }
             }
 
-            _sectorInterator.Update(ViewModelContext);
-        }
-
-        internal void SwitchCurrentPersonIntoCombatMode()
-        {
-            _commandAdaptor.SwitchIntoCombatMode();
+            _commandInput.Update(ViewModelContext);
         }
 
         private void DrawCorpses()

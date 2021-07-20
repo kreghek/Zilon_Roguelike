@@ -9,18 +9,11 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
-    public interface ICombat
-    {
-        IEnumerable<IActor> Participants { get; }
-    }
-
     /// <summary>
     /// Сектор (игровая локация). Используется в тактическом режиме.
     /// </summary>
     public interface ISector
     {
-        IEnumerable<ICombat> ActiveCombats { get; }
-
         IActorManager ActorManager { get; }
 
         /// <summary>
