@@ -17,7 +17,7 @@ using Zilon.Core.Tactics.Spatial;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    internal sealed class SectorInterator
+    internal sealed class SectorInteractor
     {
         private readonly Camera _camera;
         private readonly ServiceProviderCommandFactory _commandFactory;
@@ -30,7 +30,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private bool _leftMousePressed;
 
-        public SectorInterator(
+        public SectorInteractor(
             ISectorUiState sectorUiState,
             ICommandPool commandPool,
             Camera camera,
