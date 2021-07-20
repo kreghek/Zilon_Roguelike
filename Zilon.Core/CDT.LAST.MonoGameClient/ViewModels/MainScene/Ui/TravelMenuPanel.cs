@@ -196,6 +196,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         public void UnsubscribeEvents()
         {
+            // This panel has no event handler of the globe objects.
+            // So there is noting to unsubscribe now.
         }
 
         public event EventHandler? PropButtonClicked;
