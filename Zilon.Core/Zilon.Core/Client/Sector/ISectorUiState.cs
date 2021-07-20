@@ -21,7 +21,7 @@ namespace Zilon.Core.Client
 
         bool CanPlayerGivesCommand { get; }
 
-        ITacticalAct? TacticalAct { get; set; }
+        ICombatAct? TacticalAct { get; set; }
 
         /// <summary>
         /// Пользовательский источник задач для актёров.

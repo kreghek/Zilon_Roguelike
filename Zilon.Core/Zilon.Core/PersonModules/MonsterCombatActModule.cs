@@ -12,9 +12,9 @@ namespace Zilon.Core.PersonModules
     /// </summary>
     public sealed class MonsterCombatActModule : ICombatActModule
     {
-        private readonly IEnumerable<ITacticalAct> _acts;
+        private readonly IEnumerable<ICombatAct> _acts;
 
-        public MonsterCombatActModule(IEnumerable<ITacticalAct> acts)
+        public MonsterCombatActModule(IEnumerable<ICombatAct> acts)
         {
             _acts = acts.ToArray();
         }
@@ -28,7 +28,7 @@ namespace Zilon.Core.PersonModules
         public bool IsCombatMode { get; set; }
 
         /// <inheritdoc />
-        public IEnumerable<ITacticalAct> CalcCombatActs()
+        public IEnumerable<ICombatAct> GetCurrentCombatActs()
         {
             return _acts;
         }

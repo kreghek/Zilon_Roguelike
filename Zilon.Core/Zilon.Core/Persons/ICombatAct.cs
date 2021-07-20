@@ -7,7 +7,7 @@ namespace Zilon.Core.Persons
     /// <summary>
     /// Интерфейс тактического действия.
     /// </summary>
-    public interface ITacticalAct
+    public interface ICombatAct
     {
         /// <summary>
         /// Подсхема с ограничениями на использование действий.

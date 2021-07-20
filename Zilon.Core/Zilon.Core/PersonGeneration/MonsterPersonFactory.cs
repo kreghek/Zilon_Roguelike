@@ -28,9 +28,9 @@ namespace Zilon.Core.PersonGeneration
                 throw new InvalidOperationException();
             }
 
-            var Acts = new ITacticalAct[]
+            var Acts = new ICombatAct[]
             {
-                new MonsterTacticalAct(monsterScheme.PrimaryAct)
+                new MonsterCombatAct(monsterScheme.PrimaryAct)
             };
 
             var combaActModule = new MonsterCombatActModule(Acts);

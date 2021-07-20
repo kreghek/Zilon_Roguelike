@@ -122,7 +122,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void CountTargetActorAttack(IActor actor, IActor targetActor, ITacticalAct tacticalAct)
+        private void CountTargetActorAttack(IActor actor, IActor targetActor, ICombatAct tacticalAct)
         {
             if (actor.Person is MonsterPerson)
             {
@@ -211,7 +211,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="tacticalAct"></param>
         /// <returns></returns>
-        private static int GetActApRank(ITacticalAct tacticalAct)
+        private static int GetActApRank(ICombatAct tacticalAct)
         {
             return (tacticalAct.Stats.Offence?.ApRank).GetValueOrDefault();
         }
@@ -223,7 +223,7 @@ namespace Zilon.Core.Tactics
         /// <param name="targetActor"> Целевой актёр, для которого проверяется поглощение урона. </param>
         /// <param name="usedTacticalAct"> Действие, которое будет использовано для нанесения урона. </param>
         /// <returns> Возвращает показатель поглощения брони цели. </returns>
-        private static int GetArmorAbsorbtion(IActor targetActor, ITacticalAct usedTacticalAct)
+        private static int GetArmorAbsorbtion(IActor targetActor, ICombatAct usedTacticalAct)
         {
             var actorArmors = targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Armors;
             var offence = usedTacticalAct.Stats.Offence;
@@ -258,7 +258,7 @@ namespace Zilon.Core.Tactics
         /// <param name="targetActor"> Актёр, для которого выбирается ранг брони. </param>
         /// <param name="usedTacticalAct"> Действие, от которого требуется броня. </param>
         /// <returns> Возвращает числовое значение ранга брони указанного типа. </returns>
-        private static int? GetArmorRank(IActor targetActor, ITacticalAct usedTacticalAct)
+        private static int? GetArmorRank(IActor targetActor, ICombatAct usedTacticalAct)
         {
             var actorArmors = targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Armors;
             var offence = usedTacticalAct.Stats.Offence;
@@ -324,7 +324,7 @@ namespace Zilon.Core.Tactics
         /// При равных рангах броня пробивается на 4+.
         /// За каждые два ранга превосходства действия над бронёй - увеличение на 1.
         /// </remarks>
-        private static int GetSuccessArmorSave(IActor targetActor, ITacticalAct usedTacticalAct)
+        private static int GetSuccessArmorSave(IActor targetActor, ICombatAct usedTacticalAct)
         {
             var actorArmors = targetActor.Person.GetModule<ICombatStatsModule>().DefenceStats.Armors;
             var offence = usedTacticalAct.Stats.Offence;
@@ -395,7 +395,7 @@ namespace Zilon.Core.Tactics
                 ?.RestoreStat(SurvivalStatType.Health, tacticalActRoll.Efficient);
         }
 
-        private void LogDamagePlayerEvent(IActor actor, IActor targetActor, ITacticalAct tacticalAct)
+        private void LogDamagePlayerEvent(IActor actor, IActor targetActor, ICombatAct tacticalAct)
         {
             // Сервис логирование - необязательная зависимость.
             // Если он не задан, то не выполняем логирование.
@@ -505,7 +505,7 @@ namespace Zilon.Core.Tactics
             DamageEfficientCalc damageEfficientCalcResult,
             int successToHitRoll,
             int factToHitRoll,
-            ITacticalAct usedAct)
+            ICombatAct usedAct)
         {
             if (ActorInteractionBus is null)
             {

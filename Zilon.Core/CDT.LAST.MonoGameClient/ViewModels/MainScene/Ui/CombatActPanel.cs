@@ -44,11 +44,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _equipmentModule.EquipmentChanged += EquipmentModule_EquipmentChanged;
         }
 
-        public void UnsubscribeEvents()
-        {
-            _equipmentModule.EquipmentChanged -= EquipmentModule_EquipmentChanged;
-        }
-
         private void DrawButtonHotkey(int actIndex, ButtonBase button, SpriteBatch spriteBatch)
         {
             var spriteFont = _uiContentStorage.GetAuxTextFont();
@@ -103,7 +98,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private void Initialize(IList<CombatActButton> buttons)
         {
-            var acts = _combatActModule.CalcCombatActs();
+            var acts = _combatActModule.GetCurrentCombatActs();
             var actsOrdered = acts.OrderBy(x => x.Scheme?.Sid).Take(MAX_COMBAT_ACT_COUNT).ToArray();
             foreach (var act in actsOrdered)
             {
@@ -129,6 +124,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
                 buttons.Add(button);
             }
+        }
+
+        public void UnsubscribeEvents()
+        {
+            _equipmentModule.EquipmentChanged -= EquipmentModule_EquipmentChanged;
         }
 
         public void Draw(SpriteBatch spriteBatch, Rectangle contentRect)

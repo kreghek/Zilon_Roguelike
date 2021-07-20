@@ -21,12 +21,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     internal sealed class SectorViewModel
     {
         private readonly Camera _camera;
-        private readonly CommandInput _commandInput;
         private readonly GameObjectsViewModel _gameObjectsViewModel;
         private readonly IActorInteractionBus _intarectionBus;
 
         private readonly MapViewModel _mapViewModel;
         private readonly IPlayer _player;
+        private readonly SectorInteractor _sectorInteractor;
         private readonly SpriteBatch _spriteBatch;
         private readonly ISectorUiState _uiState;
 
@@ -84,9 +84,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var commandFactory = new ServiceProviderCommandFactory(((LivGame)game).ServiceProvider);
 
             var commandPool = serviceScope.GetRequiredService<ICommandPool>();
-            var commandInput =
-                new CommandInput(_uiState, commandPool, _camera, Sector, ViewModelContext, commandFactory);
-            _commandInput = commandInput;
+            var sectorInteractor =
+                new SectorInteractor(_uiState, commandPool, _camera, Sector, ViewModelContext, commandFactory);
+            _sectorInteractor = sectorInteractor;
         }
 
         public ISector Sector { get; }
@@ -137,7 +137,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 }
             }
 
-            _commandInput.Update(ViewModelContext);
+            _sectorInteractor.Update(ViewModelContext);
         }
 
         private void DrawCorpses()

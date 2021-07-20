@@ -12,13 +12,12 @@ using Zilon.Core;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
-using Zilon.Core.PersonModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    internal sealed class CommandInput
+    internal sealed class SectorInteractor
     {
         private readonly Camera _camera;
         private readonly ServiceProviderCommandFactory _commandFactory;
@@ -31,7 +30,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private bool _leftMousePressed;
 
-        public CommandInput(
+        public SectorInteractor(
             ISectorUiState sectorUiState,
             ICommandPool commandPool,
             Camera camera,

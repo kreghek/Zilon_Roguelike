@@ -23,7 +23,7 @@ namespace CDT.LAST.MonoGameClient
 
         protected override void RegisterSchemeService(IServiceCollection container)
         {
-            container.AddSingleton((Func<IServiceProvider, ISchemeLocator>)(factory =>
+            container.AddSingleton(factory =>
             {
                 var binPath = AppContext.BaseDirectory;
 
@@ -41,8 +41,8 @@ namespace CDT.LAST.MonoGameClient
 
                 var schemeLocator = new FileSchemeLocator(catalogPath);
 
-                return schemeLocator;
-            }));
+                return (ISchemeLocator)schemeLocator;
+            });
 
             container.AddSingleton<ISchemeService, SchemeService>();
 
