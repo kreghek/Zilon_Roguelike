@@ -20,16 +20,10 @@ namespace Zilon.Core.PersonModules
     /// </summary>
     public sealed class CombatActModule : ICombatActModule
     {
-        private const int ROUND_ACT_COUNT = 4;
-        private const int REGENERATE_DURATION = 10;
         private readonly ITacticalActScheme _defaultActScheme;
         private readonly IEquipmentModule _equipmentModule;
         private readonly IEvolutionModule _evolutionModule;
         private readonly IConditionsModule _сonditionsModule;
-
-        private IList<ICombatAct>? _combatActs;
-
-        private int _iterationCount;
 
         public CombatActModule(
             ITacticalActScheme defaultActScheme,
@@ -305,14 +299,8 @@ namespace Zilon.Core.PersonModules
 
         public IEnumerable<ICombatAct> GetCurrentCombatActs()
         {
-            if (_combatActs is null || !IsCombatMode)
-            {
-                // Combat acts are generated in Update circuit.
-                // Update called if person in combat mode (controlled by code above).
-                throw new InvalidOperationException("Person must be in combat mode.");
-            }
-
-            return _combatActs;
+            var perks = GetPerksSafe();
+            return CalcActs(_defaultActScheme, _equipmentModule, _сonditionsModule, perks);
         }
     }
 }

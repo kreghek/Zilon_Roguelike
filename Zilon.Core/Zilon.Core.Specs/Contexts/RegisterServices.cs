@@ -146,8 +146,6 @@ namespace Zilon.Core.Specs.Contexts
             serviceCollection.AddSingleton<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>();
 
             serviceCollection.AddSingleton<IUserTimeProvider, UserTimeProvider>();
-
-            serviceCollection.AddSingleton<ICombatActRandomSource, CombatActRandomSource>();
         }
 
         private IServiceCollection RegisterServicesInner()
