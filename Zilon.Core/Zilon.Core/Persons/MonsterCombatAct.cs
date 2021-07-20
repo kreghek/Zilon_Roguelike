@@ -9,9 +9,9 @@ namespace Zilon.Core.Persons
     /// <summary>
     /// Тактическое действие для монстров.
     /// </summary>
-    public class MonsterTacticalAct : ICombatAct
+    public class MonsterCombatAct : ICombatAct
     {
-        public MonsterTacticalAct(ITacticalActStatsSubScheme stats)
+        public MonsterCombatAct(ITacticalActStatsSubScheme stats)
         {
             Stats = stats ?? throw new ArgumentNullException(nameof(stats));
             if (stats.Efficient is null)

@@ -10,10 +10,10 @@ namespace Zilon.Core.Persons
     /// <summary>
     /// Тактическое действие актёров под управлением игрока.
     /// </summary>
-    public class TacticalAct : ICombatAct
+    public class CombatAct : ICombatAct
     {
         [ExcludeFromCodeCoverage]
-        public TacticalAct([NotNull] ITacticalActScheme scheme,
+        public CombatAct([NotNull] ITacticalActScheme scheme,
             [NotNull] Roll efficient,
             [NotNull] Roll toHit,
             [MaybeNull] Equipment? equipment)

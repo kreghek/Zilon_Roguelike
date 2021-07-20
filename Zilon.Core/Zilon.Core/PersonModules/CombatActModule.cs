@@ -186,7 +186,7 @@ namespace Zilon.Core.PersonModules
                 efficientRollUnmodified.Count,
                 efficientModifierValue);
 
-            return new TacticalAct(scheme, efficientRoll, toHitRoll, equipment);
+            return new CombatAct(scheme, efficientRoll, toHitRoll, equipment);
         }
 
         private static Roll CreateTacticalActRoll(int dice, int count, int modifierValue)

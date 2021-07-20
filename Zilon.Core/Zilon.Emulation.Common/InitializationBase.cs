@@ -14,7 +14,6 @@ using Zilon.Core.MapGenerators.CellularAutomatonStyle;
 using Zilon.Core.MapGenerators.OpenStyle;
 using Zilon.Core.MapGenerators.RoomStyle;
 using Zilon.Core.PersonGeneration;
-using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
 using Zilon.Core.Props;

@@ -110,7 +110,7 @@ namespace Zilon.Core.Specs.Steps
         {
             var actor = Context.GetActiveActor();
 
-            var act = actor.Person.GetModule<ICombatActModule>().GetCurrentCombatActs().OfType<TacticalAct>()
+            var act = actor.Person.GetModule<ICombatActModule>().GetCurrentCombatActs().OfType<CombatAct>()
                 .Single(x => x.Scheme.Sid == tacticalActSid);
 
             act.Efficient.Modifiers.ResultBuff.Should().Be(-1);

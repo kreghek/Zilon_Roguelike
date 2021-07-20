@@ -30,7 +30,7 @@ namespace Zilon.Core.PersonGeneration
 
             var Acts = new ICombatAct[]
             {
-                new MonsterTacticalAct(monsterScheme.PrimaryAct)
+                new MonsterCombatAct(monsterScheme.PrimaryAct)
             };
 
             var combaActModule = new MonsterCombatActModule(Acts);
