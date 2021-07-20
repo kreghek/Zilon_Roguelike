@@ -8,7 +8,6 @@ using Moq;
 using Zilon.Core.Common;
 using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
-using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
 using Zilon.Core.Props;
