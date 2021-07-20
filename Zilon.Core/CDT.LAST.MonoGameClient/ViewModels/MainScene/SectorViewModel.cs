@@ -21,12 +21,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     internal sealed class SectorViewModel
     {
         private readonly Camera _camera;
-        private readonly SectorInteractor _sectorInteractor;
         private readonly GameObjectsViewModel _gameObjectsViewModel;
         private readonly IActorInteractionBus _intarectionBus;
 
         private readonly MapViewModel _mapViewModel;
         private readonly IPlayer _player;
+        private readonly SectorInteractor _sectorInteractor;
         private readonly SpriteBatch _spriteBatch;
         private readonly ISectorUiState _uiState;
 
