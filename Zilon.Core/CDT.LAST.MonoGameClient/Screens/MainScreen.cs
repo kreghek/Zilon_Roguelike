@@ -229,27 +229,11 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             if (_uiState.HoverViewModel is IActorViewModel actorViewModel)
             {
-                DrawMonsterInfo(actorViewModel, _spriteBatch, Game.GraphicsDevice.Viewport.Width, Game.GraphicsDevice.Viewport.Height);
+                DrawMonsterInfo(actorViewModel, _spriteBatch, Game.GraphicsDevice.Viewport.Width,
+                    Game.GraphicsDevice.Viewport.Height);
             }
 
             _spriteBatch.End();
-        }
-
-        private void DrawMonsterInfo(IActorViewModel actorViewModel, SpriteBatch spriteBatch, int viewPortWidth, int viewPortHeight)
-        {
-            var position = new Vector2(viewPortWidth - 100, viewPortHeight - 100);
-            var monsterPerson = actorViewModel.Actor.Person;
-            var stats = monsterPerson.GetModule<ISurvivalModule>().Stats;
-            spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), monsterPerson.ToString(), position, Color.White);
-#if SHOW_NUMS
-            for (var statIndex = 0; statIndex < stats.Length; statIndex++)
-            {
-                var stat = stats[statIndex];
-                var statPosition = new Vector2(0, 16 + statIndex * 16);
-                var statText = $"{stat.Type} - {stat.Value} ({stat.ValueShare:0.##})";
-                spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), statText, position + statPosition, Color.White);
-            }
-#endif
         }
 
         private void DrawModals()
@@ -272,6 +256,25 @@ namespace CDT.LAST.MonoGameClient.Screens
             }
 
             _spriteBatch.End();
+        }
+
+        private void DrawMonsterInfo(IActorViewModel actorViewModel, SpriteBatch spriteBatch, int viewPortWidth,
+            int viewPortHeight)
+        {
+            var position = new Vector2(viewPortWidth - 100, viewPortHeight - 100);
+            var monsterPerson = actorViewModel.Actor.Person;
+            var stats = monsterPerson.GetModule<ISurvivalModule>().Stats;
+            spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), monsterPerson.ToString(), position, Color.White);
+#if SHOW_NUMS
+            for (var statIndex = 0; statIndex < stats.Length; statIndex++)
+            {
+                var stat = stats[statIndex];
+                var statPosition = new Vector2(0, 16 + statIndex * 16);
+                var statText = $"{stat.Type} - {stat.Value} ({stat.ValueShare:0.##})";
+                spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), statText, position + statPosition,
+                    Color.White);
+            }
+#endif
         }
 
         private void DrawPersonModePanel()
