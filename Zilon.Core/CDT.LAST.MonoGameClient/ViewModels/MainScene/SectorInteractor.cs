@@ -12,6 +12,7 @@ using Zilon.Core;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
@@ -140,7 +141,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 if (actor is null)
                 {
                     Debug.Fail(
-                        "Active actor must be assigned befor sector view model and command input starts processing of user input.");
+                        "Active actor must be assigned before the sector view model and the sector interactor start processing of user input.");
                     return true;
                 }
 
@@ -300,7 +301,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
                     if (_uiState.TacticalAct is null)
                     {
-                        Debug.Fail("Combat act is not selected.");
+                        SelectPunchAsDefaultCombatAct(_uiState);
                     }
 
                     return commandFactory.GetCommand<AttackCommand>();
@@ -312,6 +313,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     throw new InvalidOperationException(
                         $"Object of unknown type (${selectedViewModel.GetType()}) was selected.");
             }
+        }
+
+        private static void SelectPunchAsDefaultCombatAct(ISectorUiState uiState)
+        {
+            var availableCombatActs = uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>().GetCurrentCombatActs();
+            var punchAct = availableCombatActs.Single(x => x.Scheme.Sid == "punch");
+            uiState.TacticalAct = punchAct;
         }
     }
 }
