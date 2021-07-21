@@ -230,27 +230,6 @@ namespace CDT.LAST.MonoGameClient.Screens
             _spriteBatch.End();
         }
 
-        private void DrawStatsNumbers()
-        {
-            var mainPerson = _player.MainPerson;
-            if (mainPerson is null)
-            {
-                // Do not display debug info if the player person is not assigned.
-                return;
-            }
-
-            var stats = mainPerson.GetModule<ISurvivalModule>().Stats;
-            var yOffset = 32;
-
-            for (var statiIndex = 0; statiIndex < stats.Length; statiIndex++)
-            {
-                var stat = stats[statiIndex];
-                var statInfo = $"{stat.Type} - {stat.Value} ({stat.ValueShare: 0.##})";
-                var position = new Vector2(0, yOffset + statiIndex * 16);
-                _spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), statInfo, position, Color.White);
-            }
-        }
-
         private void DrawModals()
         {
             _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
@@ -284,6 +263,27 @@ namespace CDT.LAST.MonoGameClient.Screens
             }
 
             _bottomMenu.Draw(_spriteBatch, Game.GraphicsDevice);
+        }
+
+        private void DrawStatsNumbers()
+        {
+            var mainPerson = _player.MainPerson;
+            if (mainPerson is null)
+            {
+                // Do not display debug info if the player person is not assigned.
+                return;
+            }
+
+            var stats = mainPerson.GetModule<ISurvivalModule>().Stats;
+            var yOffset = 32;
+
+            for (var statiIndex = 0; statiIndex < stats.Length; statiIndex++)
+            {
+                var stat = stats[statiIndex];
+                var statInfo = $"{stat.Type} - {stat.Value} ({stat.ValueShare: 0.##})";
+                var position = new Vector2(0, yOffset + statiIndex * 16);
+                _spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), statInfo, position, Color.White);
+            }
         }
 
         private static ISectorNode? GetPlayerSectorNode(IPlayer player)
