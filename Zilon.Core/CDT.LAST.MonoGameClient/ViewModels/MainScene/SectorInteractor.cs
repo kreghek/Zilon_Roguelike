@@ -317,7 +317,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private static void SelectPunchAsDefaultCombatAct(ISectorUiState uiState)
         {
-            var availableCombatActs = uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>().GetCurrentCombatActs();
+            var availableCombatActs =
+                uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>().GetCurrentCombatActs();
             var punchAct = availableCombatActs.Single(x => x.Scheme.Sid == "punch");
             uiState.TacticalAct = punchAct;
         }
