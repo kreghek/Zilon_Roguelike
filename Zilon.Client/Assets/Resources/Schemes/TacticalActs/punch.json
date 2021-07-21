@@ -6,7 +6,8 @@
   "Stats": {
     "Efficient": {
       "Dice": 3,
-      "Count": 1
+      "Count": 1,
+	  "Bonus": 1
     },
     "Range": {
       "Min": 1,

@@ -2,8 +2,8 @@
   "Name": {
     "Ru": "Персонаж игрока"
   },
-  "Hp": 10,
-  "DefaultAct": "hand-hit",
+  "Hp": 60,
+  "DefaultAct": "punch",
   "Slots": [
     {
       "Types": "Head",

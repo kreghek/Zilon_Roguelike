@@ -3,11 +3,12 @@
     "Ru": "Хищник",
     "En": "Hunter"
   },
-  "Hp": 10,
+  "Hp": 15,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
-      "Count": 1
+      "Count": 1,
+	  "Bonus": 1,
     },
     "Range": {
       "Min": 1,
@@ -29,7 +30,7 @@
     "default",
     "default-evil-hour"
   ],
-  "BaseScore": 25,
+  "BaseScore": 100,
   "Tags": [
     "beast"
   ]

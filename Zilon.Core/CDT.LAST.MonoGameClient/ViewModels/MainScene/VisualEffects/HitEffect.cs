@@ -99,7 +99,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
                 }
             }
 
-            Debug.Fail("Hit effect was not found to visualize combat action.");
+            //Debug.Fail("Hit effect was not found to visualize combat action.");
 
             // Show default hit effect.
             return HitEffectTypes.ShortBlade;
