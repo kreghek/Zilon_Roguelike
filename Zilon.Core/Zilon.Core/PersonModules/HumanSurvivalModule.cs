@@ -519,7 +519,7 @@ namespace Zilon.Core.PersonModules
         private static IEnumerable<SurvivalStat> GetStats(IPersonScheme personScheme,
             IAttributesModule attributesModule)
         {
-            return GetStatsIterator(personScheme, attributesModule).Where(x => x != null).Select(x=>x!);
+            return GetStatsIterator(personScheme, attributesModule).Where(x => x != null).Select(x => x!);
         }
 
         private static IEnumerable<SurvivalStat?> GetStatsIterator(IPersonScheme personScheme,
