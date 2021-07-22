@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
+using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 
@@ -92,7 +93,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             {
                 var buttonIndex = buttonNumber.Value - 1;
                 var pressedButton = _buttons[buttonIndex];
-                pressedButton.Click();
+
+                if (_buttonGroup.Selected != pressedButton)
+                {
+                    pressedButton.Click();
+                }
             }
         }
 
@@ -148,8 +153,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
                 button.Draw(spriteBatch);
 
+#if SHOW_NUMS
+                spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(),
+                    GetRollAsString(button.CombatAct.Efficient), new Vector2(buttonRect.Left, buttonRect.Top), Color.White);
+#endif
+
                 DrawButtonHotkey(actIndex, button, spriteBatch);
             }
+        }
+
+        private static string GetRollAsString(Roll roll)
+        {
+            return $"{roll.Count}D{roll.Dice} +{roll.Modifiers?.ResultBuff ?? 0}";
         }
 
         public void Update()
@@ -161,7 +176,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             {
                 button.Update();
 
-                if (button.TacticalAct == _sectorUiState.TacticalAct)
+                if (button.CombatAct == _sectorUiState.TacticalAct)
                 {
                     _buttonGroup.Selected = button;
                 }

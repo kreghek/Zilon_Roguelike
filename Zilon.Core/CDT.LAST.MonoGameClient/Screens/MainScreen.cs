@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Zilon.Core.Client;
 using Zilon.Core.Client.Sector;
 using Zilon.Core.Commands;
+using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -266,15 +267,23 @@ namespace CDT.LAST.MonoGameClient.Screens
             var stats = monsterPerson.GetModule<ISurvivalModule>().Stats;
             spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), monsterPerson.ToString(), position, Color.White);
 #if SHOW_NUMS
+            var monsterCombatActModule = monsterPerson.GetModule<ICombatActModule>();
+            var defaultAct = monsterCombatActModule.GetCurrentCombatActs().First();
+            spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), GetRollAsString(defaultAct.Efficient), position + new Vector2(0, 16), Color.White);
             for (var statIndex = 0; statIndex < stats.Length; statIndex++)
             {
                 var stat = stats[statIndex];
-                var statPosition = new Vector2(0, 16 + statIndex * 16);
+                var statPosition = new Vector2(0, 32 + statIndex * 16);
                 var statText = $"{stat.Type} - {stat.Value} ({stat.ValueShare:0.##})";
                 spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), statText, position + statPosition,
                     Color.White);
             }
 #endif
+        }
+
+        private static string GetRollAsString(Roll roll)
+        {
+            return $"{roll.Count}D{roll.Dice} +{roll.Modifiers?.ResultBuff ?? 0}";
         }
 
         private void DrawPersonModePanel()
