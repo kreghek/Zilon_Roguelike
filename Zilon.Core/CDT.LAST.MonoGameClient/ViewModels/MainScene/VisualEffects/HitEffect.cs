@@ -96,10 +96,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
                 {
                     case "slash": return HitEffectTypes.ShortBlade;
                     case "bite": return HitEffectTypes.Teeth;
+                    case "punch": return HitEffectTypes.Punch;
                 }
             }
 
-            //Debug.Fail("Hit effect was not found to visualize combat action.");
+            Debug.Fail("Hit effect was not found to visualize combat action.");
 
             // Show default hit effect.
             return HitEffectTypes.ShortBlade;
