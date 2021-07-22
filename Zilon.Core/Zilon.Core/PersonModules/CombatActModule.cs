@@ -175,7 +175,7 @@ namespace Zilon.Core.PersonModules
             [NotNull] IEnumerable<IPerk> perks)
         {
             var toHitModifierValue = 0;
-            var efficientModifierValue = 0;
+            var efficientModifierValue = scheme.Stats?.Efficient?.Modifiers?.ResultBuff ?? 0;
             var efficientRollUnmodified = scheme.Stats?.Efficient ?? new Roll(1, 1);
             CalcSurvivalHazardOnTacticalAct(сonditionModule, ref toHitModifierValue, ref efficientModifierValue);
             CalcPerksBonusesOnTacticalAct(perks, equipment, ref toHitModifierValue, ref efficientModifierValue);
