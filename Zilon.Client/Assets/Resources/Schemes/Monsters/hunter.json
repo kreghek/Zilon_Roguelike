@@ -8,7 +8,9 @@
     "Efficient": {
       "Dice": 3,
       "Count": 1,
-      "Modifiers": { "ResultBuff": 1 }
+      "Modifiers": {
+        "ResultBuff": 1
+      }
     },
     "Range": {
       "Min": 1,
