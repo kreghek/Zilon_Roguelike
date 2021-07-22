@@ -268,14 +268,19 @@ namespace CDT.LAST.MonoGameClient.Screens
             spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), monsterPerson.ToString(), position, Color.White);
 #if SHOW_NUMS
             var monsterCombatActModule = monsterPerson.GetModule<ICombatActModule>();
-            var defaultAct = monsterCombatActModule.GetCurrentCombatActs().First();
+            var defaultAct
+ = monsterCombatActModule.GetCurrentCombatActs().First();
             spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), GetRollAsString(defaultAct.Efficient),
                 position + new Vector2(0, 16), Color.White);
-            for (var statIndex = 0; statIndex < stats.Length; statIndex++)
+            for (var statIndex
+ = 0; statIndex < stats.Length; statIndex++)
             {
-                var stat = stats[statIndex];
-                var statPosition = new Vector2(0, 32 + statIndex * 16);
-                var statText = $"{stat.Type} - {stat.Value} ({stat.ValueShare:0.##})";
+                var stat
+ = stats[statIndex];
+                var statPosition
+ = new Vector2(0, 32 + statIndex * 16);
+                var statText
+ = $"{stat.Type} - {stat.Value} ({stat.ValueShare:0.##})";
                 spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), statText, position + statPosition,
                     Color.White);
             }
