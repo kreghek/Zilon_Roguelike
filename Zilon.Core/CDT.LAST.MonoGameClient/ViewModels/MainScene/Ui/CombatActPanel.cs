@@ -84,6 +84,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             return null;
         }
 
+        private static string GetRollAsString(Roll roll)
+        {
+            return $"{roll.Count}D{roll.Dice} +{roll.Modifiers?.ResultBuff ?? 0}";
+        }
+
         private void HandleHotkeys()
         {
             var keyboardState = Keyboard.GetState();
@@ -155,16 +160,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
 #if SHOW_NUMS
                 spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(),
-                    GetRollAsString(button.CombatAct.Efficient), new Vector2(buttonRect.Left, buttonRect.Top), Color.White);
+                    GetRollAsString(button.CombatAct.Efficient), new Vector2(buttonRect.Left, buttonRect.Top),
+                    Color.White);
 #endif
 
                 DrawButtonHotkey(actIndex, button, spriteBatch);
             }
-        }
-
-        private static string GetRollAsString(Roll roll)
-        {
-            return $"{roll.Count}D{roll.Dice} +{roll.Modifiers?.ResultBuff ?? 0}";
         }
 
         public void Update()

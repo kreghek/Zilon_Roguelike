@@ -269,7 +269,8 @@ namespace CDT.LAST.MonoGameClient.Screens
 #if SHOW_NUMS
             var monsterCombatActModule = monsterPerson.GetModule<ICombatActModule>();
             var defaultAct = monsterCombatActModule.GetCurrentCombatActs().First();
-            spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), GetRollAsString(defaultAct.Efficient), position + new Vector2(0, 16), Color.White);
+            spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), GetRollAsString(defaultAct.Efficient),
+                position + new Vector2(0, 16), Color.White);
             for (var statIndex = 0; statIndex < stats.Length; statIndex++)
             {
                 var stat = stats[statIndex];
@@ -279,11 +280,6 @@ namespace CDT.LAST.MonoGameClient.Screens
                     Color.White);
             }
 #endif
-        }
-
-        private static string GetRollAsString(Roll roll)
-        {
-            return $"{roll.Count}D{roll.Dice} +{roll.Modifiers?.ResultBuff ?? 0}";
         }
 
         private void DrawPersonModePanel()
@@ -333,6 +329,11 @@ namespace CDT.LAST.MonoGameClient.Screens
                     from actor in sector.ActorManager.Items
                     where actor.Person == player.MainPerson
                     select sectorNode).SingleOrDefault();
+        }
+
+        private static string GetRollAsString(Roll roll)
+        {
+            return $"{roll.Count}D{roll.Dice} +{roll.Modifiers?.ResultBuff ?? 0}";
         }
 
         private void HandleMainUpdate(IActorViewModel activeActor)
