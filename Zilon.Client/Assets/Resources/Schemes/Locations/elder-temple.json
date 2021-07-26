@@ -10,10 +10,9 @@
       "RegularMonsterSids": [
         "predator"
       ],
-	  "RareMonsterSids":
-	  [
-	    "predator-equipment"
-	  ],
+      "RareMonsterSids": [
+        "predator-equipment"
+      ],
       "MapGeneratorOptions": {
         "MapGenerator": "Room",
         "RegionCount": 20,
