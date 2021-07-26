@@ -26,6 +26,9 @@ namespace CDT.LAST.MonoGameClient.Screens
 {
     internal class MainScreen : GameSceneBase
     {
+        private const int STAT_ROW_HEIGHT = 16;
+        private const int STAT_NUMS_X_POSITION = 32;
+
         private readonly IAnimationBlockerService _animationBlockerService;
         private readonly BottomMenuPanel _bottomMenu;
         private readonly Camera _camera;
@@ -300,6 +303,8 @@ namespace CDT.LAST.MonoGameClient.Screens
             _bottomMenu.Draw(_spriteBatch, Game.GraphicsDevice);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members",
+            Justification = "Method used in debug with SHOW_NUMS compiler directive.")]
         private void DrawStatsNumbers()
         {
             var mainPerson = _player.MainPerson;
@@ -310,13 +315,14 @@ namespace CDT.LAST.MonoGameClient.Screens
             }
 
             var stats = mainPerson.GetModule<ISurvivalModule>().Stats;
-            var yOffset = 32;
+            var yOffset = STAT_NUMS_X_POSITION;
 
-            for (var statiIndex = 0; statiIndex < stats.Length; statiIndex++)
+            for (var statIndex = 0; statIndex < stats.Length; statIndex++)
             {
-                var stat = stats[statiIndex];
+                var stat = stats[statIndex];
                 var statInfo = $"{stat.Type} - {stat.Value} ({stat.ValueShare: 0.##})";
-                var position = new Vector2(0, yOffset + statiIndex * 16);
+                var itemPosition = statIndex * STAT_ROW_HEIGHT;
+                var position = new Vector2(0, yOffset + itemPosition);
                 _spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), statInfo, position, Color.White);
             }
         }
@@ -336,6 +342,8 @@ namespace CDT.LAST.MonoGameClient.Screens
                     select sectorNode).SingleOrDefault();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members",
+            Justification = "Method used in debug with SHOW_NUMS compiler directive.")]
         private static string GetRollAsString(Roll roll)
         {
             return $"{roll.Count}D{roll.Dice} +{roll.Modifiers?.ResultBuff ?? 0}";
