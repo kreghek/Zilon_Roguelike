@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
@@ -303,7 +304,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             _bottomMenu.Draw(_spriteBatch, Game.GraphicsDevice);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members",
+        [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members",
             Justification = "Method used in debug with SHOW_NUMS compiler directive.")]
         private void DrawStatsNumbers()
         {
@@ -342,7 +343,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                     select sectorNode).SingleOrDefault();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members",
+        [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members",
             Justification = "Method used in debug with SHOW_NUMS compiler directive.")]
         private static string GetRollAsString(Roll roll)
         {
