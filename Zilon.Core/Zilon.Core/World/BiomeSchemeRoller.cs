@@ -29,7 +29,8 @@ namespace Zilon.Core.World
                 "elder-temple"
             };
 
-            var totalLocationSchemeSids = globeNodeMeatSchemeSids.Concat(globeNodeWaterSchemeSids).Concat(globeNodeMedkitSchemeSids).Concat(dungeonSchemeSids).ToArray();
+            var totalLocationSchemeSids = globeNodeMeatSchemeSids.Concat(globeNodeWaterSchemeSids)
+                .Concat(globeNodeMedkitSchemeSids).Concat(dungeonSchemeSids).ToArray();
 
             var rolledLocationSchemeSid = _dice.RollFromList(totalLocationSchemeSids);
             var rolledLocationScheme = _schemeService.GetScheme<ILocationScheme>(rolledLocationSchemeSid);
