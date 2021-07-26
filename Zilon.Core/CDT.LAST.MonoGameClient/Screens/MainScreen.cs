@@ -271,7 +271,8 @@ namespace CDT.LAST.MonoGameClient.Screens
             spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), monsterPerson.ToString(), position, Color.White);
 #if SHOW_NUMS
             var stats = monsterPerson.GetModule<ISurvivalModule>().Stats;
-            var monsterCombatActModule = monsterPerson.GetModule<ICombatActModule>();
+            var monsterCombatActModule
+ = monsterPerson.GetModule<ICombatActModule>();
             var defaultAct
  = monsterCombatActModule.GetCurrentCombatActs().First();
             spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), GetRollAsString(defaultAct.Efficient),
