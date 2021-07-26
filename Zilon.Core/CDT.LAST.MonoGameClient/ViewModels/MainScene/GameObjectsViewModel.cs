@@ -47,8 +47,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                            throw new ArgumentException($"{nameof(gameObjectParams.SpriteBatch)} is not defined.",
                                nameof(gameObjectParams));
 
-            _uiState = gameObjectParams.UiState ?? throw new ArgumentException($"{nameof(gameObjectParams.UiState)} is not defined.",
-                    nameof(gameObjectParams));
+            _uiState = gameObjectParams.UiState ?? throw new ArgumentException(
+                $"{nameof(gameObjectParams.UiState)} is not defined.",
+                nameof(gameObjectParams));
 
             foreach (var actor in _viewModelContext.Sector.ActorManager.Items)
             {
