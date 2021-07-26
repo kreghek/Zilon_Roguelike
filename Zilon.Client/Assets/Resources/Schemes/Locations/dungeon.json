@@ -8,8 +8,12 @@
       "Sid": "intro",
       "IsStart": true,
       "RegularMonsterSids": [
-        "predator-equipment"
+        "predator"
       ],
+	  "RareMonsterSids":
+	  [
+	    "predator-equipment"
+	  ],
       "MapGeneratorOptions": {
         "MapGenerator": "CellularAutomaton",
         "MapWidth": 35,
