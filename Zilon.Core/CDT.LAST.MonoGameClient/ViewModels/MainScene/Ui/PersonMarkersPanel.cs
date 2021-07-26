@@ -101,6 +101,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             foreach (var item in _drawnItemList)
             {
                 item.ActorViewModel.IsGraphicsOutlined = item.Rect.Intersects(mouseRect);
+
+                if (item.ActorViewModel.IsGraphicsOutlined)
+                {
+                    _sectorUiState.HoverViewModel = item.ActorViewModel;
+                }
+
                 HandleMarkerClick(mouse, item);
             }
 
