@@ -3,7 +3,7 @@
     "Ru": "Пиратский Капитан"
   },
   "Hp": 120,
-  "DefaultAct": "hand-hit",
+  "DefaultAct": "punch",
   "Slots": [
     {
       "Types": "Head"

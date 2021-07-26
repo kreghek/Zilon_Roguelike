@@ -66,16 +66,16 @@ Scenario Outline: Наступление выживальных состояни
 	| 400        | вода    | Жажда         | hunger-immunity |
 	| 1288       | вода    | Обезвоживание | hunger-immunity |
 
-@survival @dev1 @dev17
-Scenario Outline: Эффекты угроз выживания наносят урон актёру.
-	Given Актёр имеет эффект <startEffect>
-	When Я жду <waitIterations> итераций
-	Then Актёр под эффектом <effect>
-
-	Examples: 
-	| startEffect   | waitIterations | effect      |
-	| Голодание     | 3              | Слабая рана |
-	| Обезвоживание | 3              | Слабая рана |
+#@survival @dev1 @dev17
+#Scenario Outline: Эффекты угроз выживания наносят урон актёру.
+#	Given Актёр имеет эффект <startEffect>
+#	When Я жду <waitIterations> итераций
+#	Then Актёр под эффектом <effect>
+#
+#	Examples: 
+#	| startEffect   | waitIterations | effect      |
+#	| Голодание     | 3              | Слабая рана |
+#	| Обезвоживание | 3              | Слабая рана |
 
 @survival @dev1 @dev17
 Scenario Outline: Угрозы выживания (имеются изначально) снижают эффективность тактических действий у актёра игрока.
