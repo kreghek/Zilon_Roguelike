@@ -1,0 +1,31 @@
+{
+  "Name": {
+    "En": "Main globe node",
+    "Ru": "Узел мира"
+  },
+  "SectorLevels": [
+    {
+      "Sid": "main",
+      "Name": {
+        "En": "Main globe node level",
+        "Ru": "Уровень узла мира"
+      },
+      "IsStart": true,
+      "RegularMonsterSids": [
+        "predator-water"
+      ],
+      "RareMonsterSids": null,
+      "ChampionMonsterSids": null,
+      "RegionMonsterCount": 2,
+      "TransSectorSids": [
+        {
+          "SectorLevelSid": null
+        }
+      ],
+      "MapGeneratorOptions": {
+        "MapGenerator": "Open",
+        "Size": 25
+      }
+    }
+  ]
+}

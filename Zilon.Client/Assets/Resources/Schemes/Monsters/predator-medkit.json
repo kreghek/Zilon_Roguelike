@@ -1,7 +1,7 @@
 {
   "Name": {
-    "Ru": "Хищник",
-    "En": "Hunter"
+    "Ru": "Хищник Medkit",
+    "En": "Predator Medkit"
   },
   "Hp": 15,
   "PrimaryAct": {
@@ -28,7 +28,7 @@
     ]
   },
   "DropTableSids": [
-    "survival",
+    "survival-medkit",
     "default",
     "default-evil-hour"
   ],

@@ -1,0 +1,38 @@
+{
+  "Name": {
+    "Ru": "Хищник",
+    "En": "Predator"
+  },
+  "Hp": 15,
+  "PrimaryAct": {
+    "Efficient": {
+      "Dice": 3,
+      "Count": 1,
+      "Modifiers": {
+        "ResultBuff": 1
+      }
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 1
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy",
+    "Offence": {
+      "Type": "Tactical",
+      "Impact": "Kinetic"
+    },
+    "IsMelee": true,
+    "Tags": [
+      "bite"
+    ]
+  },
+  "DropTableSids": [
+    "default",
+    "default-evil-hour"
+  ],
+  "BaseScore": 100,
+  "Tags": [
+    "beast"
+  ]
+}

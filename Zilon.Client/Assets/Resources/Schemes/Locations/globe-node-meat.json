@@ -12,8 +12,7 @@
       },
       "IsStart": true,
       "RegularMonsterSids": [
-        "rat",
-        "bat"
+        "predator-meat"
       ],
       "RareMonsterSids": null,
       "ChampionMonsterSids": null,

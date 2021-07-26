@@ -37,7 +37,7 @@
         "Ru": "Конец Испытательного"
       },
       "RegularMonsterSids": [
-        "hunter"
+        "predator"
       ],
       "MinRegionMonsterCount": 1,
       "RegionMonsterCount": 1,

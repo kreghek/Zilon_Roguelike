@@ -8,8 +8,12 @@
       "Sid": "intro",
       "IsStart": true,
       "RegularMonsterSids": [
-        "hunter"
+        "predator"
       ],
+	  "RareMonsterSids":
+	  [
+	    "predator-equipment"
+	  ],
       "MapGeneratorOptions": {
         "MapGenerator": "Room",
         "RegionCount": 20,
