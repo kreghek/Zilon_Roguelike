@@ -268,9 +268,9 @@ namespace CDT.LAST.MonoGameClient.Screens
         {
             var position = new Vector2(viewPortWidth - 100, viewPortHeight - 100);
             var monsterPerson = actorViewModel.Actor.Person;
-            var stats = monsterPerson.GetModule<ISurvivalModule>().Stats;
             spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), monsterPerson.ToString(), position, Color.White);
 #if SHOW_NUMS
+            var stats = monsterPerson.GetModule<ISurvivalModule>().Stats;
             var monsterCombatActModule = monsterPerson.GetModule<ICombatActModule>();
             var defaultAct
  = monsterCombatActModule.GetCurrentCombatActs().First();
