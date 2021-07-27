@@ -74,10 +74,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             _buttons = new[]
             {
-                _autoplayModeButton,
+                //_autoplayModeButton,
                 personPropButton,
                 personStatsButton,
-                gameSpeedButton
+                //gameSpeedButton
             };
         }
 
