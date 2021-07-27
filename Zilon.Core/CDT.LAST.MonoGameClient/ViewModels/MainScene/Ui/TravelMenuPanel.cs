@@ -76,7 +76,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             {
                 //_autoplayModeButton,
                 personPropButton,
-                personStatsButton,
+                personStatsButton
                 //gameSpeedButton
             };
         }
