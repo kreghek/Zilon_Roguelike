@@ -14,7 +14,7 @@
     },
     "Range": {
       "Min": 1,
-      "Max": 1
+      "Max": 2
     },
     "Effect": "Damage",
     "Targets": "Enemy",
