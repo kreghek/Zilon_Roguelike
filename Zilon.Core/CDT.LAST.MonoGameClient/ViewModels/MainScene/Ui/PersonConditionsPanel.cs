@@ -22,20 +22,20 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
     {
         private const int ICON_SIZE = 32;
         private const int ICON_SPACING = 2;
+        private const double ALERT_VISIBLE_DURATION_SECONDS = 3;
+        private const double ALERT_DELAY_DURATION_SECONDS = 3;
+        private readonly Texture2D _alertTexture;
 
         private readonly int _screenX;
         private readonly int _screenY;
         private readonly IUiContentStorage _uiContentStorage;
-        private readonly Texture2D _alertTexture;
         private readonly ISectorUiState _uiState;
+
+        private double _alertCounter;
+
+        private readonly IList<IPersonCondition> _alertedConditions;
         private IPersonCondition? _selectedCondition;
         private int? _selectedConditionIconIndex;
-
-        private double _alertCounter = 0;
-        private const double ALERT_VISIBLE_DURATION_SECONDS = 3;
-        private const double ALERT_DELAY_DURATION_SECONDS = 3;
-
-        private IList<IPersonCondition> _alertedConditions;
 
         public PersonConditionsPanel(ISectorUiState uiState, int screenX, int screenY,
             IUiContentStorage uiContentStorage, GraphicsDevice graphicsDevice)
@@ -119,44 +119,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             UpdateAlert(conditionsModule, gameTime);
         }
 
-        private void UpdateAlert(IConditionsModule conditionsModule, GameTime gameTime)
-        {
-            var conditionRectangles = conditionsModule.Items.Select((x, index) => new
-            {
-                UiRect = new Rectangle(index * (ICON_SIZE + ICON_SPACING) - ICON_SPACING + _screenX, _screenY,
-                    ICON_SIZE, ICON_SIZE),
-                Condition = x,
-                IconIndex = index
-            });
-
-            var criticalConditions = conditionRectangles
-                .Where(x => x.Condition is SurvivalStatHazardCondition survivalStatHazardCondition && survivalStatHazardCondition.Level == SurvivalStatHazardLevel.Max);
-
-            _alertedConditions.Clear();
-
-            if (_alertCounter < ALERT_DELAY_DURATION_SECONDS + ALERT_VISIBLE_DURATION_SECONDS)
-            {
-                _alertCounter += gameTime.ElapsedGameTime.TotalSeconds;
-
-                if (_alertCounter < ALERT_VISIBLE_DURATION_SECONDS)
-                {
-                    var t = _alertCounter / ALERT_VISIBLE_DURATION_SECONDS;
-                    var visiblilitySin = Math.Sin(t * Math.PI * 2 * 3);
-                    if (visiblilitySin > 0)
-                    {
-                        foreach (var criticalCondition in criticalConditions)
-                        {
-                            _alertedConditions.Add(criticalCondition.Condition);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                _alertCounter = 0;
-            }
-        }
-
         private static Texture2D CreateTexture(GraphicsDevice device, int width, int height, Color color)
         {
             //initialize a texture
@@ -164,7 +126,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             //the array holds the color for each pixel in the texture
             Color[] data = new Color[width * height];
-            for (int pixel = 0; pixel < data.Length; pixel++)
+            for (var pixel = 0; pixel < data.Length; pixel++)
             {
                 data[pixel] = color;
             }
@@ -273,6 +235,45 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             return conditionTitle;
+        }
+
+        private void UpdateAlert(IConditionsModule conditionsModule, GameTime gameTime)
+        {
+            var conditionRectangles = conditionsModule.Items.Select((x, index) => new
+            {
+                UiRect = new Rectangle(index * (ICON_SIZE + ICON_SPACING) - ICON_SPACING + _screenX, _screenY,
+                    ICON_SIZE, ICON_SIZE),
+                Condition = x,
+                IconIndex = index
+            });
+
+            var criticalConditions = conditionRectangles
+                .Where(x => x.Condition is SurvivalStatHazardCondition survivalStatHazardCondition &&
+                            survivalStatHazardCondition.Level == SurvivalStatHazardLevel.Max);
+
+            _alertedConditions.Clear();
+
+            if (_alertCounter < ALERT_DELAY_DURATION_SECONDS + ALERT_VISIBLE_DURATION_SECONDS)
+            {
+                _alertCounter += gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (_alertCounter < ALERT_VISIBLE_DURATION_SECONDS)
+                {
+                    var t = _alertCounter / ALERT_VISIBLE_DURATION_SECONDS;
+                    var visiblilitySin = Math.Sin(t * Math.PI * 2 * 3);
+                    if (visiblilitySin > 0)
+                    {
+                        foreach (var criticalCondition in criticalConditions)
+                        {
+                            _alertedConditions.Add(criticalCondition.Condition);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                _alertCounter = 0;
+            }
         }
     }
 }
