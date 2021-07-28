@@ -12,7 +12,7 @@
       },
       "IsStart": true,
       "RegularMonsterSids": [
-        "predator-medkit"
+        "gallbladder"
       ],
       "RareMonsterSids": null,
       "ChampionMonsterSids": null,

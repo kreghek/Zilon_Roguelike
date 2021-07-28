@@ -235,6 +235,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
             LoadHeadParts(content);
 
             LoadAnimalParts(content);
+
+            _gallbladderTexture = content.Load<Texture2D>("Sprites/game-objects/Monographics/Gallbladder");
+        }
+
+        private Texture2D _gallbladderTexture;
+
+        public Texture2D GetMonographicTexture(string sid)
+        {
+            return _gallbladderTexture;
         }
     }
 }
