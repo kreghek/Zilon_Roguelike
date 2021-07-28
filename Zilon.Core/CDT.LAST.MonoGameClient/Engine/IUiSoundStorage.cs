@@ -8,19 +8,19 @@ namespace CDT.LAST.MonoGameClient.Engine
     internal interface IUiSoundStorage
     {
         bool ContentWasLoaded { get; }
-        SoundEffect GetButtonClickEffect();
-        SoundEffect GetButtonHoverEffect();
 
         SoundEffect GetAlertEffect();
+        SoundEffect GetButtonClickEffect();
+        SoundEffect GetButtonHoverEffect();
 
         void LoadContent(ContentManager contentManager);
     }
 
     internal sealed class UiSoundStorage : IUiSoundStorage
     {
+        private SoundEffect? _alertEffect;
         private SoundEffect? _buttonClickSoundEffect;
         private SoundEffect? _buttonHoverSoundEffect;
-        private SoundEffect? _alertEffect;
 
         public bool ContentWasLoaded { get; private set; }
 

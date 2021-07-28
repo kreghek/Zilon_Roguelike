@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace CDT.LAST.MonoGameClient.GameComponents
 {
-    class SoundtrackManagerComponent : GameComponent
+    internal class SoundtrackManagerComponent : GameComponent
     {
         private SoundtrackManager? _soundtrackManager;
 
@@ -32,11 +32,11 @@ namespace CDT.LAST.MonoGameClient.GameComponents
 
     internal sealed class SoundtrackManager
     {
-        public bool IsInitialized { get; private set; }
         private bool _backgroundTrackStarted;
-        private Song? titleSong;
 
         private string? _state;
+        private Song? titleSong;
+        public bool IsInitialized { get; private set; }
 
         public void Initialize(Song song)
         {
@@ -82,9 +82,9 @@ namespace CDT.LAST.MonoGameClient.GameComponents
                             }
                         }
                     }
+
                     break;
             }
-
         }
     }
 }

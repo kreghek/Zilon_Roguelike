@@ -73,7 +73,8 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             _camera = new Camera();
             _personEffectsPanel =
-                new PersonConditionsPanel(_uiState, screenX: 8, screenY: 8, _uiContentStorage, uiSoundStorage, soundtrackManager, GraphicsDevice);
+                new PersonConditionsPanel(_uiState, screenX: 8, screenY: 8, _uiContentStorage, uiSoundStorage,
+                    soundtrackManager, GraphicsDevice);
 
             _personEquipmentModal = new PersonPropsModalDialog(
                 _uiContentStorage,

@@ -26,26 +26,27 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private const int ICON_SPACING = 2;
         private const double ALERT_VISIBLE_DURATION_SECONDS = 3;
         private const double ALERT_DELAY_DURATION_SECONDS = 3;
+
+        private readonly IList<IPersonCondition> _alertedConditions;
+        private readonly SoundEffectInstance _alertSoundEffect;
         private readonly Texture2D _alertTexture;
 
         private readonly int _screenX;
         private readonly int _screenY;
+        private readonly SoundtrackManager _soundtrackManager;
         private readonly IUiContentStorage _uiContentStorage;
         private readonly IUiSoundStorage _uiSoundStorage;
-        private readonly SoundtrackManager _soundtrackManager;
-        private readonly SoundEffectInstance _alertSoundEffect;
         private readonly ISectorUiState _uiState;
 
         private double _alertCounter;
 
-        private readonly IList<IPersonCondition> _alertedConditions;
+        private bool _isAlertEffectPlaying;
         private IPersonCondition? _selectedCondition;
         private int? _selectedConditionIconIndex;
 
-        private bool _isAlertEffectPlaying;
-
         public PersonConditionsPanel(ISectorUiState uiState, int screenX, int screenY,
-            IUiContentStorage uiContentStorage, IUiSoundStorage uiSoundStorage, SoundtrackManager soundtrackManager, GraphicsDevice graphicsDevice)
+            IUiContentStorage uiContentStorage, IUiSoundStorage uiSoundStorage, SoundtrackManager soundtrackManager,
+            GraphicsDevice graphicsDevice)
         {
             _uiState = uiState;
             _screenX = screenX;
@@ -55,7 +56,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _soundtrackManager = soundtrackManager;
             _alertSoundEffect = _uiSoundStorage.GetAlertEffect().CreateInstance();
 
-            _alertTexture = CreateTexture(graphicsDevice, ICON_SIZE + ICON_SPACING * 2, ICON_SIZE + ICON_SPACING * 2, LastColors.Red);
+            _alertTexture = CreateTexture(graphicsDevice, ICON_SIZE + ICON_SPACING * 2, ICON_SIZE + ICON_SPACING * 2,
+                LastColors.Red);
             _alertedConditions = new List<IPersonCondition>();
         }
 
@@ -83,7 +85,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
                 if (_alertedConditions.Contains(condition))
                 {
-                    spriteBatch.Draw(_alertTexture, new Vector2(iconX - ICON_SPACING, _screenY - ICON_SPACING), Color.White);
+                    spriteBatch.Draw(_alertTexture, new Vector2(iconX - ICON_SPACING, _screenY - ICON_SPACING),
+                        Color.White);
                 }
 
                 conditionIndex++;
@@ -258,7 +261,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             });
 
             var criticalConditions = conditionRectangles
-                .Where(x => x.Condition is SurvivalStatHazardCondition survivalStatHazardCondition && survivalStatHazardCondition.Level == SurvivalStatHazardLevel.Max);
+                .Where(x => x.Condition is SurvivalStatHazardCondition survivalStatHazardCondition &&
+                            survivalStatHazardCondition.Level == SurvivalStatHazardLevel.Max);
 
             _alertedConditions.Clear();
 
