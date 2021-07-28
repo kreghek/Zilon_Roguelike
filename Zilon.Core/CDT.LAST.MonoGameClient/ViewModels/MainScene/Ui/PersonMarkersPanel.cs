@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Zilon.Core.Client;
 using Zilon.Core.Client.Sector;
 using Zilon.Core.Commands;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
@@ -120,8 +121,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 return;
             }
 
-            if (mouse.LeftButton == ButtonState.Pressed && _sectorUiState.TacticalAct is not null)
+            if (mouse.LeftButton == ButtonState.Pressed)
             {
+                if (_sectorUiState.TacticalAct is null)
+                {
+                    SelectPunchAsDefaultCombatAct(_sectorUiState);
+                }
+
                 var attackCommand = _commandFactory.GetCommand<AttackCommand>();
                 _sectorUiState.HoverViewModel = item.ActorViewModel;
                 if (attackCommand.CanExecute().IsSuccess)
@@ -130,6 +136,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     _commandPool.Push(attackCommand);
                 }
             }
+        }
+
+        private static void SelectPunchAsDefaultCombatAct(ISectorUiState uiState)
+        {
+            var availableCombatActs =
+                uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>().GetCurrentCombatActs();
+            var punchAct = availableCombatActs.Single(x => x.Scheme.Sid == "punch");
+            uiState.TacticalAct = punchAct;
         }
 
         private record Marker(Rectangle Rect, ActorViewModel ActorViewModel);
