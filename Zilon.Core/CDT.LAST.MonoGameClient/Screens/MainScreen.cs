@@ -69,7 +69,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             _camera = new Camera();
             _personEffectsPanel =
-                new PersonConditionsPanel(_uiState, screenX: 8, screenY: 8, uiContentStorage: _uiContentStorage);
+                new PersonConditionsPanel(_uiState, screenX: 8, screenY: 8, uiContentStorage: _uiContentStorage, GraphicsDevice);
 
             _personEquipmentModal = new PersonPropsModalDialog(
                 _uiContentStorage,
@@ -164,7 +164,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                     _personMarkerPanel.Update();
                 }
 
-                HandleMainUpdate(_uiState.ActiveActor);
+                HandleMainUpdate(_uiState.ActiveActor, gameTime);
             }
             else
             {
@@ -351,14 +351,14 @@ namespace CDT.LAST.MonoGameClient.Screens
             return $"{roll.Count}D{roll.Dice} +{roll.Modifiers?.ResultBuff ?? 0}";
         }
 
-        private void HandleMainUpdate(IActorViewModel activeActor)
+        private void HandleMainUpdate(IActorViewModel activeActor, GameTime gameTime)
         {
             var sectorNodeWithPlayerPerson = GetPlayerSectorNode(_player);
 
             if (sectorNodeWithPlayerPerson != null)
             {
                 var sectorWithPlayerPerson = sectorNodeWithPlayerPerson.Sector;
-                UpdateCurrentSectorOrPerformTransition(sectorWithPlayerPerson, activeActor);
+                UpdateCurrentSectorOrPerformTransition(sectorWithPlayerPerson, activeActor, gameTime);
             }
             else
             {
@@ -431,13 +431,14 @@ namespace CDT.LAST.MonoGameClient.Screens
         }
 
         private void UpdateCurrentSectorOrPerformTransition(ISector? sectorWithPlayerPerson,
-            IActorViewModel activeActorViewModel)
+            IActorViewModel activeActorViewModel,
+            GameTime gameTime)
         {
             if (_currentSector == sectorWithPlayerPerson)
             {
                 _camera.Follow(activeActorViewModel, Game);
 
-                _personEffectsPanel.Update();
+                _personEffectsPanel.Update(gameTime);
 
                 var activePerson = activeActorViewModel.Actor.Person;
                 var activePersonCombatActModule = activePerson.GetModule<ICombatActModule>();

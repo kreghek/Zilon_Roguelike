@@ -1,6 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
+using CDT.LAST.MonoGameClient.Engine;
 using CDT.LAST.MonoGameClient.Resources;
 using CDT.LAST.MonoGameClient.Screens;
 
@@ -13,7 +16,7 @@ using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
 
-namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
+namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
     internal class PersonConditionsPanel
     {
@@ -23,17 +26,27 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly int _screenX;
         private readonly int _screenY;
         private readonly IUiContentStorage _uiContentStorage;
+        private readonly Texture2D _alertTexture;
         private readonly ISectorUiState _uiState;
         private IPersonCondition? _selectedCondition;
         private int? _selectedConditionIconIndex;
 
+        private double _alertCounter = 0;
+        private const double ALERT_VISIBLE_DURATION_SECONDS = 3;
+        private const double ALERT_DELAY_DURATION_SECONDS = 3;
+
+        private IList<IPersonCondition> _alertedConditions;
+
         public PersonConditionsPanel(ISectorUiState uiState, int screenX, int screenY,
-            IUiContentStorage uiContentStorage)
+            IUiContentStorage uiContentStorage, GraphicsDevice graphicsDevice)
         {
             _uiState = uiState;
             _screenX = screenX;
             _screenY = screenY;
             _uiContentStorage = uiContentStorage;
+
+            _alertTexture = CreateTexture(graphicsDevice, ICON_SIZE, ICON_SIZE, LastColors.Red);
+            _alertedConditions = new List<IPersonCondition>();
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -58,13 +71,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
                 DrawIcon(spriteBatch, iconX, iconTextures.Icon);
 
+                if (_alertedConditions.Contains(condition))
+                {
+                    spriteBatch.Draw(_alertTexture, new Vector2(iconX, _screenY), Color.White);
+                }
+
                 conditionIndex++;
             }
 
             DrawHintIfSelected(spriteBatch);
         }
 
-        public void Update()
+        public void Update(GameTime gameTime)
         {
             var person = _uiState.ActiveActor?.Actor?.Person;
             if (person is null)
@@ -76,7 +94,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var mouseState = Mouse.GetState();
 
-            var effectRectangles = conditionsModule.Items.Select((x, index) => new
+            var conditionRectangles = conditionsModule.Items.Select((x, index) => new
             {
                 UiRect = new Rectangle(index * (ICON_SIZE + ICON_SPACING) - ICON_SPACING + _screenX, _screenY,
                     ICON_SIZE, ICON_SIZE),
@@ -85,18 +103,76 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             });
             var mouseRectangle = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
 
-            var effectUnderMouse = effectRectangles.FirstOrDefault(x => x.UiRect.Intersects(mouseRectangle));
+            var conditionUnderMouse = conditionRectangles.FirstOrDefault(x => x.UiRect.Intersects(mouseRectangle));
 
-            if (effectUnderMouse != null)
+            if (conditionUnderMouse != null)
             {
-                _selectedCondition = effectUnderMouse.Condition;
-                _selectedConditionIconIndex = effectUnderMouse.IconIndex;
+                _selectedCondition = conditionUnderMouse.Condition;
+                _selectedConditionIconIndex = conditionUnderMouse.IconIndex;
             }
             else
             {
                 _selectedCondition = null;
                 _selectedConditionIconIndex = null;
             }
+
+            UpdateAlert(conditionsModule, gameTime);
+        }
+
+        private void UpdateAlert(IConditionsModule conditionsModule, GameTime gameTime)
+        {
+            var conditionRectangles = conditionsModule.Items.Select((x, index) => new
+            {
+                UiRect = new Rectangle(index * (ICON_SIZE + ICON_SPACING) - ICON_SPACING + _screenX, _screenY,
+                    ICON_SIZE, ICON_SIZE),
+                Condition = x,
+                IconIndex = index
+            });
+
+            var criticalConditions = conditionRectangles
+                .Where(x => x.Condition is SurvivalStatHazardCondition survivalStatHazardCondition && survivalStatHazardCondition.Level == SurvivalStatHazardLevel.Max);
+
+            _alertedConditions.Clear();
+
+            if (_alertCounter < ALERT_DELAY_DURATION_SECONDS + ALERT_VISIBLE_DURATION_SECONDS)
+            {
+                _alertCounter += gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (_alertCounter < ALERT_VISIBLE_DURATION_SECONDS)
+                {
+                    var t = _alertCounter / ALERT_VISIBLE_DURATION_SECONDS;
+                    var visiblilitySin = Math.Sin(t * Math.PI * 2 * 3);
+                    if (visiblilitySin > 0)
+                    {
+                        foreach (var criticalCondition in criticalConditions)
+                        {
+                            _alertedConditions.Add(criticalCondition.Condition);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                _alertCounter = 0;
+            }
+        }
+
+        private static Texture2D CreateTexture(GraphicsDevice device, int width, int height, Color color)
+        {
+            //initialize a texture
+            Texture2D texture = new Texture2D(device, width, height);
+
+            //the array holds the color for each pixel in the texture
+            Color[] data = new Color[width * height];
+            for (int pixel = 0; pixel < data.Length; pixel++)
+            {
+                data[pixel] = color;
+            }
+
+            //set the color
+            texture.SetData(data);
+
+            return texture;
         }
 
         private void DrawHintIfSelected(SpriteBatch spriteBatch)
