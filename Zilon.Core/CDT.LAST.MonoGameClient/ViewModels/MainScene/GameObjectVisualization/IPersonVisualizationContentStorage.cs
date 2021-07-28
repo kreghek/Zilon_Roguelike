@@ -16,10 +16,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
         IEnumerable<HandPart> GetHandParts(string sid);
         IEnumerable<HeadPart> GetHeadParts(string sid);
 
-        Texture2D GetMonographicTexture(string sid);
-
         IEnumerable<BodyPart> GetHumanOutlinedParts();
         IEnumerable<BodyPart> GetHumanParts();
+
+        Texture2D GetMonographicTexture(string sid);
         void LoadContent(ContentManager content);
     }
 }

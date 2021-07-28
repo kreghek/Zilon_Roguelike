@@ -20,6 +20,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
         private readonly Dictionary<string, HandPart[]> _handParts;
         private readonly Dictionary<string, HeadPart[]> _headParts;
 
+        private Texture2D _gallbladderTexture;
+
         public PersonVisualizationContentStorage()
         {
             _bodyParts = new Dictionary<string, BodyPart[]>();
@@ -238,8 +240,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 
             _gallbladderTexture = content.Load<Texture2D>("Sprites/game-objects/Monographics/Gallbladder");
         }
-
-        private Texture2D _gallbladderTexture;
 
         public Texture2D GetMonographicTexture(string sid)
         {

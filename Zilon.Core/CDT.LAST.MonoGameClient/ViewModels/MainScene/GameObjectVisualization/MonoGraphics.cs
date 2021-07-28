@@ -13,10 +13,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 {
     public sealed class MonoGraphics : SpriteContainer, IActorGraphics
     {
-        private readonly IPersonVisualizationContentStorage _personVisualizationContentStorage;
-
         private readonly SpriteContainer _hitlighted;
         private readonly SpriteContainer _outline;
+        private readonly IPersonVisualizationContentStorage _personVisualizationContentStorage;
 
         public MonoGraphics(string sid, IPersonVisualizationContentStorage personVisualizationContentStorage)
         {
