@@ -4,6 +4,7 @@ using System.Threading;
 
 using CDT.LAST.MonoGameClient.Database;
 using CDT.LAST.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.GameComponents;
 using CDT.LAST.MonoGameClient.Screens;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization;
@@ -48,6 +49,7 @@ namespace CDT.LAST.MonoGameClient
             serviceContainer.AddSingleton<IPersonSoundContentStorage, PersonSoundContentStorage>();
             serviceContainer
                 .AddSingleton<IGameObjectVisualizationContentStorage, GameObjectVisualizationContentStorage>();
+            serviceContainer.AddSingleton<SoundtrackManager>();
 
             using var serviceProvider = serviceContainer.BuildServiceProvider();
 

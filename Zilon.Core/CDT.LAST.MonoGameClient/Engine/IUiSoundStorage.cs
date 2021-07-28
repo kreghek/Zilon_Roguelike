@@ -10,6 +10,9 @@ namespace CDT.LAST.MonoGameClient.Engine
         bool ContentWasLoaded { get; }
         SoundEffect GetButtonClickEffect();
         SoundEffect GetButtonHoverEffect();
+
+        SoundEffect GetAlertEffect();
+
         void LoadContent(ContentManager contentManager);
     }
 
@@ -17,8 +20,14 @@ namespace CDT.LAST.MonoGameClient.Engine
     {
         private SoundEffect? _buttonClickSoundEffect;
         private SoundEffect? _buttonHoverSoundEffect;
+        private SoundEffect? _alertEffect;
 
         public bool ContentWasLoaded { get; private set; }
+
+        public SoundEffect GetAlertEffect()
+        {
+            return _alertEffect ?? throw new InvalidOperationException("Sound must be loaded before using.");
+        }
 
         public SoundEffect GetButtonClickEffect()
         {
@@ -34,6 +43,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         {
             _buttonClickSoundEffect = contentManager.Load<SoundEffect>("Audio/ButtonClick");
             _buttonHoverSoundEffect = contentManager.Load<SoundEffect>("Audio/ButtonHover");
+            _alertEffect = contentManager.Load<SoundEffect>("Audio/CriticalPersonConditionAlert");
 
             ContentWasLoaded = true;
         }

@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 using Zilon.Core.Client;
 using Zilon.Core.Client.Sector;
@@ -102,6 +103,13 @@ namespace CDT.LAST.MonoGameClient
             var cheatInput = new CheatInput(this, _spriteBatch, Content.Load<SpriteFont>("Fonts/Main"));
             Components.Add(cheatInput);
 #endif
+
+            var soundtrackManagerComponent = new SoundtrackManagerComponent(this);
+            var soundtrackManager = ServiceProvider.GetRequiredService<SoundtrackManager>();
+            var titleSong = Content.Load<Song>("Audio/TitleBackgroundTrack");
+            soundtrackManager.Initialize(titleSong);
+            soundtrackManagerComponent.Initialize(soundtrackManager);
+            Components.Add(soundtrackManagerComponent);
         }
 
         protected override void Update(GameTime gameTime)

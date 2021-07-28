@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.GameComponents;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui;
 
@@ -64,13 +65,15 @@ namespace CDT.LAST.MonoGameClient.Screens
             _animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
             _commandPool = serviceScope.GetRequiredService<ICommandPool>();
             _commandFactory = new ServiceProviderCommandFactory(((LivGame)game).ServiceProvider);
+            var uiSoundStorage = serviceScope.GetRequiredService<IUiSoundStorage>();
 
             _uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
 
+            var soundtrackManager = serviceScope.GetRequiredService<SoundtrackManager>();
+
             _camera = new Camera();
             _personEffectsPanel =
-                new PersonConditionsPanel(_uiState, screenX: 8, screenY: 8, uiContentStorage: _uiContentStorage,
-                    GraphicsDevice);
+                new PersonConditionsPanel(_uiState, screenX: 8, screenY: 8, _uiContentStorage, uiSoundStorage, soundtrackManager, GraphicsDevice);
 
             _personEquipmentModal = new PersonPropsModalDialog(
                 _uiContentStorage,

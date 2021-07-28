@@ -4,10 +4,12 @@ using System.Diagnostics;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.GameComponents;
 using CDT.LAST.MonoGameClient.Resources;
 using CDT.LAST.MonoGameClient.Screens;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -29,6 +31,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private readonly int _screenX;
         private readonly int _screenY;
         private readonly IUiContentStorage _uiContentStorage;
+        private readonly IUiSoundStorage _uiSoundStorage;
+        private readonly SoundtrackManager _soundtrackManager;
+        private readonly SoundEffectInstance _alertSoundEffect;
         private readonly ISectorUiState _uiState;
 
         private double _alertCounter;
@@ -37,15 +42,20 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private IPersonCondition? _selectedCondition;
         private int? _selectedConditionIconIndex;
 
+        private bool _isAlertEffectPlaying;
+
         public PersonConditionsPanel(ISectorUiState uiState, int screenX, int screenY,
-            IUiContentStorage uiContentStorage, GraphicsDevice graphicsDevice)
+            IUiContentStorage uiContentStorage, IUiSoundStorage uiSoundStorage, SoundtrackManager soundtrackManager, GraphicsDevice graphicsDevice)
         {
             _uiState = uiState;
             _screenX = screenX;
             _screenY = screenY;
             _uiContentStorage = uiContentStorage;
+            _uiSoundStorage = uiSoundStorage;
+            _soundtrackManager = soundtrackManager;
+            _alertSoundEffect = _uiSoundStorage.GetAlertEffect().CreateInstance();
 
-            _alertTexture = CreateTexture(graphicsDevice, ICON_SIZE, ICON_SIZE, LastColors.Red);
+            _alertTexture = CreateTexture(graphicsDevice, ICON_SIZE + ICON_SPACING * 2, ICON_SIZE + ICON_SPACING * 2, LastColors.Red);
             _alertedConditions = new List<IPersonCondition>();
         }
 
@@ -73,7 +83,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
                 if (_alertedConditions.Contains(condition))
                 {
-                    spriteBatch.Draw(_alertTexture, new Vector2(iconX, _screenY), Color.White);
+                    spriteBatch.Draw(_alertTexture, new Vector2(iconX - ICON_SPACING, _screenY - ICON_SPACING), Color.White);
                 }
 
                 conditionIndex++;
@@ -122,10 +132,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private static Texture2D CreateTexture(GraphicsDevice device, int width, int height, Color color)
         {
             //initialize a texture
-            Texture2D texture = new Texture2D(device, width, height);
+            var texture = new Texture2D(device, width, height);
 
             //the array holds the color for each pixel in the texture
-            Color[] data = new Color[width * height];
+            var data = new Color[width * height];
             for (var pixel = 0; pixel < data.Length; pixel++)
             {
                 data[pixel] = color;
@@ -248,8 +258,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             });
 
             var criticalConditions = conditionRectangles
-                .Where(x => x.Condition is SurvivalStatHazardCondition survivalStatHazardCondition &&
-                            survivalStatHazardCondition.Level == SurvivalStatHazardLevel.Max);
+                .Where(x => x.Condition is SurvivalStatHazardCondition survivalStatHazardCondition && survivalStatHazardCondition.Level == SurvivalStatHazardLevel.Max);
 
             _alertedConditions.Clear();
 
@@ -268,11 +277,25 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                             _alertedConditions.Add(criticalCondition.Condition);
                         }
                     }
+
+                    if (visiblilitySin > 0 && _alertedConditions.Any() && _alertSoundEffect.State != SoundState.Playing)
+                    {
+                        _alertSoundEffect.Play();
+                    }
                 }
             }
             else
             {
                 _alertCounter = 0;
+            }
+
+            if (criticalConditions.Any())
+            {
+                _soundtrackManager.PlaySilence();
+            }
+            else
+            {
+                _soundtrackManager.PlayBackgroundTrack();
             }
         }
     }
