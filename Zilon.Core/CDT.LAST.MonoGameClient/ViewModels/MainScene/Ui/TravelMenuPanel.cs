@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using Zilon.Core.Commands;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
@@ -24,15 +25,20 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _humanActorTaskSource;
         private readonly IUiContentStorage _uiContentStorage;
-
+        private readonly ICommandPool _commandPool;
+        private readonly ServiceProviderCommandFactory _commandFactory;
         private bool _autoplayHintIsShown;
         private string _autoplayModeButtonTitle;
 
         public TravelPanel(IHumanActorTaskSource<ISectorTaskSourceContext> humanActorTaskSource,
-            IUiContentStorage uiContentStorage)
+            IUiContentStorage uiContentStorage,
+            ICommandPool commandPool,
+            ServiceProviderCommandFactory commandFactory)
         {
             _humanActorTaskSource = humanActorTaskSource;
             _uiContentStorage = uiContentStorage;
+            _commandPool = commandPool;
+            _commandFactory = commandFactory;
             _autoplayModeButton = new IconButton(
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 iconData: new IconData(
@@ -72,13 +78,29 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 rect: new Rectangle(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
             gameSpeedButton.OnClick += GameSpeedButton_OnClick;
 
+            var idleButton = new IconButton(texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
+                iconData: new IconData(
+                    uiContentStorage.GetSmallVerticalButtonIconsTexture(),
+                    new Rectangle(16, 32, BUTTON_WIDTH, BUTTON_HEIGHT)
+                ),
+                rect: new Rectangle(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
+
+            idleButton.OnClick += IdleButton_OnClick;
+
             _buttons = new[]
             {
                 //_autoplayModeButton,
                 personPropButton,
-                personStatsButton
+                personStatsButton,
+                idleButton
                 //gameSpeedButton
             };
+        }
+
+        private void IdleButton_OnClick(object? sender, EventArgs e)
+        {
+            var idleCommand = _commandFactory.GetCommand<IdleCommand>();
+            _commandPool.Push(idleCommand);
         }
 
         private void AutoplayModeButton_OnClick(object? sender, EventArgs e)

@@ -14,7 +14,7 @@ namespace Zilon.Core.World
         /// <summary>
         /// Duration of idle. Depends on <see cref="OneIterationLength" />.
         /// </summary>
-        public static int IdleDuration => OneIterationLength / 3;
+        public static int IdleDuration => OneIterationLength;
 
         /// <summary>
         /// Max value for any monster's move cost. Actually, lowest possible monster move speed in game.

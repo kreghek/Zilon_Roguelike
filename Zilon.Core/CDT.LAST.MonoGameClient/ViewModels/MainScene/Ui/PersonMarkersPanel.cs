@@ -106,9 +106,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 if (item.ActorViewModel.IsGraphicsOutlined)
                 {
                     _sectorUiState.HoverViewModel = item.ActorViewModel;
-                }
 
-                HandleMarkerClick(mouse, item);
+                    HandleMarkerClick(mouse, item);
+                }
             }
 
             MouseIsOver = _drawnItemList.Any(x => x.ActorViewModel.IsGraphicsOutlined);
