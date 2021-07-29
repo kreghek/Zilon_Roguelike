@@ -1,0 +1,39 @@
+{
+  "Name": {
+    "Ru": "Хищник Medkit",
+    "En": "Predator Medkit"
+  },
+  "Hp": 15,
+  "PrimaryAct": {
+    "Efficient": {
+      "Dice": 3,
+      "Count": 1,
+      "Modifiers": {
+        "ResultBuff": 1
+      }
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 2
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy",
+    "Offence": {
+      "Type": "Tactical",
+      "Impact": "Kinetic"
+    },
+    "IsMelee": true,
+    "Tags": [
+      "bite"
+    ]
+  },
+  "DropTableSids": [
+    "survival-medkit",
+    "default",
+    "default-evil-hour"
+  ],
+  "BaseScore": 100,
+  "Tags": [
+    "beast"
+  ]
+}

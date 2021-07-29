@@ -21,10 +21,10 @@ namespace CDT.LAST.MonoGameClient.Engine
             _icon = icon;
             _selectedMarker = selectedMarkerTexture;
             _buttonGroup = buttonGroup;
-            TacticalAct = tacticalAct;
+            CombatAct = tacticalAct;
         }
 
-        public ICombatAct TacticalAct { get; }
+        public ICombatAct CombatAct { get; }
 
         protected override void DrawContent(SpriteBatch spriteBatch, Rectangle contentRect, Color color)
         {

@@ -108,11 +108,38 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
             else
             {
-                var graphicsRoot = new AnimalGraphics(gameObjectParams.PersonVisualizationContentStorage);
+                var monsterPerson = Actor.Person as MonsterPerson;
+                SpriteContainer? graphics = null;
+                switch (monsterPerson.Scheme.Sid)
+                {
+                    case "predator":
+                        graphics = new AnimalGraphics(gameObjectParams.PersonVisualizationContentStorage);
+                        break;
 
-                _rootSprite.AddChild(graphicsRoot);
+                    case "predator-water":
+                        graphics = new AnimalGraphics(gameObjectParams.PersonVisualizationContentStorage);
+                        break;
 
-                _graphicsRoot = graphicsRoot;
+                    case "predator-meat":
+                        graphics = new AnimalGraphics(gameObjectParams.PersonVisualizationContentStorage);
+                        break;
+
+                    case "predator-medkit":
+                        graphics = new AnimalGraphics(gameObjectParams.PersonVisualizationContentStorage);
+                        break;
+
+                    case "predator-equipment":
+                        graphics = new AnimalGraphics(gameObjectParams.PersonVisualizationContentStorage);
+                        break;
+
+                    case "gallbladder":
+                        graphics = new MonoGraphics("gallbladder", gameObjectParams.PersonVisualizationContentStorage);
+                        break;
+                }
+
+                _rootSprite.AddChild(graphics);
+
+                _graphicsRoot = (IActorGraphics)graphics;
             }
 
             var hexSize = MapMetrics.UnitSize / 2;

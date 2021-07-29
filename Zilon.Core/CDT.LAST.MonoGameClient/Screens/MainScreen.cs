@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.GameComponents;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui;
 
@@ -13,6 +15,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Zilon.Core.Client;
 using Zilon.Core.Client.Sector;
 using Zilon.Core.Commands;
+using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -25,6 +28,9 @@ namespace CDT.LAST.MonoGameClient.Screens
 {
     internal class MainScreen : GameSceneBase
     {
+        private const int STAT_ROW_HEIGHT = 16;
+        private const int STAT_NUMS_X_POSITION = 32;
+
         private readonly IAnimationBlockerService _animationBlockerService;
         private readonly BottomMenuPanel _bottomMenu;
         private readonly Camera _camera;
@@ -59,12 +65,16 @@ namespace CDT.LAST.MonoGameClient.Screens
             _animationBlockerService = serviceScope.GetRequiredService<IAnimationBlockerService>();
             _commandPool = serviceScope.GetRequiredService<ICommandPool>();
             _commandFactory = new ServiceProviderCommandFactory(((LivGame)game).ServiceProvider);
+            var uiSoundStorage = serviceScope.GetRequiredService<IUiSoundStorage>();
 
             _uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
 
+            var soundtrackManager = serviceScope.GetRequiredService<SoundtrackManager>();
+
             _camera = new Camera();
             _personEffectsPanel =
-                new PersonConditionsPanel(_uiState, screenX: 8, screenY: 8, uiContentStorage: _uiContentStorage);
+                new PersonConditionsPanel(_uiState, screenX: 8, screenY: 8, _uiContentStorage, uiSoundStorage,
+                    soundtrackManager, GraphicsDevice);
 
             _personEquipmentModal = new PersonPropsModalDialog(
                 _uiContentStorage,
@@ -159,7 +169,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                     _personMarkerPanel.Update();
                 }
 
-                HandleMainUpdate(_uiState.ActiveActor);
+                HandleMainUpdate(_uiState.ActiveActor, gameTime);
             }
             else
             {
@@ -216,11 +226,21 @@ namespace CDT.LAST.MonoGameClient.Screens
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             _personEffectsPanel.Draw(_spriteBatch);
 
+#if SHOW_NUMS
+            DrawStatsNumbers();
+#endif
+
             DrawPersonModePanel();
 
             if (_personMarkerPanel is not null)
             {
                 _personMarkerPanel.Draw(_spriteBatch, Game.GraphicsDevice);
+            }
+
+            if (_uiState.HoverViewModel is IActorViewModel actorViewModel)
+            {
+                DrawMonsterInfo(actorViewModel, _spriteBatch, Game.GraphicsDevice.Viewport.Width,
+                    Game.GraphicsDevice.Viewport.Height);
             }
 
             _spriteBatch.End();
@@ -248,6 +268,35 @@ namespace CDT.LAST.MonoGameClient.Screens
             _spriteBatch.End();
         }
 
+        private void DrawMonsterInfo(IActorViewModel actorViewModel, SpriteBatch spriteBatch, int viewPortWidth,
+            int viewPortHeight)
+        {
+            var position = new Vector2(viewPortWidth - 100, viewPortHeight - 100);
+            var monsterPerson = actorViewModel.Actor.Person;
+            spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), monsterPerson.ToString(), position, Color.White);
+#if SHOW_NUMS
+            var stats = monsterPerson.GetModule<ISurvivalModule>().Stats;
+            var monsterCombatActModule
+ = monsterPerson.GetModule<ICombatActModule>();
+            var defaultAct
+ = monsterCombatActModule.GetCurrentCombatActs().First();
+            spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), GetRollAsString(defaultAct.Efficient),
+                position + new Vector2(0, 16), Color.White);
+            for (var statIndex
+ = 0; statIndex < stats.Length; statIndex++)
+            {
+                var stat
+ = stats[statIndex];
+                var statPosition
+ = new Vector2(0, 32 + statIndex * 16);
+                var statText
+ = $"{stat.Type} - {stat.Value} ({stat.ValueShare:0.##})";
+                spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), statText, position + statPosition,
+                    Color.White);
+            }
+#endif
+        }
+
         private void DrawPersonModePanel()
         {
             var mainPerson = _player.MainPerson;
@@ -259,6 +308,30 @@ namespace CDT.LAST.MonoGameClient.Screens
             }
 
             _bottomMenu.Draw(_spriteBatch, Game.GraphicsDevice);
+        }
+
+        [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members",
+            Justification = "Method used in debug with SHOW_NUMS compiler directive.")]
+        private void DrawStatsNumbers()
+        {
+            var mainPerson = _player.MainPerson;
+            if (mainPerson is null)
+            {
+                // Do not display debug info if the player person is not assigned.
+                return;
+            }
+
+            var stats = mainPerson.GetModule<ISurvivalModule>().Stats;
+            var yOffset = STAT_NUMS_X_POSITION;
+
+            for (var statIndex = 0; statIndex < stats.Length; statIndex++)
+            {
+                var stat = stats[statIndex];
+                var statInfo = $"{stat.Type} - {stat.Value} ({stat.ValueShare: 0.##})";
+                var itemPosition = statIndex * STAT_ROW_HEIGHT;
+                var position = new Vector2(0, yOffset + itemPosition);
+                _spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), statInfo, position, Color.White);
+            }
         }
 
         private static ISectorNode? GetPlayerSectorNode(IPlayer player)
@@ -276,14 +349,21 @@ namespace CDT.LAST.MonoGameClient.Screens
                     select sectorNode).SingleOrDefault();
         }
 
-        private void HandleMainUpdate(IActorViewModel activeActor)
+        [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members",
+            Justification = "Method used in debug with SHOW_NUMS compiler directive.")]
+        private static string GetRollAsString(Roll roll)
+        {
+            return $"{roll.Count}D{roll.Dice} +{roll.Modifiers?.ResultBuff ?? 0}";
+        }
+
+        private void HandleMainUpdate(IActorViewModel activeActor, GameTime gameTime)
         {
             var sectorNodeWithPlayerPerson = GetPlayerSectorNode(_player);
 
             if (sectorNodeWithPlayerPerson != null)
             {
                 var sectorWithPlayerPerson = sectorNodeWithPlayerPerson.Sector;
-                UpdateCurrentSectorOrPerformTransition(sectorWithPlayerPerson, activeActor);
+                UpdateCurrentSectorOrPerformTransition(sectorWithPlayerPerson, activeActor, gameTime);
             }
             else
             {
@@ -356,13 +436,14 @@ namespace CDT.LAST.MonoGameClient.Screens
         }
 
         private void UpdateCurrentSectorOrPerformTransition(ISector? sectorWithPlayerPerson,
-            IActorViewModel activeActorViewModel)
+            IActorViewModel activeActorViewModel,
+            GameTime gameTime)
         {
             if (_currentSector == sectorWithPlayerPerson)
             {
                 _camera.Follow(activeActorViewModel, Game);
 
-                _personEffectsPanel.Update();
+                _personEffectsPanel.Update(gameTime);
 
                 var activePerson = activeActorViewModel.Actor.Person;
                 var activePersonCombatActModule = activePerson.GetModule<ICombatActModule>();

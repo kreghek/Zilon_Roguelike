@@ -1,0 +1,35 @@
+{
+  "Name": {
+    "En": "Elder Temple",
+    "Ru": "Древний храм"
+  },
+  "SectorLevels": [
+    {
+      "Sid": "intro",
+      "IsStart": true,
+      "RegularMonsterSids": [
+        "predator"
+      ],
+      "RareMonsterSids": [
+        "predator-equipment"
+      ],
+      "MapGeneratorOptions": {
+        "MapGenerator": "Room",
+        "RegionCount": 20,
+        "RegionSize": 20
+      },
+      "RegionMonsterCount": 5,
+      "TotalChestCount": 20,
+      "RegionChestCountRatio": 9,
+      "ChestDropTableSids": [
+        "survival",
+        "default"
+      ],
+      "TransSectorSids": [
+        {
+          "SectorLevelSid": null
+        }
+      ]
+    }
+  ]
+}

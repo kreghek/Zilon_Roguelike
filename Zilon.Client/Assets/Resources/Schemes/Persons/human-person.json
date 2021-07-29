@@ -2,8 +2,8 @@
   "Name": {
     "Ru": "Персонаж игрока"
   },
-  "Hp": 10,
-  "DefaultAct": "hand-hit",
+  "Hp": 60,
+  "DefaultAct": "punch",
   "Slots": [
     {
       "Types": "Head",
@@ -43,9 +43,9 @@
   "SurvivalStats": [
     {
       "Type": "Satiety",
-      "MinValue": -3000,
-      "MaxValue": 500,
-      "StartValue": 250,
+      "MinValue": -600,
+      "MaxValue": 100,
+      "StartValue": 50,
       "KeyPoints": [
         {
           "Level": "Max",
@@ -66,9 +66,9 @@
     },
     {
       "Type": "Hydration",
-      "MinValue": -1200,
-      "MaxValue": 130,
-      "StartValue": 100,
+      "MinValue": -600,
+      "MaxValue": 60,
+      "StartValue": 20,
       "KeyPoints": [
         {
           "Level": "Max",

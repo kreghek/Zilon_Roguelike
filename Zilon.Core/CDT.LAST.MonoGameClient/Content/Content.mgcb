@@ -31,6 +31,12 @@
 /processorParam:Quality=Low
 /build:Audio/CombatStaffSwing.mp3
 
+#begin Audio/CriticalPersonConditionAlert.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Low
+/build:Audio/CriticalPersonConditionAlert.mp3
+
 #begin Audio/DrinkConsumable.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
@@ -941,6 +947,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/hunter/tail.png
 
+#begin Sprites/game-objects/Monographics/Gallbladder.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/game-objects/Monographics/Gallbladder.png
+
 #begin Sprites/game-objects/simple-object-shadow.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1552,6 +1570,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/VisualEffects/ConsumingEffects.png
+
+#begin Sprites/VisualEffects/PunchShortHorizontalHitEffect.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/VisualEffects/PunchShortHorizontalHitEffect.png
 
 #begin Sprites/VisualEffects/TeethHorizontalHitEffect.png
 /importer:TextureImporter

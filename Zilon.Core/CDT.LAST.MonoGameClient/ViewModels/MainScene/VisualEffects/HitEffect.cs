@@ -96,6 +96,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects
                 {
                     case "slash": return HitEffectTypes.ShortBlade;
                     case "bite": return HitEffectTypes.Teeth;
+                    case "punch": return HitEffectTypes.Punch;
                 }
             }
 

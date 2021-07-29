@@ -7,10 +7,15 @@
     <!-- PublishTrimmed have to be false. Because GH Actions thrws error about optimization until trimming is true. -->
     <PublishTrimmed>false</PublishTrimmed>
     <Nullable>enable</Nullable>
+    <Configurations>Debug;Release;Balance</Configurations>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Balance'">
+    <Optimize>false</Optimize>
+    <DefineConstants>TRACE;DEBUG;SHOW_NUMS</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Content\bin\**" />

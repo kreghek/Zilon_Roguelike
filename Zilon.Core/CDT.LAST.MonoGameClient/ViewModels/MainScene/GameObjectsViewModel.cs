@@ -25,6 +25,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly Game _game;
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
+        private readonly ISectorUiState _uiState;
         private readonly SectorViewModelContext _viewModelContext;
 
         public GameObjectsViewModel(GameObjectParams gameObjectParams)
@@ -46,11 +47,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                            throw new ArgumentException($"{nameof(gameObjectParams.SpriteBatch)} is not defined.",
                                nameof(gameObjectParams));
 
-            if (gameObjectParams.UiState is null)
-            {
-                throw new ArgumentException($"{nameof(gameObjectParams.UiState)} is not defined.",
-                    nameof(gameObjectParams));
-            }
+            _uiState = gameObjectParams.UiState ?? throw new ArgumentException(
+                $"{nameof(gameObjectParams.UiState)} is not defined.",
+                nameof(gameObjectParams));
 
             foreach (var actor in _viewModelContext.Sector.ActorManager.Items)
             {
@@ -58,7 +57,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
                 if (actor.Person == _player.MainPerson)
                 {
-                    gameObjectParams.UiState.ActiveActor = actorViewModel;
+                    _uiState.ActiveActor = actorViewModel;
                 }
 
                 _viewModelContext.GameObjects.Add(actorViewModel);
@@ -195,6 +194,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 if (fowNode != null && fowNode.State != SectorMapNodeFowState.Observing && gameObject.HiddenByFow)
                 {
                     gameObject.CanDraw = false;
+                }
+
+                if (gameObject.CanDraw)
+                {
+                    if (gameObject is ActorViewModel viewModel)
+                    {
+                        viewModel.IsGraphicsOutlined = ReferenceEquals(gameObject, _uiState.HoverViewModel);
+                    }
                 }
 
                 gameObject.Update(gameTime);

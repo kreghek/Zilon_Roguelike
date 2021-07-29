@@ -101,6 +101,38 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     new HitEffectKey(HitEffectTypes.Teeth | HitEffectTypes.Backing,
                         HitEffectDirections.Left | HitEffectDirections.Bottom),
                     content.Load<Texture2D>("Sprites/VisualEffects/TeethHorizontalHitEffect")
+                },
+
+                {
+                    new HitEffectKey(HitEffectTypes.Punch, HitEffectDirections.Left),
+                    content.Load<Texture2D>("Sprites/VisualEffects/PunchShortHorizontalHitEffect")
+                },
+
+                {
+                    new HitEffectKey(HitEffectTypes.Punch, HitEffectDirections.Left | HitEffectDirections.Top),
+                    content.Load<Texture2D>("Sprites/VisualEffects/PunchShortHorizontalHitEffect")
+                },
+
+                {
+                    new HitEffectKey(HitEffectTypes.Punch, HitEffectDirections.Left | HitEffectDirections.Bottom),
+                    content.Load<Texture2D>("Sprites/VisualEffects/PunchShortHorizontalHitEffect")
+                },
+
+                {
+                    new HitEffectKey(HitEffectTypes.Punch | HitEffectTypes.Backing, HitEffectDirections.Left),
+                    content.Load<Texture2D>("Sprites/VisualEffects/PunchShortHorizontalHitEffect")
+                },
+
+                {
+                    new HitEffectKey(HitEffectTypes.Punch | HitEffectTypes.Backing,
+                        HitEffectDirections.Left | HitEffectDirections.Top),
+                    content.Load<Texture2D>("Sprites/VisualEffects/PunchShortHorizontalHitEffect")
+                },
+
+                {
+                    new HitEffectKey(HitEffectTypes.Punch | HitEffectTypes.Backing,
+                        HitEffectDirections.Left | HitEffectDirections.Bottom),
+                    content.Load<Texture2D>("Sprites/VisualEffects/PunchShortHorizontalHitEffect")
                 }
             };
         }

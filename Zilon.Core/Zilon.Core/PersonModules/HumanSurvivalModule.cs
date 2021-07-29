@@ -15,6 +15,9 @@ namespace Zilon.Core.PersonModules
 {
     public sealed class HumanSurvivalModule : SurvivalModuleBase
     {
+        private const int CONSTITUTION_HP_AFFECT = 2;
+        private const int BASE_CONSTITUTION = 10;
+
         private readonly IAttributesModule _attributesModule;
         private readonly IEquipmentModule? _equipmentModule;
         private readonly IEvolutionModule? _evolutionModule;
@@ -486,25 +489,22 @@ namespace Zilon.Core.PersonModules
             }
             else
             {
-                const int CONSTITUTION_HP_INFLUENCE = 2;
-                const int BASE_CONSTITUTION = 10;
-
                 if (constitutionAttribute.Value > 10)
                 {
                     constitutionHpBonus = ((int)constitutionAttribute.Value - BASE_CONSTITUTION) *
-                                          CONSTITUTION_HP_INFLUENCE;
+                                          CONSTITUTION_HP_AFFECT;
                 }
                 else
                 {
                     constitutionHpBonus = -(BASE_CONSTITUTION - (int)constitutionAttribute.Value) *
-                                          CONSTITUTION_HP_INFLUENCE;
+                                          CONSTITUTION_HP_AFFECT;
                 }
             }
 
             return constitutionHpBonus;
         }
 
-        private static IPersonSurvivalStatKeySegmentSubScheme GetKeyPointSchemeValue(
+        private static IPersonSurvivalStatKeySegmentSubScheme? GetKeyPointSchemeValue(
             PersonSurvivalStatKeypointLevel level,
             IPersonSurvivalStatKeySegmentSubScheme[] keyPoints)
         {
@@ -519,7 +519,7 @@ namespace Zilon.Core.PersonModules
         private static IEnumerable<SurvivalStat> GetStats(IPersonScheme personScheme,
             IAttributesModule attributesModule)
         {
-            return GetStatsIterator(personScheme, attributesModule).Where(x => x != null);
+            return GetStatsIterator(personScheme, attributesModule).Where(x => x != null).Select(x => x!);
         }
 
         private static IEnumerable<SurvivalStat?> GetStatsIterator(IPersonScheme personScheme,
@@ -554,7 +554,7 @@ namespace Zilon.Core.PersonModules
             yield return CreateUselessStat(SurvivalStatType.Energy);
         }
 
-        private void OtherModule_StateChanged(object sender, EventArgs e)
+        private void OtherModule_StateChanged(object? sender, EventArgs e)
         {
             CalcSurvivalStats();
         }
@@ -702,6 +702,11 @@ namespace Zilon.Core.PersonModules
 
         private void Stat_Changed(object? sender, EventArgs e)
         {
+            if (sender is null)
+            {
+                throw new InvalidOperationException("Invalid event sender.");
+            }
+
             var stat = (SurvivalStat)sender;
 
             if (stat.KeySegments is null)

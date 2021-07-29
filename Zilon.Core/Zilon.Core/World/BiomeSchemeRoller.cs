@@ -19,20 +19,18 @@ namespace Zilon.Core.World
 
         public ILocationScheme Roll()
         {
-            var openSchemeSids = Enumerable.Range(1, 20).Select(x => "globe-node").ToArray();
+            var globeNodeMeatSchemeSids = Enumerable.Range(1, 7).Select(x => "globe-node-meat").ToArray();
+            var globeNodeWaterSchemeSids = Enumerable.Range(1, 7).Select(x => "globe-node-water").ToArray();
+            var globeNodeMedkitSchemeSids = Enumerable.Range(1, 7).Select(x => "globe-node-medkit").ToArray();
 
             var dungeonSchemeSids = new[]
             {
-                "rat-hole",
-                "rat-kingdom",
-                "demon-dungeon",
-                "demon-lair",
-                "crypt",
-                "elder-place",
-                "genomass-cave"
+                "dungeon",
+                "elder-temple"
             };
 
-            var totalLocationSchemeSids = openSchemeSids.Concat(dungeonSchemeSids).ToArray();
+            var totalLocationSchemeSids = globeNodeMeatSchemeSids.Concat(globeNodeWaterSchemeSids)
+                .Concat(globeNodeMedkitSchemeSids).Concat(dungeonSchemeSids).ToArray();
 
             var rolledLocationSchemeSid = _dice.RollFromList(totalLocationSchemeSids);
             var rolledLocationScheme = _schemeService.GetScheme<ILocationScheme>(rolledLocationSchemeSid);
