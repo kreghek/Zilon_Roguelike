@@ -116,20 +116,20 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         graphics = new AnimalGraphics(gameObjectParams.PersonVisualizationContentStorage);
                         break;
 
-                    case "predator-water":
-                        graphics = new AnimalGraphics(gameObjectParams.PersonVisualizationContentStorage);
+                    case "warthrog":
+                        graphics = new MonoGraphics("warthrog", gameObjectParams.PersonVisualizationContentStorage);
                         break;
 
                     case "predator-meat":
                         graphics = new AnimalGraphics(gameObjectParams.PersonVisualizationContentStorage);
                         break;
 
-                    case "predator-medkit":
-                        graphics = new AnimalGraphics(gameObjectParams.PersonVisualizationContentStorage);
+                    case "skeleton":
+                        graphics = new MonoGraphics("skeleton", gameObjectParams.PersonVisualizationContentStorage);
                         break;
 
-                    case "predator-equipment":
-                        graphics = new AnimalGraphics(gameObjectParams.PersonVisualizationContentStorage);
+                    case "skeleton-equipment":
+                        graphics = new MonoGraphics("skeleton-equipment", gameObjectParams.PersonVisualizationContentStorage);
                         break;
 
                     case "gallbladder":

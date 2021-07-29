@@ -1,9 +1,9 @@
 {
   "Name": {
-    "Ru": "Хищник Water",
-    "En": "Predator Water"
+    "Ru": "Элита скелетов",
+    "En": "Skeleton Elite"
   },
-  "Hp": 15,
+  "Hp": 100,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
@@ -24,15 +24,15 @@
     },
     "IsMelee": true,
     "Tags": [
-      "bite"
+      "punch"
     ]
   },
   "DropTableSids": [
-    "survival-water",
+    "survival-equipment",
     "default",
     "default-evil-hour"
   ],
-  "BaseScore": 100,
+  "BaseScore": 300,
   "Tags": [
     "beast"
   ]

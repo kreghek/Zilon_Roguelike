@@ -1,16 +1,13 @@
 {
   "Name": {
-    "Ru": "Хищник Equipment",
-    "En": "Predator Equipment"
+    "Ru": "Бородавочник",
+    "En": "Warthrog"
   },
-  "Hp": 100,
+  "Hp": 25,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
-      "Count": 1,
-      "Modifiers": {
-        "ResultBuff": 1
-      }
+      "Count": 1
     },
     "Range": {
       "Min": 1,
@@ -28,11 +25,11 @@
     ]
   },
   "DropTableSids": [
-    "survival-equipment",
+    "survival-water",
     "default",
     "default-evil-hour"
   ],
-  "BaseScore": 300,
+  "BaseScore": 100,
   "Tags": [
     "beast"
   ]

@@ -1,14 +1,10 @@
 {
-  "Rolls": 2,
+  "Rolls": 1,
   "Records": [
     {
       "SchemeSid": "med-kit",
       "MinCount": 1,
       "MaxCount": 1,
-      "Weight": 2
-    },
-    {
-      "SchemeSid": null,
       "Weight": 2
     }
   ]

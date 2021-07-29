@@ -20,7 +20,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
         private readonly Dictionary<string, HandPart[]> _handParts;
         private readonly Dictionary<string, HeadPart[]> _headParts;
 
-        private Texture2D _gallbladderTexture;
+        private IDictionary<string, Texture2D> _monographicsTexture;
 
         public PersonVisualizationContentStorage()
         {
@@ -238,12 +238,24 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 
             LoadAnimalParts(content);
 
-            _gallbladderTexture = content.Load<Texture2D>("Sprites/game-objects/Monographics/Gallbladder");
+            _monographicsTexture = new Dictionary<string, Texture2D> {
+                { "gallbladder",  content.Load<Texture2D>("Sprites/game-objects/Monographics/Gallbladder")},
+                { "gallbladder/Outlined",  content.Load<Texture2D>("Sprites/game-objects/Monographics/Gallbladder")},
+
+                { "skeleton",  content.Load<Texture2D>("Sprites/game-objects/Monographics/Skeleton")},
+                { "skeleton/Outlined",  content.Load<Texture2D>("Sprites/game-objects/Monographics/Skeleton")},
+
+                { "skeleton-elite",  content.Load<Texture2D>("Sprites/game-objects/Monographics/SkeletonElite")},
+                { "skeleton-elite/Outlined",  content.Load<Texture2D>("Sprites/game-objects/Monographics/SkeletonElite")},
+
+                { "warthog",  content.Load<Texture2D>("Sprites/game-objects/Monographics/Warthog")},
+                { "warthog/Outlined",  content.Load<Texture2D>("Sprites/game-objects/Monographics/Warthog")}
+            };
         }
 
         public Texture2D GetMonographicTexture(string sid)
         {
-            return _gallbladderTexture;
+            return _monographicsTexture[sid];
         }
     }
 }

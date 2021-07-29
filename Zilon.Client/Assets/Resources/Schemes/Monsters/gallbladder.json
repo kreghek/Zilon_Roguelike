@@ -1,6 +1,6 @@
 {
   "Name": {
-    "Ru": "Желник",
+    "Ru": "Желчник",
     "En": "Gallbladder"
   },
   "Hp": 15,
@@ -14,7 +14,7 @@
     },
     "Range": {
       "Min": 1,
-      "Max": 2
+      "Max": 3
     },
     "Effect": "Damage",
     "Targets": "Enemy",
@@ -24,7 +24,7 @@
     },
     "IsMelee": true,
     "Tags": [
-      "bite"
+      "slash"
     ]
   },
   "DropTableSids": [

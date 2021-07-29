@@ -8,10 +8,10 @@
       "Sid": "intro",
       "IsStart": true,
       "RegularMonsterSids": [
-        "predator"
+        "skeleton"
       ],
       "RareMonsterSids": [
-        "predator-equipment"
+        "skeleton-equipment"
       ],
       "MapGeneratorOptions": {
         "MapGenerator": "Room",

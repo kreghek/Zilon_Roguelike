@@ -12,7 +12,7 @@
       },
       "IsStart": true,
       "RegularMonsterSids": [
-        "predator-water"
+        "warthog"
       ],
       "RareMonsterSids": null,
       "ChampionMonsterSids": null,

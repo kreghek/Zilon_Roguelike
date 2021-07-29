@@ -1,9 +1,9 @@
 {
   "Name": {
-    "Ru": "Хищник Medkit",
-    "En": "Predator Medkit"
+    "Ru": "Скелет",
+    "En": "Skeleton"
   },
-  "Hp": 15,
+  "Hp": 100,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
@@ -24,15 +24,14 @@
     },
     "IsMelee": true,
     "Tags": [
-      "bite"
+      "punch"
     ]
   },
   "DropTableSids": [
-    "survival-medkit",
     "default",
     "default-evil-hour"
   ],
-  "BaseScore": 100,
+  "BaseScore": 300,
   "Tags": [
     "beast"
   ]
