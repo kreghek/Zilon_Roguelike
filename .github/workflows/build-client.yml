@@ -3,15 +3,7 @@ name: Build game clients
 on:
   push:
     branches:
-      - master
-    tags:
-      - 'v*.*.*'
-  pull_request:
-    types: [opened, synchronize, reopened]
-    branches:
-      - master
-    tags:
-      - 'v*.*.*'
+      - develop-gdw21
 
 jobs:
   build:
@@ -20,14 +12,12 @@ jobs:
     strategy:
       matrix:
         project:
-          - Zilon.TextClient
           - CDT.LAST.MonoGameClient
         configuration:
           - Release
           - Debug
         runtime:
           - win-x64
-          - linux-x64
     steps:
       - uses: actions/checkout@v2
 
