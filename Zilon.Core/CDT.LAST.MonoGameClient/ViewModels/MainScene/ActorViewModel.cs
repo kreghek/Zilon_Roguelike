@@ -116,8 +116,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         graphics = new AnimalGraphics(gameObjectParams.PersonVisualizationContentStorage);
                         break;
 
-                    case "warthrog":
-                        graphics = new MonoGraphics("warthrog", gameObjectParams.PersonVisualizationContentStorage);
+                    case "warthog":
+                        graphics = new MonoGraphics("warthog", gameObjectParams.PersonVisualizationContentStorage);
                         break;
 
                     case "predator-meat":
