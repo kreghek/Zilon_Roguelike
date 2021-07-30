@@ -1133,6 +1133,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/ClothIcons/WorkClothes.png
 
+#begin Sprites/ui/CombatActIcons/DeathPunch.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/CombatActIcons/DeathPunch.png
+
 #begin Sprites/ui/CombatActIcons/EvasionSlash.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1204,6 +1216,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color16Bit
 /build:Sprites/ui/CombatActIcons/SwordCut.png
+
+#begin Sprites/ui/CombatActIcons/Uppercut.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/CombatActIcons/Uppercut.png
 
 #begin Sprites/ui/CombatActIcons/WeakBlock.png
 /importer:TextureImporter

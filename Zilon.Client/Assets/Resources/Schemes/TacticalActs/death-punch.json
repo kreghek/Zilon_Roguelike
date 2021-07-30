@@ -5,8 +5,8 @@
   },
   "Stats": {
     "Efficient": {
-      "Dice": 6,
-      "Count": 1,
+      "Dice": 3,
+      "Count": 3,
       "Modifiers": {
         "ResultBuff": 3
       }
@@ -31,6 +31,6 @@
   },
   "Constrains":
   {
-	  "EnergyCost": 30
+	  "EnergyCost": 50
   }
 }

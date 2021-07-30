@@ -45,13 +45,13 @@ namespace Zilon.Core.Commands
 
             var map = sector.Map;
 
-            var activeActor = PlayerState.ActiveActor;
-            if (activeActor is null)
+            var activeActorViewModel = PlayerState.ActiveActor;
+            if (activeActorViewModel is null)
             {
                 return CanExecuteCheckResult.CreateFailed("Active actor is not assigned.");
             }
 
-            var currentNode = activeActor.Actor.Node;
+            var currentNode = activeActorViewModel.Actor.Node;
 
             var target = GetTarget(PlayerState);
             if (target is null)
@@ -67,8 +67,13 @@ namespace Zilon.Core.Commands
                 return CanExecuteCheckResult.CreateFailed("Act is not assigned.");
             }
 
+            if (act.Constrains?.EnergyCost > 0 && activeActorViewModel.Actor.Person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Energy)?.Value < 0)
+            {
+                return CanExecuteCheckResult.CreateFailed("The energy is critically low.");
+            }
+
             if ((act.Stats.Targets & TacticalActTargets.Self) > 0 &&
-                ReferenceEquals(activeActor.Actor, target))
+                ReferenceEquals(activeActorViewModel.Actor, target))
             {
                 // Лечить можно только самого себя.
                 // Возможно, дальше будут компаньоны и другие НПЦ.
@@ -99,7 +104,7 @@ namespace Zilon.Core.Commands
             if (act.Constrains?.PropResourceType != null && act.Constrains?.PropResourceCount != null)
             {
                 var hasPropResource = CheckPropResource(
-                    activeActor.Actor.Person.GetModule<IInventoryModule>(),
+                    activeActorViewModel.Actor.Person.GetModule<IInventoryModule>(),
                     act.Constrains.PropResourceType,
                     act.Constrains.PropResourceCount.Value);
 
