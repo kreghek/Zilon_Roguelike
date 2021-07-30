@@ -297,6 +297,15 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        internal static string NoneEquipmentTitle {
+            get {
+                return ResourceManager.GetString("NoneEquipmentTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Normal.
         /// </summary>
         internal static string NormalAttributeValueTitle {

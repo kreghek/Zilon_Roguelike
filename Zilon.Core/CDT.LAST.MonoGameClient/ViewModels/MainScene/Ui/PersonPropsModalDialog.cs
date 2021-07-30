@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 
 using CDT.LAST.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.Resources;
 using CDT.LAST.MonoGameClient.Screens;
 
 using Microsoft.Xna.Framework;
@@ -138,7 +139,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private void DrawEquipmentHintIfSelected(SpriteBatch spriteBatch)
         {
-            if (_hoverEquipmentItem is null)
+            if (_hoverEquipmentItem is null || _hoverEquipmentItem.Equipment is null)
             {
                 return;
             }
@@ -171,8 +172,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             foreach (var item in _currentEquipmentItems)
             {
                 item.Control.Draw(spriteBatch);
-                var propTitle = PropHelper.GetPropTitle(item.Equipment);
-                spriteBatch.DrawString(_uiContentStorage.GetButtonFont(), propTitle, new Vector2(item.Control.Rect.Right + 2, item.Control.Rect.Top), Color.Wheat);
+
+                if (item.Equipment is not null)
+                {
+                    var propTitle = PropHelper.GetPropTitle(item.Equipment);
+                    spriteBatch.DrawString(_uiContentStorage.GetButtonFont(), propTitle, new Vector2(item.Control.Rect.Right + 2, item.Control.Rect.Top), Color.Wheat);
+                }
+                else
+                {
+                    spriteBatch.DrawString(_uiContentStorage.GetButtonFont(), UiResources.NoneEquipmentTitle, new Vector2(item.Control.Rect.Right + 2, item.Control.Rect.Top), Color.Gray);
+                }
             }
         }
 
@@ -190,7 +199,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 var propTitle = PropHelper.GetPropTitle(item.Prop);
                 if (item.Prop is Resource resource)
                 {
-                    propTitle = propTitle + $" x{resource.Count}";
+                    propTitle += $" x{resource.Count}";
                 }
                 spriteBatch.DrawString(_uiContentStorage.GetButtonFont(), propTitle, new Vector2(item.Control.Rect.Right + 2, item.Control.Rect.Top), Color.Wheat);
             }
@@ -231,13 +240,50 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             var currentEquipmentItemList = new List<EquipmentUiItem>();
-            var equipmentList = equipmentModule.ToArray();
-            for (var itemIndex = 0; itemIndex < equipmentList.Length; itemIndex++)
+            var equipmentSlotList = equipmentModule.Slots.ToArray();
+            for (var itemIndex = 0; itemIndex < equipmentSlotList.Length; itemIndex++)
             {
-                var equipment = equipmentList[itemIndex];
-                if (equipment is null)
+                var slot = equipmentSlotList[itemIndex];
+
+                var sid = string.Empty;
+                Equipment equipment = null;
+                if (equipmentModule[itemIndex] is not null)
                 {
-                    continue;
+                    equipment = equipmentModule[itemIndex];
+                    sid = equipment.Scheme.Sid;
+                    if (string.IsNullOrEmpty(sid))
+                    {
+                        Debug.Fail("All equipment must have symbolic identifier (SID).");
+                        sid = "EmptyPropIcon";
+                    }
+                }
+                else
+                {
+                    switch (slot.Types)
+                    {
+                        case Zilon.Core.Components.EquipmentSlotTypes.Head:
+                            sid = "HeadSlot";
+                            break;
+
+                        case Zilon.Core.Components.EquipmentSlotTypes.Body:
+                            sid = "BodySlot";
+                            break;
+
+                        case Zilon.Core.Components.EquipmentSlotTypes.Hand:
+                            if (slot.IsMain)
+                            {
+                                sid = "RightHandSlot";
+                            }
+                            else
+                            {
+                                sid = "LeftHandSlot";
+                            }
+                            break;
+
+                        case Zilon.Core.Components.EquipmentSlotTypes.Aux:
+                            sid = "AuxSlot";
+                            break;
+                    }
                 }
 
                 var relativeY = itemIndex * (EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING);
@@ -246,13 +292,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     rect.Top + relativeY,
                     EQUIPMENT_ITEM_SIZE,
                     EQUIPMENT_ITEM_SIZE);
-
-                var sid = equipment.Scheme.Sid;
-                if (string.IsNullOrEmpty(sid))
-                {
-                    Debug.Fail("All equipment must have symbolic identifier (SID).");
-                    sid = "EmptyPropIcon";
-                }
 
                 var equipmentButton = new EquipmentButton(
                     _uiContentStorage.GetButtonTexture(),
@@ -381,7 +420,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             public EquipmentUiItem(EquipmentButton control, Equipment equipment, int uiIndex, Rectangle uiRect)
             {
                 Control = control ?? throw new ArgumentNullException(nameof(control));
-                Equipment = equipment ?? throw new ArgumentNullException(nameof(equipment));
+                Equipment = equipment;
                 UiIndex = uiIndex;
                 UiRect = uiRect;
             }

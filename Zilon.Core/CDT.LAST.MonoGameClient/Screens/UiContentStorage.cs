@@ -183,6 +183,17 @@ namespace CDT.LAST.MonoGameClient.Screens
             _propIcons.Add("packed-food",
                 new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/PackedFood") });
 
+            _propIcons.Add("HeadSlot",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/InventorySlots/Head") });
+            _propIcons.Add("BodySlot",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/InventorySlots/Body") });
+            _propIcons.Add("RightHandSlot",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/InventorySlots/RightHand") });
+            _propIcons.Add("LeftHandSlot",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/InventorySlots/LeftHand") });
+            _propIcons.Add("AuxSlot",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/InventorySlots/Auxiliary") });
+
             _propIcons.Add("EmptyPropIcon", new[] { contentManager.Load<Texture2D>("Sprites/ui/EmptyPropIcon") });
         }
 

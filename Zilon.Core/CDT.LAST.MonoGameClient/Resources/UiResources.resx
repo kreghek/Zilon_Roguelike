@@ -288,4 +288,7 @@ take out the character before he dies.</value>
   <data name="PlayerInputNicknamePrompt" xml:space="preserve">
     <value>Please, enter your nickname</value>
   </data>
+  <data name="NoneEquipmentTitle" xml:space="preserve">
+    <value>None</value>
+  </data>
 </root>

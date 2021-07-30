@@ -288,4 +288,7 @@
   <data name="PlayerInputNicknamePrompt" xml:space="preserve">
     <value>Введите свое прозвище</value>
   </data>
+  <data name="NoneEquipmentTitle" xml:space="preserve">
+    <value>Пусто</value>
+  </data>
 </root>
