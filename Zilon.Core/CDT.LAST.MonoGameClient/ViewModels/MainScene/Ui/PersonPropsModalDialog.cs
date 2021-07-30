@@ -47,6 +47,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         protected override void DrawContent(SpriteBatch spriteBatch)
         {
+            // Separator
+            spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), new Rectangle(ContentRect.Center.X, ContentRect.Top, 2, ContentRect.Height), Color.White);
+
             DrawEquipments(spriteBatch);
             DrawInventory(spriteBatch);
 
@@ -71,8 +74,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 throw new InvalidOperationException("Active person must be selected before this dialog was opened.");
             }
 
-            InitEquipment(person);
-            InitInventory(person);
+            var halfWidth = ContentRect.Width / 2;
+            InitEquipment(person, new Rectangle(ContentRect.Left, ContentRect.Top, halfWidth - 2, ContentRect.Height));
+            InitInventory(person, new Rectangle(ContentRect.Center.X + 2 * 2, ContentRect.Top, halfWidth - 2 * 2, ContentRect.Height));
         }
 
         protected override void UpdateContent()
@@ -167,6 +171,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             foreach (var item in _currentEquipmentItems)
             {
                 item.Control.Draw(spriteBatch);
+                var propTitle = PropHelper.GetPropTitle(item.Equipment);
+                spriteBatch.DrawString(_uiContentStorage.GetButtonFont(), propTitle, new Vector2(item.Control.Rect.Right + 2, item.Control.Rect.Top), Color.Wheat);
             }
         }
 
@@ -180,6 +186,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             foreach (var item in _currentInventoryItems)
             {
                 item.Control.Draw(spriteBatch);
+
+                var propTitle = PropHelper.GetPropTitle(item.Prop);
+                if (item.Prop is Resource resource)
+                {
+                    propTitle = propTitle + $" x{resource.Count}";
+                }
+                spriteBatch.DrawString(_uiContentStorage.GetButtonFont(), propTitle, new Vector2(item.Control.Rect.Right + 2, item.Control.Rect.Top), Color.Wheat);
             }
         }
 
@@ -208,7 +221,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 Color.Wheat);
         }
 
-        private void InitEquipment(IPerson person)
+        private void InitEquipment(IPerson person, Rectangle rect)
         {
             var equipmentModule = person.GetModuleSafe<IEquipmentModule>();
             if (equipmentModule is null)
@@ -218,18 +231,19 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             var currentEquipmentItemList = new List<EquipmentUiItem>();
-            foreach (var equipment in equipmentModule)
+            var equipmentList = equipmentModule.ToArray();
+            for (var itemIndex = 0; itemIndex < equipmentList.Length; itemIndex++)
             {
+                var equipment = equipmentList[itemIndex];
                 if (equipment is null)
                 {
                     continue;
                 }
 
-                var lastIndex = currentEquipmentItemList.Count;
-                var relativeX = lastIndex * (EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING);
+                var relativeY = itemIndex * (EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING);
                 var buttonRect = new Rectangle(
-                    relativeX + ContentRect.Left,
-                    ContentRect.Top,
+                    rect.Left,
+                    rect.Top + relativeY,
                     EQUIPMENT_ITEM_SIZE,
                     EQUIPMENT_ITEM_SIZE);
 
@@ -246,7 +260,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     buttonRect,
                     new Rectangle(0, 0, EQUIPMENT_ITEM_SIZE, EQUIPMENT_ITEM_SIZE));
 
-                var uiItem = new EquipmentUiItem(equipmentButton, equipment, lastIndex, buttonRect);
+                var uiItem = new EquipmentUiItem(equipmentButton, equipment, itemIndex, buttonRect);
 
                 currentEquipmentItemList.Add(uiItem);
             }
@@ -254,7 +268,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _currentEquipmentItems = currentEquipmentItemList.ToArray();
         }
 
-        private void InitInventory(IPerson person)
+        private void InitInventory(IPerson person, Rectangle rect)
         {
             var inventoryModule = person.GetModuleSafe<IInventoryModule>();
             if (inventoryModule is null)
@@ -264,24 +278,19 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             var currentInventoryItemList = new List<InventoryUiItem>();
-            var inventoryItems = inventoryModule.CalcActualItems();
-            foreach (var prop in inventoryItems)
+            var inventoryItems = inventoryModule.CalcActualItems().ToArray();
+            for (var itemIndex = 0; itemIndex < inventoryItems.Length; itemIndex++)
             {
+                var prop = inventoryItems[itemIndex];
                 if (prop is null)
                 {
                     continue;
                 }
 
-                const int EQUIPMENT_ROW_HEIGHT = EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING;
-
-                var lastIndex = currentInventoryItemList.Count;
-                var columnIndex = lastIndex % MAX_INVENTORY_ROW_ITEMS;
-                var rowIndex = lastIndex / MAX_INVENTORY_ROW_ITEMS;
-                var relativeX = columnIndex * (EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING);
-                var relativeY = rowIndex * (EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING);
+                var relativeY = itemIndex * (EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING);
                 var buttonRect = new Rectangle(
-                    relativeX + ContentRect.Left,
-                    ContentRect.Top + relativeY + EQUIPMENT_ROW_HEIGHT,
+                    rect.Left,
+                    rect.Top + relativeY,
                     EQUIPMENT_ITEM_SIZE,
                     EQUIPMENT_ITEM_SIZE);
 
@@ -298,7 +307,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     buttonRect);
                 propButton.OnClick += PropButton_OnClick;
 
-                var uiItem = new InventoryUiItem(propButton, prop, lastIndex, buttonRect);
+                var uiItem = new InventoryUiItem(propButton, prop, itemIndex, buttonRect);
 
                 currentInventoryItemList.Add(uiItem);
             }
