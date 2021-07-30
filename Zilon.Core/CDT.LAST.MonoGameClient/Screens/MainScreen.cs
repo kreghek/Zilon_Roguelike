@@ -421,6 +421,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             if (_uiState.ActiveActor is not null)
             {
+                _uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>().IsCombatMode = false;
                 _uiState.ActiveActor.Actor.OpenedContainer -= Actor_OpenedContainer;
                 _uiState.ActiveActor.Actor.BeginTransitionToOtherSector -= Actor_BeginTransitionToOtherSector;
             }
