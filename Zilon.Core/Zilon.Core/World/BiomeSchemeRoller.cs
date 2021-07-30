@@ -19,9 +19,9 @@ namespace Zilon.Core.World
 
         public ILocationScheme Roll()
         {
-            var globeNodeMeatSchemeSids = Enumerable.Range(1, 7).Select(x => "globe-node-meat").ToArray();
-            var globeNodeWaterSchemeSids = Enumerable.Range(1, 7).Select(x => "globe-node-water").ToArray();
-            var globeNodeMedkitSchemeSids = Enumerable.Range(1, 7).Select(x => "globe-node-medkit").ToArray();
+            var globeNodeMeatSchemeSids = Enumerable.Range(1, 3).Select(x => "globe-node-meat").ToArray();
+            var globeNodeWaterSchemeSids = Enumerable.Range(1, 3).Select(x => "globe-node-water").ToArray();
+            var globeNodeMedkitSchemeSids = Enumerable.Range(1, 3).Select(x => "globe-node-medkit").ToArray();
 
             var dungeonSchemeSids = new[]
             {

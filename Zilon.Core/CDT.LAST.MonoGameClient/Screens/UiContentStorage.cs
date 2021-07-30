@@ -127,7 +127,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                 },
                 {
                     SurvivalStatType.Energy,
-                    contentManager.Load<Texture2D>("Sprites/ui/PersonConditions/InjureConditionIcon")
+                    contentManager.Load<Texture2D>("Sprites/ui/PersonConditions/EnergyConditionIcon")
                 }
             };
 

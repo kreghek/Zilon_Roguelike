@@ -1469,6 +1469,18 @@
 /processorParam:TextureFormat=Color16Bit
 /build:Sprites/ui/PersonConditions/DiseaseSymptomConditionIcon.png
 
+#begin Sprites/ui/PersonConditions/EnergyConditionIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/PersonConditions/EnergyConditionIcon.png
+
 #begin Sprites/ui/PersonConditions/HungerConditionIcon.png
 /importer:TextureImporter
 /processor:TextureProcessor

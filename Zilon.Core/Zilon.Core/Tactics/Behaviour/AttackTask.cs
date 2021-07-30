@@ -31,7 +31,24 @@ namespace Zilon.Core.Tactics.Behaviour
             TargetNode = target.Node;
 
             var combatActDuration = (tacticalAct.Constrains?.Duration).GetValueOrDefault(1);
-            _cost = GlobeMetrics.OneIterationLength * combatActDuration;
+            var durationBonus = GetDurationBonus(actor);
+            var durationWithBonus = (int)Math.Round(GlobeMetrics.OneIterationLength * combatActDuration * durationBonus);
+            _cost = durationWithBonus;
+        }
+
+        private static float GetDurationBonus(IActor actor)
+        {
+            var dexterity = (actor.Person.GetModuleSafe<IAttributesModule>()?.GetAttribute(PersonAttributeType.Dexterity)?.Value).GetValueOrDefault(10);
+            if (dexterity > 10)
+            {
+                return 0.75f;
+            }
+            else if (dexterity < 10)
+            {
+                return 1.25f;
+            }
+
+            return 1f;
         }
 
         public override int Cost => _cost;
