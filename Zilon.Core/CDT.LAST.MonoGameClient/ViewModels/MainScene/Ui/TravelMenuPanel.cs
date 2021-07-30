@@ -81,7 +81,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             var idleButton = new IconButton(texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 iconData: new IconData(
                     uiContentStorage.GetSmallVerticalButtonIconsTexture(),
-                    new Rectangle(16, 32, BUTTON_WIDTH, BUTTON_HEIGHT)
+                    new Rectangle(32, 32, BUTTON_WIDTH, BUTTON_HEIGHT)
                 ),
                 rect: new Rectangle(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
 

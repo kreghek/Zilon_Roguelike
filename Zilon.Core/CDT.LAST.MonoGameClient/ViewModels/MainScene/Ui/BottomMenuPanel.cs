@@ -55,25 +55,26 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             _currentModeMenu = _travelPanel;
 
-            var idleButtonIcon = new IconData(
+            var combatButtonIcon = new IconData(
                 uiContentStorage.GetSmallVerticalButtonIconsTexture(),
                 new Rectangle(48, 0, SWITCHER_MODE_BUTTON_WIDTH, SWITCHER_MODE_BUTTON_HEIGHT)
             );
 
-            var combatButtonIcon = new IconData(
+            var idleButtonIcon = new IconData(
                 uiContentStorage.GetSmallVerticalButtonIconsTexture(),
                 new Rectangle(0, 32, SWITCHER_MODE_BUTTON_WIDTH, SWITCHER_MODE_BUTTON_HEIGHT)
             );
 
-            _idleModeSwitcherButton = new IconButton(uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
-                combatButtonIcon,
+            _idleModeSwitcherButton = new IconButton(
+                uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
+                idleButtonIcon,
                 new Rectangle(0, 0, SWITCHER_MODE_BUTTON_WIDTH, SWITCHER_MODE_BUTTON_HEIGHT));
             _idleModeSwitcherButton.OnClick += IdleModeSwitcherButton_OnClick;
             _combatActModule = combatActModule;
             _uiContentStorage = uiContentStorage;
             _combatModeSwitcherButton = new IconButton(
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
-                iconData: idleButtonIcon,
+                iconData: combatButtonIcon,
                 rect: new Rectangle(0, 0, SWITCHER_MODE_BUTTON_WIDTH, SWITCHER_MODE_BUTTON_HEIGHT));
             _combatModeSwitcherButton.OnClick += CombatModeSwitcherButton_OnClick;
         }
