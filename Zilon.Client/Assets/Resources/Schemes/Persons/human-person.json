@@ -3,7 +3,7 @@
     "Ru": "Персонаж игрока"
   },
   "Hp": 60,
-  "DefaultAct": "punch",
+  "DefaultActs": ["punch", "uppercut", "death-punch"],
   "Slots": [
     {
       "Types": "Head",
@@ -115,6 +115,29 @@
       "MinValue": 0,
       "MaxValue": 50,
       "StartValue": 0
-    }
+    },
+	{
+      "Type": "Energy",
+      "MinValue": -1,
+      "MaxValue": 99,
+      "StartValue": 99,
+      "KeyPoints": [
+        {
+          "Level": "Max",
+          "Start": 0,
+          "End": 0.01
+        },
+        {
+          "Level": "Strong",
+          "Start": 0.01,
+          "End": 0.75
+        },
+        {
+          "Level": "Lesser",
+          "Start": 0.75,
+          "End": 0.86
+        }
+      ]
+    },
   ]
 }

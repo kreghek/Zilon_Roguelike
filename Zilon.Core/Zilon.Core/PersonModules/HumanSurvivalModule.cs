@@ -271,7 +271,7 @@ namespace Zilon.Core.PersonModules
             var stat = new SurvivalStat(statScheme.StartValue, statScheme.MinValue, statScheme.MaxValue)
             {
                 Type = type,
-                Rate = 1,
+                Rate = type != SurvivalStatType.Energy ? 1 : -1,
                 KeySegments = keySegmentList.ToArray(),
                 DownPassRoll = statScheme.DownPassRoll.GetValueOrDefault(SurvivalStat.DEFAULT_DOWN_PASS_VALUE)
             };
@@ -546,12 +546,15 @@ namespace Zilon.Core.PersonModules
                     PersonSurvivalStatType.Intoxication);
 
                 yield return CreateStatFromScheme(survivalStats,
+                    SurvivalStatType.Energy,
+                    PersonSurvivalStatType.Energy);
+
+                yield return CreateStatFromScheme(survivalStats,
                     SurvivalStatType.Wound,
                     PersonSurvivalStatType.Wound);
             }
 
             yield return CreateUselessStat(SurvivalStatType.Breath);
-            yield return CreateUselessStat(SurvivalStatType.Energy);
         }
 
         private void OtherModule_StateChanged(object? sender, EventArgs e)

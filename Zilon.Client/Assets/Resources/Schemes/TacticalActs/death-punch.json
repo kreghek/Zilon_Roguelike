@@ -1,14 +1,14 @@
 {
   "Name": {
-    "Ru": "Удар кулаком",
-    "En": "Punch"
+    "Ru": "Апперкот",
+    "En": "Uppercut"
   },
   "Stats": {
     "Efficient": {
       "Dice": 3,
-      "Count": 1,
+      "Count": 3,
       "Modifiers": {
-        "ResultBuff": 1
+        "ResultBuff": 3
       }
     },
     "Range": {
@@ -22,14 +22,15 @@
     "Offence": {
       "Type": "Tactical",
       "Impact": "Kinetic",
-      "ApRank": 1
+      "ApRank": 2
     },
     "Tags": [
-      "punch"
+      "punch",
+	  "overpower"
     ]
   },
   "Constrains":
   {
-	  "EnergyCost": 1
+	  "EnergyCost": 50
   }
 }

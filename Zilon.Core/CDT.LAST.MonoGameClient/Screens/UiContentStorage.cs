@@ -91,6 +91,9 @@ namespace CDT.LAST.MonoGameClient.Screens
 
                 ["tag-punch"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/Punch"),
 
+                ["uppercut"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/Uppercut"),
+                ["death-punch"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/DeathPunch"),
+
                 ["clumsy-cut"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/SwordCut"),
                 ["evasion-slash"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/EvasionSlash"),
                 ["lunging-stab"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/LungingStab"),
@@ -120,6 +123,10 @@ namespace CDT.LAST.MonoGameClient.Screens
                 },
                 {
                     SurvivalStatType.Health,
+                    contentManager.Load<Texture2D>("Sprites/ui/PersonConditions/InjureConditionIcon")
+                },
+                {
+                    SurvivalStatType.Energy,
                     contentManager.Load<Texture2D>("Sprites/ui/PersonConditions/InjureConditionIcon")
                 }
             };

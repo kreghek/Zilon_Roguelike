@@ -171,6 +171,33 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to OVERHEATED!.
+        /// </summary>
+        internal static string EnergyCriticalConditionTitle {
+            get {
+                return ResourceManager.GetString("EnergyCriticalConditionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Easy tired.
+        /// </summary>
+        internal static string EnergyLesserConditionTitle {
+            get {
+                return ResourceManager.GetString("EnergyLesserConditionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tired.
+        /// </summary>
+        internal static string EnergyStrongConditionTitle {
+            get {
+                return ResourceManager.GetString("EnergyStrongConditionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Equip in slot: {0}.
         /// </summary>
         internal static string EquipInSlotTemplateCommandButton {

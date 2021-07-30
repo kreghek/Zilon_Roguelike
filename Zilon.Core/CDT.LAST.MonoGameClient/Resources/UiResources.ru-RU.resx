@@ -291,4 +291,13 @@
   <data name="NoneEquipmentTitle" xml:space="preserve">
     <value>Пусто</value>
   </data>
+  <data name="EnergyLesserConditionTitle" xml:space="preserve">
+    <value>Слабо выдохся</value>
+  </data>
+  <data name="EnergyStrongConditionTitle" xml:space="preserve">
+    <value>Одышка</value>
+  </data>
+  <data name="EnergyCriticalConditionTitle" xml:space="preserve">
+    <value>ПЕРЕГРЕВ!</value>
+  </data>
 </root>

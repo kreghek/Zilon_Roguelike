@@ -27,5 +27,7 @@
         /// Тип ресурсов, необходимых для выполнения действия.
         /// </summary>
         string? PropResourceType { get; }
+
+        int? EnergyCost { get; }
     }
 }
