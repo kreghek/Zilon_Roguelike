@@ -40,8 +40,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private readonly ISectorUiState _uiState;
 
         private double _alertCounter;
-
-        private bool _isAlertEffectPlaying;
         private IPersonCondition? _selectedCondition;
         private int? _selectedConditionIconIndex;
 
