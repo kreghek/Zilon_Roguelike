@@ -110,6 +110,12 @@ namespace CDT.LAST.MonoGameClient
             soundtrackManager.Initialize(titleSong);
             soundtrackManagerComponent.Initialize(soundtrackManager);
             Components.Add(soundtrackManagerComponent);
+#if !DEBUG
+            _graphics.IsFullScreen = true;
+            _graphics.PreferredBackBufferWidth = 1280;
+            _graphics.PreferredBackBufferHeight = 720;
+            _graphics.ApplyChanges();
+#endif
         }
 
         protected override void Update(GameTime gameTime)

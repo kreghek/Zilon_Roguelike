@@ -245,8 +245,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
                 { "skeleton",  content.Load<Texture2D>("Sprites/game-objects/Monographics/Skeleton")},
                 { "skeleton/Outlined",  content.Load<Texture2D>("Sprites/game-objects/Monographics/Skeleton")},
 
-                { "skeleton-elite",  content.Load<Texture2D>("Sprites/game-objects/Monographics/SkeletonElite")},
-                { "skeleton-elite/Outlined",  content.Load<Texture2D>("Sprites/game-objects/Monographics/SkeletonElite")},
+                { "skeleton-equipment",  content.Load<Texture2D>("Sprites/game-objects/Monographics/SkeletonElite")},
+                { "skeleton-equipment/Outlined",  content.Load<Texture2D>("Sprites/game-objects/Monographics/SkeletonElite")},
 
                 { "warthog",  content.Load<Texture2D>("Sprites/game-objects/Monographics/Warthog")},
                 { "warthog/Outlined",  content.Load<Texture2D>("Sprites/game-objects/Monographics/Warthog")}
