@@ -195,11 +195,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             _deathDict = new Dictionary<string, SoundEffect>
             {
-                ["human"] = contentManager.Load<SoundEffect>("Audio/HumanDeath"),
-                ["dog"] = contentManager.Load<SoundEffect>("Audio/DogDeath"),
-                ["pig"] = contentManager.Load<SoundEffect>("Audio/PigDeath"),
-                ["insect"] = contentManager.Load<SoundEffect>("Audio/InsectDeath"),
-                ["skeleton"] = contentManager.Load<SoundEffect>("Audio/SkeletonDeath")
+                ["human"] = contentManager.Load<SoundEffect>("Audio/Deaths/HumanDeath"),
+                ["dog"] = contentManager.Load<SoundEffect>("Audio/Deaths/DogDeath"),
+                ["pig"] = contentManager.Load<SoundEffect>("Audio/Deaths/PigDeath"),
+                ["insect"] = contentManager.Load<SoundEffect>("Audio/Deaths/InsectDeath"),
+                ["skeleton"] = contentManager.Load<SoundEffect>("Audio/Deaths/SkeletonDeath")
             };
 
             _impactDict = new Dictionary<string, SoundEffect>
