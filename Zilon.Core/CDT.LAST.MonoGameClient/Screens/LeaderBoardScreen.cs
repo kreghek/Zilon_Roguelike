@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using CDT.LAST.MonoGameClient.Database;
 using CDT.LAST.MonoGameClient.Engine;
@@ -9,6 +10,7 @@ using CDT.LAST.MonoGameClient.Resources;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Scoring;
 
@@ -45,7 +47,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private const int SCORE_TABLE_HEADERS_ROW_OFFSET_Y = 2;
 
-        private const int ADD_PLAYER_SCORE_BUTTON_POSITION_X = PLAYER_SCORE_TITLE_POSITION_X + OFFSET_BETWEEN_BUTTON;
+        private const int ADD_PLAYER_SCORE_BUTTON_POSITION_X = GO_TO_MAIN_MENU_BUTTON_POSITION_X + BUTTON_WIDTH + OFFSET_BETWEEN_BUTTON;
 
         private const int OFFSET_BETWEEN_BUTTON = 100;
 
@@ -64,11 +66,11 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private readonly TextButton _addPlayerNickname;
 
-        private readonly int _addPlayerScoreButtonOffsetY = GetRowVerticalPositionOffset(PLAYER_ROW_OFFSET_Y);
+        private const int ADD_PLAYER_SCORE_BUTTON_POSITION_Y = GO_TO_MAIN_MENU_BUTTON_POSITION_Y;
 
         private readonly TextButton _clearPlayerNickname;
 
-        private readonly int _clearPlayerScoreButtonOffsetY = GetRowVerticalPositionOffset(PLAYER_ROW_OFFSET_Y);
+        private const int CLEAR_PLAYER_SCORE_BUTTON_POSITION_Y = GO_TO_MAIN_MENU_BUTTON_POSITION_Y;
 
         private readonly DbContext _dbContext;
 
@@ -100,7 +102,9 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private List<PlayerScore> _leaderBoardRecords;
 
-        private string _playerNickname = "";
+        private string PlayerNickname => _playerNicknameSb.ToString();
+
+        private StringBuilder _playerNicknameSb = new ();
 
         /// <inheritdoc />
         public LeaderBoardScreen(Game game, SpriteBatch spriteBatch)
@@ -134,7 +138,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                 uiContentStorage.GetButtonFont(),
                 new Rectangle(
                     ADD_PLAYER_SCORE_BUTTON_POSITION_X,
-                    _addPlayerScoreButtonOffsetY,
+                    ADD_PLAYER_SCORE_BUTTON_POSITION_Y,
                     ADD_PLAYER_NICNKNAME_BUTTON_WIDTH,
                     BUTTON_HEIGHT));
             _addPlayerNickname.OnClick += AddPlayerNickNameClickHandler;
@@ -145,7 +149,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                 uiContentStorage.GetButtonFont(),
                 new Rectangle(
                     CLEAR_PLAYER_SCORE_BUTTON_POSITION_X,
-                    _clearPlayerScoreButtonOffsetY,
+                    CLEAR_PLAYER_SCORE_BUTTON_POSITION_Y,
                     BUTTON_WIDTH,
                     BUTTON_HEIGHT));
             _clearPlayerNickname.OnClick += ClearPlayerNickNameClickHandler;
@@ -166,6 +170,8 @@ namespace CDT.LAST.MonoGameClient.Screens
             _spriteBatch.Begin();
 
             _goToMainMenu.Draw(_spriteBatch);
+            _addPlayerNickname.Draw(_spriteBatch);
+            _clearPlayerNickname.Draw(_spriteBatch);
             _spriteBatch.DrawString(
                 _font,
                 UiResources.LeaderboardMenuTitle,
@@ -188,13 +194,13 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private void AddPlayerNickNameClickHandler(object? sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(_playerNickname))
+            if (_playerNicknameSb.Length == 0)
             {
                 _isVisibleNickNamePromt = true;
             }
             else
             {
-                _dbContext.AppendScores(_playerNickname, _scoreSummary);
+                _dbContext.AppendScores(PlayerNickname, _scoreSummary);
                 _leaderBoardRecords = _dbContext.GetLeaderBoard();
                 _isNeedToAddedPlayerScore = false;
                 _addPlayerNickname.OnClick -= AddPlayerNickNameClickHandler;
@@ -204,7 +210,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private void ClearPlayerNickNameClickHandler(object? sender, EventArgs e)
         {
-            _playerNickname = "";
+            _playerNicknameSb.Clear();
         }
 
         private void DrawAddPlayerRows()
@@ -281,7 +287,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         {
             _spriteBatch.DrawString(
                 _font,
-                _playerNickname,
+                PlayerNickname,
                 GetNickCellPosition(_playerRowOffsetY),
                 _playerInfoColor);
         }
@@ -363,15 +369,25 @@ namespace CDT.LAST.MonoGameClient.Screens
         private void InputNickName(object? sender, TextInputEventArgs e)
         {
             var playerChar = e.Character;
-            if (_playerNickname.Length + 1 <= NICKNAME_MAX_LENGTH)
+
+            if (CanInputMore() && IsPrintedChar(playerChar))
             {
-                _playerNickname = $"{_playerNickname}{playerChar}";
+                _playerNicknameSb.Append(playerChar);
             }
 
-            if (!string.IsNullOrEmpty(_playerNickname))
+            if (_playerNicknameSb.Length > 0)
             {
                 _isVisibleNickNamePromt = false;
+                if (e.Key == Keys.Back)
+                    _playerNicknameSb.Remove(_playerNicknameSb.Length - 1, 1);
             }
+        }
+
+        private bool CanInputMore() => _playerNicknameSb.Length < NICKNAME_MAX_LENGTH;
+
+        private bool IsPrintedChar(char ch)
+        {
+            return char.IsLetterOrDigit(ch);
         }
 
         private void UpdateAddNickNamePlayerButtons()

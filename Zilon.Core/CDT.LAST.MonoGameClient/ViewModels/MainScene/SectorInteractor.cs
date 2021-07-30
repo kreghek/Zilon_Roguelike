@@ -213,6 +213,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 moveCoords = currentCoords.RightUp();
             }
 
+            if (keyboardState.IsKeyDown(Keys.Space))
+            {
+                var idleCommand = _commandFactory.GetCommand<IdleCommand>();
+                _commandPool.Push(idleCommand);
+            }
+
             if (moveCoords == default)
             {
                 return;
