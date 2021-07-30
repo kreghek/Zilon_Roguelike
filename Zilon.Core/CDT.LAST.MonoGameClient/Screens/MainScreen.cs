@@ -125,7 +125,18 @@ namespace CDT.LAST.MonoGameClient.Screens
             DrawHud();
 
             DrawModals();
+
+            var isInTransition = _transitionPool.CheckPersonInTransition(_player.MainPerson);
+            if (isInTransition)
+            {
+                _loadingAnimCounter += gameTime.ElapsedGameTime.TotalSeconds;
+                _spriteBatch.Begin();
+                _spriteBatch.Draw(_uiContentStorage.GetHintBackgroundTexture(), Game.GraphicsDevice.Viewport.Bounds, Color.Black);
+                _spriteBatch.DrawString(_uiContentStorage.GetButtonFont(), "Loading..." + _loadingAnimCounter.ToString(), new Vector2(0, 0), Color.White);
+            }
         }
+
+        private double _loadingAnimCounter;
 
         public override void Update(GameTime gameTime)
         {

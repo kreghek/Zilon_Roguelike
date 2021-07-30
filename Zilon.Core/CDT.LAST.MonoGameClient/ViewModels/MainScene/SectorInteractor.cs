@@ -320,7 +320,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var availableCombatActs =
                 uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>().GetCurrentCombatActs();
             var punchAct = availableCombatActs.Single(x => x.Scheme.Sid == "punch");
-            uiState.TacticalAct = punchAct;
+            var weaponActs = availableCombatActs.Where(x => x != punchAct);
+
+            if (weaponActs.Any())
+            {
+                uiState.TacticalAct = weaponActs.OrderBy(x => Guid.NewGuid()).First();
+            }
+            else
+            {
+                uiState.TacticalAct = punchAct;
+            }
         }
     }
 }

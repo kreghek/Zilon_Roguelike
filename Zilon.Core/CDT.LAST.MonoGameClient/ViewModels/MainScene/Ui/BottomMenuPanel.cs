@@ -105,7 +105,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             var activeButton = GetActiveSwitcherButton();
 
             activeButton.Rect = buttonRectangle;
-            activeButton.Draw(spriteBatch);
+            //activeButton.Draw(spriteBatch);
         }
 
         public void UnsubscribeEvents()
@@ -120,7 +120,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _currentModeMenu.Update();
 
             var activeSwitcherButton = GetActiveSwitcherButton();
-            activeSwitcherButton.Update();
+            //activeSwitcherButton.Update();
         }
 
         private void CombatModeSwitcherButton_OnClick(object? sender, EventArgs e)
