@@ -14,6 +14,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
+using Zilon.Core.Diseases;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Persons.Survival;
@@ -71,10 +72,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             var conditionsModule = person.GetModule<IConditionsModule>();
 
-            var conditionIndex = 0;
             var items = conditionsModule.Items;
-            foreach (var condition in items)
+            var itemsList = items.ToArray();
+            for (var conditionIndex = 0; conditionIndex < itemsList.Length; conditionIndex++)
             {
+                var condition = itemsList[conditionIndex];
                 var iconX = conditionIndex * (ICON_SIZE + ICON_SPACING) + _screenX;
 
                 var iconTextures = _uiContentStorage.GetConditionIconTextures(condition);
@@ -88,8 +90,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     spriteBatch.Draw(_alertTexture, new Vector2(iconX - ICON_SPACING, _screenY - ICON_SPACING),
                         Color.White);
                 }
-
-                conditionIndex++;
             }
 
             DrawHintIfSelected(spriteBatch);
@@ -192,14 +192,28 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 case SurvivalStatHazardCondition statEffect:
                     return GetSurvivalConditionTitle(statEffect);
 
-                case DiseaseSymptomCondition:
-                    return string.Empty;
+                case DiseaseSymptomCondition diseaseSymptomCondition:
+                    return GetSymptomTitle(diseaseSymptomCondition);
 
                 default:
                     Debug.Fail(
                         $"All person conditions must have localized titles. Unknown person effect: {personCondition}.");
                     return string.Empty;
             }
+        }
+
+        private static string? GetSymptomTitle(DiseaseSymptomCondition diseaseSymptomCondition)
+        {
+            var diseasesTitles = diseaseSymptomCondition.Diseases.Select(x=>GetName(x));
+            var fullDeseasesList = string.Join(",", diseasesTitles);
+            return $"{diseaseSymptomCondition.Symptom.Name?.Ru ?? diseaseSymptomCondition.Symptom.Name?.En} ({fullDeseasesList})";
+        }
+
+        private static string GetName(IDisease disease)
+        {
+            var name =
+                        $"{disease.Name.Secondary?.Ru} {disease.Name.PrimaryPrefix?.Ru}{disease.Name.Primary?.Ru} {disease.Name.Subject?.Ru}";
+            return name;
         }
 
         private static string GetStatHazardConditionLevelClientString(SurvivalStatHazardCondition statCondition)
@@ -224,6 +238,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
                 case SurvivalStatType.Intoxication:
                     return "Intoxication";
+
+                case SurvivalStatType.Energy:
+                    return "Energy";
 
                 case SurvivalStatType.Undefined:
                     Debug.Fail("Undefined condition.");

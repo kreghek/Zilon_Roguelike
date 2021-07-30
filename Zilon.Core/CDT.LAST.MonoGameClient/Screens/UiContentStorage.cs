@@ -121,6 +121,10 @@ namespace CDT.LAST.MonoGameClient.Screens
                 {
                     SurvivalStatType.Health,
                     contentManager.Load<Texture2D>("Sprites/ui/PersonConditions/InjureConditionIcon")
+                },
+                {
+                    SurvivalStatType.Energy,
+                    contentManager.Load<Texture2D>("Sprites/ui/PersonConditions/InjureConditionIcon")
                 }
             };
 

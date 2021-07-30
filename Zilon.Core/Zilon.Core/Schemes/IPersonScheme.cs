@@ -6,7 +6,7 @@
     /// </summary>
     public interface IPersonScheme : IScheme
     {
-        string? DefaultAct { get; set; }
+        string?[]? DefaultActs { get; set; }
 
         int Hp { get; set; }
 

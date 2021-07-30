@@ -54,7 +54,7 @@ namespace Zilon.Core.Specs.Mocks
                 сonditionModule, evolutionModule, equipmentModule);
             person.AddModule(survivalModule);
 
-            var defaultActScheme = _schemeService.GetScheme<ITacticalActScheme>(person.Scheme.DefaultAct);
+            var defaultActScheme = _schemeService.GetScheme<ITacticalActScheme>(person.Scheme.DefaultActs);
             var combatActModule =
                 new CombatActModule(defaultActScheme, equipmentModule, сonditionModule, evolutionModule);
             person.AddModule(combatActModule);

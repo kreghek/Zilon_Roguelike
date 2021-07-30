@@ -291,4 +291,13 @@ take out the character before he dies.</value>
   <data name="NoneEquipmentTitle" xml:space="preserve">
     <value>None</value>
   </data>
+  <data name="EnergyLesserConditionTitle" xml:space="preserve">
+    <value>Easy tired</value>
+  </data>
+  <data name="EnergyStrongConditionTitle" xml:space="preserve">
+    <value>Tired</value>
+  </data>
+  <data name="EnergyCriticalConditionTitle" xml:space="preserve">
+    <value>OVERHEATED!</value>
+  </data>
 </root>

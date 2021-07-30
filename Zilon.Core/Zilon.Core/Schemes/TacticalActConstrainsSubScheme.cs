@@ -21,5 +21,9 @@ namespace Zilon.Core.Schemes
         /// <inheritdoc />
         [JsonProperty]
         public int? Cooldown { get; private set; }
+
+        /// <inheritdoc />
+        [JsonProperty]
+        public int? EnergyCost { get; private set; }
     }
 }

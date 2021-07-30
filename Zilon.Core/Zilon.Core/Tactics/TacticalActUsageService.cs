@@ -219,6 +219,13 @@ namespace Zilon.Core.Tactics
 
             // Сброс КД, если он есть.
             act.StartCooldownIfItIs();
+
+            // Consume energy.
+            // Monster's act has no energy cost.
+            if (act.Constrains?.EnergyCost != null)
+            {
+                actor.Person.GetModule<ISurvivalModule>().DecreaseStat(SurvivalStatType.Energy, act.Constrains.EnergyCost.Value);
+            }
         }
 
         public void UseOn(IActor actor, ActTargetInfo target, UsedTacticalActs usedActs, ISector sector)
