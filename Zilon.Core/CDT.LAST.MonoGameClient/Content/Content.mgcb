@@ -61,6 +61,12 @@
 /processorParam:Quality=Low
 /build:Audio/Deaths/PigDeath.mp3
 
+#begin Audio/Deaths/SkeletonDeath.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Low
+/build:Audio/Deaths/SkeletonDeath.mp3
+
 #begin Audio/DrinkConsumable.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
