@@ -126,17 +126,20 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             DrawModals();
 
-            var isInTransition = _transitionPool.CheckPersonInTransition(_player.MainPerson);
-            if (isInTransition)
+            if (_isBeginTransition)
             {
                 _loadingAnimCounter += gameTime.ElapsedGameTime.TotalSeconds;
                 _spriteBatch.Begin();
                 _spriteBatch.Draw(_uiContentStorage.GetHintBackgroundTexture(), Game.GraphicsDevice.Viewport.Bounds, Color.Black);
-                _spriteBatch.DrawString(_uiContentStorage.GetButtonFont(), "Loading..." + _loadingAnimCounter.ToString(), new Vector2(0, 0), Color.White);
+                var pointCount = ((int)_loadingAnimCounter) % 4;
+                _spriteBatch.DrawString(_uiContentStorage.GetButtonFont(), "Loading" + new string('.', pointCount), Game.GraphicsDevice.Viewport.Bounds.Center.ToVector2(), Color.White);
+                _spriteBatch.End();
             }
         }
 
         private double _loadingAnimCounter;
+
+        private bool _isBeginTransition = false;
 
         public override void Update(GameTime gameTime)
         {
@@ -201,7 +204,13 @@ namespace CDT.LAST.MonoGameClient.Screens
             if (_uiState.ActiveActor is not null)
             {
                 _uiState.ActiveActor.Actor.OpenedContainer += Actor_OpenedContainer;
+                _uiState.ActiveActor.Actor.BeginTransitionToOtherSector += Actor_BeginTransitionToOtherSector;
             }
+        }
+
+        private void Actor_BeginTransitionToOtherSector(object? sender, EventArgs e)
+        {
+            _isBeginTransition = true;
         }
 
         private void BottomMenu_PropButtonClicked(object? sender, EventArgs e)
@@ -413,6 +422,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             if (_uiState.ActiveActor is not null)
             {
                 _uiState.ActiveActor.Actor.OpenedContainer -= Actor_OpenedContainer;
+                _uiState.ActiveActor.Actor.BeginTransitionToOtherSector -= Actor_BeginTransitionToOtherSector;
             }
 
             _bottomMenu.UnsubscribeEvents();
