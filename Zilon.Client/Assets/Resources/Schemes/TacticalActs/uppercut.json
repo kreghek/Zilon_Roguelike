@@ -6,7 +6,7 @@
   "Stats": {
     "Efficient": {
       "Dice": 6,
-      "Count": 1
+      "Count": 2
     },
     "Range": {
       "Min": 1,
@@ -27,6 +27,7 @@
   },
   "Constrains":
   {
-	  "EnergyCost": 2
+	  "EnergyCost": 2,
+	  "Duration": 3
   }
 }

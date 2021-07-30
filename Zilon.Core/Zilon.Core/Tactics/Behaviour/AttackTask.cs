@@ -6,12 +6,15 @@ using Zilon.Core.Components;
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
     public class AttackTask : OneTurnActorTaskBase
     {
         private readonly ITacticalActUsageService _actService;
+
+        private int _cost;
 
         public AttackTask(IActor actor,
             IActorTaskContext context,
@@ -26,7 +29,12 @@ namespace Zilon.Core.Tactics.Behaviour
             TacticalAct = tacticalAct ?? throw new ArgumentNullException(nameof(tacticalAct));
 
             TargetNode = target.Node;
+
+            var combatActDuration = (tacticalAct.Constrains?.Duration).GetValueOrDefault(1);
+            _cost = GlobeMetrics.OneIterationLength * combatActDuration;
         }
+
+        public override int Cost => _cost;
 
         public ICombatAct TacticalAct { get; }
 

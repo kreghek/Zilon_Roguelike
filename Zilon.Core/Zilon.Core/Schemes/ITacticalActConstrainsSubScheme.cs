@@ -29,5 +29,7 @@
         string? PropResourceType { get; }
 
         int? EnergyCost { get; }
+
+        int? Duration { get; }
     }
 }
