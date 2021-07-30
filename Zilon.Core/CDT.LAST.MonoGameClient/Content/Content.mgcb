@@ -37,6 +37,30 @@
 /processorParam:Quality=Low
 /build:Audio/CriticalPersonConditionAlert.mp3
 
+#begin Audio/Deaths/DogDeath.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Low
+/build:Audio/Deaths/DogDeath.wav
+
+#begin Audio/Deaths/HumanDeath.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Low
+/build:Audio/Deaths/HumanDeath.mp3
+
+#begin Audio/Deaths/InsectDeath.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Low
+/build:Audio/Deaths/InsectDeath.mp3
+
+#begin Audio/Deaths/PigDeath.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Low
+/build:Audio/Deaths/PigDeath.mp3
+
 #begin Audio/DrinkConsumable.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
@@ -73,23 +97,11 @@
 /processorParam:Quality=Low
 /build:Audio/HealConsumable.mp3
 
-#begin Audio/HumanDeath.mp3
-/importer:Mp3Importer
-/processor:SoundEffectProcessor
-/processorParam:Quality=Low
-/build:Audio/HumanDeath.mp3
-
 #begin Audio/HumanImpact.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Low
 /build:Audio/HumanImpact.mp3
-
-#begin Audio/HunterDeath.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Low
-/build:Audio/HunterDeath.wav
 
 #begin Audio/HunterHitEffect.mp3
 /importer:Mp3Importer

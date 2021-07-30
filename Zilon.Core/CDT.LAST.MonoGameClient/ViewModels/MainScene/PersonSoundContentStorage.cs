@@ -104,6 +104,29 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             {
                 key = "human";
             }
+            else if (person is MonsterPerson monsterPerson)
+            {
+                switch (monsterPerson.Scheme.Sid)
+                {
+                    case "predator":
+                    case "predator-meat":
+                        key = "dog";
+                        break;
+
+                    case "warthog":
+                        key = "pig";
+                        break;
+
+                    case "gallbladder":
+                        key = "insect";
+                        break;
+
+                    case "skeleton":
+                    case "skeleton-equipment":
+                        key = "skeleton";
+                        break;
+                }
+            }
 
             if (_deathDict.TryGetValue(key, out var soundEffect))
             {
@@ -173,7 +196,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _deathDict = new Dictionary<string, SoundEffect>
             {
                 ["human"] = contentManager.Load<SoundEffect>("Audio/HumanDeath"),
-                ["monster"] = contentManager.Load<SoundEffect>("Audio/HunterDeath")
+                ["dog"] = contentManager.Load<SoundEffect>("Audio/DogDeath"),
+                ["pig"] = contentManager.Load<SoundEffect>("Audio/PigDeath"),
+                ["insect"] = contentManager.Load<SoundEffect>("Audio/InsectDeath"),
+                ["skeleton"] = contentManager.Load<SoundEffect>("Audio/SkeletonDeath")
             };
 
             _impactDict = new Dictionary<string, SoundEffect>
