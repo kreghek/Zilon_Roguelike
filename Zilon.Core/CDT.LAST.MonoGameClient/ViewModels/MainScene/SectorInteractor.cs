@@ -49,6 +49,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public void Update(SectorViewModelContext sectorViewModelContext)
         {
+            ProccessCancelPersonTask();
+            
             if (!_uiState.CanPlayerGivesCommand)
             {
                 return;
@@ -117,7 +119,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private bool HandleHotKeys()
         {
             var keyboardState = Keyboard.GetState();
-            if (DidTransferToLocation(keyboardState))
+            if (DidTransferToOtherSector(keyboardState))
                 return true;
 
             if (DidOpenDropMenu(keyboardState))
@@ -126,6 +128,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _lastKeyboardState = keyboardState;
 
             return false;
+        }
+
+        private void ProccessCancelPersonTask()
+        {
+            var keyboardState = Keyboard.GetState();
+            if (!keyboardState.IsKeyDown(Keys.Space))
+                return;
+            
+            var idleCommand = _commandFactory.GetCommand<IdleCommand>();
+            _commandPool.Push(idleCommand);
         }
 
         private bool DidOpenDropMenu(KeyboardState keyboardState)
@@ -154,7 +166,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             return true;
         }
 
-        private bool DidTransferToLocation(KeyboardState keyboardState)
+        private bool DidTransferToOtherSector(KeyboardState keyboardState)
         {
             if (!keyboardState.IsKeyUp(Keys.T) || _lastKeyboardState?.IsKeyDown(Keys.T) != true)
                 return false;
@@ -223,12 +235,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             if (keyboardState.IsKeyDown(Keys.NumPad9))
             {
                 moveCoords = currentCoords.RightUp();
-            }
-
-            if (keyboardState.IsKeyDown(Keys.Space))
-            {
-                var idleCommand = _commandFactory.GetCommand<IdleCommand>();
-                _commandPool.Push(idleCommand);
             }
 
             if (moveCoords == default)
