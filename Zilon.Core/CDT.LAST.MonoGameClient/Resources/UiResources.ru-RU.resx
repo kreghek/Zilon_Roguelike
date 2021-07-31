@@ -300,4 +300,10 @@
   <data name="EnergyCriticalConditionTitle" xml:space="preserve">
     <value>ПЕРЕГРЕВ!</value>
   </data>
+  <data name="ControlsTutorialText" xml:space="preserve">
+    <value>[LMB] для передвижения и атаки.
+[T] для перехода на след. уровень.
+[O] чтобы подобрать предмет.
+[SPACE] немного подождать.</value>
+  </data>
 </root>
