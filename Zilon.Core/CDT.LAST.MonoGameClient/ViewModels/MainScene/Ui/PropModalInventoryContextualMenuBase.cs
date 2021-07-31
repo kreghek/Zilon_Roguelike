@@ -75,16 +75,24 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 button.Update();
             }
 
-            // Close menu if mouse is not on menu.
-            if (_size != null)
+            CloseMenuIfAnyMouseButtonPressed();
+        }
+
+        private void CloseMenuIfAnyMouseButtonPressed()
+        {
+            if (_size == null)
+                return;
+            
+            var mouseState = Mouse.GetState();
+            var mouseRect = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
+            var menuRect = new Rectangle(_position, _size.Value);
+            var wasPressedAnyMouseButton = mouseState.LeftButton == ButtonState.Pressed ||
+                                           mouseState.RightButton == ButtonState.Pressed ||
+                                           mouseState.MiddleButton == ButtonState.Pressed;
+            var isClickMenuOut = !mouseRect.Intersects(menuRect);
+            if (isClickMenuOut && wasPressedAnyMouseButton)
             {
-                var mouseState = Mouse.GetState();
-                var mouseRect = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
-                var menuRect = new Rectangle(_position, _size.Value);
-                if (!mouseRect.Intersects(menuRect))
-                {
-                    CloseMenu();
-                }
+                CloseMenu();
             }
         }
 
