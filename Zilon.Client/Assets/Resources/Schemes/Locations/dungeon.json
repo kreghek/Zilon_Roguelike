@@ -15,9 +15,9 @@
       ],
       "MapGeneratorOptions": {
         "MapGenerator": "CellularAutomaton",
-        "MapWidth": 35,
-        "MapHeight": 35,
-        "ChanceToStartAlive": 65
+        "MapWidth": 55,
+        "MapHeight": 55,
+        "ChanceToStartAlive": 45
       },
       "RegionMonsterCount": 2,
       "TotalChestCount": 20,

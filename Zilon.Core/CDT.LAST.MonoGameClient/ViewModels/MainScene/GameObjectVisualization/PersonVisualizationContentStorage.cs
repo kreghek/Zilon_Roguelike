@@ -240,16 +240,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 
             _monographicsTexture = new Dictionary<string, Texture2D> {
                 { "gallbladder",  content.Load<Texture2D>("Sprites/game-objects/Monographics/Gallbladder")},
-                { "gallbladder/Outlined",  content.Load<Texture2D>("Sprites/game-objects/Monographics/Gallbladder")},
+                { "gallbladder/Outlined",  content.Load<Texture2D>("Sprites/game-objects/Monographics/Outlined/Gallbladder")},
 
                 { "skeleton",  content.Load<Texture2D>("Sprites/game-objects/Monographics/Skeleton")},
-                { "skeleton/Outlined",  content.Load<Texture2D>("Sprites/game-objects/Monographics/Skeleton")},
+                { "skeleton/Outlined",  content.Load<Texture2D>("Sprites/game-objects/Monographics/Outlined/Skeleton")},
 
                 { "skeleton-equipment",  content.Load<Texture2D>("Sprites/game-objects/Monographics/SkeletonElite")},
-                { "skeleton-equipment/Outlined",  content.Load<Texture2D>("Sprites/game-objects/Monographics/SkeletonElite")},
+                { "skeleton-equipment/Outlined",  content.Load<Texture2D>("Sprites/game-objects/Monographics/Outlined/SkeletonElite")},
 
                 { "warthog",  content.Load<Texture2D>("Sprites/game-objects/Monographics/Warthog")},
-                { "warthog/Outlined",  content.Load<Texture2D>("Sprites/game-objects/Monographics/Warthog")}
+                { "warthog/Outlined",  content.Load<Texture2D>("Sprites/game-objects/Monographics/Outlined/Warthog")}
             };
         }
 
