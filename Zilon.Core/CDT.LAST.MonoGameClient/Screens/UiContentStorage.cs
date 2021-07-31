@@ -40,6 +40,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         private Texture2D? _smallVerticalButtonIconsTexture;
 
         private IDictionary<SurvivalStatType, Texture2D>? _survivalStatConditionIcons;
+        private Texture2D? _hexMarkersTexture;
 
         public UiContentStorage()
         {
@@ -279,6 +280,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             _contextualMenuBorderTexture = contentManager.Load<Texture2D>("Sprites/ui/ContextualMenuBorder");
             _contextualMenuItemBackgroundTexture =
                 contentManager.Load<Texture2D>("Sprites/ui/ContextualMenuItemBackground");
+            _hexMarkersTexture = contentManager.Load<Texture2D>("Sprites/ui/HexMarkers");
 
             InitPropIcons(contentManager);
             InitCombatActIcons(contentManager);
@@ -318,6 +320,11 @@ namespace CDT.LAST.MonoGameClient.Screens
         public Texture2D GetMenuItemTexture()
         {
             return _contextualMenuItemBackgroundTexture ?? throw new InvalidOperationException();
+        }
+
+        public Texture2D GetHexMarkers()
+        {
+            return _hexMarkersTexture ?? throw new InvalidOperationException();
         }
 
         public PersonConditionTextures GetConditionIconTextures(IPersonCondition personCondition)
