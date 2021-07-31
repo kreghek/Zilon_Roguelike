@@ -529,6 +529,24 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Switch lang.
+        /// </summary>
+        internal static string SwitchLanguagebuttonTitle {
+            get {
+                return ResourceManager.GetString("SwitchLanguagebuttonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch res.
+        /// </summary>
+        internal static string SwitchResolutionButtonTitle {
+            get {
+                return ResourceManager.GetString("SwitchResolutionButtonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Take in inventory.
         /// </summary>
         internal static string TakePropInInventoryButtonTitle {

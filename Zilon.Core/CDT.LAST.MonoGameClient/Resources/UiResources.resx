@@ -306,4 +306,10 @@ take out the character before he dies.</value>
 [O] to give loot up.
 [SPACE] to wait a little.</value>
   </data>
+  <data name="SwitchLanguagebuttonTitle" xml:space="preserve">
+    <value>Switch lang</value>
+  </data>
+  <data name="SwitchResolutionButtonTitle" xml:space="preserve">
+    <value>Switch res</value>
+  </data>
 </root>

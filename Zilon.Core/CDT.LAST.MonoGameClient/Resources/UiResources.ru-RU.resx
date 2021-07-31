@@ -306,4 +306,10 @@
 [O] чтобы подобрать предмет.
 [SPACE] немного подождать.</value>
   </data>
+  <data name="SwitchLanguagebuttonTitle" xml:space="preserve">
+    <value>Смена языка</value>
+  </data>
+  <data name="SwitchResolutionButtonTitle" xml:space="preserve">
+    <value>Разрешение</value>
+  </data>
 </root>
