@@ -5,6 +5,7 @@ using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
 using CDT.LAST.MonoGameClient.GameComponents;
+using CDT.LAST.MonoGameClient.Resources;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui;
 
@@ -265,7 +266,22 @@ namespace CDT.LAST.MonoGameClient.Screens
                     Game.GraphicsDevice.Viewport.Height);
             }
 
+            DrawControlsTutorial(_spriteBatch, Game.GraphicsDevice);
+
             _spriteBatch.End();
+        }
+
+        private void DrawControlsTutorial(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        {
+            var controlsTutorialText = UiResources.ControlsTutorialText;
+            var spriteFont = _uiContentStorage.GetButtonFont();
+            var textSize = spriteFont.MeasureString(controlsTutorialText);
+            const int MARGIN = 5;
+            spriteBatch.DrawString(
+                spriteFont,
+                controlsTutorialText,
+                new Vector2(graphicsDevice.Viewport.Bounds.Right - textSize.X - MARGIN, graphicsDevice.Viewport.Bounds.Top + MARGIN),
+                Color.Gray);
         }
 
         private void DrawModals()

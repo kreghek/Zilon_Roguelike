@@ -116,6 +116,18 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [LMB] to move and attack.
+        ///[T] to transit to other level.
+        ///[O] to give loot up.
+        ///[SPACE] to wait a little..
+        /// </summary>
+        internal static string ControlsTutorialText {
+            get {
+                return ResourceManager.GetString("ControlsTutorialText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Defective.
         /// </summary>
         internal static string DefectiveAttributeValueTitle {

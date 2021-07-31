@@ -300,4 +300,10 @@ take out the character before he dies.</value>
   <data name="EnergyCriticalConditionTitle" xml:space="preserve">
     <value>OVERHEATED!</value>
   </data>
+  <data name="ControlsTutorialText" xml:space="preserve">
+    <value>[LMB] to move and attack.
+[T] to transit to other level.
+[O] to give loot up.
+[SPACE] to wait a little.</value>
+  </data>
 </root>
