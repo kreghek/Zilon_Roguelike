@@ -4,6 +4,7 @@
     "En": "Predator"
   },
   "Hp": 15,
+  "MoveSpeedFactor": 1.5,
   "PrimaryAct": {
     "Efficient": {
       "Dice": 3,
@@ -14,7 +15,7 @@
     },
     "Range": {
       "Min": 1,
-      "Max": 2
+      "Max": 1
     },
     "Effect": "Damage",
     "Targets": "Enemy",
@@ -23,6 +24,10 @@
       "Impact": "Kinetic"
     },
     "IsMelee": true,
+	"Constrains":
+	{
+	  "Duration": 0.75
+	},
     "Tags": [
       "bite"
     ]

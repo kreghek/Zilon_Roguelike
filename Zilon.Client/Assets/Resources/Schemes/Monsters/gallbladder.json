@@ -13,7 +13,7 @@
       }
     },
     "Range": {
-      "Min": 1,
+      "Min": 2,
       "Max": 3
     },
     "Effect": "Damage",

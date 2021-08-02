@@ -28,6 +28,6 @@ namespace Zilon.Core.Schemes
 
         /// <inheritdoc />
         [JsonProperty]
-        public int? Duration { get; private set; }
+        public float? Duration { get; private set; }
     }
 }

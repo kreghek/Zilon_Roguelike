@@ -70,8 +70,10 @@ namespace Zilon.Bot.Players.Logics
             if (targetIsOnLine)
             {
                 var taskContext = new ActorTaskContext(context.Sector);
+                var moveModule = actor.Person.GetModule<IMovingModule>();
+                var moveCost = moveModule.CalculateCost();
 
-                _moveTask = new MoveTask(actor, taskContext, triggerTarget.Node, map);
+                _moveTask = new MoveTask(actor, taskContext, triggerTarget.Node, map, moveCost);
                 return _moveTask;
             }
 

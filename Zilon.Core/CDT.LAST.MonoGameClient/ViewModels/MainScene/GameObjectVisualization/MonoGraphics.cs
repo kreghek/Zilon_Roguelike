@@ -46,7 +46,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
             {
                 "predator" or "predator-meat" => new Vector2(0, -12),
                 "warthog" => new Vector2(-5, -12),
-                "skeleton" or "skeleton-elite" => new Vector2(0, -22),
+                "skeleton" or "skeleton-equipment" => new Vector2(0, -22),
                 "gallbladder" => new Vector2(0, -12),
                 _ => new Vector2(0, -12),
             };

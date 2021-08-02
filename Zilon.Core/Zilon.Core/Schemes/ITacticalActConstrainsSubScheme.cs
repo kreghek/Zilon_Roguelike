@@ -30,6 +30,6 @@
 
         int? EnergyCost { get; }
 
-        int? Duration { get; }
+        float? Duration { get; }
     }
 }

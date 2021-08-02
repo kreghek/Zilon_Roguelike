@@ -1,12 +1,13 @@
 {
   "Name": {
     "Ru": "Бородавочник",
-    "En": "Warthrog"
+    "En": "Warthog"
   },
-  "Hp": 25,
+  "Hp": 40,
+  "MoveSpeedFactor": 0.75,
   "PrimaryAct": {
     "Efficient": {
-      "Dice": 3,
+      "Dice": 6,
       "Count": 1
     },
     "Range": {
@@ -20,6 +21,10 @@
       "Impact": "Kinetic"
     },
     "IsMelee": true,
+	"Constrains":
+	{
+	  "Duration": 3
+	},
     "Tags": [
       "bite"
     ]
