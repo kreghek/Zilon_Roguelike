@@ -6,7 +6,10 @@
   "Stats": {
     "Efficient": {
       "Dice": 3,
-      "Count": 2
+      "Count": 1,
+	  "Modifiers": {
+        "ResultBuff": 4
+      }
     },
     "Range": {
       "Min": 1,
@@ -16,6 +19,7 @@
     "Targets": "Enemy",
     "HitCount": 1,
     "IsMelee": true,
+	"Duration": 1.75,
     "Offence": {
       "Type": "Concentrated",
       "Impact": "Kinetic",
