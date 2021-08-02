@@ -65,6 +65,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 return;
             }
 
+            if (_sectorUiState.ActiveActor is null)
+            {
+                return;
+            }
+
             var orderedVisibleActors = _visibleActors.OrderBy(x =>
             {
                 var map = _sectorViewModelContext.Sector.Map;
