@@ -5,12 +5,15 @@
   },
   "Stats": {
     "Efficient": {
-      "Dice": 6,
-      "Count": 1
+      "Dice": 3,
+      "Count": 2,
+	  "Modifiers": {
+        "ResultBuff": 1
+      }
     },
     "Range": {
-      "Min": 1,
-      "Max": 1
+      "Min": 2,
+      "Max": 3
     },
     "Effect": "Damage",
     "Targets": "Enemy",

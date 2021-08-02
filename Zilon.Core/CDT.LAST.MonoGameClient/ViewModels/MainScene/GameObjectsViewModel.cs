@@ -183,6 +183,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             foreach (var gameObject in gameObjectsFixedList)
             {
                 gameObject.CanDraw = true;
+                gameObject.UnderFog = false;
 
                 var fowNode = visibleFowNodeData.GetFowByNode(gameObject.Node);
 
@@ -194,6 +195,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 if (fowNode != null && fowNode.State != SectorMapNodeFowState.Observing && gameObject.HiddenByFow)
                 {
                     gameObject.CanDraw = false;
+                }
+
+                if (fowNode != null && fowNode.State != SectorMapNodeFowState.Observing && !gameObject.HiddenByFow)
+                {
+                    gameObject.CanDraw = true;
+                    gameObject.UnderFog = true;
                 }
 
                 if (gameObject.CanDraw)
@@ -224,7 +231,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             foreach (var staticObject in e.Items)
             {
-                var staticObjectModel = new StaticObjectViewModel(_game, staticObject, _spriteBatch);
+                var staticObjectModel = new StaticObjectViewModel(_game, staticObject, _spriteBatch, true);
 
                 _viewModelContext.GameObjects.Add(staticObjectModel);
             }

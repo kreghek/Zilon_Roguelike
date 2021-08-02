@@ -16,11 +16,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     internal class StaticObjectViewModel : GameObjectBase, IContainerViewModel
     {
+        private const int HIGHLIGHT_DURATION_SECONDS = 3;
         private readonly Game _game;
         private readonly SpriteContainer _rootSprite;
         private readonly SpriteBatch _spriteBatch;
 
-        public StaticObjectViewModel(Game game, IStaticObject staticObject, SpriteBatch spriteBatch)
+        private double? _highlightCounter;
+
+        public StaticObjectViewModel(Game game, IStaticObject staticObject, SpriteBatch spriteBatch, bool createHighlighted = false)
         {
             _game = game;
             StaticObject = staticObject;
@@ -32,7 +35,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var hexSize = MapMetrics.UnitSize / 2;
             var staticObjectPosition = new Vector2(
-                (int)Math.Round(worldCoords[0] * hexSize * Math.Sqrt(3), MidpointRounding.ToEven),
+                (int)Math.Round(worldCoords[0] * hexSize * Math.Sqrt(HIGHLIGHT_DURATION_SECONDS), MidpointRounding.ToEven),
                 (int)Math.Round(worldCoords[1] * hexSize * 2 / 2, MidpointRounding.ToEven)
             );
 
@@ -50,6 +53,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             });
 
             _rootSprite.AddChild(graphics);
+
+            if (createHighlighted)
+            {
+                _highlightCounter = HIGHLIGHT_DURATION_SECONDS;
+            }
         }
 
         public override bool HiddenByFow => false;
@@ -59,7 +67,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public override void Draw(GameTime gameTime, Matrix transform)
         {
-            _spriteBatch.Begin(transformMatrix: transform);
+            _spriteBatch.Begin(transformMatrix: transform, blendState: BlendState.AlphaBlend);
+
+            if (_highlightCounter is not null)
+            {
+                var t = _highlightCounter.Value / HIGHLIGHT_DURATION_SECONDS;
+                var t2 = Math.Abs(Math.Round(Math.Sin(t * HIGHLIGHT_DURATION_SECONDS * Math.PI * 2)));
+                _rootSprite.Color = Color.Lerp(Color.White, Color.Red, (float)t2);
+            }
+            else
+            {
+                _rootSprite.Color = UnderFog ? Color.White * 0.5f : Color.White;
+            }
 
             _rootSprite.Draw(_spriteBatch);
 
@@ -68,7 +87,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public override void Update(GameTime gameTime)
         {
-            _rootSprite.Color = UnderFog ? Color.White * 0.5f : Color.White;
+            //_rootSprite.Color = UnderFog ? Color.White * 0.5f : Color.White;
+
+            if (_highlightCounter is not null)
+            {
+                _highlightCounter -= gameTime.ElapsedGameTime.TotalSeconds;
+                if (_highlightCounter <= 0)
+                {
+                    _highlightCounter = null;
+                }
+            }
         }
 
         public IStaticObject StaticObject { get; set; }
