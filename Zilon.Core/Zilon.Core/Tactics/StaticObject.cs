@@ -40,7 +40,7 @@ namespace Zilon.Core.Tactics
         public bool IsMapBlock => GetIsMapBlock();
 
         /// <inheritdoc />
-        public bool IsSightBlock => false;
+        public bool IsSightBlock => true;
 
         /// <inheritdoc />
         public PropContainerPurpose Purpose { get; }
