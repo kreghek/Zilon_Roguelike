@@ -11,6 +11,7 @@ using Zilon.Core.Client;
 using Zilon.Core.Client.Sector;
 using Zilon.Core.Commands;
 using Zilon.Core.PersonModules;
+using Zilon.Core.Persons;
 using Zilon.Core.Players;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
@@ -69,9 +70,36 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     MARKER_HEGHT
                 );
 
-                spriteBatch.Draw(_uiContentStorage.GetPersonMarkerTextureSheet(), rect, Color.White);
+                var testedCombatAct = _sectorUiState.TacticalAct;
+                if (testedCombatAct is null)
+                {
+                    testedCombatAct = GetDefaultCombatAct(_sectorUiState);
+                }
 
-                _drawnItemList.Add(new Marker(rect, item));
+                if (testedCombatAct is not null)
+                {
+
+                    var selectedCombatActRange = testedCombatAct.Stats.Range;
+                    var map = _sectorViewModelContext.Sector.Map;
+                    var activeActorNode = _sectorUiState.ActiveActor.Actor.Node;
+                    var monsterNode = item.Actor.Node;
+                    if (selectedCombatActRange.Contains(map.DistanceBetween(activeActorNode, monsterNode)))
+                    {
+                        spriteBatch.Draw(_uiContentStorage.GetPersonMarkerTextureSheet(), rect, Color.White);
+                    }
+                    else
+                    {
+                        spriteBatch.Draw(_uiContentStorage.GetPersonMarkerTextureSheet(), rect, Color.DarkGray);
+                    }
+
+                    _drawnItemList.Add(new Marker(rect, item));
+                }
+                else
+                {
+                    // Old behaviour.
+                    spriteBatch.Draw(_uiContentStorage.GetPersonMarkerTextureSheet(), rect, Color.White);
+                    _drawnItemList.Add(new Marker(rect, item));
+                }
 
                 index++;
             }
@@ -140,11 +168,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private static void SelectPunchAsDefaultCombatAct(ISectorUiState uiState)
         {
+            uiState.TacticalAct = GetDefaultCombatAct(uiState);
+        }
+
+        private static ICombatAct GetDefaultCombatAct(ISectorUiState uiState)
+        {
             var availableCombatActs =
                 uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>().GetCurrentCombatActs();
             var punchAct = availableCombatActs.Single(x => x.Scheme.Sid == "punch");
 
-            uiState.TacticalAct = punchAct;
+            return punchAct;
         }
 
         private record Marker(Rectangle Rect, ActorViewModel ActorViewModel);
