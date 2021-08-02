@@ -1,5 +1,6 @@
 ﻿using System;
 
+using CDT.LAST.MonoGameClient.Database;
 using CDT.LAST.MonoGameClient.Engine;
 using CDT.LAST.MonoGameClient.Resources;
 
@@ -24,25 +25,19 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private const int BUTTON_HEIGHT = 20;
 
-        private const int BUTTON_WIDTH_OFFSET = 100;
-
         private const int SCORE_MENU_TITLE_POSITION_X = 50;
 
         private const int SCORE_MENU_TITLE_POSITION_Y = 100;
 
-        private readonly GlobeSelectionScreen _globeGenerationScene;
-
-        private readonly TextButton _goToMainMenu;
-
-        private readonly TextButton _goToNextScreen;
-
         private readonly TextButton _restartButton;
-
+        private readonly IScoreManager _scoreManager;
         private readonly string _scoreSummary;
 
         private readonly SpriteBatch _spriteBatch;
 
         private readonly IUiContentStorage _uiContentStorage;
+
+        private readonly DbContext _dbContext;
 
         /// <inheritdoc />
         public ScoresScreen(Game game, SpriteBatch spriteBatch)
@@ -51,11 +46,12 @@ namespace CDT.LAST.MonoGameClient.Screens
             _spriteBatch = spriteBatch;
 
             var serviceScope = ((LivGame)Game).ServiceProvider;
-            var scoreManager = serviceScope.GetRequiredService<IScoreManager>();
-            _scoreSummary = TextSummaryHelper.CreateTextSummary(scoreManager.Scores);
+
+            _scoreManager = serviceScope.GetRequiredService<IScoreManager>();
+            _scoreSummary = TextSummaryHelper.CreateTextSummary(_scoreManager.Scores);
             _uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
 
-            _globeGenerationScene = new GlobeSelectionScreen(game: game, spriteBatch: spriteBatch);
+            _dbContext = serviceScope.GetRequiredService<DbContext>();
 
             var buttonTexture = _uiContentStorage.GetButtonTexture();
             var font = _uiContentStorage.GetButtonFont();
@@ -69,29 +65,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                     y: BUTTON_POSITION_Y,
                     width: BUTTON_WIDTH,
                     height: BUTTON_HEIGHT));
-            _restartButton.OnClick += RestartButtonClickHandler;
-
-            _goToMainMenu = new TextButton(
-                title: UiResources.MainMenuButtonTitle,
-                texture: buttonTexture,
-                font: font,
-                rect: new Rectangle(
-                    x: RESTART_BUTTON_POSITION_X + (BUTTON_WIDTH_OFFSET * 2),
-                    y: BUTTON_POSITION_Y,
-                    width: BUTTON_WIDTH,
-                    height: BUTTON_HEIGHT));
-            _goToMainMenu.OnClick += GoToMainMenuButtonClickHandler;
-
-            _goToNextScreen = new TextButton(
-                title: UiResources.NextScreenButtonTitle,
-                texture: buttonTexture,
-                font: font,
-                rect: new Rectangle(
-                    x: RESTART_BUTTON_POSITION_X + (BUTTON_WIDTH_OFFSET * 4),
-                    y: BUTTON_POSITION_Y,
-                    width: BUTTON_WIDTH,
-                    height: BUTTON_HEIGHT));
-            _goToNextScreen.OnClick += GoToNextScreenButtonClickHandler;
+            _restartButton.OnClick += GoToNextScreenButtonClickHandler;
         }
 
         /// <inheritdoc />
@@ -99,24 +73,17 @@ namespace CDT.LAST.MonoGameClient.Screens
         {
             base.Draw(gameTime);
 
-            _spriteBatch.Begin();
-
-            _restartButton.Draw(_spriteBatch);
-            _goToMainMenu.Draw(_spriteBatch);
-            _goToNextScreen.Draw(_spriteBatch);
-
             var font = _uiContentStorage.GetButtonFont();
 
-            _spriteBatch.DrawString(
-                spriteFont: font,
-                text: UiResources.ScoreMenuTitle,
-                position: new Vector2(x: SCORE_MENU_TITLE_POSITION_X, y: SCORE_MENU_TITLE_POSITION_Y),
-                color: Color.White);
+            _spriteBatch.Begin();
+
             _spriteBatch.DrawString(
                 spriteFont: font,
                 text: _scoreSummary,
                 position: new Vector2(x: SCORE_MENU_TITLE_POSITION_X * 3, y: SCORE_MENU_TITLE_POSITION_Y * 2),
                 color: Color.White);
+
+            _restartButton.Draw(_spriteBatch);
 
             _spriteBatch.End();
         }
@@ -127,23 +94,15 @@ namespace CDT.LAST.MonoGameClient.Screens
             base.Update(gameTime);
 
             _restartButton.Update();
-            _goToMainMenu.Update();
-            _goToNextScreen.Update();
-        }
-
-        private void GoToMainMenuButtonClickHandler(object? sender, EventArgs e)
-        {
-            TargetScene = new TitleScreen(game: Game, spriteBatch: _spriteBatch);
         }
 
         private void GoToNextScreenButtonClickHandler(object? sender, EventArgs e)
         {
-            TargetScene = new LeaderBoardScreen(game: Game, spriteBatch: _spriteBatch);
-        }
+            _dbContext.AppendScores("Безымянный бродяга", _scoreSummary);
 
-        private void RestartButtonClickHandler(object? sender, EventArgs e)
-        {
-            TargetScene = _globeGenerationScene;
+            _scoreManager.ResetScores();
+
+            TargetScene = new LeaderBoardScreen(game: Game, spriteBatch: _spriteBatch);
         }
     }
 }

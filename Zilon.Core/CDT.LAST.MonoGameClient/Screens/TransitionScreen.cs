@@ -36,12 +36,20 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             if (!_transitionPool.CheckPersonInTransition(_player.MainPerson) && !_targetSceneInitialized)
             {
-                var playerPersonSectorNode = GetPlayerSectorNode(_player);
-
-                if (playerPersonSectorNode != null)
+                try
                 {
-                    TargetScene = new MainScreen(Game, _spriteBatch);
-                    _targetSceneInitialized = true;
+                    var playerPersonSectorNode = GetPlayerSectorNode(_player);
+
+                    if (playerPersonSectorNode != null)
+                    {
+                        TargetScene = new MainScreen(Game, _spriteBatch);
+                        _targetSceneInitialized = true;
+                    }
+                }
+                catch (InvalidOperationException)
+                {
+                    // The exception was thrown because player.Globe.SectorNodes was modified during enumeration.
+                    return;
                 }
             }
         }
