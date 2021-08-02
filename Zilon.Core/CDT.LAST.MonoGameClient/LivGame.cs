@@ -104,6 +104,11 @@ namespace CDT.LAST.MonoGameClient
 
             var cheatInput = new CheatInput(this, _spriteBatch, Content.Load<SpriteFont>("Fonts/Main"));
             Components.Add(cheatInput);
+            
+            _graphics.IsFullScreen = false;
+            _graphics.PreferredBackBufferWidth = 800;
+            _graphics.PreferredBackBufferHeight = 480;
+            _graphics.ApplyChanges();
 #endif
 
             var soundtrackManagerComponent = new SoundtrackManagerComponent(this);
