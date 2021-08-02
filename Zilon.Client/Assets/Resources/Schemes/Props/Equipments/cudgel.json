@@ -2,12 +2,12 @@
   "Tags": [ "weapon", "mace" ],
   "Equip": {
     "ActSids": [
-      "slash"
+      "bludgeon"
     ],
     "SlotTypes": [ "Hand" ]
   },
   "Name": {
-    "Ru": "club",
-	"En": "club"
+    "Ru": "Дубинка",
+	"En": "Cudgel"
   }
 }

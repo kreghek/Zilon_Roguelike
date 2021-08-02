@@ -147,10 +147,21 @@ namespace CDT.LAST.MonoGameClient.Screens
         private void InitPropIcons(ContentManager contentManager)
         {
             // Place textures in order to display. Latest will display on the top.
+            // Text above is obsolete. We use only one image to show icon right now.
             _propIcons.Add("short-sword",
                 new[]
                 {
                     contentManager.Load<Texture2D>("Sprites/ui/WeaponIcons/ShortSword")
+                });
+            _propIcons.Add("knife",
+                new[]
+                {
+                    contentManager.Load<Texture2D>("Sprites/ui/WeaponIcons/Knife")
+                });
+            _propIcons.Add("cudgel",
+                new[]
+                {
+                    contentManager.Load<Texture2D>("Sprites/ui/WeaponIcons/Cudgel")
                 });
             _propIcons.Add("great-sword",
                 new[]

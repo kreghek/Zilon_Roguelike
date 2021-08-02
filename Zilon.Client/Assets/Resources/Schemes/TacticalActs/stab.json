@@ -1,25 +1,32 @@
 {
   "Name": {
-    "Ru": "Удар",
-    "En": "Blow"
+    "Ru": "Удар нодом",
+    "En": "Stab"
   },
   "Stats": {
     "Efficient": {
       "Dice": 3,
-      "Count": 2
+      "Count": 1,
+	  "Modifiers": {
+        "ResultBuff": 1
+      }
     },
     "Range": {
-      "Min": 1,
-      "Max": 1
+      "Min": 2,
+      "Max": 3
     },
     "Effect": "Damage",
     "Targets": "Enemy",
     "HitCount": 1,
     "IsMelee": true,
+	"Duration": 0.75,
     "Offence": {
-      "Type": "Concentrated",
+      "Type": "Tactical",
       "Impact": "Kinetic",
       "ApRank": 2
-    }
+    },
+    "Tags": [
+      "slash"
+    ]
   }
 }

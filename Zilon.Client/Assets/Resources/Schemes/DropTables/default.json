@@ -37,6 +37,14 @@
       "SchemeSid": "work-clothes",
       "Weight": 2
 	},
+	{
+      "SchemeSid": "knife",
+      "Weight": 2
+	},
+	{
+      "SchemeSid": "cudgel",
+      "Weight": 2
+	},
     {
       "SchemeSid": null,
       "Weight": 120

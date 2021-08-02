@@ -449,6 +449,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HandParts/CombatStaffBase.png
 
+#begin Sprites/game-objects/Equipments/HandParts/CudgelBase.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/game-objects/Equipments/HandParts/CudgelBase.png
+
 #begin Sprites/game-objects/Equipments/HandParts/GreatSwordBase.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -460,6 +472,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HandParts/GreatSwordBase.png
+
+#begin Sprites/game-objects/Equipments/HandParts/KnifeBase.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/game-objects/Equipments/HandParts/KnifeBase.png
 
 #begin Sprites/game-objects/Equipments/HandParts/ShortSwordBase.png
 /importer:TextureImporter
@@ -1697,6 +1721,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/WeaponIcons/CombatStaff.png
 
+#begin Sprites/ui/WeaponIcons/Cudgel.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/WeaponIcons/Cudgel.png
+
 #begin Sprites/ui/WeaponIcons/GreatSword.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1708,6 +1744,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/WeaponIcons/GreatSword.png
+
+#begin Sprites/ui/WeaponIcons/Knife.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/WeaponIcons/Knife.png
 
 #begin Sprites/ui/WeaponIcons/ShortSword.png
 /importer:TextureImporter

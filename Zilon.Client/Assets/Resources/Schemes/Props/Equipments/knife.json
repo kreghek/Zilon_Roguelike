@@ -2,12 +2,12 @@
   "Tags": [ "weapon" ],
   "Equip": {
     "ActSids": [
-      "thrust"
+      "stab"
     ],
     "SlotTypes": [ "Hand" ]
   },
   "Name": {
-    "En": "Stilletor",
-    "Ru": "Стиллет"
+    "En": "Knife",
+    "Ru": "Нож"
   }
 }

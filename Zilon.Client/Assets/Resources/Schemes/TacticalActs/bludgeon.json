@@ -1,0 +1,25 @@
+{
+  "Name": {
+    "Ru": "Удар дубиной",
+    "En": "Bludgeon"
+  },
+  "Stats": {
+    "Efficient": {
+      "Dice": 3,
+      "Count": 2
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 3
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy",
+    "HitCount": 1,
+    "IsMelee": true,
+    "Offence": {
+      "Type": "Concentrated",
+      "Impact": "Kinetic",
+      "ApRank": 1
+    }
+  }
+}
