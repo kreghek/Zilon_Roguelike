@@ -71,7 +71,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 );
 
                 var testedCombatAct = _sectorUiState.TacticalAct;
-                if (testedCombatAct is null)
+                if (testedCombatAct is null && _sectorUiState.ActiveActor != null)
                 {
                     testedCombatAct = GetDefaultCombatAct(_sectorUiState);
                 }
