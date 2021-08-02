@@ -87,14 +87,22 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             idleButton.OnClick += IdleButton_OnClick;
 
+            #if DEBUG
             _buttons = new[]
             {
-                //_autoplayModeButton,
+                _autoplayModeButton,
+                personPropButton,
+                personStatsButton,
+                gameSpeedButton
+            }; 
+            #else
+            _buttons = new[]
+            {
                 personPropButton,
                 personStatsButton,
                 idleButton
-                //gameSpeedButton
             };
+            #endif
         }
 
         private void IdleButton_OnClick(object? sender, EventArgs e)
