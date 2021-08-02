@@ -98,11 +98,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     var monsterNode = item.Actor.Node;
                     if (selectedCombatActRange.Contains(map.DistanceBetween(activeActorNode, monsterNode)))
                     {
-                        spriteBatch.Draw(_uiContentStorage.GetPersonMarkerTextureSheet(), rect, Color.White);
+                        spriteBatch.Draw(_uiContentStorage.GetPersonMarkerTextureSheet(), rect, new Rectangle(0,0,16,32), Color.White);
                     }
                     else
                     {
-                        spriteBatch.Draw(_uiContentStorage.GetPersonMarkerTextureSheet(), rect, Color.DarkGray);
+                        spriteBatch.Draw(_uiContentStorage.GetPersonMarkerTextureSheet(), rect, new Rectangle(16, 0, 16, 32), Color.White);
                     }
 
                     _drawnItemList.Add(new Marker(rect, item));
