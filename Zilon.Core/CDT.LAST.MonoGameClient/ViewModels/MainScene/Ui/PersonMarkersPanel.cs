@@ -60,7 +60,20 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             var viewPortHeight = graphicsDevice.Viewport.Height;
 
             _drawnItemList.Clear();
-            foreach (var item in _visibleActors)
+            if (!_sectorUiState.CanPlayerGivesCommand)
+            {
+                return;
+            }
+
+            var orderedVisibleActors = _visibleActors.OrderBy(x =>
+            {
+                var map = _sectorViewModelContext.Sector.Map;
+                var activeActorNode = _sectorUiState.ActiveActor.Actor.Node;
+                var monsterNode = x.Node;
+                return map.DistanceBetween(activeActorNode, monsterNode);
+            }).OrderBy(x=>x.Actor.Person.Id).ToArray();
+
+            foreach (var item in orderedVisibleActors)
             {
                 var itemOffsetX = index * MARKER_WIDTH;
                 var rect = new Rectangle(

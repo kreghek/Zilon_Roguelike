@@ -77,7 +77,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
             else
             {
-                _rootSprite.Color = Color.White;
+                _rootSprite.Color = UnderFog ? Color.White * 0.5f : Color.White;
             }
 
             _rootSprite.Draw(_spriteBatch);
@@ -87,7 +87,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public override void Update(GameTime gameTime)
         {
-            _rootSprite.Color = UnderFog ? Color.White * 0.5f : Color.White;
+            //_rootSprite.Color = UnderFog ? Color.White * 0.5f : Color.White;
 
             if (_highlightCounter is not null)
             {
