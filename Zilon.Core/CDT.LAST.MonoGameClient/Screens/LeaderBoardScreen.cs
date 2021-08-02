@@ -88,8 +88,6 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private readonly int _playerScore;
 
-        private readonly string _scoreSummary;
-
         private readonly SpriteBatch _spriteBatch;
 
         private readonly Color _tableHeaderColor = Color.White;
@@ -118,7 +116,6 @@ namespace CDT.LAST.MonoGameClient.Screens
             var uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
             var scoreManager = serviceScope.GetRequiredService<IScoreManager>();
 
-            _scoreSummary = TextSummaryHelper.CreateTextSummary(scoreManager.Scores);
             _dbContext = serviceScope.GetRequiredService<DbContext>();
 
             _goToMainMenu = new TextButton(
@@ -200,7 +197,6 @@ namespace CDT.LAST.MonoGameClient.Screens
             }
             else
             {
-                _dbContext.AppendScores(PlayerNickname, _scoreSummary);
                 _leaderBoardRecords = _dbContext.GetLeaderBoard();
                 _isNeedToAddedPlayerScore = false;
                 _addPlayerNickname.OnClick -= AddPlayerNickNameClickHandler;
