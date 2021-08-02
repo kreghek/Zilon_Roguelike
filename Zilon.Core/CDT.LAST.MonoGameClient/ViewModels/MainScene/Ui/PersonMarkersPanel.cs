@@ -71,7 +71,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 var activeActorNode = _sectorUiState.ActiveActor.Actor.Node;
                 var monsterNode = x.Node;
                 return map.DistanceBetween(activeActorNode, monsterNode);
-            }).OrderBy(x=>x.Actor.Person.Id).ToArray();
+            }).ThenBy(x => x.Actor.Person.Id).ToArray();
 
             foreach (var item in orderedVisibleActors)
             {

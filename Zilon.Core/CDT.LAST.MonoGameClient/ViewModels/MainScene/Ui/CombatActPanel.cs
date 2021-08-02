@@ -109,7 +109,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private void Initialize(IList<CombatActButton> buttons)
         {
             var acts = _combatActModule.GetCurrentCombatActs();
-            var actsOrdered = acts.OrderBy(x => x.Scheme?.Sid).Take(MAX_COMBAT_ACT_COUNT).ToArray();
+            var actsOrdered = acts.OrderBy(x=>x.Constrains is null)
+                .ThenBy(x=>x.Constrains?.Duration)
+                .ThenBy(x=>x.Constrains?.EnergyCost)
+                .ThenBy(x => x.Scheme?.Sid)
+                .Take(MAX_COMBAT_ACT_COUNT).ToArray();
             foreach (var act in actsOrdered)
             {
                 var tags = act.Scheme?.Stats?.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??

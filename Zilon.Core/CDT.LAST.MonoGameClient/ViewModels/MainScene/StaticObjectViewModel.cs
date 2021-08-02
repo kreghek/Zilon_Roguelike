@@ -72,7 +72,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             if (_highlightCounter is not null)
             {
                 var t = _highlightCounter.Value / HIGHLIGHT_DURATION_SECONDS;
-                var t2 = Math.Sin(t * HIGHLIGHT_DURATION_SECONDS * Math.PI * 2);
+                var t2 = Math.Abs(Math.Round(Math.Sin(t * HIGHLIGHT_DURATION_SECONDS * Math.PI * 2)));
                 _rootSprite.Color = Color.Lerp(Color.White, Color.Red, (float)t2);
             }
             else
