@@ -8,6 +8,7 @@
       "Dice": 6,
       "Count": 2
     },
+	"Duration": 3,
     "Range": {
       "Min": 1,
       "Max": 2
@@ -27,7 +28,6 @@
   },
   "Constrains":
   {
-	  "EnergyCost": 2,
-	  "Duration": 3
+	  "EnergyCost": 2
   }
 }

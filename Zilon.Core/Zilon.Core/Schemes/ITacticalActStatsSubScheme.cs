@@ -49,5 +49,7 @@ namespace Zilon.Core.Schemes
         /// Доступные цели действия.
         /// </summary>
         TacticalActTargets Targets { get; }
+
+        float? Duration { get; }
     }
 }

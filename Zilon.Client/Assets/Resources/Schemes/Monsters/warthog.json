@@ -21,10 +21,7 @@
       "Impact": "Kinetic"
     },
     "IsMelee": true,
-	"Constrains":
-	{
-	  "Duration": 3
-	},
+    "Duration": 3,
     "Tags": [
       "bite"
     ]

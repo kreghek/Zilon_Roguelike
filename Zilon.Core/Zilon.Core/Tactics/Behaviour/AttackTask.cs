@@ -30,7 +30,7 @@ namespace Zilon.Core.Tactics.Behaviour
 
             TargetNode = target.Node;
 
-            var combatActDuration = (tacticalAct.Constrains?.Duration).GetValueOrDefault(1);
+            var combatActDuration = tacticalAct.Stats.Duration.GetValueOrDefault(1);
             var durationBonus = GetDurationBonus(actor);
             var durationWithBonus = (int)Math.Round(GlobeMetrics.OneIterationLength * combatActDuration * durationBonus);
             _cost = durationWithBonus;

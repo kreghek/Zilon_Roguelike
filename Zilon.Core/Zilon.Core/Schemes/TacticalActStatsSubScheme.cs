@@ -55,5 +55,9 @@ namespace Zilon.Core.Schemes
         /// <inheritdoc />
         [JsonProperty]
         public string?[]? Tags { get; private set; }
+
+        /// <inheritdoc />
+        [JsonProperty]
+        public float? Duration { get; private set; }
     }
 }
