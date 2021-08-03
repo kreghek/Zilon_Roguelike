@@ -24,6 +24,7 @@
       "Type": "Concentrated",
       "Impact": "Kinetic",
       "ApRank": 1
-    }
+    },
+	"Rules": ["NormalPush"]
   }
 }

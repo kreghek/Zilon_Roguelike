@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Common;
+﻿using Newtonsoft.Json;
+
+using Zilon.Core.Common;
 using Zilon.Core.Components;
 
 namespace Zilon.Core.Schemes
@@ -51,5 +53,14 @@ namespace Zilon.Core.Schemes
         TacticalActTargets Targets { get; }
 
         float? Duration { get; }
+
+        CombatActRule[] Rules { get; }
+    }
+
+    [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+    public enum CombatActRule
+    { 
+        Undefined,
+        NormalPush
     }
 }

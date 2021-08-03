@@ -59,5 +59,9 @@ namespace Zilon.Core.Schemes
         /// <inheritdoc />
         [JsonProperty]
         public float? Duration { get; private set; }
+
+        /// <inheritdoc />
+        [JsonProperty]
+        public CombatActRule[] Rules { get; private set; }
     }
 }

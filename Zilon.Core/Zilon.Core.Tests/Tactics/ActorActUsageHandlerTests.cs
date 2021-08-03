@@ -67,7 +67,7 @@ namespace Zilon.Core.Tests.Tactics
             var act = actMock.Object;
 
             // ACT
-            var usedActs = new TacticalActRoll(act, 1);
+            var usedActs = new CombatActRoll(act, 1);
             actUsageService.ProcessActUsage(actor, monster, usedActs);
 
             // ASSERT
@@ -120,7 +120,7 @@ namespace Zilon.Core.Tests.Tactics
             tacticalActMock.SetupGet(x => x.Stats).Returns(actStatScheme);
             var tacticalAct = tacticalActMock.Object;
 
-            var usedActs = new TacticalActRoll(tacticalAct, 1);
+            var usedActs = new CombatActRoll(tacticalAct, 1);
 
             // ACT
             actUsageService.ProcessActUsage(actor, actor, usedActs);
@@ -163,7 +163,7 @@ namespace Zilon.Core.Tests.Tactics
             var act = CreateTestAct();
 
             // ACT
-            var usedActs = new TacticalActRoll(act, 1);
+            var usedActs = new CombatActRoll(act, 1);
             actUsageService.ProcessActUsage(actor, monster, usedActs);
 
             // ASSERT
@@ -218,7 +218,7 @@ namespace Zilon.Core.Tests.Tactics
             var act = actMock.Object;
 
             // ACT
-            var usedActs = new TacticalActRoll(act, 1);
+            var usedActs = new CombatActRoll(act, 1);
             actUsageService.ProcessActUsage(actor, monster, usedActs);
 
             // ASSERT
@@ -273,7 +273,7 @@ namespace Zilon.Core.Tests.Tactics
             var act = actMock.Object;
 
             // ACT
-            var usedActs = new TacticalActRoll(act, FAKE_ACTEFFICIENT_ROLL);
+            var usedActs = new CombatActRoll(act, FAKE_ACTEFFICIENT_ROLL);
             actUsageService.ProcessActUsage(actor, monster, usedActs);
 
             // ASSERT

@@ -57,11 +57,11 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="act"> Соверщённое действие. </param>
         /// <returns> Возвращает выпавшее значение эффективности. </returns>
-        private TacticalActRoll GetActEfficient(ICombatAct act)
+        private CombatActRoll GetActEfficient(ICombatAct act)
         {
             var rolledEfficient = _actUsageRandomSource.RollEfficient(act.Efficient);
 
-            var roll = new TacticalActRoll(act, rolledEfficient);
+            var roll = new CombatActRoll(act, rolledEfficient);
 
             return roll;
         }
@@ -183,7 +183,7 @@ namespace Zilon.Core.Tactics
                 var tacticalActRoll = GetActEfficient(act);
 
                 var actHandler = _actUsageHandlerSelector.GetHandler(target.TargetObject);
-                actHandler.ProcessActUsage(actor, target.TargetObject, tacticalActRoll);
+                actHandler.ProcessActUsage(actor, target.TargetObject, tacticalActRoll, map);
 
                 UseActResources(actor, act);
             }
