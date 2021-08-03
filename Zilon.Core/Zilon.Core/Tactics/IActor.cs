@@ -44,6 +44,12 @@ namespace Zilon.Core.Tactics
         /// <param name="targetNode"> Целевой узел карты. </param>
         void MoveToNode(IGraphNode targetNode);
 
+        /// <summary>
+        /// Форсированное перемещение актёра в указанный узел карты.
+        /// </summary>
+        /// <param name="targetNode"> Целевой узел карты. </param>
+        void ForcedMoveToNode(IGraphNode targetNode);
+
         void MoveToOtherSector(ISector sector, SectorTransition sectorTransition);
 
         /// <summary>
@@ -73,7 +79,7 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Происходит, когда актёр переместился.
         /// </summary>
-        event EventHandler? Moved;
+        event EventHandler<ActorMoveEventArgs>? Moved;
 
         /// <summary>
         /// Происходит, когда актёр открывает контейнер в секторе.

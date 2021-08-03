@@ -323,7 +323,7 @@ namespace Zilon.Core.Tactics
         }
 
         /// <inheritdoc />
-        public event EventHandler? Moved;
+        public event EventHandler<ActorMoveEventArgs>? Moved;
 
         /// <inheritdoc />
         public event EventHandler<OpenContainerEventArgs>? OpenedContainer;
@@ -377,7 +377,13 @@ namespace Zilon.Core.Tactics
         public void MoveToNode(IGraphNode targetNode)
         {
             Node = targetNode;
-            Moved?.Invoke(this, new EventArgs());
+            Moved?.Invoke(this, new ActorMoveEventArgs(false));
+        }
+
+        public void ForcedMoveToNode(IGraphNode targetNode)
+        {
+            Node = targetNode;
+            Moved?.Invoke(this, new ActorMoveEventArgs(true));
         }
 
         public void OpenContainer(IStaticObject container, IOpenContainerMethod method)
@@ -500,5 +506,15 @@ namespace Zilon.Core.Tactics
             BeginTransitionToOtherSector?.Invoke(this, EventArgs.Empty);
             sector.UseTransition(this, sectorTransition);
         }
+    }
+
+    public sealed class ActorMoveEventArgs: EventArgs
+    {
+        public ActorMoveEventArgs(bool forced)
+        {
+            Forced = forced;
+        }
+
+        public bool Forced { get; }
     }
 }

@@ -321,7 +321,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             AddStateEngine(stateEngine);
         }
 
-        private void Actor_Moved(object? sender, EventArgs e)
+        private void Actor_Moved(object? sender, ActorMoveEventArgs e)
         {
             var hexSize = MapMetrics.UnitSize / 2;
             var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
@@ -351,15 +351,30 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 moveSoundEffectInstance = moveSoundEffect?.CreateInstance();
             }
 
-            var moveEngine = new ActorMoveEngine(
-                _rootSprite,
-                _graphicsRoot.RootSprite,
-                _shadowSprite,
-                newPosition,
-                animationBlockerService,
-                moveSoundEffectInstance);
+            if (!e.Forced)
+            {
+                var moveEngine = new ActorMoveEngine(
+                    _rootSprite,
+                    _graphicsRoot.RootSprite,
+                    _shadowSprite,
+                    newPosition,
+                    animationBlockerService,
+                    moveSoundEffectInstance);
 
-            AddStateEngine(moveEngine);
+                AddStateEngine(moveEngine);
+            }
+            else
+            {
+                var pushEngine = new ActorPushEngine(
+                    _rootSprite,
+                    _graphicsRoot.RootSprite,
+                    _shadowSprite,
+                    newPosition,
+                    animationBlockerService,
+                    moveSoundEffectInstance);
+
+                AddStateEngine(pushEngine);
+            }
         }
 
         private void Actor_PropTransferPerformed(object? sender, EventArgs e)

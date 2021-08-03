@@ -549,14 +549,22 @@ namespace Zilon.Core.Tactics
                 {
                     if (combatActRoll.CombatAct.Stats.Rules.Contains(CombatActRule.NormalPush))
                     {
-                        var neighbours = map.GetNext(targetActor.Node);
-                        var orderedNeighbours = neighbours.OrderByDescending(x => map.DistanceBetween(x, actor.Node));
-                        var pushTargetNode = orderedNeighbours.FirstOrDefault();
-                        if (pushTargetNode is not null)
+                        var pushRuleRoll = _actUsageRandomSource.RollPushRule();
+
+                        if (pushRuleRoll >= 4)
                         {
-                            map.ReleaseNode(targetActor.Node, targetActor);
-                            targetActor.MoveToNode(pushTargetNode);
-                            map.HoldNode(pushTargetNode, targetActor);
+                            var neighbours = map.GetNext(targetActor.Node);
+                            var orderedNeighbours = neighbours
+                                .Select(x => new { Distance = map.DistanceBetween(x, actor.Node), Node = x })
+                                .Where(x => x.Distance > map.DistanceBetween(actor.Node, targetActor.Node))
+                                .Select(x => x.Node);
+                            var pushTargetNode = orderedNeighbours.FirstOrDefault();
+                            if (pushTargetNode is not null)
+                            {
+                                map.ReleaseNode(targetActor.Node, targetActor);
+                                targetActor.ForcedMoveToNode(pushTargetNode);
+                                map.HoldNode(pushTargetNode, targetActor);
+                            }
                         }
                     }
                 }

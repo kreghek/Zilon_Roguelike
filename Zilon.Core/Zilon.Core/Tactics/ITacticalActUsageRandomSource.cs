@@ -46,5 +46,7 @@ namespace Zilon.Core.Tactics
         /// Используется для проверки удара вторым оружием.
         /// </remarks>
         int RollUseSecondaryAct();
+
+        int RollPushRule();
     }
 }
