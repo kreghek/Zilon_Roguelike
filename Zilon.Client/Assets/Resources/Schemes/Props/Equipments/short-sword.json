@@ -2,13 +2,7 @@
   "Tags": [ "weapon", "sword" ],
   "Equip": {
     "ActSids": [
-      "clumsy-cut",
-      "evasion-slash",
-      "lunging-stab",
-      "penetrating-thrust",
-      "weak-block",
-      "weak-parry",
-      "weak-swing"
+      "clumsy-cut"
     ],
     "SlotTypes": [ "Hand" ]
   },
