@@ -5,7 +5,7 @@
   },
   "Hp": 15,
   "MoveSpeedFactor": 1.5,
-  "PrimaryAct": {
+  "CombatActs": [ {
     "Efficient": {
       "Dice": 3,
       "Count": 1,
@@ -28,7 +28,7 @@
     "Tags": [
       "bite"
     ]
-  },
+  }],
   "DropTableSids": [
     "survival-meat",
     "default",

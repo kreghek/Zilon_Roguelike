@@ -5,7 +5,7 @@
   },
   "Hp": 40,
   "MoveSpeedFactor": 0.75,
-  "PrimaryAct": {
+  "CombatActs":[ {
     "Efficient": {
       "Dice": 6,
       "Count": 1
@@ -25,7 +25,7 @@
     "Tags": [
       "bite"
     ]
-  },
+  }],
   "DropTableSids": [
     "survival-water",
     "default",

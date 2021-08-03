@@ -38,7 +38,7 @@
         /// <summary>
         /// The action the monster performs when attacking.
         /// </summary>
-        ITacticalActStatsSubScheme? PrimaryAct { get; }
+        ITacticalActStatsSubScheme?[]? CombatActs { get; }
 
         /// <summary>
         /// Tags for classifying monsters.
