@@ -2,7 +2,8 @@
   "Tags": [ "weapon", "sword" ],
   "Equip": {
     "ActSids": [
-      "clumsy-cut"
+      "clumsy-cut",
+      "evasion-slash"
     ],
     "SlotTypes": [ "Hand" ]
   },

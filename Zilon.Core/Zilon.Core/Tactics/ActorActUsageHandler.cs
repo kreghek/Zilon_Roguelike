@@ -590,6 +590,27 @@ namespace Zilon.Core.Tactics
                     CountTargetActorDefeat(actor, targetActor);
                 }
             }
+
+            // handle move backward rule
+            if (combatActRoll.CombatAct.Stats.Rules is not null)
+            {
+                if (combatActRoll.CombatAct.Stats.Rules.Contains(CombatActRule.MoveBackward))
+                {
+                    var neighbours = map.GetNext(actor.Node);
+                    var orderedNeighbours = neighbours
+                        .Select(x => new { Distance = map.DistanceBetween(x, targetActor.Node), Node = x })
+                        .Where(x => x.Distance > map.DistanceBetween(actor.Node, targetActor.Node))
+                        .Select(x => x.Node);
+                    var moveBackwardTargetNode = orderedNeighbours.FirstOrDefault();
+
+                    if (moveBackwardTargetNode is not null)
+                    {
+                        map.ReleaseNode(actor.Node, actor);
+                        actor.ForcedMoveToNode(moveBackwardTargetNode);
+                        map.HoldNode(moveBackwardTargetNode, actor);
+                    }
+                }
+            }
         }
 
         private void ReduceTargetEquipmentDurability(IActor targetActor)

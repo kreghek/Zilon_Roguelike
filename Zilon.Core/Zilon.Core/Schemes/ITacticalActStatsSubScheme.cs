@@ -61,6 +61,7 @@ namespace Zilon.Core.Schemes
     public enum CombatActRule
     { 
         Undefined,
-        NormalPush
+        NormalPush,
+        MoveBackward
     }
 }
