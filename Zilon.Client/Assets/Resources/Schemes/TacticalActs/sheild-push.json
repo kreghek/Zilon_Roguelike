@@ -1,0 +1,26 @@
+{
+  "Name": {
+    "Ru": "Толчок щитом",
+    "En": "Shield push"
+  },
+  "Stats": {
+    "Efficient": {
+      "Dice": 1,
+      "Count": 1
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 1
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy",
+    "HitCount": 1,
+    "IsMelee": true,
+    "Offence": {
+      "Type": "Concentrated",
+      "Impact": "Kinetic",
+      "ApRank": 1
+    },
+	"Rules": ["NormalPush"]
+  }
+}

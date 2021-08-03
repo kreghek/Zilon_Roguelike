@@ -2,11 +2,14 @@
   "Tags": [ "shield" ],
   "Equip": {
     "SlotTypes": [ "Hand" ],
+	"ActSids": [
+      "shield-push"
+    ],
     "Armors": [
       {
         "Impact": "Kinetic",
         "AbsorbtionLevel": "Normal",
-        "ArmorRank": 10
+        "ArmorRank": 5
       }
     ]
   },

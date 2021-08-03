@@ -547,11 +547,19 @@ namespace Zilon.Core.Tactics
 
                 if (combatActRoll.CombatAct.Stats.Rules is not null)
                 {
+                    var hasPushRule = false;
+                    var pushSuccessfullRoll = 0;
                     if (combatActRoll.CombatAct.Stats.Rules.Contains(CombatActRule.NormalPush))
+                    {
+                        pushSuccessfullRoll = 2;
+                        hasPushRule = true;
+                    }
+
+                    if (hasPushRule)
                     {
                         var pushRuleRoll = _actUsageRandomSource.RollPushRule();
 
-                        if (pushRuleRoll >= 4)
+                        if (pushRuleRoll >= pushSuccessfullRoll)
                         {
                             var neighbours = map.GetNext(targetActor.Node);
                             var orderedNeighbours = neighbours
