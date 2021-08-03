@@ -22,6 +22,7 @@
       "Impact": "Kinetic",
       "ApRank": 2
     },
+	"Rules": ["NormalPush"],
     "Tags": [
       "punch"
     ]
