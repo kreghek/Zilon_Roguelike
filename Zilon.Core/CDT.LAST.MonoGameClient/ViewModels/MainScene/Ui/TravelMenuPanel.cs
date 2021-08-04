@@ -73,6 +73,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 rect: new Rectangle(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
             personStatsButton.OnClick += PersonStatsButton_OnClick;
 
+
+            var personTraisButton = new IconButton(
+                texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
+                iconData: new IconData(
+                    uiContentStorage.GetSmallVerticalButtonIconsTexture(),
+                    new Rectangle(32, 0, BUTTON_WIDTH, BUTTON_HEIGHT)
+                ),
+                rect: new Rectangle(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
+            personTraisButton.OnClick += PersonTraitsButton_OnClick;
+
+
             var gameSpeedButton = new IconButton(
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 iconData: new IconData(
@@ -99,16 +110,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 _autoplayModeButton,
                 personPropButton,
                 personStatsButton,
+                personTraisButton,
                 gameSpeedButton
-            }; 
-            #else
+            };
+#else
             _buttons = new[]
             {
                 personPropButton,
                 personStatsButton,
+                personTraisButton,
                 idleButton
             };
-            #endif
+#endif
         }
 
         private void IdleButton_OnClick(object? sender, EventArgs e)
@@ -182,6 +195,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private void PersonStatsButton_OnClick(object? sender, EventArgs e)
         {
             StatButtonClicked?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void PersonTraitsButton_OnClick(object? sender, EventArgs e)
+        {
+            TraitsButtonClicked?.Invoke(this, EventArgs.Empty);
         }
 
         public void Draw(SpriteBatch spriteBatch, Rectangle contentRect)
@@ -261,5 +279,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         public event EventHandler? PropButtonClicked;
         public event EventHandler? StatButtonClicked;
+        public event EventHandler? TraitsButtonClicked;
     }
 }

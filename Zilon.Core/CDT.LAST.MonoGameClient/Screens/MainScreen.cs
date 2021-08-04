@@ -42,6 +42,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly PersonConditionsPanel _personEffectsPanel;
         private readonly ModalDialogBase _personEquipmentModal;
         private readonly PersonStatsModalDialog _personStatsModal;
+        private readonly PersonTraitsModalDialog _personTraitsModal;
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
         private readonly ITransitionPool _transitionPool;
@@ -89,6 +90,11 @@ namespace CDT.LAST.MonoGameClient.Screens
                 game.GraphicsDevice,
                 _uiState);
 
+            _personTraitsModal = new PersonTraitsModalDialog(
+                _uiContentStorage,
+                game.GraphicsDevice,
+                _uiState);
+
             _containerModal = new ContainerModalDialog(
                 _uiState,
                 _uiContentStorage,
@@ -113,6 +119,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                 _commandFactory);
             _bottomMenu.PropButtonClicked += BottomMenu_PropButtonClicked;
             _bottomMenu.StatButtonClicked += BottomMenu_StatButtonClicked;
+            _bottomMenu.TraitsButtonClicked += BottomMenu_TraitsButtonClicked;
         }
 
         public override void Draw(GameTime gameTime)
@@ -225,6 +232,11 @@ namespace CDT.LAST.MonoGameClient.Screens
             _personStatsModal.Show();
         }
 
+        private void BottomMenu_TraitsButtonClicked(object? sender, EventArgs e)
+        {
+            _personTraitsModal.Show();
+        }
+
         private ModalDialogBase? CheckModalsIsVisible()
         {
             if (_personEquipmentModal.IsVisible)
@@ -240,6 +252,11 @@ namespace CDT.LAST.MonoGameClient.Screens
             if (_containerModal.IsVisible)
             {
                 return _containerModal;
+            }
+
+            if (_personTraitsModal.IsVisible)
+            {
+                return _personTraitsModal;
             }
 
             return null;
@@ -297,6 +314,11 @@ namespace CDT.LAST.MonoGameClient.Screens
             if (_personStatsModal.IsVisible)
             {
                 _personStatsModal.Draw(_spriteBatch);
+            }
+
+            if (_personTraitsModal.IsVisible)
+            {
+                _personTraitsModal.Draw(_spriteBatch);
             }
 
             if (_containerModal.IsVisible)
