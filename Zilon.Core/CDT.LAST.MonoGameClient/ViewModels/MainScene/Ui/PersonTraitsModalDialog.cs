@@ -105,7 +105,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private void DrawAttribute(PersonPerkUiItem item, SpriteBatch spriteBatch)
         {
-            var sourceRect = GetAttributeIcon(PersonAttributeType.PhysicalStrength);
+            var sourceRect = GetPerkIcon();
             spriteBatch.Draw(_uiContentStorage.GetAttributeBackgroundTexture(),
                 new Vector2(item.UiRect.Left, item.UiRect.Top), Color.White);
             spriteBatch.Draw(_uiContentStorage.GetAttributeIconsTexture(),
@@ -149,26 +149,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             return perk.Scheme.Description?.En ?? perk.Scheme.Description?.Ru ?? string.Empty;
         }
 
-        private static Rectangle GetAttributeIcon(PersonAttributeType type)
+        private static Rectangle GetPerkIcon()
         {
-            switch (type)
-            {
-                case PersonAttributeType.PhysicalStrength:
-                    return new Rectangle(0, 0, 32, 32);
-
-                case PersonAttributeType.Dexterity:
-                    return new Rectangle(32, 0, 32, 32);
-
-                case PersonAttributeType.Perception:
-                    return new Rectangle(0, 32, 32, 32);
-
-                case PersonAttributeType.Constitution:
-                    return new Rectangle(32, 32, 32, 32);
-
-                default:
-                    Debug.Fail($"Unknown attribute {type}.");
-                    return new Rectangle(0, 0, 1, 1);
-            }
+            return new Rectangle(0, 64, 32, 32);
         }
 
         private static string GetAttributeTitle(IPerk perk)
