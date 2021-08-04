@@ -10,5 +10,10 @@
   "Name": {
     "Ru": "Короткий меч",
 	"En": "Short sword"
-  }
+  },
+  "Description":
+  {
+    "Ru": "Меч - это острая палка с ручкой в руках новичка.\nИ крутейший инструмент в руках мастера.\nЭффективен на средних дистанциях.",
+	"En": "A sword is a sharp stick with a grip in the hands of a beginner.\nAnd the coolest instrument in the hands of the master.\nEffective at medium ranges."
+  },
 }

@@ -23,7 +23,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
     {
         private const int EQUIPMENT_ITEM_SIZE = 32;
         private const int EQUIPMENT_ITEM_SPACING = 2;
-        private const int MAX_INVENTORY_ROW_ITEMS = 8;
+        private const int MAX_INVENTORY_ROWS = 8;
         private readonly IServiceProvider _serviceProvider;
 
         private readonly IUiContentStorage _uiContentStorage;
@@ -144,7 +144,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 return;
             }
 
-            var equipmentTitle = PropHelper.GetPropTitle(_hoverEquipmentItem.Equipment);
+            var equipmentTitle = PropHelper.GetPropHintText(_hoverEquipmentItem.Equipment);
             var hintTitleFont = _uiContentStorage.GetHintTitleFont();
             var titleTextSizeVector = hintTitleFont.MeasureString(equipmentTitle);
 
@@ -192,7 +192,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 return;
             }
 
-            foreach (var item in _currentInventoryItems)
+            var pagedItems = _currentInventoryItems.Take(MAX_INVENTORY_ROWS).ToArray();
+
+            foreach (var item in pagedItems)
             {
                 item.Control.Draw(spriteBatch);
 
@@ -212,9 +214,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 return;
             }
 
-            var inventoryTitle = PropHelper.GetPropTitle(_hoverInventoryItem.Prop);
+            var inventoryItemHintText = PropHelper.GetPropHintText(_hoverInventoryItem.Prop);
+
             var hintTitleFont = _uiContentStorage.GetHintTitleFont();
-            var titleTextSizeVector = hintTitleFont.MeasureString(inventoryTitle);
+            var titleTextSizeVector = hintTitleFont.MeasureString(inventoryItemHintText);
 
             const int HINT_TEXT_SPACING = 8;
             var hintRectangle = new Rectangle(
@@ -225,7 +228,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), hintRectangle, Color.DarkSlateGray);
 
-            spriteBatch.DrawString(hintTitleFont, inventoryTitle,
+            spriteBatch.DrawString(hintTitleFont, inventoryItemHintText,
                 new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
                 Color.Wheat);
         }
