@@ -46,12 +46,12 @@ namespace CDT.LAST.MonoGameClient.Screens
             {
                 if (Vector2.Distance(_currentPosition.Value, _targetPosition) > 0.1)
                 {
-                    _currentPosition = Vector2.Lerp(_currentPosition.Value, _targetPosition, (float)gameTime.ElapsedGameTime.TotalSeconds * 0.5f);
-                    _currentPosition = new Vector2((int)Math.Round(_currentPosition.Value.X, MidpointRounding.ToEven), (int)Math.Round(_currentPosition.Value.Y, MidpointRounding.ToEven));
+                    _currentPosition = Vector2.Lerp(_currentPosition.Value, _targetPosition, (float)gameTime.ElapsedGameTime.TotalSeconds * 2f);
+                    var gridBoundCurrentPosition = new Vector2((int)Math.Round(_currentPosition.Value.X, MidpointRounding.ToEven), (int)Math.Round(_currentPosition.Value.Y, MidpointRounding.ToEven));
 
                     var position = Matrix.CreateTranslation(
-                                    -_currentPosition.Value.X,
-                                    -_currentPosition.Value.Y,
+                                    -gridBoundCurrentPosition.X,
+                                    -gridBoundCurrentPosition.Y,
                                     0);
 
                     var offset = Matrix.CreateTranslation(
