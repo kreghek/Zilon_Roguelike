@@ -3,6 +3,11 @@
     "Ru": "Рубящий удар",
     "En": "Slash"
   },
+  "Description":
+  {
+    "Ru": "Простой удар мечом.\nК кому мы с мечом придём, тот от меча и погибнет.\nНе может работать в клинче. Никто не бьет мечом от пуза.",
+	"En": "A simple hit with a sword.\nTo whom we come with a sword, he will die by the sword.\nCannot work in a clinch. Nobody hits with a sword from the belly."
+  },
   "Stats": {
     "Efficient": {
       "Dice": 3,
@@ -27,5 +32,9 @@
     "Tags": [
       "slash"
     ]
+  },
+  "Constrains":
+  {
+	  "EnergyCost": 3
   }
 }

@@ -1,7 +1,12 @@
 {
   "Name": {
-    "Ru": "Апперкот",
-    "En": "Uppercut"
+    "Ru": "Смертельный удар смерти",
+    "En": "Death punch of the death"
+  },
+  "Description":
+  {
+    "Ru": "Мощнейший сокрушительный удар!\nСильно измытывает.\nСмотри не поранься!",
+	"En": "The most powerful crushing blow!.\nIt is very draining.\nMake sure you don't hurt yourself!"
   },
   "Stats": {
     "Efficient": {

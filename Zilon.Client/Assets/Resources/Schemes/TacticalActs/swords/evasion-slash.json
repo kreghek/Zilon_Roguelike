@@ -1,7 +1,12 @@
 {
   "Name": {
-    "Ru": "Уклоняющийся Секуший Удар",
+    "Ru": "Удар с уклонением",
 	"En": "Evasion Slash"
+  },
+  "Description":
+  {
+    "Ru": "Приём, придуманный мастерами фехтования или трусами.\nУдарил, отшагнул, ударил снова.",
+	"En": "A technique invented by fencing masters or cowards.\nHit, stepped back, hit again."
   },
   "Stats": {
     "Efficient": {
@@ -28,5 +33,9 @@
 	"Tags": [
       "slash"
     ]
+  },
+  "Constrains":
+  {
+	  "EnergyCost": 10
   }
 }
