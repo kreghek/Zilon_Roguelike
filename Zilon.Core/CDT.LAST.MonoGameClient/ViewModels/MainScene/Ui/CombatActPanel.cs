@@ -169,14 +169,51 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 #endif
 
                 DrawButtonHotkey(actIndex, button, spriteBatch);
+
+                if (_hoverCombatActButton is not null)
+                {
+                    DrawCombatActHint(_hoverCombatActButton, spriteBatch);
+                }
             }
         }
+
+        private const int HINT_TEXT_SPACING = 8;
+
+        private void DrawCombatActHint(CombatActButton button, SpriteBatch spriteBatch)
+        {
+            var combatActName = button.CombatAct.Scheme.Name.En ?? button.CombatAct.Scheme.Name.Ru ?? "<Undefined>";
+            var combatActDescription = button.CombatAct.Scheme.Description?.En ?? button.CombatAct.Scheme.Description?.Ru ?? string.Empty;
+            var combatActHintText = combatActName + "\n" + new string('-', 8) + "\n" + combatActDescription;
+
+            var titleTextSizeVector = _uiContentStorage.GetHintTitleFont().MeasureString(combatActHintText);
+
+            var autoplayButtonRect = button.Rect;
+
+            var hintRectangle = new Rectangle(
+                autoplayButtonRect.Left,
+                autoplayButtonRect.Top - (int)titleTextSizeVector.Y - (HINT_TEXT_SPACING * 2),
+                (int)titleTextSizeVector.X + (HINT_TEXT_SPACING * 2),
+                (int)titleTextSizeVector.Y + (HINT_TEXT_SPACING * 2));
+
+            spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), hintRectangle, Color.DarkSlateGray);
+
+            spriteBatch.DrawString(_uiContentStorage.GetHintTitleFont(),
+                combatActHintText,
+                new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
+                Color.Wheat);
+        }
+
+        private CombatActButton? _hoverCombatActButton;
 
         public void Update()
         {
             HandleHotkeys();
 
+            var mouse = Mouse.GetState();
+            var mouseRect = new Rectangle(mouse.X, mouse.Y, 1, 1);
+
             _buttonGroup.Selected = null;
+            _hoverCombatActButton = null;
             foreach (var button in _buttons)
             {
                 button.Update();
@@ -184,6 +221,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 if (button.CombatAct == _sectorUiState.TacticalAct)
                 {
                     _buttonGroup.Selected = button;
+                }
+
+                if (button.Rect.Contains(mouseRect))
+                {
+                    _hoverCombatActButton = button;
                 }
             }
         }
