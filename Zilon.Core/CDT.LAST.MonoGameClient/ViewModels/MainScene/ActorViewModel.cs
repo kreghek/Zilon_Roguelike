@@ -188,6 +188,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             base.HandleRemove();
 
+            UnsubscribeEventHandlers();
+
             foreach (var state in _actorStateEngineList)
             {
                 state.Cancel();
