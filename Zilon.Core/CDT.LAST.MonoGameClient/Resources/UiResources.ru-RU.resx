@@ -304,6 +304,8 @@
     <value>[LMB] для передвижения и атаки.
 [T] для перехода на след. уровень.
 [O] чтобы подобрать предмет.
+[I] окно инвентаря.
+[С] Окно персонажа.
 [SPACE] немного подождать.</value>
   </data>
   <data name="SwitchLanguagebuttonTitle" xml:space="preserve">

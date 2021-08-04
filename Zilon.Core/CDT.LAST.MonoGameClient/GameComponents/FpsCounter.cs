@@ -38,8 +38,13 @@ namespace CDT.LAST.MonoGameClient.GameComponents
             _spriteBatch.DrawString(
                 _font,
                 fps,
-                new Vector2(Game.GraphicsDevice.Viewport.Bounds.Right - size.X - 1, 1),
+                new Vector2(Game.GraphicsDevice.Viewport.Bounds.Right - size.X - 1 - 1, 1 - 1),
                 Color.Black);
+            _spriteBatch.DrawString(
+                _font,
+                fps,
+                new Vector2(Game.GraphicsDevice.Viewport.Bounds.Right - size.X - 1, 1),
+                Color.White);
             _spriteBatch.End();
         }
 

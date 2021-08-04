@@ -276,7 +276,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             var controlsTutorialText = UiResources.ControlsTutorialText;
             var spriteFont = _uiContentStorage.GetButtonFont();
             var textSize = spriteFont.MeasureString(controlsTutorialText);
-            const int MARGIN = 5;
+            const int MARGIN = 15;
             spriteBatch.DrawString(
                 spriteFont,
                 controlsTutorialText,
