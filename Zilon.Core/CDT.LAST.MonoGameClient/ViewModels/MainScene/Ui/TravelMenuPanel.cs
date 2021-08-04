@@ -27,6 +27,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private readonly IUiContentStorage _uiContentStorage;
         private readonly ICommandPool _commandPool;
         private readonly ServiceProviderCommandFactory _commandFactory;
+        private readonly IconButton _personPropButton;
+        private readonly IconButton _personStatsButton;
         private bool _autoplayHintIsShown;
         private string _autoplayModeButtonTitle;
 
@@ -60,6 +62,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 rect: new Rectangle(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
             personPropButton.OnClick += PersonEquipmentButton_OnClick;
 
+            _personPropButton = personPropButton;
+
             var personStatsButton = new IconButton(
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 iconData: new IconData(
@@ -77,6 +81,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 ),
                 rect: new Rectangle(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
             gameSpeedButton.OnClick += GameSpeedButton_OnClick;
+
+            _personStatsButton = personStatsButton;
 
             var idleButton = new IconButton(texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 iconData: new IconData(
@@ -222,7 +228,30 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             DetectAutoplayHint();
+
+            HandleHotkeys();
         }
+
+        private void HandleHotkeys()
+        {
+            var keyboardState = Keyboard.GetState();
+            if (keyboardState.IsKeyUp(Keys.I) && _lastKeyboard?.IsKeyDown(Keys.I) == true)
+            {
+                _personPropButton.Click();
+            }
+            else if (keyboardState.IsKeyUp(Keys.C) && _lastKeyboard?.IsKeyDown(Keys.C) == true)
+            {
+                _personStatsButton.Click();
+            }
+            else
+            {
+                // No hotkeys have been pressed. Do nothing.
+            }
+
+            _lastKeyboard = keyboardState;
+        }
+
+        private KeyboardState? _lastKeyboard;
 
         public void UnsubscribeEvents()
         {
