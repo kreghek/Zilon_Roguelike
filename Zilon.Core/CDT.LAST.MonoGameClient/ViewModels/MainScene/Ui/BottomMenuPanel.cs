@@ -52,6 +52,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             _travelPanel.PropButtonClicked += PersonPropButton_OnClick;
             _travelPanel.StatButtonClicked += PersonStatsButton_OnClick;
+            _travelPanel.TraitsButtonClicked += PersonTraitsButton_OnClick;
 
             _currentModeMenu = _travelPanel;
 
@@ -172,7 +173,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             StatButtonClicked?.Invoke(this, EventArgs.Empty);
         }
 
+        private void PersonTraitsButton_OnClick(object? sender, EventArgs e)
+        {
+            TraitsButtonClicked?.Invoke(this, EventArgs.Empty);
+        }
+
         public event EventHandler? PropButtonClicked;
         public event EventHandler? StatButtonClicked;
+        public event EventHandler? TraitsButtonClicked;
     }
 }
