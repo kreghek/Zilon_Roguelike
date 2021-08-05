@@ -325,7 +325,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             if (!criticalConditions.Any())
             { 
-                _alertIterationIndex = null;
+                _alertIterationIndex = 0;
             }
         }
     }
