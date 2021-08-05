@@ -286,7 +286,7 @@
     <value>Очистить</value>
   </data>
   <data name="PlayerInputNicknamePrompt" xml:space="preserve">
-    <value>Введите свое прозвище</value>
+    <value>Введите ваше прозвище или оно будет {0}</value>
   </data>
   <data name="NoneEquipmentTitle" xml:space="preserve">
     <value>Пусто</value>
@@ -313,5 +313,8 @@
   </data>
   <data name="SwitchResolutionButtonTitle" xml:space="preserve">
     <value>Разрешение</value>
+  </data>
+  <data name="PlayerRatingLabel" xml:space="preserve">
+    <value>Ваш рейтинг в таблице лидеров: {0}</value>
   </data>
 </root>
