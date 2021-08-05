@@ -286,7 +286,7 @@
     <value>Очистить</value>
   </data>
   <data name="PlayerInputNicknamePrompt" xml:space="preserve">
-    <value>Введите ваше прозвище или оно будет {0}</value>
+    <value>Введите свое прозвище</value>
   </data>
   <data name="NoneEquipmentTitle" xml:space="preserve">
     <value>Пусто</value>
@@ -298,7 +298,7 @@
     <value>Одышка</value>
   </data>
   <data name="EnergyCriticalConditionTitle" xml:space="preserve">
-    <value>ПЕРЕГРЕВ!</value>
+    <value>ИЗМОТАННОСТЬ!</value>
   </data>
   <data name="ControlsTutorialText" xml:space="preserve">
     <value>[LMB] для передвижения и атаки.
@@ -313,8 +313,5 @@
   </data>
   <data name="SwitchResolutionButtonTitle" xml:space="preserve">
     <value>Разрешение</value>
-  </data>
-  <data name="PlayerRatingLabel" xml:space="preserve">
-    <value>Ваш рейтинг в таблице лидеров: {0}</value>
   </data>
 </root>

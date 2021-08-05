@@ -286,7 +286,7 @@ take out the character before he dies.</value>
     <value>Clear</value>
   </data>
   <data name="PlayerInputNicknamePrompt" xml:space="preserve">
-    <value>Please, enter your nickname, else your nickname will be {0}</value>
+    <value>Please, enter your nickname</value>
   </data>
   <data name="NoneEquipmentTitle" xml:space="preserve">
     <value>None</value>
@@ -313,8 +313,5 @@ take out the character before he dies.</value>
   </data>
   <data name="SwitchResolutionButtonTitle" xml:space="preserve">
     <value>Switch res</value>
-  </data>
-  <data name="PlayerRatingLabel" xml:space="preserve">
-    <value>Your leader board rating: {0}</value>
   </data>
 </root>
