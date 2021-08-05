@@ -40,6 +40,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private readonly ISectorUiState _uiState;
 
         private double _alertCounter;
+        private static int? _alertIterationIndex;
         private IPersonCondition? _selectedCondition;
         private int? _selectedConditionIconIndex;
 
@@ -281,6 +282,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             _alertedConditions.Clear();
 
+            const int ALERT_SOUND_COUNT = 3;
+
             if (_alertCounter < ALERT_DELAY_DURATION_SECONDS + ALERT_VISIBLE_DURATION_SECONDS)
             {
                 _alertCounter += gameTime.ElapsedGameTime.TotalSeconds;
@@ -288,7 +291,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 if (_alertCounter < ALERT_VISIBLE_DURATION_SECONDS)
                 {
                     var t = _alertCounter / ALERT_VISIBLE_DURATION_SECONDS;
-                    var visiblilitySin = Math.Sin(t * Math.PI * 2 * 3);
+                    
+                    var visiblilitySin = Math.Sin(t * Math.PI * 2 * ALERT_SOUND_COUNT);
                     if (visiblilitySin > 0)
                     {
                         foreach (var criticalCondition in criticalConditions)
@@ -297,8 +301,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                         }
                     }
 
-                    if (visiblilitySin > 0 && _alertedConditions.Any() && _alertSoundEffect.State != SoundState.Playing)
+                    if (visiblilitySin > 0 && _alertedConditions.Any() && _alertSoundEffect.State != SoundState.Playing && _alertIterationIndex <= 3 * ALERT_SOUND_COUNT)
                     {
+                        _alertIterationIndex++;
                         _alertSoundEffect.Play();
                     }
                 }
@@ -308,13 +313,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 _alertCounter = 0;
             }
 
-            if (criticalConditions.Any())
+            if (criticalConditions.Any() && _alertIterationIndex <= 3 * ALERT_SOUND_COUNT)
             {
                 _soundtrackManager.PlaySilence();
             }
             else
             {
                 _soundtrackManager.PlayBackgroundTrack();
+            }
+
+            if (!criticalConditions.Any())
+            { 
+                _alertIterationIndex = null;
             }
         }
     }

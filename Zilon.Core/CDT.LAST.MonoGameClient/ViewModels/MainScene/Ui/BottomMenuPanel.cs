@@ -123,6 +123,25 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             var activeSwitcherButton = GetActiveSwitcherButton();
             activeSwitcherButton.Update();
+
+            HandleHotkeys();
+        }
+
+        private KeyboardState? _lastKeyboard;
+
+        private void HandleHotkeys()
+        {
+            var keyboardState = Keyboard.GetState();
+            if (keyboardState.IsKeyUp(Keys.Space) && _lastKeyboard?.IsKeyDown(Keys.Space) == true)
+            {
+                _travelPanel._idleButton.Click();
+            }
+            else
+            {
+                // No hotkeys have been pressed. Do nothing.
+            }
+
+            _lastKeyboard = keyboardState;
         }
 
         private void CombatModeSwitcherButton_OnClick(object? sender, EventArgs e)

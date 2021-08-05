@@ -14,13 +14,14 @@ using Zilon.Core.Tactics.Behaviour;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
-    public sealed class TravelPanel : IBottomSubPanel
+    internal sealed class TravelPanel : IBottomSubPanel
     {
         private const int BUTTON_WIDTH = 16;
         private const int BUTTON_HEIGHT = 32;
         private const int HINT_TEXT_SPACING = 8;
 
         private readonly IconButton _autoplayModeButton;
+        public readonly IconButton _idleButton;
         private readonly IconButton[] _buttons;
 
         private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _humanActorTaskSource;
@@ -103,6 +104,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 rect: new Rectangle(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
 
             idleButton.OnClick += IdleButton_OnClick;
+
+            _idleButton = idleButton;
 
             #if DEBUG
             _buttons = new[]

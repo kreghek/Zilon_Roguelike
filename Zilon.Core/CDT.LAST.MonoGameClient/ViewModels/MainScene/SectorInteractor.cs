@@ -49,8 +49,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public void Update(SectorViewModelContext sectorViewModelContext)
         {
-            ProccessCancelPersonTask();
-            
             if (!_uiState.CanPlayerGivesCommand)
             {
                 return;
@@ -128,16 +126,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _lastKeyboardState = keyboardState;
 
             return false;
-        }
-
-        private void ProccessCancelPersonTask()
-        {
-            var keyboardState = Keyboard.GetState();
-            if (!keyboardState.IsKeyDown(Keys.Space))
-                return;
-            
-            var idleCommand = _commandFactory.GetCommand<IdleCommand>();
-            _commandPool.Push(idleCommand);
         }
 
         private bool DidOpenDropMenu(KeyboardState keyboardState)

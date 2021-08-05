@@ -5,6 +5,7 @@ using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects;
 
 using Microsoft.Extensions.DependencyInjection;
