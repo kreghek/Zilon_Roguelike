@@ -298,7 +298,7 @@ take out the character before he dies.</value>
     <value>Tired</value>
   </data>
   <data name="EnergyCriticalConditionTitle" xml:space="preserve">
-    <value>OVERHEATED!</value>
+    <value>EXHAUSTED!</value>
   </data>
   <data name="ControlsTutorialText" xml:space="preserve">
     <value>[LMB] to move and attack.
