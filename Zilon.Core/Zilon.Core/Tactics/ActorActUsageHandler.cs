@@ -555,7 +555,7 @@ namespace Zilon.Core.Tactics
                         hasPushRule = true;
                     }
 
-                    if (hasPushRule)
+                    if (hasPushRule && !targetActor.Person.CheckIsDead())
                     {
                         var pushRuleRoll = _actUsageRandomSource.RollPushRule();
 
@@ -592,7 +592,7 @@ namespace Zilon.Core.Tactics
             }
 
             // handle move backward rule
-            if (combatActRoll.CombatAct.Stats.Rules is not null)
+            if (combatActRoll.CombatAct.Stats.Rules is not null && !actor.Person.CheckIsDead())
             {
                 if (combatActRoll.CombatAct.Stats.Rules.Contains(CombatActRule.MoveBackward))
                 {
