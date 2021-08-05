@@ -40,7 +40,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private readonly ISectorUiState _uiState;
 
         private double _alertCounter;
-        private static int? _alertIterationIndex;
+        private static int _alertIterationIndex;
         private IPersonCondition? _selectedCondition;
         private int? _selectedConditionIconIndex;
 
@@ -292,7 +292,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 {
                     var t = _alertCounter / ALERT_VISIBLE_DURATION_SECONDS;
                     
-                    var visiblilitySin = Math.Sin(t * Math.PI * 2 * ALERT_SOUND_COUNT);
+                    var visiblilitySin = Math.Sin(t * Math.PI * 2 * 3);
                     if (visiblilitySin > 0)
                     {
                         foreach (var criticalCondition in criticalConditions)
@@ -301,9 +301,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                         }
                     }
 
-                    if (visiblilitySin > 0 && _alertedConditions.Any() && _alertSoundEffect.State != SoundState.Playing && _alertIterationIndex <= 3 * ALERT_SOUND_COUNT)
+                    if (visiblilitySin > 0 && _alertedConditions.Any() && _alertSoundEffect.State != SoundState.Playing && _alertIterationIndex < ALERT_SOUND_COUNT)
                     {
                         _alertIterationIndex++;
+
                         _alertSoundEffect.Play();
                     }
                 }
@@ -313,7 +314,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 _alertCounter = 0;
             }
 
-            if (criticalConditions.Any() && _alertIterationIndex <= 3 * ALERT_SOUND_COUNT)
+            if (criticalConditions.Any() && _alertIterationIndex < ALERT_SOUND_COUNT)
             {
                 _soundtrackManager.PlaySilence();
             }
