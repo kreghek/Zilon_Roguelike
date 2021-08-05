@@ -126,9 +126,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 return;
             }
 
-            var attributeDescription = GetAttributeDescription(_selectedAttributeItem.Perk);
+            var perkDescription = GetPerkDescription(_selectedAttributeItem.Perk);
             var hintTitleFont = _uiContentStorage.GetHintTitleFont();
-            var titleTextSizeVector = hintTitleFont.MeasureString(attributeDescription);
+            var titleTextSizeVector = hintTitleFont.MeasureString(perkDescription);
 
             const int HINT_TEXT_SPACING = 8;
             var hintRectangle = new Rectangle(
@@ -139,14 +139,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), hintRectangle, Color.DarkSlateGray);
 
-            spriteBatch.DrawString(hintTitleFont, attributeDescription,
+            spriteBatch.DrawString(hintTitleFont, perkDescription,
                 new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
                 Color.Wheat);
         }
 
-        private static string GetAttributeDescription(IPerk perk)
+        private static string GetPerkDescription(IPerk perk)
         {
-            return perk.Scheme.Description?.En ?? perk.Scheme.Description?.Ru ?? string.Empty;
+            return PerkHelper.GetPerkHintText(perk);
         }
 
         private static Rectangle GetPerkIcon()
@@ -156,7 +156,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private static string GetAttributeTitle(IPerk perk)
         {
-            return perk.Scheme?.Name?.En;
+            return PerkHelper.GetPropTitle(perk);
         }
 
         private record PersonPerkUiItem
