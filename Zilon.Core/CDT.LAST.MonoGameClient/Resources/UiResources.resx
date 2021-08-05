@@ -314,4 +314,7 @@ take out the character before he dies.</value>
   <data name="SwitchResolutionButtonTitle" xml:space="preserve">
     <value>Switch res</value>
   </data>
+  <data name="PlayerRatingLabel" xml:space="preserve">
+    <value>Your leader board rating: {0}</value>
+  </data>
 </root>

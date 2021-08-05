@@ -405,6 +405,15 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your leader board rating: {0}.
+        /// </summary>
+        internal static string PlayerRatingLabel {
+            get {
+                return ResourceManager.GetString("PlayerRatingLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Put into {0}.
         /// </summary>
         internal static string PutPropInContainerButtonTitleTemplate {

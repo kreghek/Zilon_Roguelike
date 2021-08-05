@@ -314,4 +314,7 @@
   <data name="SwitchResolutionButtonTitle" xml:space="preserve">
     <value>Разрешение</value>
   </data>
+  <data name="PlayerRatingLabel" xml:space="preserve">
+    <value>Ваш рейтинг в таблице лидеров: {0}</value>
+  </data>
 </root>
