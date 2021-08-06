@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using Zilon.Core.Client.Sector;
 using Zilon.Core.Commands;
 using Zilon.Core.Tactics.Behaviour;
 
@@ -28,6 +29,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private readonly IUiContentStorage _uiContentStorage;
         private readonly ICommandPool _commandPool;
         private readonly ServiceProviderCommandFactory _commandFactory;
+        private readonly ICommandLoopContext _commandLoopContext;
         private readonly IconButton _personPropButton;
         private readonly IconButton _personStatsButton;
         private bool _autoplayHintIsShown;
@@ -36,12 +38,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         public TravelPanel(IHumanActorTaskSource<ISectorTaskSourceContext> humanActorTaskSource,
             IUiContentStorage uiContentStorage,
             ICommandPool commandPool,
-            ServiceProviderCommandFactory commandFactory)
+            ServiceProviderCommandFactory commandFactory,
+            ICommandLoopContext commandLoopContext)
         {
             _humanActorTaskSource = humanActorTaskSource;
             _uiContentStorage = uiContentStorage;
             _commandPool = commandPool;
             _commandFactory = commandFactory;
+            _commandLoopContext = commandLoopContext;
             _autoplayModeButton = new IconButton(
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 iconData: new IconData(
@@ -130,8 +134,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private void IdleButton_OnClick(object? sender, EventArgs e)
         {
-            var idleCommand = _commandFactory.GetCommand<IdleCommand>();
-            _commandPool.Push(idleCommand);
+            if (_commandLoopContext.CanPlayerGiveCommand)
+            {
+                var idleCommand = _commandFactory.GetCommand<IdleCommand>();
+                _commandPool.Push(idleCommand);
+            }
         }
 
         private void AutoplayModeButton_OnClick(object? sender, EventArgs e)

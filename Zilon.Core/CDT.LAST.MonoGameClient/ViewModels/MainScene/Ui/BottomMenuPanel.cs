@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
+using Zilon.Core.Client.Sector;
 using Zilon.Core.Commands;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Tactics.Behaviour;
@@ -45,9 +46,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             IEquipmentModule equipmentModule,
             ISectorUiState sectorUiState,
             ICommandPool commandPool,
-            ServiceProviderCommandFactory commandFactory)
+            ServiceProviderCommandFactory commandFactory,
+            ICommandLoopContext commandLoopContext)
         {
-            _travelPanel = new TravelPanel(humanActorTaskSource, uiContentStorage, commandPool, commandFactory);
+            _travelPanel = new TravelPanel(humanActorTaskSource, uiContentStorage, commandPool, commandFactory, commandLoopContext);
             _combatActPanel = new CombatActPanel(combatActModule, equipmentModule, uiContentStorage, sectorUiState);
 
             _travelPanel.PropButtonClicked += PersonPropButton_OnClick;

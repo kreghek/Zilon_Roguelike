@@ -118,7 +118,8 @@ namespace CDT.LAST.MonoGameClient.Screens
                 mainPerson.GetModule<IEquipmentModule>(),
                 _uiState,
                 _commandPool,
-                _commandFactory);
+                _commandFactory,
+                serviceScope.GetRequiredService<ICommandLoopContext>());
             _bottomMenu.PropButtonClicked += BottomMenu_PropButtonClicked;
             _bottomMenu.StatButtonClicked += BottomMenu_StatButtonClicked;
             _bottomMenu.TraitsButtonClicked += BottomMenu_TraitsButtonClicked;
