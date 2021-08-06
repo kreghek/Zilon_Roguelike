@@ -276,7 +276,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             return null;
         }
 
-        private static bool _showControlTutorial;
+        private static bool _showControlTutorial = true;
 
         private void DrawHud()
         {
