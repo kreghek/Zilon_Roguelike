@@ -13,7 +13,7 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
         public CherryBrushFactory(
             ISchemeService schemeService,
             IDropResolver dropResolver) : base(Array.Empty<string>(), "cherry-brush", PropContainerPurpose.CherryBrush,
-            schemeService, dropResolver)
+            schemeService, dropResolver, true)
         {
         }
 

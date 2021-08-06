@@ -12,7 +12,7 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
         public OreDepositFactory(
             ISchemeService schemeService,
             IDropResolver dropResolver) : base(toolTags: new[] { "pick-axe" }, dropTableSchemeSid: "ore-deposit",
-            PropContainerPurpose.OreDeposits, schemeService, dropResolver)
+            PropContainerPurpose.OreDeposits, schemeService, dropResolver, true)
         {
         }
 

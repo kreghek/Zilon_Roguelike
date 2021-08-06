@@ -13,7 +13,7 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
         public PuddleFactory(
             ISchemeService schemeService,
             IDropResolver dropResolver) : base(Array.Empty<string>(), "water-puddle", PropContainerPurpose.Puddle,
-            schemeService, dropResolver)
+            schemeService, dropResolver, false)
         {
         }
 

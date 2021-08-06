@@ -18,7 +18,7 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
                 throw new ArgumentNullException(nameof(sector));
             }
 
-            var staticObject = new StaticObject(node, Purpose, id);
+            var staticObject = new StaticObject(node, Purpose, id, false);
 
             return staticObject;
         }
