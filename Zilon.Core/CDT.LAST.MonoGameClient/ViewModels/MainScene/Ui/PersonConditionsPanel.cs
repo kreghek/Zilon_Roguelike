@@ -153,9 +153,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         {
             if (_selectedCondition != null && _selectedConditionIconIndex != null)
             {
-                var personConditionTitle = GetConditionTitle(_selectedCondition);
+                var personConditionHintText = GetConditionHintText(_selectedCondition);
+
                 var hintFont = _uiContentStorage.GetHintTitleFont();
-                var titleTextSizeVector = hintFont.MeasureString(personConditionTitle);
+                var titleTextSizeVector = hintFont.MeasureString(personConditionHintText);
                 var selectedConditionIndex = _selectedConditionIconIndex.Value;
                 var hintXPosition = selectedConditionIndex * (ICON_SIZE + ICON_SPACING) + _screenX;
 
@@ -168,7 +169,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 var conditionHintBackgroundTexture = _uiContentStorage.GetHintBackgroundTexture();
                 spriteBatch.Draw(conditionHintBackgroundTexture, hintRectangle, Color.DarkSlateGray);
 
-                spriteBatch.DrawString(hintFont, personConditionTitle,
+                spriteBatch.DrawString(hintFont, personConditionHintText,
                     new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
                     Color.Wheat);
             }
@@ -184,12 +185,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             spriteBatch.Draw(backgroundTexture, new Vector2(iconX, _screenY), Color.White);
         }
 
-        private static string GetConditionTitle(IPersonCondition personCondition)
+        private static string GetConditionHintText(IPersonCondition personCondition)
         {
             switch (personCondition)
             {
                 case SurvivalStatHazardCondition statEffect:
-                    return GetSurvivalConditionTitle(statEffect);
+                    return GetSurvivalConditionHintText(statEffect);
 
                 case DiseaseSymptomCondition diseaseSymptomCondition:
                     return GetSymptomTitle(diseaseSymptomCondition);
@@ -251,11 +252,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
         }
 
-        private static string GetSurvivalConditionTitle(SurvivalStatHazardCondition statCondition)
+        private static string GetSurvivalConditionHintText(SurvivalStatHazardCondition statCondition)
         {
             var typeString = GetStatHazardConditionTypeClientString(statCondition.Type);
             var levelString = GetStatHazardConditionLevelClientString(statCondition);
             var conditionTitle = UiResources.ResourceManager.GetString($"{typeString}{levelString}ConditionTitle");
+            var conditionDescription = UiResources.ResourceManager.GetString($"{typeString}ConditionDescription");
             if (string.IsNullOrWhiteSpace(conditionTitle))
             {
                 Debug.Fail("All person conditions must have localized titles."
@@ -263,7 +265,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 return $"{typeString}{levelString}";
             }
 
-            return conditionTitle;
+            return $"{conditionTitle}\n{new string('-', 8)}\n{conditionDescription}";
         }
 
         private void UpdateAlert(IConditionsModule conditionsModule, GameTime gameTime)

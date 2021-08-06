@@ -145,7 +145,7 @@
     <value>Легкая токсикация</value>
   </data>
   <data name="IntoxicationCriticalConditionTitle" xml:space="preserve">
-    <value>ТОКСИКАЦИЯ!</value>
+    <value>ПЕРЕДОЗИРОВКА!</value>
   </data>
   <data name="HungerStrongConditionTitle" xml:space="preserve">
     <value>Голод</value>
@@ -316,5 +316,37 @@
   </data>
   <data name="PlayerRatingLabel" xml:space="preserve">
     <value>Ваш рейтинг в таблице лидеров: {0}</value>
+  </data>
+  <data name="EnergyConditionDescription" xml:space="preserve">
+    <value>Энергия нужна, чтобы выполнять мощные удары.
+Когда энергия заканчивается - персонаж устает.
+Уставший персонаж менее эффективен в бою.
+А измотанный персонаж начинает терять жизненные силы
+и может умереть от переутомления.</value>
+  </data>
+  <data name="HungerConditionDescription" xml:space="preserve">
+    <value>Любому персонажу нужно есть.
+Голодный персонаж менее эффективен.
+В конечном счете, голодание убивает персонажа.</value>
+  </data>
+  <data name="IntoxicationConditionDescription" xml:space="preserve">
+    <value>Употребление медикаментов повышает уровень интоксикации персонажа.
+Токсины немного снижают эффективность персонажа,
+но со временем выветриваются.
+Если интоксикация вырастет слишком сильно - наступит передозировка
+и персонаж умрёт.</value>
+  </data>
+  <data name="ThristConditionDescription" xml:space="preserve">
+    <value>Всем персонажам нужно пить.\n
+Жажда снижает эффективность персонажам\n
+и может привести к обезвоживанию.\n
+Обезвоживание - это смерть!</value>
+  </data>
+  <data name="WoundConditionDescription" xml:space="preserve">
+    <value>Персонаж жив, пока у него есть жизненные силы.
+Повреждения, наружные или внутренние,
+отнимают жизненные силы. Постепенно любые ранения
+затягиваются. В конечном счёте, игра продолжается,
+пока в персонаже есть хоть немного жизни.</value>
   </data>
 </root>

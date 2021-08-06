@@ -185,6 +185,19 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Energy is needed to deliver powerful blows.
+        ///When the energy ends, the character gets tired.
+        ///A tired character is less effective in combat.
+        ///And the exhausted character begins to lose vitality
+        ///and may die of overwork..
+        /// </summary>
+        internal static string EnergyConditionDescription {
+            get {
+                return ResourceManager.GetString("EnergyConditionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to EXHAUSTED!.
         /// </summary>
         internal static string EnergyCriticalConditionTitle {
@@ -248,6 +261,17 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Any character needs to eat.
+        ///A hungry character is less efficient.
+        ///Ultimately, starvation kills the character..
+        /// </summary>
+        internal static string HungerConditionDescription {
+            get {
+                return ResourceManager.GetString("HungerConditionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Starvation!.
         /// </summary>
         internal static string HungerCriticalConditionTitle {
@@ -275,7 +299,20 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INTOXICATION!.
+        ///   Looks up a localized string similar to The use of medicines increases the level of intoxication of the character.
+        ///Toxins slightly reduce the effectiveness of the character,
+        ///but erode over time.
+        ///If the intoxication grows too much, an overdose will occur.
+        ///and the character will die..
+        /// </summary>
+        internal static string IntoxicationConditionDescription {
+            get {
+                return ResourceManager.GetString("IntoxicationConditionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OVERDOSE!.
         /// </summary>
         internal static string IntoxicationCriticalConditionTitle {
             get {
@@ -567,6 +604,18 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All characters need to drink.\n
+        ///Thirst reduces the effectiveness of characters\n
+        ///and can lead to dehydration.\n
+        ///Dehydration is death!.
+        /// </summary>
+        internal static string ThristConditionDescription {
+            get {
+                return ResourceManager.GetString("ThristConditionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dehydration!.
         /// </summary>
         internal static string ThristCriticalConditionTitle {
@@ -608,6 +657,18 @@ namespace CDT.LAST.MonoGameClient.Resources {
         internal static string UseCommandButtonTitle {
             get {
                 return ResourceManager.GetString("UseCommandButtonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The character is alive as long as he has vitality.
+        ///Damage, external or internal, takes away vitality.
+        ///Gradually, any wounds heal. Ultimately, the game
+        ///continues as long as there is at least some life in the character..
+        /// </summary>
+        internal static string WoundConditionDescription {
+            get {
+                return ResourceManager.GetString("WoundConditionDescription", resourceCulture);
             }
         }
         

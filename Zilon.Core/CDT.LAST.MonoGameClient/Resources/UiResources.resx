@@ -130,7 +130,7 @@
     <value>Hunger</value>
   </data>
   <data name="IntoxicationCriticalConditionTitle" xml:space="preserve">
-    <value>INTOXICATION!</value>
+    <value>OVERDOSE!</value>
   </data>
   <data name="IntoxicationLesserConditionTitle" xml:space="preserve">
     <value>Easy intoxication</value>
@@ -316,5 +316,36 @@ take out the character before he dies.</value>
   </data>
   <data name="PlayerRatingLabel" xml:space="preserve">
     <value>Your leader board rating: {0}</value>
+  </data>
+  <data name="EnergyConditionDescription" xml:space="preserve">
+    <value>Energy is needed to deliver powerful blows.
+When the energy ends, the character gets tired.
+A tired character is less effective in combat.
+And the exhausted character begins to lose vitality
+and may die of overwork.</value>
+  </data>
+  <data name="HungerConditionDescription" xml:space="preserve">
+    <value>Any character needs to eat.
+A hungry character is less efficient.
+Ultimately, starvation kills the character.</value>
+  </data>
+  <data name="IntoxicationConditionDescription" xml:space="preserve">
+    <value>The use of medicines increases the level of intoxication of the character.
+Toxins slightly reduce the effectiveness of the character,
+but erode over time.
+If the intoxication grows too much, an overdose will occur.
+and the character will die.</value>
+  </data>
+  <data name="ThristConditionDescription" xml:space="preserve">
+    <value>All characters need to drink.\n
+Thirst reduces the effectiveness of characters\n
+and can lead to dehydration.\n
+Dehydration is death!</value>
+  </data>
+  <data name="WoundConditionDescription" xml:space="preserve">
+    <value>The character is alive as long as he has vitality.
+Damage, external or internal, takes away vitality.
+Gradually, any wounds heal. Ultimately, the game
+continues as long as there is at least some life in the character.</value>
   </data>
 </root>
