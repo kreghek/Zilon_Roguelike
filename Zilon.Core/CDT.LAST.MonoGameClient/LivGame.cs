@@ -97,12 +97,12 @@ namespace CDT.LAST.MonoGameClient
 
             Components.Add(sceneManager);
 
+            var font = Content.Load<SpriteFont>("Fonts/Main");
 #if DEBUG
-
-            var fpsCounter = new FpsCounter(this, _spriteBatch, Content.Load<SpriteFont>("Fonts/Main"));
+            var fpsCounter = new FpsCounter(this, _spriteBatch, font);
             Components.Add(fpsCounter);
 
-            var cheatInput = new CheatInput(this, _spriteBatch, Content.Load<SpriteFont>("Fonts/Main"));
+            var cheatInput = new CheatInput(this, _spriteBatch, font);
             Components.Add(cheatInput);
             
             _graphics.IsFullScreen = false;
@@ -123,6 +123,9 @@ namespace CDT.LAST.MonoGameClient
             _graphics.PreferredBackBufferHeight = 720;
             _graphics.ApplyChanges();
 #endif
+
+            var versionDisplay = new VersionDisplay(this, _spriteBatch, font);
+            Components.Add(versionDisplay);
         }
 
         protected override void Update(GameTime gameTime)
