@@ -75,14 +75,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             personStatsButton.OnClick += PersonStatsButton_OnClick;
 
 
-            var personTraisButton = new IconButton(
+            var personTraitsButton = new IconButton(
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 iconData: new IconData(
                     uiContentStorage.GetSmallVerticalButtonIconsTexture(),
-                    new Rectangle(32, 0, BUTTON_WIDTH, BUTTON_HEIGHT)
+                    new Rectangle(48, 32, BUTTON_WIDTH, BUTTON_HEIGHT)
                 ),
-                rect: new Rectangle(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
-            personTraisButton.OnClick += PersonTraitsButton_OnClick;
+                rect: new Rectangle(48, 32, BUTTON_WIDTH, BUTTON_HEIGHT));
+            personTraitsButton.OnClick += PersonTraitsButton_OnClick;
 
 
             var gameSpeedButton = new IconButton(
@@ -113,7 +113,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 _autoplayModeButton,
                 personPropButton,
                 personStatsButton,
-                personTraisButton,
+                personTraitsButton,
+                idleButton,
                 gameSpeedButton
             };
 #else

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
-using CDT.LAST.MonoGameClient.Resources;
 using CDT.LAST.MonoGameClient.Screens;
 
 using Microsoft.Xna.Framework;
@@ -44,7 +42,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             foreach (var item in _currentAttributesItems)
             {
-                DrawAttribute(item, spriteBatch);
+                DrawPerk(item, spriteBatch);
             }
 
             DrawHintIfSelected(spriteBatch);
@@ -69,18 +67,25 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             var currentAttributeItemList = new List<PersonPerkUiItem>();
+            var colWidth = ContentRect.Width / 2;
 
-            var perks = evolutionModule.GetArchievedPerks();
-            foreach (var perk in perks)
+            int MAX_ITEM_IN_ROW = 8;
+            int MAX_ITEM_COUNT = MAX_ITEM_IN_ROW * 2;
+
+            var perks = evolutionModule.GetArchievedPerks().Take(MAX_ITEM_COUNT).ToArray();
+            for (var itemIndex = 0; itemIndex < perks.Length; itemIndex++)
             {
-                var lastIndex = currentAttributeItemList.Count;
-                var relativeY = lastIndex * (ATTRIBUTE_ITEM_SIZE + ATTRIBUTE_ITEM_SPACING);
+                var perk = perks[itemIndex];
+                var colIndex = itemIndex / MAX_ITEM_IN_ROW;
+                var rowIndex = itemIndex % MAX_ITEM_IN_ROW;
+                var relativeX = colWidth * colIndex;
+                var relativeY = rowIndex * (ATTRIBUTE_ITEM_SIZE + ATTRIBUTE_ITEM_SPACING);
                 var uiRect = new Rectangle(
-                    ContentRect.Left,
+                    ContentRect.Left + relativeX,
                     ContentRect.Top + relativeY,
                     ATTRIBUTE_ITEM_SIZE,
                     ATTRIBUTE_ITEM_SIZE);
-                var uiItem = new PersonPerkUiItem(perk, lastIndex, uiRect);
+                var uiItem = new PersonPerkUiItem(perk, itemIndex, uiRect);
                 currentAttributeItemList.Add(uiItem);
             }
 
@@ -103,15 +108,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _selectedAttributeItem = effectUnderMouse;
         }
 
-        private void DrawAttribute(PersonPerkUiItem item, SpriteBatch spriteBatch)
+        private void DrawPerk(PersonPerkUiItem item, SpriteBatch spriteBatch)
         {
-            var sourceRect = GetPerkIcon();
+            var sourceRect = GetPerkIcon(item.Perk);
             spriteBatch.Draw(_uiContentStorage.GetAttributeBackgroundTexture(),
                 new Vector2(item.UiRect.Left, item.UiRect.Top), Color.White);
             spriteBatch.Draw(_uiContentStorage.GetAttributeIconsTexture(),
                 new Vector2(item.UiRect.Left, item.UiRect.Top), sourceRect, Color.White);
 
-            var attributeTitle = GetAttributeTitle(item.Perk);
+            var attributeTitle = GetPerkTitle(item.Perk);
              spriteBatch.DrawString(
                 _uiContentStorage.GetButtonFont(),
                 attributeTitle,
@@ -149,12 +154,19 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             return PerkHelper.GetPerkHintText(perk);
         }
 
-        private static Rectangle GetPerkIcon()
+        private static Rectangle GetPerkIcon(IPerk perk)
         {
-            return new Rectangle(0, 64, 32, 32);
+            if (perk.Scheme.IsBuildIn)
+            {
+                return new Rectangle(0, 64, 32, 32);
+            }
+            else
+            {
+                return new Rectangle(32, 64, 32, 32);
+            }
         }
 
-        private static string GetAttributeTitle(IPerk perk)
+        private static string GetPerkTitle(IPerk perk)
         {
             return PerkHelper.GetPropTitle(perk);
         }

@@ -38,7 +38,7 @@ namespace Zilon.Bot.Players.Triggers
             // Remember last intruder for logic with will handle reaction.
             strategyData.TriggerIntuder = nearbyIntruder;
 
-            if (nearbyIntruder == null)
+            if (nearbyIntruder is null)
             {
                 return false;
             }
@@ -48,7 +48,7 @@ namespace Zilon.Bot.Players.Triggers
 
         public void Update()
         {
-            // Нет состояния.
+            
         }
 
         public void Reset()
