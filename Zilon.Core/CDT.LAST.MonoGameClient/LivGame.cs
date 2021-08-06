@@ -58,13 +58,14 @@ namespace CDT.LAST.MonoGameClient
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
-            base.Initialize();
-
             InitGlobeLoop();
 
             InitCommandLoop();
+
+            System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo("ru-RU");
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("ru-RU");
+
+            base.Initialize();
         }
 
         protected override void LoadContent()

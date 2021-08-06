@@ -140,13 +140,13 @@ namespace CDT.LAST.MonoGameClient.Screens
             if (string.Equals(currentLanguage.TwoLetterISOLanguageName, "en",
                 StringComparison.InvariantCultureIgnoreCase))
             {
-                var newCulture = new CultureInfo("ru-RU");
+                var newCulture = System.Globalization.CultureInfo.GetCultureInfo("ru-RU");
                 Thread.CurrentThread.CurrentCulture = newCulture;
                 Thread.CurrentThread.CurrentUICulture = newCulture;
             }
             else
             {
-                var newCulture = new CultureInfo("en-US");
+                var newCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
                 Thread.CurrentThread.CurrentCulture = newCulture;
                 Thread.CurrentThread.CurrentUICulture = newCulture;
             }
