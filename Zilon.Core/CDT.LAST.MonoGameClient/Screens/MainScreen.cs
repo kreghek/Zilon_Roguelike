@@ -6,6 +6,7 @@ using System.Linq;
 using CDT.LAST.MonoGameClient.Engine;
 using CDT.LAST.MonoGameClient.GameComponents;
 using CDT.LAST.MonoGameClient.Resources;
+using CDT.LAST.MonoGameClient.ViewModels;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui;
 
@@ -351,30 +352,37 @@ namespace CDT.LAST.MonoGameClient.Screens
         private void DrawMonsterInfo(IActorViewModel actorViewModel, SpriteBatch spriteBatch, int viewPortWidth,
             int viewPortHeight)
         {
-            var position = new Vector2(viewPortWidth - 100, viewPortHeight - 100);
-            var monsterPerson = actorViewModel.Actor.Person;
-            spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), monsterPerson.ToString(), position, Color.White);
-#if SHOW_NUMS
-            var stats = monsterPerson.GetModule<ISurvivalModule>().Stats;
-            var monsterCombatActModule
- = monsterPerson.GetModule<ICombatActModule>();
-            var defaultAct
- = monsterCombatActModule.GetCurrentCombatActs().First();
-            spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), GetRollAsString(defaultAct.Efficient),
-                position + new Vector2(0, 16), Color.White);
-            for (var statIndex
- = 0; statIndex < stats.Length; statIndex++)
+            var monsterPerson = actorViewModel.Actor.Person as MonsterPerson;
+
+            if (monsterPerson is null)
             {
-                var stat
- = stats[statIndex];
-                var statPosition
- = new Vector2(0, 32 + statIndex * 16);
-                var statText
- = $"{stat.Type} - {stat.Value} ({stat.ValueShare:0.##})";
-                spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), statText, position + statPosition,
-                    Color.White);
+                return;
             }
+
+            var position = new Vector2(viewPortWidth - 100, viewPortHeight - 100);
+            spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), MonsterHelper.GetPerkHintText(monsterPerson), position, Color.White);
+            var isNumbersShow = false;
+
+#if SHOW_NUMS
+            isNumbersShow = true;
 #endif
+
+            if (isNumbersShow)
+            {
+                var stats = monsterPerson.GetModule<ISurvivalModule>().Stats;
+                var monsterCombatActModule = monsterPerson.GetModule<ICombatActModule>();
+                var defaultAct = monsterCombatActModule.GetCurrentCombatActs().First();
+                spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), GetRollAsString(defaultAct.Efficient),
+                    position + new Vector2(0, 16), Color.White);
+                for (var statIndex = 0; statIndex < stats.Length; statIndex++)
+                {
+                    var stat = stats[statIndex];
+                    var statPosition = new Vector2(0, 32 + statIndex * 16);
+                    var statText = $"{stat.Type} - {stat.Value} ({stat.ValueShare:0.##})";
+                    spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), statText, position + statPosition,
+                        Color.White);
+                }
+            }
         }
 
         private void DrawPersonModePanel()
