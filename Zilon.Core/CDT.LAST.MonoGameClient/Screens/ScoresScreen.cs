@@ -94,7 +94,11 @@
             var serviceScope = ((LivGame)Game).ServiceProvider;
 
             _scoreManager = serviceScope.GetRequiredService<IScoreManager>();
-            _scoreSummary = TextSummaryHelper.CreateTextSummary(_scoreManager.Scores);
+
+            var currentLanguage = System.Threading.Thread.CurrentThread.CurrentUICulture;
+            var langName = currentLanguage.TwoLetterISOLanguageName;
+
+            _scoreSummary = TextSummaryHelper.CreateTextSummary(_scoreManager.Scores, langName);
             _uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
 
             _dbContext = serviceScope.GetRequiredService<DbContext>();
