@@ -12,6 +12,7 @@ using CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
 using Zilon.Core.Client.Sector;
@@ -200,7 +201,20 @@ namespace CDT.LAST.MonoGameClient.Screens
             {
                 HandleTransition(isInTransition);
             }
+
+            var keyboardState = Keyboard.GetState();
+            if (_lastKeyboardState is not null)
+            {
+                if (_lastKeyboardState.Value.IsKeyDown(Keys.F1) && keyboardState.IsKeyUp(Keys.F1))
+                {
+                    _showControlTutorial = !_showControlTutorial;
+                }
+            }
+
+            _lastKeyboardState = keyboardState;
         }
+
+        private KeyboardState? _lastKeyboardState;
 
         private void Actor_OpenedContainer(object? sender, OpenContainerEventArgs e)
         {
@@ -262,6 +276,8 @@ namespace CDT.LAST.MonoGameClient.Screens
             return null;
         }
 
+        private static bool _showControlTutorial = true;
+
         private void DrawHud()
         {
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
@@ -284,7 +300,10 @@ namespace CDT.LAST.MonoGameClient.Screens
                     Game.GraphicsDevice.Viewport.Height);
             }
 
-            DrawControlsTutorial(_spriteBatch, Game.GraphicsDevice);
+            if (_showControlTutorial)
+            {
+                DrawControlsTutorial(_spriteBatch, Game.GraphicsDevice);
+            }
 
             _spriteBatch.End();
         }
@@ -299,7 +318,7 @@ namespace CDT.LAST.MonoGameClient.Screens
                 spriteFont,
                 controlsTutorialText,
                 new Vector2(graphicsDevice.Viewport.Bounds.Right - textSize.X - MARGIN, graphicsDevice.Viewport.Bounds.Top + MARGIN),
-                Color.Gray);
+                Color.White);
         }
 
         private void DrawModals()
