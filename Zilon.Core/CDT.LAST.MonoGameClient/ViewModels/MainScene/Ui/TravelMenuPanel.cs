@@ -126,7 +126,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             {
                 personPropButton,
                 personStatsButton,
-                personTraisButton,
+                personTraitsButton,
                 idleButton
             };
 #endif
