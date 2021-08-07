@@ -189,6 +189,30 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     }
                 }
             }
+            else if (e.ActorInteractionEvent is DodgeActorInteractionEvent dodgeActorInteractionEvent)
+            {
+                var actDescription = dodgeActorInteractionEvent.UsedActDescription;
+                var targetActor = dodgeActorInteractionEvent.TargetActor;
+
+                var attackerViewModel = ViewModelContext.GameObjects.OfType<ActorViewModel>()
+                    .Single(x => x.Actor == dodgeActorInteractionEvent.Actor);
+                if (attackerViewModel.CanDraw)
+                {
+                    attackerViewModel.RunCombatActUsageAnimation(actDescription, targetActor.Node);
+                }
+            }
+            else if (e.ActorInteractionEvent is PureMissActorInteractionEvent pureMissActorInteractionEvent)
+            {
+                var actDescription = pureMissActorInteractionEvent.UsedActDescription;
+                var targetActor = pureMissActorInteractionEvent.TargetActor;
+
+                var attackerViewModel = ViewModelContext.GameObjects.OfType<ActorViewModel>()
+                    .Single(x => x.Actor == pureMissActorInteractionEvent.Actor);
+                if (attackerViewModel.CanDraw)
+                {
+                    attackerViewModel.RunCombatActUsageAnimation(actDescription, targetActor.Node);
+                }
+            }
         }
     }
 }

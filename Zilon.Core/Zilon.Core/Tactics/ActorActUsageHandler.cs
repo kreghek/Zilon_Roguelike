@@ -178,12 +178,12 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="actor"> Актёр, который совершил действие. </param>
         /// <param name="targetActor"> Цель использования действия. </param>
-        /// <param name="tacticalActRoll"> Эффективность действия. </param>
-        private void DamageActor(IActor actor, IActor targetActor, CombatActRoll tacticalActRoll, ISectorMap map)
+        /// <param name="combatActRoll"> Эффективность действия. </param>
+        private void DamageActor(IActor actor, IActor targetActor, CombatActRoll combatActRoll, ISectorMap map)
         {
             var targetIsDeadLast = targetActor.Person.CheckIsDead();
 
-            var offence = tacticalActRoll.CombatAct.Stats.Offence;
+            var offence = combatActRoll.CombatAct.Stats.Offence;
             if (offence is null)
             {
                 throw new InvalidOperationException();
@@ -194,16 +194,16 @@ namespace Zilon.Core.Tactics
 
             var prefferedDefenceItem = HitHelper.CalcPreferredDefense(usedDefences);
             var successToHitRoll = HitHelper.CalcSuccessToHit(prefferedDefenceItem);
-            var factToHitRoll = _actUsageRandomSource.RollToHit(tacticalActRoll.CombatAct.ToHit);
+            var factToHitRoll = _actUsageRandomSource.RollToHit(combatActRoll.CombatAct.ToHit);
 
             if (factToHitRoll >= successToHitRoll)
             {
-                ProcessSuccessfullHit(actor, targetActor, tacticalActRoll, targetIsDeadLast, successToHitRoll,
+                ProcessSuccessfullHit(actor, targetActor, combatActRoll, targetIsDeadLast, successToHitRoll,
                     factToHitRoll, map);
             }
             else
             {
-                ProcessFailedHit(actor, targetActor, prefferedDefenceItem, successToHitRoll, factToHitRoll);
+                ProcessFailedHit(actor, targetActor, combatActRoll, prefferedDefenceItem, successToHitRoll, factToHitRoll);
             }
         }
 
@@ -418,6 +418,7 @@ namespace Zilon.Core.Tactics
         private void ProcessAttackDodgeEvent(
             IActor actor,
             IActor targetActor,
+            CombatActRoll combatActRoll,
             PersonDefenceItem personDefenceItem,
             int successToHitRoll,
             int factToHitRoll)
@@ -427,7 +428,9 @@ namespace Zilon.Core.Tactics
                 return;
             }
 
-            var interactEvent = new DodgeActorInteractionEvent(actor, targetActor, personDefenceItem)
+            var usedActDescription = ActDescription.CreateFromActStats(combatActRoll.CombatAct.Stats);
+
+            var interactEvent = new DodgeActorInteractionEvent(actor, targetActor, personDefenceItem, usedActDescription)
             {
                 SuccessToHitRoll = successToHitRoll,
                 FactToHitRoll = factToHitRoll
@@ -462,7 +465,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void ProcessFailedHit(IActor actor, IActor targetActor, PersonDefenceItem? prefferedDefenceItem,
+        private void ProcessFailedHit(IActor actor, IActor targetActor, CombatActRoll combatActRoll, PersonDefenceItem? prefferedDefenceItem,
             int successToHitRoll, int factToHitRoll)
         {
             if (prefferedDefenceItem != null)
@@ -470,6 +473,7 @@ namespace Zilon.Core.Tactics
                 // Это промах, потому что целевой актёр увернулся.
                 ProcessAttackDodgeEvent(actor,
                     targetActor,
+                    combatActRoll,
                     prefferedDefenceItem,
                     successToHitRoll,
                     factToHitRoll);
@@ -479,19 +483,22 @@ namespace Zilon.Core.Tactics
                 // Это промах чистой воды.
                 ProcessPureMissEvent(actor,
                     targetActor,
+                    combatActRoll,
                     successToHitRoll,
                     factToHitRoll);
             }
         }
 
-        private void ProcessPureMissEvent(IActor actor, IActor targetActor, int successToHitRoll, int factToHitRoll)
+        private void ProcessPureMissEvent(IActor actor, IActor targetActor, CombatActRoll combatActRoll, int successToHitRoll, int factToHitRoll)
         {
             if (ActorInteractionBus == null)
             {
                 return;
             }
 
-            var damageEvent = new PureMissActorInteractionEvent(actor, targetActor)
+            var usedActDescription = ActDescription.CreateFromActStats(combatActRoll.CombatAct.Stats);
+
+            var damageEvent = new PureMissActorInteractionEvent(actor, targetActor, usedActDescription)
             {
                 SuccessToHitRoll = successToHitRoll,
                 FactToHitRoll = factToHitRoll
