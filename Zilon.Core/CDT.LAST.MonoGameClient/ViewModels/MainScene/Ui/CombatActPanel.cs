@@ -162,11 +162,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
                 button.Draw(spriteBatch);
 
+                var showNums = false;
+
 #if SHOW_NUMS
-                spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(),
-                    GetRollAsString(button.CombatAct.Efficient), new Vector2(buttonRect.Left, buttonRect.Top),
-                    Color.White);
+                showNums = true;
 #endif
+
+                if (showNums)
+                {
+                    spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(),
+                        GetRollAsString(button.CombatAct.Efficient), new Vector2(buttonRect.Left, buttonRect.Top),
+                        Color.White);
+                }
 
                 DrawButtonHotkey(actIndex, button, spriteBatch);
 
@@ -181,9 +188,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private void DrawCombatActHint(CombatActButton button, SpriteBatch spriteBatch)
         {
-            var combatActName = button.CombatAct.Scheme.Name.En ?? button.CombatAct.Scheme.Name.Ru ?? "<Undefined>";
-            var combatActDescription = button.CombatAct.Scheme.Description?.En ?? button.CombatAct.Scheme.Description?.Ru ?? string.Empty;
-            var combatActHintText = combatActName + "\n" + new string('-', 8) + "\n" + combatActDescription;
+            var combatActHintText = CombatActHelper.GetActHintText(button.CombatAct);
 
             var titleTextSizeVector = _uiContentStorage.GetHintTitleFont().MeasureString(combatActHintText);
 
