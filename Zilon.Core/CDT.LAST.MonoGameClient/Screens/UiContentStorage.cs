@@ -86,23 +86,28 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private void InitCombatActIcons(ContentManager contentManager)
         {
+            Texture2D loadIcon(string name) { return contentManager.Load<Texture2D>($"Sprites/ui/CombatActIcons/{name}"); };
+
             _combatActDict = new Dictionary<string, Texture2D>
             {
-                ["default"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/SwordCut"),
+                ["default"] = loadIcon("SwordCut"),
 
-                ["tag-punch"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/Punch"),
+                ["tag-punch"] = loadIcon("Punch"),
 
-                ["uppercut"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/Uppercut"),
-                ["death-punch"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/DeathPunch"),
+                ["uppercut"] = loadIcon("Uppercut"),
+                ["death-punch"] = loadIcon("DeathPunch"),
 
-                ["clumsy-cut"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/SwordCut"),
-                ["evasion-slash"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/EvasionSlash"),
-                ["lunging-stab"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/LungingStab"),
-                ["penetrating-thrust"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/PenetratingThrust"),
-                ["weak-block"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/WeakBlock"),
-                ["weak-parry"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/WeakParry"),
-                ["weak-swing"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/WeakSwing"),
-                ["pierce"] = contentManager.Load<Texture2D>("Sprites/ui/CombatActIcons/NormalPierce")
+                ["slash"] = loadIcon("SwordCut"),
+                ["evasion-slash"] = loadIcon("EvasionSlash"),
+                
+                ["pierce"] = loadIcon("NormalPierce"),
+
+                ["shield-push"] = loadIcon("ShieldBash"),
+
+                ["stab"] = loadIcon("Stab"),
+                ["dirty-trick"] = loadIcon("DirtyTrick"),
+
+                ["bludgeon"] = loadIcon("Bludgeon"),
             };
         }
 

@@ -1205,6 +1205,30 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/ClothIcons/WorkClothes.png
 
+#begin Sprites/ui/CombatActIcons/Bludgeon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/ui/CombatActIcons/Bludgeon.png
+
+#begin Sprites/ui/CombatActIcons/DeathPunch.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/ui/CombatActIcons/DeathPunch.png
+
 #begin Sprites/ui/CombatActIcons/DeathPunch.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1216,6 +1240,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/CombatActIcons/DeathPunch.png
+
+#begin Sprites/ui/CombatActIcons/DirtyTrick.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/ui/CombatActIcons/DirtyTrick.png
 
 #begin Sprites/ui/CombatActIcons/EvasionSlash.png
 /importer:TextureImporter
@@ -1229,6 +1265,18 @@
 /processorParam:TextureFormat=Color16Bit
 /build:Sprites/ui/CombatActIcons/EvasionSlash.png
 
+#begin Sprites/ui/CombatActIcons/EvasionSlash.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/CombatActIcons/EvasionSlash.png
+
 #begin Sprites/ui/CombatActIcons/LungingStab.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1240,6 +1288,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color16Bit
 /build:Sprites/ui/CombatActIcons/LungingStab.png
+
+#begin Sprites/ui/CombatActIcons/LungingStab.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/CombatActIcons/LungingStab.png
+
+#begin Sprites/ui/CombatActIcons/NormalPierce.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/ui/CombatActIcons/NormalPierce.png
 
 #begin Sprites/ui/CombatActIcons/NormalPierce.png
 /importer:TextureImporter
@@ -1265,6 +1337,18 @@
 /processorParam:TextureFormat=Color16Bit
 /build:Sprites/ui/CombatActIcons/PenetratingThrust.png
 
+#begin Sprites/ui/CombatActIcons/PenetratingThrust.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/CombatActIcons/PenetratingThrust.png
+
 #begin Sprites/ui/CombatActIcons/Punch.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1277,6 +1361,42 @@
 /processorParam:TextureFormat=Color16Bit
 /build:Sprites/ui/CombatActIcons/Punch.png
 
+#begin Sprites/ui/CombatActIcons/Punch.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/CombatActIcons/Punch.png
+
+#begin Sprites/ui/CombatActIcons/ShieldBash.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/ui/CombatActIcons/ShieldBash.png
+
+#begin Sprites/ui/CombatActIcons/Stab.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/ui/CombatActIcons/Stab.png
+
 #begin Sprites/ui/CombatActIcons/SwordCut.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1288,6 +1408,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color16Bit
 /build:Sprites/ui/CombatActIcons/SwordCut.png
+
+#begin Sprites/ui/CombatActIcons/SwordCut.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/CombatActIcons/SwordCut.png
+
+#begin Sprites/ui/CombatActIcons/Uppercut.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/ui/CombatActIcons/Uppercut.png
 
 #begin Sprites/ui/CombatActIcons/Uppercut.png
 /importer:TextureImporter
@@ -1313,6 +1457,18 @@
 /processorParam:TextureFormat=Color16Bit
 /build:Sprites/ui/CombatActIcons/WeakBlock.png
 
+#begin Sprites/ui/CombatActIcons/WeakBlock.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/CombatActIcons/WeakBlock.png
+
 #begin Sprites/ui/CombatActIcons/WeakParry.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1325,6 +1481,18 @@
 /processorParam:TextureFormat=Color16Bit
 /build:Sprites/ui/CombatActIcons/WeakParry.png
 
+#begin Sprites/ui/CombatActIcons/WeakParry.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/CombatActIcons/WeakParry.png
+
 #begin Sprites/ui/CombatActIcons/WeakSwing.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1335,6 +1503,18 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color16Bit
+/build:Sprites/ui/CombatActIcons/WeakSwing.png
+
+#begin Sprites/ui/CombatActIcons/WeakSwing.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
 /build:Sprites/ui/CombatActIcons/WeakSwing.png
 
 #begin Sprites/ui/ContextualMenuBorder.png
