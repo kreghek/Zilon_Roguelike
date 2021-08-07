@@ -117,7 +117,7 @@ namespace CDT.LAST.MonoGameClient.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to [LMB] to move and attack.
-        ///[T] to transit to other level.
+        ///[T] to transit to other stage.
         ///[O] to give loot up.
         ///[I] to open inventory.
         ///[C] to open character stats.

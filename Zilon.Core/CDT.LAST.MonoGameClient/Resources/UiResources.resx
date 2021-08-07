@@ -302,7 +302,7 @@ take out the character before he dies.</value>
   </data>
   <data name="ControlsTutorialText" xml:space="preserve">
     <value>[LMB] to move and attack.
-[T] to transit to other level.
+[T] to transit to other stage.
 [O] to give loot up.
 [I] to open inventory.
 [C] to open character stats.
