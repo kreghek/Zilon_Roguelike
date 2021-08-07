@@ -146,7 +146,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     // You should make sprite 28*16.
                     var hexSprite = new Sprite(_hexSprite)
                     {
-                        Color = nodeColor,
                         SourceRectangle = new Rectangle(hexTextureIndexX * 28, hexTextureIndexY * 16, 28, 16)
                     };
 
