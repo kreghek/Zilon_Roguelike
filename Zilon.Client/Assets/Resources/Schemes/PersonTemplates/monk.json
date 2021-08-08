@@ -1,0 +1,52 @@
+{
+  "FractionSid": "player",
+  "Name": {
+    "Ru": "Монах",
+    "En": "Monk"
+  },
+  "BodyEquipments": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "traveler-camisole",
+        "Weight": 1
+      }
+    ]
+  },
+  "MainHandEquipments": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "combat-staff",
+        "Weight": 1
+      }
+    ]
+  },
+  "InventoryProps": {
+    "Rolls": 3,
+    "Records": [
+      {
+        "SchemeSid": "med-kit",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "packed-food",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "water-bottle",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": null,
+        "Weight": 4
+      }
+    ]
+  }
+}

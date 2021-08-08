@@ -108,6 +108,10 @@ namespace CDT.LAST.MonoGameClient.Screens
                 ["dirty-trick"] = loadIcon("DirtyTrick"),
 
                 ["bludgeon"] = loadIcon("Bludgeon"),
+
+                ["chop"] = loadIcon("AxeCut"),
+
+                ["swing"] = loadIcon("Swing"),
             };
         }
 
@@ -188,6 +192,32 @@ namespace CDT.LAST.MonoGameClient.Screens
                 {
                     contentManager.Load<Texture2D>("Sprites/ui/WeaponIcons/WoodenShield")
                 });
+            _propIcons.Add("battle-axe",
+                new[]
+                {
+                    contentManager.Load<Texture2D>("Sprites/ui/WeaponIcons/BattleAxe")
+                });
+            _propIcons.Add("pick-axe",
+                new[]
+                {
+                    contentManager.Load<Texture2D>("Sprites/ui/WeaponIcons/PickAxe")
+                });
+            _propIcons.Add("katana",
+                new[]
+                {
+                    contentManager.Load<Texture2D>("Sprites/ui/WeaponIcons/Katana")
+                });
+            _propIcons.Add("shovel",
+                new[]
+                {
+                    contentManager.Load<Texture2D>("Sprites/ui/WeaponIcons/Shovel")
+                });
+            _propIcons.Add("mace",
+                new[]
+                {
+                    contentManager.Load<Texture2D>("Sprites/ui/WeaponIcons/Mace")
+                });
+
             _propIcons.Add("work-clothes",
                 new[] { contentManager.Load<Texture2D>("Sprites/ui/ClothIcons/WorkClothes") });
             _propIcons.Add("traveler-camisole",
@@ -199,6 +229,10 @@ namespace CDT.LAST.MonoGameClient.Screens
                 new[] { contentManager.Load<Texture2D>("Sprites/ui/ClothIcons/KnittedHat") });
             _propIcons.Add("steel-helmet",
                 new[] { contentManager.Load<Texture2D>("Sprites/ui/ClothIcons/SteelHelmet") });
+            _propIcons.Add("headband",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/ClothIcons/Headband") });
+            _propIcons.Add("highlander-helmet",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/ClothIcons/HighlanderHelmet") });
 
             _propIcons.Add("med-kit",
                 new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/MedKit") });

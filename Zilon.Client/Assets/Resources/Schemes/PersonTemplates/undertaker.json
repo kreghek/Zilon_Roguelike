@@ -1,11 +1,33 @@
 {
   "FractionSid": "player",
   "Name": {
-    "Ru": "Тест",
-    "En": "Test"
+    "Ru": "Гробовщик",
+    "En": "Undertaker"
+  },
+  "BodyEquipments": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "work-clothes",
+        "Weight": 1
+      }
+    ]
+  },
+  "MainHandEquipments": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "pick-axe",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "shovel",
+        "Weight": 2
+      }
+    ]
   },
   "InventoryProps": {
-    "Rolls": 1,
+    "Rolls": 5,
     "Records": [
       {
         "SchemeSid": "med-kit",

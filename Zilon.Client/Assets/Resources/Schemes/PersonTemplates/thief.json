@@ -1,0 +1,56 @@
+{
+  "FractionSid": "player",
+  "Name": {
+    "Ru": "Вор",
+    "En": "Thief"
+  },
+  "BodyEquipments": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "work-clothes",
+        "Weight": 1
+      }
+    ]
+  },
+  "MainHandEquipments": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "knife",
+        "Weight": 1
+      },
+	  {
+        "SchemeSid": "cidgel",
+        "Weight": 1
+      }
+    ]
+  },
+  "InventoryProps": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "med-kit",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "packed-food",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "water-bottle",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": null,
+        "Weight": 4
+      }
+    ]
+  }
+}

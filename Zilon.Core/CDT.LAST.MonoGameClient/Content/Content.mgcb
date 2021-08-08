@@ -353,18 +353,6 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/BodyParts/TravelerCamisole/Body.png
 
-#begin Sprites/game-objects/Equipments/BodyParts/TravelerCamisole/Icon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/game-objects/Equipments/BodyParts/TravelerCamisole/Icon.png
-
 #begin Sprites/game-objects/Equipments/BodyParts/TravelerCamisole/LegsCombat.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -401,18 +389,6 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/BodyParts/WorkClothes/Body.png
 
-#begin Sprites/game-objects/Equipments/BodyParts/WorkClothes/Icon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/game-objects/Equipments/BodyParts/WorkClothes/Icon.png
-
 #begin Sprites/game-objects/Equipments/BodyParts/WorkClothes/LegsCombat.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -436,6 +412,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/BodyParts/WorkClothes/LegsIdle.png
+
+#begin Sprites/game-objects/Equipments/HandParts/BattleAxeBase.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/game-objects/Equipments/HandParts/BattleAxeBase.png
 
 #begin Sprites/game-objects/Equipments/HandParts/CombatStaffBase.png
 /importer:TextureImporter
@@ -473,6 +461,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HandParts/GreatSwordBase.png
 
+#begin Sprites/game-objects/Equipments/HandParts/KatanaBase.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/game-objects/Equipments/HandParts/KatanaBase.png
+
 #begin Sprites/game-objects/Equipments/HandParts/KnifeBase.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -485,6 +485,30 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HandParts/KnifeBase.png
 
+#begin Sprites/game-objects/Equipments/HandParts/MaceBase.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/game-objects/Equipments/HandParts/MaceBase.png
+
+#begin Sprites/game-objects/Equipments/HandParts/PickAxeBase.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/game-objects/Equipments/HandParts/PickAxeBase.png
+
 #begin Sprites/game-objects/Equipments/HandParts/ShortSwordBase.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -496,6 +520,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HandParts/ShortSwordBase.png
+
+#begin Sprites/game-objects/Equipments/HandParts/ShovelBase.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/game-objects/Equipments/HandParts/ShovelBase.png
 
 #begin Sprites/game-objects/Equipments/HandParts/TribalSpearBase.png
 /importer:TextureImporter
@@ -521,6 +557,30 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HandParts/WoodenShieldBase.png
 
+#begin Sprites/game-objects/Equipments/HeadParts/HeadbandBase.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/game-objects/Equipments/HeadParts/HeadbandBase.png
+
+#begin Sprites/game-objects/Equipments/HeadParts/HighlanderHelmetBase.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/game-objects/Equipments/HeadParts/HighlanderHelmetBase.png
+
 #begin Sprites/game-objects/Equipments/HeadParts/KnittedHatBase.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -533,18 +593,6 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HeadParts/KnittedHatBase.png
 
-#begin Sprites/game-objects/Equipments/HeadParts/KnittedHatIcon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/game-objects/Equipments/HeadParts/KnittedHatIcon.png
-
 #begin Sprites/game-objects/Equipments/HeadParts/SteelHelmetBase.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -556,18 +604,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HeadParts/SteelHelmetBase.png
-
-#begin Sprites/game-objects/Equipments/HeadParts/SteelHelmetIcon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/game-objects/Equipments/HeadParts/SteelHelmetIcon.png
 
 #begin Sprites/game-objects/Equipments/HeadParts/SteelHelmetInside.png
 /importer:TextureImporter
@@ -1157,6 +1193,30 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/button.png
 
+#begin Sprites/ui/ClothIcons/Headband.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/ui/ClothIcons/Headband.png
+
+#begin Sprites/ui/ClothIcons/HighlanderHelmet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/ui/ClothIcons/HighlanderHelmet.png
+
 #begin Sprites/ui/ClothIcons/KnittedHat.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1205,6 +1265,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/ClothIcons/WorkClothes.png
 
+#begin Sprites/ui/CombatActIcons/AxeCut.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/ui/CombatActIcons/AxeCut.png
+
 #begin Sprites/ui/CombatActIcons/Bludgeon.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1216,18 +1288,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color16Bit
 /build:Sprites/ui/CombatActIcons/Bludgeon.png
-
-#begin Sprites/ui/CombatActIcons/DeathPunch.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color16Bit
-/build:Sprites/ui/CombatActIcons/DeathPunch.png
 
 #begin Sprites/ui/CombatActIcons/DeathPunch.png
 /importer:TextureImporter
@@ -1257,18 +1317,6 @@
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=False
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color16Bit
-/build:Sprites/ui/CombatActIcons/EvasionSlash.png
-
-#begin Sprites/ui/CombatActIcons/EvasionSlash.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
 /processorParam:ColorKeyEnabled=True
 /processorParam:GenerateMipmaps=False
 /processorParam:PremultiplyAlpha=True
@@ -1276,18 +1324,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/CombatActIcons/EvasionSlash.png
-
-#begin Sprites/ui/CombatActIcons/LungingStab.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=False
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color16Bit
-/build:Sprites/ui/CombatActIcons/LungingStab.png
 
 #begin Sprites/ui/CombatActIcons/LungingStab.png
 /importer:TextureImporter
@@ -1310,32 +1346,8 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color16Bit
-/build:Sprites/ui/CombatActIcons/NormalPierce.png
-
-#begin Sprites/ui/CombatActIcons/NormalPierce.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/CombatActIcons/NormalPierce.png
-
-#begin Sprites/ui/CombatActIcons/PenetratingThrust.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=False
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color16Bit
-/build:Sprites/ui/CombatActIcons/PenetratingThrust.png
 
 #begin Sprites/ui/CombatActIcons/PenetratingThrust.png
 /importer:TextureImporter
@@ -1348,18 +1360,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/CombatActIcons/PenetratingThrust.png
-
-#begin Sprites/ui/CombatActIcons/Punch.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=False
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color16Bit
-/build:Sprites/ui/CombatActIcons/Punch.png
 
 #begin Sprites/ui/CombatActIcons/Punch.png
 /importer:TextureImporter
@@ -1397,17 +1397,17 @@
 /processorParam:TextureFormat=Color16Bit
 /build:Sprites/ui/CombatActIcons/Stab.png
 
-#begin Sprites/ui/CombatActIcons/SwordCut.png
+#begin Sprites/ui/CombatActIcons/Swing.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=False
+/processorParam:ColorKeyEnabled=True
 /processorParam:GenerateMipmaps=False
 /processorParam:PremultiplyAlpha=True
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color16Bit
-/build:Sprites/ui/CombatActIcons/SwordCut.png
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/CombatActIcons/Swing.png
 
 #begin Sprites/ui/CombatActIcons/SwordCut.png
 /importer:TextureImporter
@@ -1430,32 +1430,8 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color16Bit
-/build:Sprites/ui/CombatActIcons/Uppercut.png
-
-#begin Sprites/ui/CombatActIcons/Uppercut.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/CombatActIcons/Uppercut.png
-
-#begin Sprites/ui/CombatActIcons/WeakBlock.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=False
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color16Bit
-/build:Sprites/ui/CombatActIcons/WeakBlock.png
 
 #begin Sprites/ui/CombatActIcons/WeakBlock.png
 /importer:TextureImporter
@@ -1473,18 +1449,6 @@
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=False
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color16Bit
-/build:Sprites/ui/CombatActIcons/WeakParry.png
-
-#begin Sprites/ui/CombatActIcons/WeakParry.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
 /processorParam:ColorKeyEnabled=True
 /processorParam:GenerateMipmaps=False
 /processorParam:PremultiplyAlpha=True
@@ -1492,18 +1456,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/CombatActIcons/WeakParry.png
-
-#begin Sprites/ui/CombatActIcons/WeakSwing.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=False
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color16Bit
-/build:Sprites/ui/CombatActIcons/WeakSwing.png
 
 #begin Sprites/ui/CombatActIcons/WeakSwing.png
 /importer:TextureImporter
@@ -1889,6 +1841,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/walk-cursor.png
 
+#begin Sprites/ui/WeaponIcons/BattleAxe.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/ui/WeaponIcons/BattleAxe.png
+
 #begin Sprites/ui/WeaponIcons/CombatStaff.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1925,6 +1889,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/WeaponIcons/GreatSword.png
 
+#begin Sprites/ui/WeaponIcons/Katana.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/ui/WeaponIcons/Katana.png
+
 #begin Sprites/ui/WeaponIcons/Knife.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1937,6 +1913,30 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/WeaponIcons/Knife.png
 
+#begin Sprites/ui/WeaponIcons/Mace.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/ui/WeaponIcons/Mace.png
+
+#begin Sprites/ui/WeaponIcons/PickAxe.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/ui/WeaponIcons/PickAxe.png
+
 #begin Sprites/ui/WeaponIcons/ShortSword.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1948,6 +1948,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/WeaponIcons/ShortSword.png
+
+#begin Sprites/ui/WeaponIcons/Shovel.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/ui/WeaponIcons/Shovel.png
 
 #begin Sprites/ui/WeaponIcons/Spear.png
 /importer:TextureImporter

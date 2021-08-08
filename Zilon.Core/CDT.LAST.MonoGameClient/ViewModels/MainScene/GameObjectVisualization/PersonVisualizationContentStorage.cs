@@ -103,6 +103,31 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
             {
                 new HandPart(HandPartType.Base, load("KnifeBase"))
             });
+
+            _handParts.Add("battle-axe", new[]
+            {
+                new HandPart(HandPartType.Base, load("BattleAxeBase"))
+            });
+
+            _handParts.Add("pick-axe", new[]
+            {
+                new HandPart(HandPartType.Base, load("PickAxeBase"))
+            });
+
+            _handParts.Add("shovel", new[]
+            {
+                new HandPart(HandPartType.Base, load("ShovelBase"))
+            });
+
+            _handParts.Add("mace", new[]
+            {
+                new HandPart(HandPartType.Base, load("MaceBase"))
+            });
+
+            _handParts.Add("katana", new[]
+            {
+                new HandPart(HandPartType.Base, load("KatanaBase"))
+            });
         }
 
         private void LoadHeadParts(ContentManager content)
@@ -117,6 +142,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
             _headParts.Add("steel-helmet", new[]
             {
                 new HeadPart(HeadPartType.Base, content.Load<Texture2D>(PATH_TO_HEAD_PARTS + "SteelHelmetBase")),
+                new HeadPart(HeadPartType.Inside, content.Load<Texture2D>(PATH_TO_HEAD_PARTS + "SteelHelmetInside"))
+            });
+
+            _headParts.Add("headband", new[]
+            {
+                new HeadPart(HeadPartType.Base, content.Load<Texture2D>(PATH_TO_HEAD_PARTS + "HeadbandBase"))
+            });
+
+            _headParts.Add("highlander-helmet", new[]
+            {
+                new HeadPart(HeadPartType.Base, content.Load<Texture2D>(PATH_TO_HEAD_PARTS + "HighlanderHelmetBase")),
                 new HeadPart(HeadPartType.Inside, content.Load<Texture2D>(PATH_TO_HEAD_PARTS + "SteelHelmetInside"))
             });
         }
