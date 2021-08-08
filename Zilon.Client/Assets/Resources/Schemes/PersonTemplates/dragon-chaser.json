@@ -1,36 +1,14 @@
 {
   "FractionSid": "player",
   "Name": {
-    "Ru": "Тест",
-    "En": "Test"
-  },
-  "HeadEquipments": {
-    "Rolls": 1,
-    "Records": [
-      {
-        "SchemeSid": "knitted-hat",
-        "Weight": 1
-      },
-      {
-        "SchemeSid": "steel-helmet",
-        "Weight": 1
-      },
-      {
-        "SchemeSid": null,
-        "Weight": 1
-      }
-    ]
+    "Ru": "Драконоубийца",
+    "En": "Dragon Chaser"
   },
   "BodyEquipments": {
-    "Rolls": 1,
     "Records": [
       {
-        "SchemeSid": "work-clothes",
-        "Weight": 1
-      },
-      {
-        "SchemeSid": "traveler-camisole",
-        "Weight": 1
+        "SchemeSid": "steel-armor",
+        "Weight": 2
       },
       {
         "SchemeSid": null,
@@ -39,40 +17,34 @@
     ]
   },
   "MainHandEquipments": {
-    "Rolls": 1,
     "Records": [
       {
-        "SchemeSid": "great-sword",
-        "Weight": 1
-      },
-      {
-        "SchemeSid": "combat-staff",
-        "Weight": 1
-      },
-      {
-        "SchemeSid": "tribal-spear",
-        "Weight": 1
-      },
-      {
-        "SchemeSid": "wooden-shield",
-        "Weight": 2
-      },
-      {
         "SchemeSid": "short-sword",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "battle-axe",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "mace",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "club",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "glaive",
         "Weight": 1
       }
     ]
   },
   "OffHandEquipments": {
-    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "wooden-shield",
         "Weight": 2
-      },
-      {
-        "SchemeSid": "short-sword",
-        "Weight": 1
       },
       {
         "SchemeSid": null,
@@ -81,7 +53,6 @@
     ]
   },
   "InventoryProps": {
-    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "med-kit",
