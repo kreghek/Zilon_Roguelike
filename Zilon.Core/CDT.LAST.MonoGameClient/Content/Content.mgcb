@@ -1325,6 +1325,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/ClothIcons/WorkClothes.png
 
+#begin Sprites/ui/CombatActIcons/AxeCut.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/ui/CombatActIcons/AxeCut.png
+
 #begin Sprites/ui/CombatActIcons/Bludgeon.png
 /importer:TextureImporter
 /processor:TextureProcessor

@@ -104,11 +104,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
                 new HandPart(HandPartType.Base, load("KnifeBase"))
             });
 
-            _handParts.Add("knife", new[]
-            {
-                new HandPart(HandPartType.Base, load("KnifeBase"))
-            });
-
             _handParts.Add("battle-axe", new[]
             {
                 new HandPart(HandPartType.Base, load("BattleAxeBase"))
@@ -127,6 +122,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
             _handParts.Add("mace", new[]
             {
                 new HandPart(HandPartType.Base, load("MaceBase"))
+            });
+
+            _handParts.Add("catana", new[]
+            {
+                new HandPart(HandPartType.Base, load("CatanaBase"))
             });
         }
 

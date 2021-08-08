@@ -108,6 +108,8 @@ namespace CDT.LAST.MonoGameClient.Screens
                 ["dirty-trick"] = loadIcon("DirtyTrick"),
 
                 ["bludgeon"] = loadIcon("Bludgeon"),
+
+                ["chop"] = loadIcon("AxeCut")
             };
         }
 
