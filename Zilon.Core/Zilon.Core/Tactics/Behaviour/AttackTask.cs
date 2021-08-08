@@ -146,6 +146,12 @@ namespace Zilon.Core.Tactics.Behaviour
                         continue;
                     }
 
+                    //TODO Add CanUseAsSecondary to equipment
+                    if (slotEquipment.Scheme.Tags?.Contains("shield") == true)
+                    {
+                        continue;
+                    }
+
                     if ((slots[i].Types & EquipmentSlotTypes.Hand) == 0)
                     {
                         continue;
@@ -153,6 +159,8 @@ namespace Zilon.Core.Tactics.Behaviour
 
                     var equipmentActs = from act in currentActs
                                         where act.Equipment == slotEquipment
+                                        //TODO Add CanUseAsSecondary to combat act
+                                        //where act.Scheme.Sid != "shield-push"
                                         select act;
 
                     var usedAct = equipmentActs.FirstOrDefault();

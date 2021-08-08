@@ -14,7 +14,7 @@ namespace Zilon.Core.Scoring
     /// <seealso cref="IScoreManager" />
     public class ScoreManager : IScoreManager
     {
-        private const float TURN_INC = 0.1f;
+        private const float TURN_INC = 0.001f;
         private const int MONSTER_DEFAULT_BASE_SCORE = 25;
 
         public ScoreManager()

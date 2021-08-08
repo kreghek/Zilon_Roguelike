@@ -10,8 +10,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.ActorInteractionEvents;
 using Zilon.Core.World;
@@ -29,6 +31,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly SectorInteractor _sectorInteractor;
         private readonly SpriteBatch _spriteBatch;
         private readonly ISectorUiState _uiState;
+        private IScoreManager _scoreManager;
+        private readonly IPlayerEventLogService _logService;
 
         public SectorViewModel(Game game, Camera camera, SpriteBatch spriteBatch)
         {
@@ -49,6 +53,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var personSoundContentStorage = serviceScope.GetRequiredService<IPersonSoundContentStorage>();
             var gameObjectVisualizationContentStorage =
                 serviceScope.GetRequiredService<IGameObjectVisualizationContentStorage>();
+
+            _scoreManager = serviceScope.GetRequiredService<IScoreManager>();
+            _logService = serviceScope.GetRequiredService<IPlayerEventLogService>();
 
             var sector = GetPlayerSectorNode(_player).Sector;
 
@@ -138,6 +145,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
 
             _sectorInteractor.Update(ViewModelContext);
+
+            var turns = _scoreManager.Scores.Turns;
+            var detailedLifetime = ScoreCalculator.ConvertTurnsToDetailed(turns);
+            if (detailedLifetime.Days >= 3 && !(_player.MainPerson?.CheckIsDead()).GetValueOrDefault())
+            {
+                var endOfLifeEvent = new EndOfLifeEvent();
+                _logService.Log(endOfLifeEvent);
+
+                var survivalModule = _player.MainPerson.GetModule<ISurvivalModule>();
+                survivalModule.SetStatForce(SurvivalStatType.Health, 0);
+            }
         }
 
         private void DrawCorpses()

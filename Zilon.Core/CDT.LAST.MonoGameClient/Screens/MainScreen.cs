@@ -50,7 +50,8 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly ITransitionPool _transitionPool;
         private readonly IUiContentStorage _uiContentStorage;
         private readonly ISectorUiState _uiState;
-
+        private readonly IScoreManager _scoreManager;
+        private readonly IPlayerEventLogService _logService;
         private ISector? _currentSector;
 
         private bool _isTransitionPerforming;
@@ -123,6 +124,9 @@ namespace CDT.LAST.MonoGameClient.Screens
             _bottomMenu.PropButtonClicked += BottomMenu_PropButtonClicked;
             _bottomMenu.StatButtonClicked += BottomMenu_StatButtonClicked;
             _bottomMenu.TraitsButtonClicked += BottomMenu_TraitsButtonClicked;
+
+            _scoreManager = serviceScope.GetRequiredService<IScoreManager>();
+            _logService = serviceScope.GetRequiredService<IPlayerEventLogService>();
         }
 
         public override void Draw(GameTime gameTime)
@@ -305,6 +309,13 @@ namespace CDT.LAST.MonoGameClient.Screens
             if (_showControlTutorial)
             {
                 DrawControlsTutorial(_spriteBatch, Game.GraphicsDevice);
+            }
+
+            var turns = _scoreManager.Scores.Turns;
+            var detailedLifetime = ScoreCalculator.ConvertTurnsToDetailed(turns);
+            //if (detailedLifetime.Days > 3 && !(_player.MainPerson?.CheckIsDead()).GetValueOrDefault())
+            {
+                _spriteBatch.DrawString(_uiContentStorage.GetButtonFont(), $"{detailedLifetime.Days}d {detailedLifetime.Hours}h", new Vector2(5, 5), Color.White);
             }
 
             _spriteBatch.End();

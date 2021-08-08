@@ -27,5 +27,8 @@
       "ApRank": 1
     },
 	"Rules": ["NormalPush"]
-  }
+  },
+    "Tags": [
+      "punch"
+    ]
 }

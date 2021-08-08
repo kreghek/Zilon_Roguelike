@@ -4,6 +4,15 @@
     "Ru": "Драконоубийца",
     "En": "Dragon Chaser"
   },
+  "HeadEquipments": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "steel-helmet",
+        "Weight": 1
+      }
+    ]
+  },
   "MainHandEquipments": {
 	"Rolls": 1,
     "Records": [
