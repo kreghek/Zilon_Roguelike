@@ -2,7 +2,7 @@
   "Tags": [ "weapon", "mace" ],
   "Equip": {
     "ActSids": [
-      "blow"
+      "bludgeon"
     ],
     "SlotTypes": [ "Hand" ]
   },
