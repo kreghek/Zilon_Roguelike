@@ -44,13 +44,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 Position = staticObjectPosition
             };
 
-            var shadowTexture = _game.Content.Load<Texture2D>("Sprites/game-objects/simple-object-shadow");
-            _rootSprite.AddChild(new Sprite(shadowTexture)
+            var hasNoShadow = StaticObject.Purpose == PropContainerPurpose.Puddle || StaticObject.Purpose == PropContainerPurpose.Pit;
+            if (!hasNoShadow)
             {
-                Position = new Vector2(0, 0),
-                Origin = new Vector2(0.5f, 0.5f),
-                Color = new Color(Color.White, 0.5f)
-            });
+                var shadowTexture = _game.Content.Load<Texture2D>("Sprites/game-objects/simple-object-shadow");
+                _rootSprite.AddChild(new Sprite(shadowTexture)
+                {
+                    Position = new Vector2(0, 0),
+                    Origin = new Vector2(0.5f, 0.5f),
+                    Color = new Color(Color.White, 0.5f)
+                });
+            }
 
             _rootSprite.AddChild(graphics);
 
