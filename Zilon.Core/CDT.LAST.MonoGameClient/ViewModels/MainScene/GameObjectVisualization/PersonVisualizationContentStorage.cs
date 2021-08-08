@@ -103,6 +103,31 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
             {
                 new HandPart(HandPartType.Base, load("KnifeBase"))
             });
+
+            _handParts.Add("knife", new[]
+            {
+                new HandPart(HandPartType.Base, load("KnifeBase"))
+            });
+
+            _handParts.Add("battle-axe", new[]
+            {
+                new HandPart(HandPartType.Base, load("BattleAxeBase"))
+            });
+
+            _handParts.Add("pick-axe", new[]
+            {
+                new HandPart(HandPartType.Base, load("PickAxeBase"))
+            });
+
+            _handParts.Add("shovel", new[]
+            {
+                new HandPart(HandPartType.Base, load("ShovelBase"))
+            });
+
+            _handParts.Add("mace", new[]
+            {
+                new HandPart(HandPartType.Base, load("MaceBase"))
+            });
         }
 
         private void LoadHeadParts(ContentManager content)

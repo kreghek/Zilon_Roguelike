@@ -4,54 +4,14 @@
     "Ru": "Драконоубийца",
     "En": "Dragon Chaser"
   },
-  "BodyEquipments": {
-    "Records": [
-      {
-        "SchemeSid": "steel-armor",
-        "Weight": 2
-      },
-      {
-        "SchemeSid": null,
-        "Weight": 1
-      }
-    ]
-  },
   "MainHandEquipments": {
     "Records": [
       {
-        "SchemeSid": "short-sword",
-        "Weight": 1
-      },
-      {
-        "SchemeSid": "battle-axe",
-        "Weight": 1
-      },
-      {
-        "SchemeSid": "mace",
-        "Weight": 1
-      },
-      {
-        "SchemeSid": "club",
-        "Weight": 1
-      },
-      {
-        "SchemeSid": "glaive",
+        "SchemeSid": "great-sword",
         "Weight": 1
       }
     ]
-  },
-  "OffHandEquipments": {
-    "Records": [
-      {
-        "SchemeSid": "wooden-shield",
-        "Weight": 2
-      },
-      {
-        "SchemeSid": null,
-        "Weight": 1
-      }
-    ]
-  },
+  }
   "InventoryProps": {
     "Records": [
       {

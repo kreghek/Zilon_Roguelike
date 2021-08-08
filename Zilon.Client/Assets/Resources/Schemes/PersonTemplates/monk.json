@@ -1,31 +1,27 @@
 {
   "FractionSid": "player",
   "Name": {
-    "Ru": "Гвардеец",
-    "En": "Guardian"
+    "Ru": "Монах",
+    "En": "Monk"
+  },
+  "BodyEquipments": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "traveler-camisole",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": null,
+        "Weight": 1
+      }
+    ]
   },
   "MainHandEquipments": {
     "Rolls": 1,
     "Records": [
       {
-        "SchemeSid": "short-sword",
-        "Weight": 1
-      },
-      {
-        "SchemeSid": "mace",
-        "Weight": 1
-      }
-    ]
-  },
-  "OffHandEquipments": {
-    "Rolls": 1,
-    "Records": [
-      {
-        "SchemeSid": "wooden-shield",
-        "Weight": 2
-      },
-      {
-        "SchemeSid": null,
+        "SchemeSid": "combat-staff",
         "Weight": 1
       }
     ]
