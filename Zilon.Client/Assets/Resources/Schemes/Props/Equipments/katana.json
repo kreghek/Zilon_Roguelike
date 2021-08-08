@@ -4,7 +4,8 @@
     "ActSids": [
       "slash"
     ],
-    "SlotTypes": [ "Hand" ]
+    "SlotTypes": [ "Hand" ],
+	"EquipRestrictions": { "PropHandUsage": "TwoHanded" }
   },
   "Name": {
     "Ru": "katana",

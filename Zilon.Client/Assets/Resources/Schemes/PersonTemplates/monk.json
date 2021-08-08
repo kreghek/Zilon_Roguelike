@@ -10,10 +10,6 @@
       {
         "SchemeSid": "traveler-camisole",
         "Weight": 1
-      },
-      {
-        "SchemeSid": null,
-        "Weight": 1
       }
     ]
   },
@@ -27,7 +23,7 @@
     ]
   },
   "InventoryProps": {
-    "Rolls": 1,
+    "Rolls": 3,
     "Records": [
       {
         "SchemeSid": "med-kit",

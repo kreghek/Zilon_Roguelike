@@ -641,6 +641,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HandParts/WoodenShieldBase.png
 
+#begin Sprites/game-objects/Equipments/HeadParts/HeadbandBase.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/game-objects/Equipments/HeadParts/HeadbandBase.png
+
 #begin Sprites/game-objects/Equipments/HeadParts/KnittedHatBase.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -653,18 +665,6 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HeadParts/KnittedHatBase.png
 
-#begin Sprites/game-objects/Equipments/HeadParts/KnittedHatIcon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/game-objects/Equipments/HeadParts/KnittedHatIcon.png
-
 #begin Sprites/game-objects/Equipments/HeadParts/SteelHelmetBase.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -676,18 +676,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HeadParts/SteelHelmetBase.png
-
-#begin Sprites/game-objects/Equipments/HeadParts/SteelHelmetIcon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/game-objects/Equipments/HeadParts/SteelHelmetIcon.png
 
 #begin Sprites/game-objects/Equipments/HeadParts/SteelHelmetInside.png
 /importer:TextureImporter
@@ -1276,6 +1264,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/button.png
+
+#begin Sprites/ui/ClothIcons/Headband.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/ui/ClothIcons/Headband.png
 
 #begin Sprites/ui/ClothIcons/KnittedHat.png
 /importer:TextureImporter

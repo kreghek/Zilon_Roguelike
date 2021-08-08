@@ -4,6 +4,15 @@
     "Ru": "Самурай",
     "En": "Samurai"
   },
+  "HeadEquipments": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "headband",
+        "Weight": 1
+      }
+    ]
+  },
   "MainHandEquipments": {
     "Rolls": 1,
     "Records": [
