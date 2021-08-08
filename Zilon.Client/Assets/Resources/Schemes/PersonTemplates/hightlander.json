@@ -4,6 +4,15 @@
     "Ru": "Горец",
     "En": "Highlander"
   },
+  "HeadEquipments": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "highlander-helmet",
+        "Weight": 1
+      }
+    ]
+  },
   "MainHandEquipments": {
     "Rolls": 1,
     "Records": [
@@ -19,7 +28,11 @@
       {
         "SchemeSid": "battle-axe",
         "Weight": 1
-      }
+      },
+	  {
+        "SchemeSid": "cidgel",
+        "Weight": 1
+      },
     ]
   },
   "InventoryProps": {

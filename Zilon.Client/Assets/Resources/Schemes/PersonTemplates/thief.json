@@ -10,10 +10,6 @@
       {
         "SchemeSid": "work-clothes",
         "Weight": 1
-      },
-      {
-        "SchemeSid": null,
-        "Weight": 1
       }
     ]
   },
@@ -22,6 +18,10 @@
     "Records": [
       {
         "SchemeSid": "knife",
+        "Weight": 1
+      },
+	  {
+        "SchemeSid": "cidgel",
         "Weight": 1
       }
     ]

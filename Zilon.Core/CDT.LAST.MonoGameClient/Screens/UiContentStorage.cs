@@ -231,6 +231,8 @@ namespace CDT.LAST.MonoGameClient.Screens
                 new[] { contentManager.Load<Texture2D>("Sprites/ui/ClothIcons/SteelHelmet") });
             _propIcons.Add("headband",
                 new[] { contentManager.Load<Texture2D>("Sprites/ui/ClothIcons/Headband") });
+            _propIcons.Add("highlander-helmet",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/ClothIcons/HighlanderHelmet") });
 
             _propIcons.Add("med-kit",
                 new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/MedKit") });
