@@ -5,6 +5,7 @@
     "En": "Dragon Chaser"
   },
   "MainHandEquipments": {
+	"Rolls": 1,
     "Records": [
       {
         "SchemeSid": "great-sword",

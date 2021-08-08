@@ -109,7 +109,9 @@ namespace CDT.LAST.MonoGameClient.Screens
 
                 ["bludgeon"] = loadIcon("Bludgeon"),
 
-                ["chop"] = loadIcon("AxeCut")
+                ["chop"] = loadIcon("AxeCut"),
+
+                ["swing"] = loadIcon("Swing"),
             };
         }
 
@@ -200,10 +202,10 @@ namespace CDT.LAST.MonoGameClient.Screens
                 {
                     contentManager.Load<Texture2D>("Sprites/ui/WeaponIcons/PickAxe")
                 });
-            _propIcons.Add("catana",
+            _propIcons.Add("katana",
                 new[]
                 {
-                    contentManager.Load<Texture2D>("Sprites/ui/WeaponIcons/Catana")
+                    contentManager.Load<Texture2D>("Sprites/ui/WeaponIcons/Katana")
                 });
             _propIcons.Add("shovel",
                 new[]

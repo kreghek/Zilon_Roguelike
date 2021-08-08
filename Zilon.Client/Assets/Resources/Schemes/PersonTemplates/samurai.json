@@ -4,32 +4,11 @@
     "Ru": "Самурай",
     "En": "Samurai"
   },
-  "BodyEquipments": {
-    "Rolls": 1,
-    "Records": [
-      {
-        "SchemeSid": "leather-jacket",
-        "Weight": 1
-      },
-      {
-        "SchemeSid": null,
-        "Weight": 1
-      }
-    ]
-  },
   "MainHandEquipments": {
     "Rolls": 1,
     "Records": [
       {
-        "SchemeSid": "bocken",
-        "Weight": 1
-      },
-      {
         "SchemeSid": "katana",
-        "Weight": 1
-      },
-      {
-        "SchemeSid": "daikatana",
         "Weight": 1
       }
     ]

@@ -124,9 +124,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
                 new HandPart(HandPartType.Base, load("MaceBase"))
             });
 
-            _handParts.Add("catana", new[]
+            _handParts.Add("katana", new[]
             {
-                new HandPart(HandPartType.Base, load("CatanaBase"))
+                new HandPart(HandPartType.Base, load("KatanaBase"))
             });
         }
 

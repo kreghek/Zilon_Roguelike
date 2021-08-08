@@ -425,7 +425,7 @@
 /processorParam:TextureFormat=Color16Bit
 /build:Sprites/game-objects/Equipments/HandParts/BattleAxeBase.png
 
-#begin Sprites/game-objects/Equipments/HandParts/CatanaBase.png
+#begin Sprites/game-objects/Equipments/HandParts/KatanaBase.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -435,7 +435,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color16Bit
-/build:Sprites/game-objects/Equipments/HandParts/CatanaBase.png
+/build:Sprites/game-objects/Equipments/HandParts/KatanaBase.png
 
 #begin Sprites/game-objects/Equipments/HandParts/CombatStaffBase.png
 /importer:TextureImporter
@@ -1529,6 +1529,18 @@
 /processorParam:TextureFormat=Color16Bit
 /build:Sprites/ui/CombatActIcons/Stab.png
 
+#begin Sprites/ui/CombatActIcons/Swing.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/CombatActIcons/Swing.png
+
 #begin Sprites/ui/CombatActIcons/SwordCut.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -2033,7 +2045,7 @@
 /processorParam:TextureFormat=Color16Bit
 /build:Sprites/ui/WeaponIcons/BattleAxe.png
 
-#begin Sprites/ui/WeaponIcons/Catana.png
+#begin Sprites/ui/WeaponIcons/Katana.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -2043,7 +2055,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color16Bit
-/build:Sprites/ui/WeaponIcons/Catana.png
+/build:Sprites/ui/WeaponIcons/Katana.png
 
 #begin Sprites/ui/WeaponIcons/CombatStaff.png
 /importer:TextureImporter
