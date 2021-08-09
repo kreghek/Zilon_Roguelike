@@ -24,7 +24,7 @@ namespace Zilon.Core.Persons
         public IPerk[] Generate()
         {
             //TODO Mark *-immunity traits as test.
-            var allBuildInPerks = _schemeService.GetSchemes<IPerkScheme>().Where(x => x.IsBuildIn && x.Sid != "thrist-immunity" && x.Sid == "hunger-immunity").ToArray();
+            var allBuildInPerks = _schemeService.GetSchemes<IPerkScheme>().Where(x => x.IsBuildIn && x.Sid != "thrist-immunity" && x.Sid != "hunger-immunity").ToArray();
 
             var maxPerkCount = Math.Min(allBuildInPerks.Length, START_TRAIT_MAX_COUNT);
             var minPerkCount = Math.Min(maxPerkCount, START_TRAIT_MIN_COUNT);

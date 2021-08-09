@@ -177,7 +177,7 @@
         {
             var inputSize = new Vector2(256, 32);
 
-            var buttonPosition = new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - inputSize.X / 2 + 128 / 2, inputSize.Y + 5);
+            var buttonPosition = new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - inputSize.X / 2 + 128 / 2, inputSize.Y + 5 + 10);
             _restartButton.Rect = new Rectangle(buttonPosition.ToPoint(), new Point(128, 20));
             _restartButton.Draw(_spriteBatch);
         }
@@ -239,16 +239,19 @@
 
         private void DrawScoreSummary()
         {
-            var inputSize = new Vector2(256, 32);
+            var baseScoreSize = _uiContentStorage.GetScoresFont().MeasureString(_score.BaseScores.ToString());
+            var summarySize = _uiContentStorage.GetScoresFont().MeasureString(_scoreSummary);
 
-            var textPosition = new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - inputSize.X / 2, inputSize.Y + 5 + 20);
+            var scoresPosition = new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - baseScoreSize.X / 2, 10 + 20 + 48 + 5);
+            var summaryPosition = new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - summarySize.X / 2, 10 + 20 + 48 + 5 + baseScoreSize.Y + 5);
 
-            _spriteBatch.DrawString(_uiContentStorage.GetScoresFont(), _score.BaseScores.ToString(), textPosition, Color.White);
+
+            _spriteBatch.DrawString(_uiContentStorage.GetScoresFont(), _score.BaseScores.ToString(), scoresPosition, Color.White);
 
             _spriteBatch.DrawString(
                 _font,
                 _scoreSummary,
-                textPosition + new Vector2(0, 48),
+                summaryPosition,
                 Color.White);
         }
 
