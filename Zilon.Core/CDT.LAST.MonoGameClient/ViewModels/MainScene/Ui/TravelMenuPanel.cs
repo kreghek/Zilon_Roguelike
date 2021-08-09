@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client.Sector;
 using Zilon.Core.Commands;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
@@ -46,6 +47,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _commandPool = commandPool;
             _commandFactory = commandFactory;
             _commandLoopContext = commandLoopContext;
+
             _autoplayModeButton = new IconButton(
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 iconData: new IconData(
@@ -111,7 +113,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             _idleButton = idleButton;
 
-            #if DEBUG
+            var fastDeathButton = new IconButton(texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
+                iconData: new IconData(
+                    uiContentStorage.GetSmallVerticalButtonIconsTexture(),
+                    new Rectangle(32, 32, BUTTON_WIDTH, BUTTON_HEIGHT)
+                ),
+                rect: new Rectangle(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
+
+            fastDeathButton.OnClick += FastDeathButton_OnClick;
+
+#if DEBUG
             _buttons = new[]
             {
                 _autoplayModeButton,
@@ -119,7 +130,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 personStatsButton,
                 personTraitsButton,
                 idleButton,
-                gameSpeedButton
+                gameSpeedButton,
+                fastDeathButton
             };
 #else
             _buttons = new[]
@@ -130,6 +142,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 idleButton
             };
 #endif
+        }
+
+        private void FastDeathButton_OnClick(object? sender, EventArgs e)
+        {
+            FastDeathButtonClicked?.Invoke(this, EventArgs.Empty);
+
         }
 
         private void IdleButton_OnClick(object? sender, EventArgs e)
@@ -291,5 +309,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         public event EventHandler? PropButtonClicked;
         public event EventHandler? StatButtonClicked;
         public event EventHandler? TraitsButtonClicked;
+        public event EventHandler? FastDeathButtonClicked;
     }
 }

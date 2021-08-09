@@ -17,6 +17,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         private Texture2D? _attributeIconsTexture;
         private Texture2D? _attributesBackgroundTexture;
         private SpriteFont? _auxFont;
+        private SpriteFont _scoresFont;
         private Texture2D? _bottomPanelBackground;
         private SpriteFont? _buttonFont;
         private Texture2D? _buttonTexture;
@@ -312,6 +313,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             _buttonFont = contentManager.Load<SpriteFont>("Fonts/Main");
             _hintTitleFont = contentManager.Load<SpriteFont>("Fonts/HintTitle");
             _auxFont = contentManager.Load<SpriteFont>("Fonts/UiAux");
+            _scoresFont = contentManager.Load<SpriteFont>("Fonts/Scores");
             _hintBackgorundTexture = contentManager.Load<Texture2D>("Sprites/ui/HintBackground");
             _buttonTexture = contentManager.Load<Texture2D>("Sprites/ui/button");
             _modalShadowTexture = contentManager.Load<Texture2D>("Sprites/ui/ModalDialogShadow");
@@ -448,6 +450,11 @@ namespace CDT.LAST.MonoGameClient.Screens
         {
             return _personMarkerTextureSheet ??
                    throw new InvalidOperationException("Person marker texture was not loaded.");
+        }
+
+        public SpriteFont GetScoresFont()
+        {
+            return _scoresFont ?? throw new InvalidOperationException("Scores font was not loaded.");
         }
     }
 }
