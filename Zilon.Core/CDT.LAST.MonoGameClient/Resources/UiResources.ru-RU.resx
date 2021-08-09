@@ -337,9 +337,9 @@
 и персонаж умрёт.</value>
   </data>
   <data name="ThristConditionDescription" xml:space="preserve">
-    <value>Всем персонажам нужно пить.\n
-Жажда снижает эффективность персонажам\n
-и может привести к обезвоживанию.\n
+    <value>Всем персонажам нужно пить.
+Жажда снижает эффективность персонажам
+и может привести к обезвоживанию.
 Обезвоживание - это смерть!</value>
   </data>
   <data name="WoundConditionDescription" xml:space="preserve">

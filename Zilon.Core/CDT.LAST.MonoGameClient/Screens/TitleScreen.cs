@@ -81,11 +81,14 @@ namespace CDT.LAST.MonoGameClient.Screens
             _spriteBatch.Begin();
 
             var font = Game.Content.Load<SpriteFont>("Fonts/Main");
+            var titleFont = Game.Content.Load<SpriteFont>("Fonts/Scores");
 
             const int BUTTON_WIDTH = 100;
             const int BUTTON_HEIGHT = 20;
 
-            _spriteBatch.DrawString(font, "Title", new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - BUTTON_WIDTH / 2, 100), Color.White);
+            var logoSize = titleFont.MeasureString("LAST IMPERIAL VAGABOND");
+
+            _spriteBatch.DrawString(titleFont, "LAST IMPERIAL VAGABOND", new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - logoSize.X / 2, 100), Color.White);
 
             _startButton.Title = UiResources.StartGameButtonTitle;
             _startButton.Rect = new Rectangle(Game.GraphicsDevice.Viewport.Bounds.Center.X - BUTTON_WIDTH / 2, 150, BUTTON_WIDTH, BUTTON_HEIGHT);

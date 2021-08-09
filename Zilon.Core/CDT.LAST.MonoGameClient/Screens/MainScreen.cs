@@ -296,12 +296,12 @@ namespace CDT.LAST.MonoGameClient.Screens
             DrawStatsNumbers();
 #endif
 
-            DrawPersonModePanel();
-
             if (_personMarkerPanel is not null)
             {
                 _personMarkerPanel.Draw(_spriteBatch, Game.GraphicsDevice);
             }
+
+            DrawPersonModePanel();
 
             if (_uiState.HoverViewModel is IActorViewModel actorViewModel)
             {

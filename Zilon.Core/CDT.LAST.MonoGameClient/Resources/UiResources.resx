@@ -337,9 +337,9 @@ If the intoxication grows too much, an overdose will occur.
 and the character will die.</value>
   </data>
   <data name="ThristConditionDescription" xml:space="preserve">
-    <value>All characters need to drink.\n
-Thirst reduces the effectiveness of characters\n
-and can lead to dehydration.\n
+    <value>All characters need to drink.
+Thirst reduces the effectiveness of characters
+and can lead to dehydration.
 Dehydration is death!</value>
   </data>
   <data name="WoundConditionDescription" xml:space="preserve">

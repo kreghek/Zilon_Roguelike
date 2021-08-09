@@ -604,9 +604,9 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All characters need to drink.\n
-        ///Thirst reduces the effectiveness of characters\n
-        ///and can lead to dehydration.\n
+        ///   Looks up a localized string similar to All characters need to drink.
+        ///Thirst reduces the effectiveness of characters
+        ///and can lead to dehydration.
         ///Dehydration is death!.
         /// </summary>
         internal static string ThristConditionDescription {
