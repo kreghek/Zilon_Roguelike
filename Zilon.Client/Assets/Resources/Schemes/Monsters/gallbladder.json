@@ -3,39 +3,19 @@
     "Ru": "Желчник",
     "En": "Gallbladder"
   },
-  "Hp": 15,
+  "Hp": 10,
   "CombatActs":[
     {
 		"Efficient": {
-		  "Dice": 3,
-		  "Count": 1,
+		  "Dice": 6,
+		  "Count": 2,
 		  "Modifiers": {
-			"ResultBuff": 1
+			"ResultBuff": 2
 		  }
 		},
 		"Range": {
-		  "Min": 2,
-		  "Max": 3
-		},
-		"Effect": "Damage",
-		"Targets": "Enemy",
-		"Offence": {
-		  "Type": "Tactical",
-		  "Impact": "Kinetic"
-		},
-		"IsMelee": true,
-		"Tags": [
-		  "slash"
-		]
-	},
-	{
-		"Efficient": {
-		  "Dice": 2,
-		  "Count": 1
-		},
-		"Range": {
 		  "Min": 1,
-		  "Max": 1
+		  "Max": 4
 		},
 		"Effect": "Damage",
 		"Targets": "Enemy",
@@ -47,7 +27,7 @@
 		"Tags": [
 		  "slash"
 		]
-	},
+	}
   ],
   "DropTableSids": [
     "survival-medkit",
