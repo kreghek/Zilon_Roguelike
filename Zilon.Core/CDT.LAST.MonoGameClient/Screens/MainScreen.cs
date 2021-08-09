@@ -112,6 +112,8 @@ namespace CDT.LAST.MonoGameClient.Screens
                 throw new InvalidOperationException("Main person is not initalized. Generate globe first.");
             }
 
+            _logService = serviceScope.GetRequiredService<IPlayerEventLogService>();
+
             _bottomMenu = new BottomMenuPanel(
                 humanActorTaskSource,
                 mainPerson.GetModule<ICombatActModule>(),
@@ -120,13 +122,14 @@ namespace CDT.LAST.MonoGameClient.Screens
                 _uiState,
                 _commandPool,
                 _commandFactory,
-                serviceScope.GetRequiredService<ICommandLoopContext>());
+                serviceScope.GetRequiredService<ICommandLoopContext>(),
+                _logService);
             _bottomMenu.PropButtonClicked += BottomMenu_PropButtonClicked;
             _bottomMenu.StatButtonClicked += BottomMenu_StatButtonClicked;
             _bottomMenu.TraitsButtonClicked += BottomMenu_TraitsButtonClicked;
 
             _scoreManager = serviceScope.GetRequiredService<IScoreManager>();
-            _logService = serviceScope.GetRequiredService<IPlayerEventLogService>();
+            
         }
 
         public override void Draw(GameTime gameTime)

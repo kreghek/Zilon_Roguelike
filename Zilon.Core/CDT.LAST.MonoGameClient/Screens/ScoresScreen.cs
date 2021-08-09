@@ -14,6 +14,7 @@
     using Microsoft.Xna.Framework.Input;
 
     using Zilon.Core.Scoring;
+    using Zilon.Core.Tactics;
 
     /// <summary>
     /// Scores screen to show a user's score when a character died.
@@ -71,7 +72,7 @@
         private readonly int _playerScore;
 
         private readonly IScoreManager _scoreManager;
-
+        private readonly Scores _score;
         private readonly string _scoreSummary;
 
         private readonly SpriteBatch _spriteBatch;
@@ -98,7 +99,9 @@
             var currentLanguage = System.Threading.Thread.CurrentThread.CurrentUICulture;
             var langName = currentLanguage.TwoLetterISOLanguageName;
 
-            _scoreSummary = TextSummaryHelper.CreateTextSummary(_scoreManager.Scores, langName);
+            _score = _scoreManager.Scores;
+
+            _scoreSummary = TextSummaryHelper.CreateTextSummary(_score, langName);
             _uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
 
             _dbContext = serviceScope.GetRequiredService<DbContext>();
@@ -125,10 +128,17 @@
 
             _spriteBatch.Begin();
 
-            DrawScreenTitle();
-            DrawScoreSummary();
+            //DrawScreenTitle();
+
+            DrawNickInput();
+
             DrawMenuButtons();
-            DrawPlayerNickNamePanel();
+
+            //DrawPlayerScoreButtons();
+
+            DrawScoreSummary();
+            
+            //DrawPlayerNickNamePanel();
 
             _spriteBatch.End();
         }
@@ -165,15 +175,24 @@
 
         private void DrawMenuButtons()
         {
+            var inputSize = new Vector2(256, 32);
+
+            var buttonPosition = new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - inputSize.X / 2 + 128 / 2, inputSize.Y + 5);
+            _restartButton.Rect = new Rectangle(buttonPosition.ToPoint(), new Point(128, 20));
             _restartButton.Draw(_spriteBatch);
         }
 
         private void DrawNickInput()
         {
+            var inputSize = new Vector2(256, 32);
+            var inputRect = new Rectangle((int)(Game.GraphicsDevice.Viewport.Width - inputSize.X) / 2, 10, (int)inputSize.X, (int)inputSize.Y);
+
+            _spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), inputRect, Color.Gray);
+
             _spriteBatch.DrawString(
-                _font,
+                _uiContentStorage.GetScoresFont(),
                 PlayerNickname,
-                new Vector2(PLAYER_INPUT_NICKNAME_PROMPT_POSITION_X, PLAYER_INPUT_NICKNAME_PROMPT_POSITION_Y),
+                inputRect.Location.ToVector2(),
                 _playerInfoColor);
         }
 
@@ -193,9 +212,10 @@
 
         private void DrawPlayerNickNamePanel()
         {
+            
+
             DrawPlayerInputNickNamePrompt();
-            DrawPlayerScoreButtons();
-            DrawNickInput();
+            
             DrawPlayerRatingInLeaderBoard();
         }
 
@@ -219,10 +239,16 @@
 
         private void DrawScoreSummary()
         {
+            var inputSize = new Vector2(256, 32);
+
+            var textPosition = new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - inputSize.X / 2, inputSize.Y + 5 + 20);
+
+            _spriteBatch.DrawString(_uiContentStorage.GetScoresFont(), _score.BaseScores.ToString(), textPosition, Color.White);
+
             _spriteBatch.DrawString(
                 _font,
                 _scoreSummary,
-                new Vector2(SCORE_SUMMARY_POSITION_X, SCORE_SUMMARY_POSITION_Y),
+                textPosition + new Vector2(0, 48),
                 Color.White);
         }
 
