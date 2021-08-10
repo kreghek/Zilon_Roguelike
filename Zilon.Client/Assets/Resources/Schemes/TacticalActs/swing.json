@@ -3,6 +3,10 @@
     "Ru": "Свинг",
     "En": "Swing"
   },
+  "Description":
+  {
+    "Ru": "Широчайших замах чем-нибудь длинным."
+  },
   "Stats": {
     "Efficient": {
       "Dice": 6,

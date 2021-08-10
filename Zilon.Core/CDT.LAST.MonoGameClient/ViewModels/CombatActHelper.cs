@@ -60,13 +60,34 @@ namespace CDT.LAST.MonoGameClient.ViewModels
             var title = GetActTitle(combatAct);
             var description = GetActDescription(combatAct);
 
+            var usedEquipment = combatAct.Equipment;
+            var equipmentTitle = string.Empty;
+            if (usedEquipment is not null)
+            {
+                equipmentTitle = PropHelper.GetPropTitle(usedEquipment);
+            }
+
             if (!string.IsNullOrWhiteSpace(description))
             {
-                return $"{title}\n{new string('-', 8)}\n{description}";
+                if (!string.IsNullOrWhiteSpace(equipmentTitle))
+                {
+                    return $"{title}\n({equipmentTitle})\n{new string('-', 8)}\n{description}";
+                }
+                else
+                {
+                    return $"{title}\n{new string('-', 8)}\n{description}";
+                }
             }
             else
             {
-                return title;
+                if (!string.IsNullOrWhiteSpace(equipmentTitle))
+                {
+                    return $"{title}\n({equipmentTitle})";
+                }
+                else
+                {
+                    return title;
+                }
             }
         }
     }
