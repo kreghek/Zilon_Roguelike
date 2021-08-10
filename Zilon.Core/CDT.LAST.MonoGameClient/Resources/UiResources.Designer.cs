@@ -121,7 +121,10 @@ namespace CDT.LAST.MonoGameClient.Resources {
         ///[O] to give loot up.
         ///[I] to open inventory.
         ///[C] to open character stats.
-        ///[SPACE] to wait a little..
+        ///[SPACE] to wait a little.
+        ///[ALT] to highlight interactive.
+        ///[1-8] to select combat action.
+        ///[NUM1-NUM9] to move step by step..
         /// </summary>
         internal static string ControlsTutorialText {
             get {
