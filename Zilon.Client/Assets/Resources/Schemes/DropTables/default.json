@@ -45,6 +45,52 @@
       "SchemeSid": "cudgel",
       "Weight": 2
 	},
+	
+	{
+      "SchemeSid": "fire-opal-necklace",
+      "Weight": 1
+	},
+	{
+      "SchemeSid": "higea-ring",
+      "Weight": 1
+	},
+	{
+      "SchemeSid": "hunger-moderator",
+      "Weight": 1
+	},
+	{
+      "SchemeSid": "hydro-necklace",
+      "Weight": 1
+	},
+	{
+      "SchemeSid": "iron-ring",
+      "Weight": 1
+	},
+	{
+      "SchemeSid": "law-codex",
+      "Weight": 1
+	},
+	{
+      "SchemeSid": "power-shield-generator",
+      "Weight": 1
+	},
+	{
+      "SchemeSid": "taurus-stim",
+      "Weight": 1
+	},
+	{
+      "SchemeSid": "thrist-moderator",
+      "Weight": 1
+	},
+	{
+      "SchemeSid": "med-mask",
+      "Weight": 1
+	},
+	{
+      "SchemeSid": "med-gloves",
+      "Weight": 1
+	},
+	
     {
       "SchemeSid": null,
       "Weight": 120

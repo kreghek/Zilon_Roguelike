@@ -242,6 +242,32 @@ namespace CDT.LAST.MonoGameClient.Screens
             _propIcons.Add("packed-food",
                 new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/PackedFood") });
 
+            // Aux
+            _propIcons.Add("evil-pumpkin",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/EvilPumpkin") });
+            _propIcons.Add("fire-opal-necklace",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/Necklace") });
+            _propIcons.Add("higea-ring",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/Ring") });
+            _propIcons.Add("hunger-moderator",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/HungerModerator") });
+            _propIcons.Add("hydro-necklace",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/Necklace") });
+            _propIcons.Add("iron-ring",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/Ring") });
+            _propIcons.Add("law-codex",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/Book") });
+            _propIcons.Add("power-shield-generator",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/PowerShieldGenerator") });
+            _propIcons.Add("taurus-stim",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/StimPack") });
+            _propIcons.Add("thrist-moderator",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/ThristModerator") });
+            _propIcons.Add("med-mask",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/MedicalMask") });
+            _propIcons.Add("med-gloves",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/MedicalGloves") });
+
             _propIcons.Add("HeadSlot",
                 new[] { contentManager.Load<Texture2D>("Sprites/ui/InventorySlots/Head") });
             _propIcons.Add("BodySlot",
