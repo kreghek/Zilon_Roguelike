@@ -155,6 +155,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
                 new HeadPart(HeadPartType.Base, content.Load<Texture2D>(PATH_TO_HEAD_PARTS + "HighlanderHelmetBase")),
                 new HeadPart(HeadPartType.Inside, content.Load<Texture2D>(PATH_TO_HEAD_PARTS + "SteelHelmetInside"))
             });
+
+            _headParts.Add("evil-pumpkin", new[]
+            {
+                new HeadPart(HeadPartType.Base, content.Load<Texture2D>(PATH_TO_HEAD_PARTS + "EvilPumpkinBase"))
+            });
         }
 
         private void LoadHumanParts(ContentManager content)

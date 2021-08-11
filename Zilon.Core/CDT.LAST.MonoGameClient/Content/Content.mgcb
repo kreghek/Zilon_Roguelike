@@ -564,6 +564,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/game-objects/Equipments/HandParts/WoodenShieldBase.png
 
+#begin Sprites/game-objects/Equipments/HeadParts/EvilPumpkinBase.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color16Bit
+/build:Sprites/game-objects/Equipments/HeadParts/EvilPumpkinBase.png
+
 #begin Sprites/game-objects/Equipments/HeadParts/HeadbandBase.png
 /importer:TextureImporter
 /processor:TextureProcessor
