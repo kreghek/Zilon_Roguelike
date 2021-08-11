@@ -154,7 +154,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 _logService.Log(endOfLifeEvent);
 
                 var survivalModule = _player.MainPerson.GetModule<ISurvivalModule>();
-                survivalModule.SetStatForce(SurvivalStatType.Health, 0);
+
+                try
+                {
+                    survivalModule.SetStatForce(SurvivalStatType.Health, 0);
+                }
+                catch (InvalidOperationException)
+                { 
+                    // Error occured then person removed (i think after transiton)
+                    // and death event handler try remove person again.
+                }
             }
         }
 
