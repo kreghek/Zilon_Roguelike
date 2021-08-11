@@ -367,9 +367,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         private void DrawMonsterInfo(IActorViewModel actorViewModel, SpriteBatch spriteBatch, int viewPortWidth,
             int viewPortHeight)
         {
-            var monsterPerson = actorViewModel.Actor.Person as MonsterPerson;
-
-            if (monsterPerson is null)
+            if (actorViewModel.Actor.Person is not MonsterPerson monsterPerson)
             {
                 return;
             }
@@ -452,8 +450,6 @@ namespace CDT.LAST.MonoGameClient.Screens
                     select sectorNode).SingleOrDefault();
         }
 
-        [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members",
-            Justification = "Method used in debug with SHOW_NUMS compiler directive.")]
         private static string GetRollAsString(Roll roll)
         {
             return $"{roll.Count}D{roll.Dice} +{roll.Modifiers?.ResultBuff ?? 0}";
