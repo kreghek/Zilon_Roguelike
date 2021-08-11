@@ -159,7 +159,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
                     if (_sector.Map.Transitions.TryGetValue(fowNode.Node, out var transition))
                     {
-                        if (transition.SectorNode.SectorScheme.Sid == "dungeon" || transition.SectorNode.SectorScheme.Sid == "elder-temple")
+                        if (transition.SectorNode.Biome.LocationScheme.Sid == "dungeon" || transition.SectorNode.Biome.LocationScheme.Sid == "elder-temple")
                         {
                             var transitionMarkerSprite = new Sprite(_hexMarkerTextures)
                             {
