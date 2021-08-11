@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Threading;
 
 using Zilon.Core.Persons;
-using Zilon.Core.Props;
 
 namespace CDT.LAST.MonoGameClient.ViewModels
 {
