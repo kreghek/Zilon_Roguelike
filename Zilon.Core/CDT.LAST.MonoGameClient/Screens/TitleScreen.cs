@@ -15,6 +15,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 {
     internal class TitleScreen : GameSceneBase
     {
+        private const string TITLETEXT = "LAST IMPERIAL VAGABOND";
         private readonly GlobeSelectionScreen _globeGenerationScene;
         private readonly SpriteBatch _spriteBatch;
         private readonly TextButton _startButton;
@@ -86,9 +87,9 @@ namespace CDT.LAST.MonoGameClient.Screens
             const int BUTTON_WIDTH = 100;
             const int BUTTON_HEIGHT = 20;
 
-            var logoSize = titleFont.MeasureString("LAST IMPERIAL VAGABOND");
+            var logoSize = titleFont.MeasureString(TITLETEXT);
 
-            _spriteBatch.DrawString(titleFont, "LAST IMPERIAL VAGABOND", new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - logoSize.X / 2, 100), Color.White);
+            _spriteBatch.DrawString(titleFont, TITLETEXT, new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - logoSize.X / 2, 100), Color.White);
 
             _startButton.Title = UiResources.StartGameButtonTitle;
             _startButton.Rect = new Rectangle(Game.GraphicsDevice.Viewport.Bounds.Center.X - BUTTON_WIDTH / 2, 150, BUTTON_WIDTH, BUTTON_HEIGHT);
