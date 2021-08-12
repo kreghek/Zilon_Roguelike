@@ -13,6 +13,7 @@
     using Microsoft.Xna.Framework.Graphics;
     using Microsoft.Xna.Framework.Input;
 
+    using Zilon.Core.ScoreResultGenerating;
     using Zilon.Core.Scoring;
     using Zilon.Core.Tactics;
 
@@ -78,7 +79,8 @@
         private readonly SpriteBatch _spriteBatch;
 
         private readonly IUiContentStorage _uiContentStorage;
-
+        private readonly IDeathReasonService _deathReasonService;
+        private readonly IPlayerEventLogService _eventLog;
         private TextButton _clearPlayerNickname;
 
         private bool _isVisibleNickNamePromt;
@@ -92,9 +94,9 @@
             game.Window.TextInput += InputNickName;
             _spriteBatch = spriteBatch;
 
-            var serviceScope = ((LivGame)Game).ServiceProvider;
+            var serviceProvider = ((LivGame)Game).ServiceProvider;
 
-            _scoreManager = serviceScope.GetRequiredService<IScoreManager>();
+            _scoreManager = serviceProvider.GetRequiredService<IScoreManager>();
 
             var currentLanguage = System.Threading.Thread.CurrentThread.CurrentUICulture;
             var langName = currentLanguage.TwoLetterISOLanguageName;
@@ -102,9 +104,11 @@
             _score = _scoreManager.Scores;
 
             _scoreSummary = TextSummaryHelper.CreateTextSummary(_score, langName);
-            _uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
+            _uiContentStorage = serviceProvider.GetRequiredService<IUiContentStorage>();
+            _deathReasonService = serviceProvider.GetRequiredService<IDeathReasonService>();
+            _eventLog = serviceProvider.GetRequiredService<IPlayerEventLogService>();
 
-            _dbContext = serviceScope.GetRequiredService<DbContext>();
+            _dbContext = serviceProvider.GetRequiredService<DbContext>();
 
             _font = _uiContentStorage.GetButtonFont();
 
@@ -240,13 +244,32 @@
         private void DrawScoreSummary()
         {
             var baseScoreSize = _uiContentStorage.GetScoresFont().MeasureString(_score.BaseScores.ToString());
-            var summarySize = _uiContentStorage.GetScoresFont().MeasureString(_scoreSummary);
-
             var scoresPosition = new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - baseScoreSize.X / 2, 10 + 20 + 48 + 5);
-            var summaryPosition = new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - summarySize.X / 2, 10 + 20 + 48 + 5 + baseScoreSize.Y + 5);
-
-
             _spriteBatch.DrawString(_uiContentStorage.GetScoresFont(), _score.BaseScores.ToString(), scoresPosition, Color.White);
+
+            try
+            {
+                var lastEvent = _eventLog.GetPlayerEvent();
+                if (lastEvent is not null)
+                {
+                    //TODO Use current game culture
+                    var deathReasonText = _deathReasonService.GetDeathReasonSummary(lastEvent, Zilon.Core.Localization.Language.Ru);
+                    if (deathReasonText is not null)
+                    {
+                        var fullDeathReasonText = $"Причина смерти: {deathReasonText}";
+                        var deathReasonSize = _font.MeasureString(fullDeathReasonText);
+                        var deathReasonPosition = new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - deathReasonSize.X / 2, scoresPosition.Y + baseScoreSize.Y + 5);
+                        _spriteBatch.DrawString(_font, fullDeathReasonText, deathReasonPosition, Color.Wheat);
+                    }
+                }
+            }
+            catch
+            {
+                //TODO Fast safe solution
+            }
+
+            var summarySize = _uiContentStorage.GetScoresFont().MeasureString(_scoreSummary);
+            var summaryPosition = new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - summarySize.X / 2, 10 + 20 + 48 + 5 + baseScoreSize.Y + 5 + 20);
 
             _spriteBatch.DrawString(
                 _font,

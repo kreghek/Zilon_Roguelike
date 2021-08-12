@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Zilon.Core.Commands;
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.Players;
+using Zilon.Core.ScoreResultGenerating;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
