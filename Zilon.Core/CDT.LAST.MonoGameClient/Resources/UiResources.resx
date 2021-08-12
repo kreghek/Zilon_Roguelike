@@ -351,4 +351,16 @@ Damage, external or internal, takes away vitality.
 Gradually, any wounds heal. Ultimately, the game
 continues as long as there is at least some life in the character.</value>
   </data>
+  <data name="PropFullDurabilityValueTitle" xml:space="preserve">
+    <value>Unbroken</value>
+  </data>
+  <data name="PropShabbyDurabilityValueTitle" xml:space="preserve">
+    <value>Shabby</value>
+  </data>
+  <data name="PropDamagedDurabilityValueTitle" xml:space="preserve">
+    <value>Damaged</value>
+  </data>
+  <data name="PropBrokenDurabilityValueTitle" xml:space="preserve">
+    <value>Broken</value>
+  </data>
 </root>

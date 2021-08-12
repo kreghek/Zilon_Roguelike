@@ -352,4 +352,16 @@
 затягиваются. В конечном счёте, игра продолжается,
 пока в персонаже есть хоть немного жизни.</value>
   </data>
+  <data name="PropFullDurabilityValueTitle" xml:space="preserve">
+    <value>Целый</value>
+  </data>
+  <data name="PropShabbyDurabilityValueTitle" xml:space="preserve">
+    <value>Потёртый</value>
+  </data>
+  <data name="PropDamagedDurabilityValueTitle" xml:space="preserve">
+    <value>Повреждён</value>
+  </data>
+  <data name="PropBrokenDurabilityValueTitle" xml:space="preserve">
+    <value>Сломан</value>
+  </data>
 </root>

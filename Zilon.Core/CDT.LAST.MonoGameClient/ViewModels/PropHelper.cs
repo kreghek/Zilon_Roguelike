@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Threading;
 
+using CDT.LAST.MonoGameClient.Resources;
+
 using Zilon.Core.Props;
 
 namespace CDT.LAST.MonoGameClient.ViewModels
@@ -54,6 +56,24 @@ namespace CDT.LAST.MonoGameClient.ViewModels
             return text;
         }
 
+        private static string? GetPropDurability(Equipment equipment)
+        {
+            var durable = equipment.Durable;
+            if (durable is null)
+            {
+                return null;
+            }
+
+            return durable.ValueShare switch
+            {
+                > 0.9f => UiResources.PropFullDurabilityValueTitle,
+                <= 0.9f and > 0.5f => UiResources.PropShabbyDurabilityValueTitle,
+                <= 0.5f and > 0 => UiResources.PropDamagedDurabilityValueTitle,
+                <= 0 => UiResources.PropBrokenDurabilityValueTitle,
+                _ => null
+            };
+        }
+
         public static string GetPropHintText(IProp prop)
         {
             var title = GetPropTitle(prop);
@@ -61,11 +81,41 @@ namespace CDT.LAST.MonoGameClient.ViewModels
 
             if (!string.IsNullOrWhiteSpace(description))
             {
-                return $"{title}\n{new string('-', 8)}\n{description}";
+                if (prop is Equipment equipment)
+                {
+                    var durabilityValue = GetPropDurability(equipment);
+                    if (!string.IsNullOrWhiteSpace(durabilityValue))
+                    {
+                        return $"{title}\n{new string('-', 8)}\n({durabilityValue})\n{new string('-', 8)}\n{description}";
+                    }
+                    else
+                    {
+                        return $"{title}\n{new string('-', 8)}\n{description}";
+                    }
+                }
+                else
+                {
+                    return $"{title}\n{new string('-', 8)}\n{description}";
+                }
             }
             else
             {
-                return title;
+                if (prop is Equipment equipment)
+                {
+                    var durabilityValue = GetPropDurability(equipment);
+                    if (!string.IsNullOrWhiteSpace(durabilityValue))
+                    {
+                        return $"{title}\n{new string('-', 8)}\n({durabilityValue})";
+                    }
+                    else
+                    {
+                        return title;
+                    }
+                }
+                else
+                {
+                    return title;
+                }
             }
         }
     }

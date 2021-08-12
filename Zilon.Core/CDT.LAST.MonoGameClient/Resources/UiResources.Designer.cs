@@ -454,6 +454,42 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Broken.
+        /// </summary>
+        internal static string PropBrokenDurabilityValueTitle {
+            get {
+                return ResourceManager.GetString("PropBrokenDurabilityValueTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Damaged.
+        /// </summary>
+        internal static string PropDamagedDurabilityValueTitle {
+            get {
+                return ResourceManager.GetString("PropDamagedDurabilityValueTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unbroken.
+        /// </summary>
+        internal static string PropFullDurabilityValueTitle {
+            get {
+                return ResourceManager.GetString("PropFullDurabilityValueTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shabby.
+        /// </summary>
+        internal static string PropShabbyDurabilityValueTitle {
+            get {
+                return ResourceManager.GetString("PropShabbyDurabilityValueTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Put into {0}.
         /// </summary>
         internal static string PutPropInContainerButtonTitleTemplate {
