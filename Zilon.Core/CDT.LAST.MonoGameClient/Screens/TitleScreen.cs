@@ -90,6 +90,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             var logoSize = titleFont.MeasureString(TITLETEXT);
 
             _spriteBatch.DrawString(titleFont, TITLETEXT, new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - logoSize.X / 2, 100), Color.White);
+            _spriteBatch.DrawString(font, "(demo)", new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - logoSize.X / 2 + logoSize.X, 100), Color.Wheat);
 
             _startButton.Title = UiResources.StartGameButtonTitle;
             _startButton.Rect = new Rectangle(Game.GraphicsDevice.Viewport.Bounds.Center.X - BUTTON_WIDTH / 2, 150, BUTTON_WIDTH, BUTTON_HEIGHT);
