@@ -25,7 +25,6 @@ using Zilon.Core.Players;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Behaviour;
-using Zilon.Core.Tactics.Spatial;
 using Zilon.Core.World;
 
 namespace CDT.LAST.MonoGameClient.Screens

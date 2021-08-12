@@ -1,7 +1,6 @@
 ﻿namespace CDT.LAST.MonoGameClient.Screens
 {
     using System;
-    using System.Linq;
     using System.Text;
 
     using CDT.LAST.MonoGameClient.Database;
@@ -30,48 +29,20 @@
 
         private const int BUTTON_HEIGHT = 20;
 
-        private const int SCORE_MENU_TITLE_POSITION_X = 50;
-
         private const int SCORE_MENU_TITLE_POSITION_Y = 100;
-
-        private const int OFFSET_BETWEEN_BUTTON = 100;
-
-        private const int OFFSET_ROW = 50;
 
         private const int NICKNAME_MAX_LENGTH = 50;
 
-        private const int CLEAR_PLAYER_SCORE_BUTTON_POSITION_X = RESTART_BUTTON_POSITION_X + BUTTON_WIDTH + OFFSET_BETWEEN_BUTTON;
-
-        private const int PLAYER_INPUT_NICKNAME_PROMPT_POSITION_X = SCORE_MENU_TITLE_POSITION_X;
-
-        private const int CLEAR_PLAYER_SCORE_BUTTON_POSITION_Y = RESTART_BUTTON_POSITION_Y;
-
-        private const int PLAYER_INPUT_NICKNAME_PROMPT_POSITION_Y = RESTART_BUTTON_POSITION_Y + OFFSET_ROW;
-
-        private const int PLAYER_RATING_IN_LEADER_BOARD_X = SCORE_MENU_TITLE_POSITION_X;
-
-        private const int PLAYER_RATING_IN_LEADER_BOARD_Y = PLAYER_INPUT_NICKNAME_PROMPT_POSITION_Y + OFFSET_ROW;
-
+        //TODO Use localized value
         private const string DEFAULT_PLAYER_NICK_NAME = "Безымянный бродяга";
-
-        private const int SCORE_SUMMARY_POSITION_Y = PLAYER_RATING_IN_LEADER_BOARD_Y + OFFSET_ROW;
-
-        private const int SCORE_SUMMARY_POSITION_X = SCORE_MENU_TITLE_POSITION_X * 4;
 
         private readonly DbContext _dbContext;
 
         private readonly SpriteFont _font;
 
-        private readonly bool _isNeedToAddedPlayerScore = true;
-
         private readonly Color _playerInfoColor = Color.Yellow;
 
         private readonly StringBuilder _playerNicknameSb = new();
-
-        private readonly uint _playerRatingInLeaderboard;
-
-        private readonly int _playerScore;
-
         private readonly IScoreManager _scoreManager;
         private readonly Scores _score;
         private readonly string _scoreSummary;
@@ -81,11 +52,8 @@
         private readonly IUiContentStorage _uiContentStorage;
         private readonly IDeathReasonService _deathReasonService;
         private readonly IPlayerEventLogService _eventLog;
-        private TextButton _clearPlayerNickname;
 
-        private bool _isVisibleNickNamePromt;
-
-        private TextButton _restartButton;
+        private TextButton _leaderboardScreenButton;
 
         /// <inheritdoc />
         public ScoresScreen(Game game, SpriteBatch spriteBatch)
@@ -114,8 +82,6 @@
 
             InitButtons();
 
-            _playerScore = _scoreManager.BaseScores;
-            _playerRatingInLeaderboard = GetPlayerRating();
             PlayerNickname = DEFAULT_PLAYER_NICK_NAME;
         }
 
@@ -132,17 +98,11 @@
 
             _spriteBatch.Begin();
 
-            //DrawScreenTitle();
-
             DrawNickInput();
 
             DrawMenuButtons();
 
-            //DrawPlayerScoreButtons();
-
             DrawScoreSummary();
-            
-            //DrawPlayerNickNamePanel();
 
             _spriteBatch.End();
         }
@@ -153,7 +113,6 @@
             base.Update(gameTime);
 
             UpdateMenuButtons();
-            UpdateNickNamePlayerButtons();
         }
 
         private bool CanInputMore()
@@ -166,7 +125,6 @@
             if (_playerNicknameSb.Length > 0)
                 return false;
 
-            _isVisibleNickNamePromt = true;
 
             return true;
         }
@@ -182,8 +140,8 @@
             var inputSize = new Vector2(256, 32);
 
             var buttonPosition = new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - inputSize.X / 2 + 128 / 2, inputSize.Y + 5 + 10);
-            _restartButton.Rect = new Rectangle(buttonPosition.ToPoint(), new Point(128, 20));
-            _restartButton.Draw(_spriteBatch);
+            _leaderboardScreenButton.Rect = new Rectangle(buttonPosition.ToPoint(), new Point(128, 20));
+            _leaderboardScreenButton.Draw(_spriteBatch);
         }
 
         private void DrawNickInput()
@@ -198,47 +156,6 @@
                 PlayerNickname,
                 inputRect.Location.ToVector2(),
                 _playerInfoColor);
-        }
-
-        private void DrawPlayerInputNickNamePrompt()
-        {
-            if (!_isVisibleNickNamePromt)
-                return;
-
-            var formattedPromt = string.Format(UiResources.PlayerInputNicknamePrompt, DEFAULT_PLAYER_NICK_NAME);
-            var position = new Vector2(PLAYER_INPUT_NICKNAME_PROMPT_POSITION_X, PLAYER_INPUT_NICKNAME_PROMPT_POSITION_Y);
-            _spriteBatch.DrawString(
-                _font,
-                formattedPromt,
-                position,
-                Color.Red);
-        }
-
-        private void DrawPlayerNickNamePanel()
-        {
-            
-
-            DrawPlayerInputNickNamePrompt();
-            
-            DrawPlayerRatingInLeaderBoard();
-        }
-
-        private void DrawPlayerRatingInLeaderBoard()
-        {
-            var formattedRating = string.Format(UiResources.PlayerRatingLabel, _playerRatingInLeaderboard.ToString());
-            _spriteBatch.DrawString(
-                _font,
-                formattedRating,
-                new Vector2(PLAYER_RATING_IN_LEADER_BOARD_X, PLAYER_RATING_IN_LEADER_BOARD_Y),
-                _playerInfoColor);
-        }
-
-        private void DrawPlayerScoreButtons()
-        {
-            if (!_isNeedToAddedPlayerScore)
-                return;
-
-            _clearPlayerNickname.Draw(_spriteBatch);
         }
 
         private void DrawScoreSummary()
@@ -278,24 +195,6 @@
                 Color.White);
         }
 
-        private void DrawScreenTitle()
-        {
-            _spriteBatch.DrawString(
-                _font,
-                UiResources.ScoreMenuTitle,
-                new Vector2(SCORE_MENU_TITLE_POSITION_X, SCORE_MENU_TITLE_POSITION_Y),
-                Color.White);
-        }
-
-        private uint GetPlayerRating()
-        {
-            var leaderboardRecords = _dbContext.GetAllLeaderboardRecord();
-            var playerRating = leaderboardRecords.FirstOrDefault(x => x.RatingPosition <= _playerScore);
-            var lastRating = (uint)leaderboardRecords.Count + 1;
-
-            return playerRating?.RatingPosition ?? lastRating;
-        }
-
         private void GoToNextScreenButtonClickHandler(object? sender, EventArgs e)
         {
             SetDefaultNickNameOnEmptyNickName();
@@ -309,26 +208,11 @@
         private void InitButtons()
         {
             InitRestartButton();
-            InitClearPlayerNickNameButton();
-        }
-
-        private void InitClearPlayerNickNameButton()
-        {
-            _clearPlayerNickname = new TextButton(
-                UiResources.ClearPlayerNicknameButton,
-                _uiContentStorage.GetButtonTexture(),
-                _uiContentStorage.GetButtonFont(),
-                new Rectangle(
-                    CLEAR_PLAYER_SCORE_BUTTON_POSITION_X,
-                    CLEAR_PLAYER_SCORE_BUTTON_POSITION_Y,
-                    BUTTON_WIDTH,
-                    BUTTON_HEIGHT));
-            _clearPlayerNickname.OnClick += ClearPlayerNickNameClickHandler;
         }
 
         private void InitRestartButton()
         {
-            _restartButton = new TextButton(
+            _leaderboardScreenButton = new TextButton(
                 UiResources.LeaderBoardButtonTitle,
                 _uiContentStorage.GetButtonTexture(),
                 _font,
@@ -337,7 +221,7 @@
                     RESTART_BUTTON_POSITION_Y,
                     BUTTON_WIDTH,
                     BUTTON_HEIGHT));
-            _restartButton.OnClick += GoToNextScreenButtonClickHandler;
+            _leaderboardScreenButton.OnClick += GoToNextScreenButtonClickHandler;
         }
 
         private void InputNickName(object? sender, TextInputEventArgs e)
@@ -347,7 +231,6 @@
             if (CanInputMore() && IsPrintedChar(playerChar))
             {
                 _playerNicknameSb.Append(playerChar);
-                _isVisibleNickNamePromt = false;
             }
 
             if (CheckEmptyNickName())
@@ -372,12 +255,7 @@
 
         private void UpdateMenuButtons()
         {
-            _restartButton.Update();
-        }
-
-        private void UpdateNickNamePlayerButtons()
-        {
-            _clearPlayerNickname.Update();
+            _leaderboardScreenButton.Update();
         }
     }
 }

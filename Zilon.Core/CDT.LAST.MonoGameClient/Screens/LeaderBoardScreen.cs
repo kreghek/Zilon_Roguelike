@@ -166,7 +166,8 @@ namespace CDT.LAST.MonoGameClient.Screens
             {
                 var positionY = tablePositionY + i * 20;
                 var record = _leaderBoardRecords[i];
-                DrawScoreTableNumberCell(i, positionX, positionY);
+                var rank = i + 1; // starts with the zero
+                DrawScoreTableNumberCell(rank, positionX, positionY);
                 DrawScoreTableNickCell(record.NickName, positionX + RANK_COLUMN_WIDTH, positionY);
                 DrawScoreTableScoreCell(record.Score, positionX + RANK_COLUMN_WIDTH + NAME_COLUMN_WIDTH, positionY);
             }
