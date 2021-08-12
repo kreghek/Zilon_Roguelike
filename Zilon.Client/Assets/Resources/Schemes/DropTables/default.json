@@ -84,12 +84,12 @@
 	},
 	{
       "SchemeSid": "med-mask",
-      "Weight": 1
+      "Weight": 2
 	},
 	{
       "SchemeSid": "med-gloves",
       "Weight": 1
-	},
+	}
 	
     {
       "SchemeSid": null,
