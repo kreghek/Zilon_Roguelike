@@ -306,7 +306,7 @@
         private void InitRestartButton()
         {
             _restartButton = new TextButton(
-                UiResources.StartGameButtonTitle,
+                UiResources.LeaderBoardButtonTitle,
                 _uiContentStorage.GetButtonTexture(),
                 _font,
                 new Rectangle(

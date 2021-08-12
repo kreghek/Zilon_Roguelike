@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Threading;
 
 using CDT.LAST.MonoGameClient.Engine;
@@ -21,6 +20,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly TextButton _startButton;
         private readonly TextButton _switchLanguageButton;
         private readonly TextButton _switchResolutionButton;
+        private readonly TextButton _leaderBoardButton;
 
         public TitleScreen(Game game, SpriteBatch spriteBatch) : base(game)
         {
@@ -47,6 +47,17 @@ namespace CDT.LAST.MonoGameClient.Screens
                 font,
                 new Rectangle(Game.GraphicsDevice.Viewport.Bounds.Center.X, 250, 100, 20));
             _switchResolutionButton.OnClick += SwitchResolutionButton_OnClick;
+
+            _leaderBoardButton = new TextButton(UiResources.LeaderBoardButtonTitle,
+                buttonTexture,
+                font,
+                new Rectangle(Game.GraphicsDevice.Viewport.Bounds.Center.X, 250, 100, 20));
+            _leaderBoardButton.OnClick += LeaderBoardButton_OnClick;
+        }
+
+        private void LeaderBoardButton_OnClick(object? sender, EventArgs e)
+        {
+            TargetScene = new LeaderBoardScreen(Game, _spriteBatch);
         }
 
         private void SwitchResolutionButton_OnClick(object? sender, EventArgs e)
@@ -107,6 +118,10 @@ namespace CDT.LAST.MonoGameClient.Screens
             _switchResolutionButton.Rect = new Rectangle(Game.GraphicsDevice.Viewport.Bounds.Center.X - BUTTON_WIDTH / 2, 250, BUTTON_WIDTH, BUTTON_HEIGHT);
             _switchResolutionButton.Draw(_spriteBatch);
 
+            _leaderBoardButton.Title = UiResources.LeaderBoardButtonTitle;
+            _leaderBoardButton.Rect = new Rectangle(Game.GraphicsDevice.Viewport.Bounds.Center.X - BUTTON_WIDTH / 2, 300, BUTTON_WIDTH, BUTTON_HEIGHT);
+            _leaderBoardButton.Draw(_spriteBatch);
+
             var graphicsManager = ((LivGame)Game).Graphics;
             _spriteBatch.DrawString(font, $"{graphicsManager.PreferredBackBufferWidth} x {graphicsManager.PreferredBackBufferHeight}",
                 new Vector2(_switchResolutionButton.Rect.Right + 5, _switchResolutionButton.Rect.Top), Color.White);
@@ -132,6 +147,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             _startButton.Update();
             _switchLanguageButton.Update();
             _switchResolutionButton.Update();
+            _leaderBoardButton.Update();
         }
 
         private void StartButtonClickHandler(object? sender, EventArgs e)

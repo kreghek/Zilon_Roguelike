@@ -342,6 +342,15 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Leaderboard.
+        /// </summary>
+        internal static string LeaderBoardButtonTitle {
+            get {
+                return ResourceManager.GetString("LeaderBoardButtonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Leaderboard menu.
         /// </summary>
         internal static string LeaderboardMenuTitle {

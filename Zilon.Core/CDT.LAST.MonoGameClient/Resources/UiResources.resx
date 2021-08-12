@@ -363,4 +363,7 @@ continues as long as there is at least some life in the character.</value>
   <data name="PropBrokenDurabilityValueTitle" xml:space="preserve">
     <value>Broken</value>
   </data>
+  <data name="LeaderBoardButtonTitle" xml:space="preserve">
+    <value>Leaderboard</value>
+  </data>
 </root>

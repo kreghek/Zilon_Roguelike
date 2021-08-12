@@ -16,23 +16,13 @@ namespace CDT.LAST.MonoGameClient.Screens
     /// </summary>
     public class LeaderBoardScreen : GameSceneBase
     {
-        private const int GO_TO_MAIN_MENU_BUTTON_POSITION_X = LEADERBOARD_MENU_TITLE_POSITION_X;
-
         private const int GO_TO_MAIN_MENU_BUTTON_POSITION_Y = 150;
 
         private const int BUTTON_WIDTH = 100;
 
         private const int BUTTON_HEIGHT = 20;
 
-        private const int LEADERBOARD_MENU_TITLE_POSITION_X = 50;
-
-        private const int LEADERBOARD_MENU_TITLE_POSITION_Y = 100;
-
-        private const int PLAYER_NICKNAME_TITLE_POSITION_X = PLAYER_NUMBER_TITLE_POSITION_X * 3;
-
-        private const int PLAYER_NUMBER_TITLE_POSITION_X = LEADERBOARD_MENU_TITLE_POSITION_X;
-
-        private const int PLAYER_SCORE_TITLE_POSITION_X = PLAYER_NICKNAME_TITLE_POSITION_X * 6;
+        private const int LEADERBOARD_MENU_TITLE_POSITION_Y = 50;
 
         private const int ROW_STEP = 50;
 
@@ -41,12 +31,12 @@ namespace CDT.LAST.MonoGameClient.Screens
         private const int SCORE_TABLE_HEADERS_ROW_OFFSET_Y = 2;
 
         private const int TABLE_RESULTS_OFFSET_Y = 3;
-
+        private readonly IUiContentStorage uiContentStorage;
         private readonly DbContext _dbContext;
 
         private readonly SpriteFont _font;
 
-        private readonly TextButton _goToMainMenu;
+        private readonly TextButton _goToMainMenuButton;
 
         private readonly SpriteBatch _spriteBatch;
 
@@ -64,22 +54,23 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             var serviceScope = ((LivGame)Game).ServiceProvider;
 
-            var uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
+            uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
+
 
             _dbContext = serviceScope.GetRequiredService<DbContext>();
 
-            _goToMainMenu = new TextButton(
+            _goToMainMenuButton = new TextButton(
                 UiResources.MainMenuButtonTitle,
                 uiContentStorage.GetButtonTexture(),
                 uiContentStorage.GetButtonFont(),
                 new Rectangle(
-                    GO_TO_MAIN_MENU_BUTTON_POSITION_X,
-                    GO_TO_MAIN_MENU_BUTTON_POSITION_Y,
+                    0,
+                    0,
                     BUTTON_WIDTH,
                     BUTTON_HEIGHT));
-            _goToMainMenu.OnClick += GoToMainMenuButtonClickHandler;
+            _goToMainMenuButton.OnClick += GoToMainMenuButtonClickHandler;
 
-            _leaderBoardRecords = _dbContext.GetLeaderBoard();
+            _leaderBoardRecords = _dbContext.GetLeaderBoard(new LeaderboardLimit(limit: 10));
 
             _font = uiContentStorage.GetButtonFont();
         }
@@ -91,13 +82,20 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             _spriteBatch.Begin();
 
-            _goToMainMenu.Draw(_spriteBatch);
+            var scoresFont = uiContentStorage.GetScoresFont();
+            var titleSize = scoresFont.MeasureString(UiResources.LeaderboardMenuTitle);
+
             _spriteBatch.DrawString(
-                _font,
+                scoresFont,
                 UiResources.LeaderboardMenuTitle,
-                new Vector2(LEADERBOARD_MENU_TITLE_POSITION_X, LEADERBOARD_MENU_TITLE_POSITION_Y),
+                new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - titleSize.X / 2, LEADERBOARD_MENU_TITLE_POSITION_Y),
                 Color.White);
-            DrawScoreTable();
+
+            _goToMainMenuButton.Rect = new Rectangle(Game.GraphicsDevice.Viewport.Bounds.Center.X - BUTTON_WIDTH / 2,
+                LEADERBOARD_MENU_TITLE_POSITION_Y + (int)titleSize.Y + 5, BUTTON_WIDTH, BUTTON_HEIGHT);
+            _goToMainMenuButton.Draw(_spriteBatch);
+
+            DrawScoreTable(_goToMainMenuButton.Rect.Bottom);
 
             _spriteBatch.End();
         }
@@ -107,91 +105,85 @@ namespace CDT.LAST.MonoGameClient.Screens
         {
             base.Update(gameTime);
 
-            _goToMainMenu.Update();
+            _goToMainMenuButton.Update();
         }
 
-        private void DrawScoreTable()
+        private void DrawScoreTable(int positionY)
         {
-            DrawScoreTableHeaders();
-            DrawScoreTableResults();
+            DrawScoreTableHeaders(positionY + 30);
+            DrawScoreTableResults(positionY + 20 + 30);
         }
 
-        private void DrawScoreTableHeaders()
+        const int RANK_COLUMN_WIDTH = 30;
+        const int NAME_COLUMN_WIDTH = 150;
+        const int SCORES_COLUMN_WIDTH = 80;
+        const int TABLE_WIDTH = RANK_COLUMN_WIDTH + NAME_COLUMN_WIDTH + SCORES_COLUMN_WIDTH;
+
+        private void DrawScoreTableHeaders(int positionY)
         {
-            var offsetY = GetRowVerticalPositionOffset(SCORE_TABLE_HEADERS_ROW_OFFSET_Y);
+            var offsetY = positionY;
             _spriteBatch.DrawString(
                 _font,
                 UiResources.ScoreTableNumberColumnTitle,
-                new Vector2(PLAYER_NUMBER_TITLE_POSITION_X, offsetY),
+                new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - TABLE_WIDTH / 2, offsetY),
                 _tableHeaderColor);
             _spriteBatch.DrawString(
                 _font,
                 UiResources.ScoreTableNickColumnTitle,
-                new Vector2(PLAYER_NICKNAME_TITLE_POSITION_X, offsetY),
+                new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - (TABLE_WIDTH) / 2 + RANK_COLUMN_WIDTH, offsetY),
                 _tableHeaderColor);
-            var scoreCellPosition = GetScoreCellPosition(SCORE_TABLE_HEADERS_ROW_OFFSET_Y);
+
             _spriteBatch.DrawString(
                 _font,
                 UiResources.ScoreTableScoreColumnTitle,
-                scoreCellPosition,
+                new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - (TABLE_WIDTH) / 2 + RANK_COLUMN_WIDTH + NAME_COLUMN_WIDTH, offsetY),
                 _tableHeaderColor);
         }
 
-        private void DrawScoreTableNickCell(string nickName, int indexY)
+        private void DrawScoreTableNickCell(string nickName, int positionX, int positionY)
         {
-            var offsetY = GetRowVerticalPositionOffset(indexY);
             _spriteBatch.DrawString(
                 _font,
-                nickName,
-                GetNickCellPosition(offsetY),
+                nickName.Length > 20 ? nickName.Substring(0, 20) : nickName,
+                new Vector2(positionX, positionY),
                 _tableResultsColor);
         }
 
-        private void DrawScoreTableNumberCell(uint index, int indexY, Color color)
+        private void DrawScoreTableNumberCell(int index, int positionX, int positionY)
         {
-            var offsetY = GetRowVerticalPositionOffset(indexY);
             _spriteBatch.DrawString(
                 _font,
                 index.ToString(),
-                new Vector2(PLAYER_NUMBER_TITLE_POSITION_X, offsetY),
-                color);
+                new Vector2(positionX, positionY),
+                _tableResultsColor);
         }
 
-        private void DrawScoreTableResults()
+        private void DrawScoreTableResults(int tablePositionY)
         {
+            var positionX = Game.GraphicsDevice.Viewport.Bounds.Center.X - TABLE_WIDTH / 2;
+
             for (var i = 0; i < _leaderBoardRecords.Count; i++)
             {
-                var indexY = i + TABLE_RESULTS_OFFSET_Y;
+                var positionY = tablePositionY + i * 20;
                 var record = _leaderBoardRecords[i];
-                DrawScoreTableNumberCell(record.RatingPosition, indexY, _tableResultsColor);
-                DrawScoreTableNickCell(record.NickName, indexY);
-                DrawScoreTableScoreCell(record.Score, indexY);
+                DrawScoreTableNumberCell(i, positionX, positionY);
+                DrawScoreTableNickCell(record.NickName, positionX + RANK_COLUMN_WIDTH, positionY);
+                DrawScoreTableScoreCell(record.Score, positionX + RANK_COLUMN_WIDTH + NAME_COLUMN_WIDTH, positionY);
             }
         }
 
-        private void DrawScoreTableScoreCell(int score, int offsetY)
+        private void DrawScoreTableScoreCell(int score, int positionX, int positionY)
         {
             _spriteBatch.DrawString(
                 _font,
                 score.ToString(),
-                GetScoreCellPosition(offsetY),
+                new Vector2(positionX, positionY),
                 _tableResultsColor);
-        }
-
-        private static Vector2 GetNickCellPosition(int offsetY)
-        {
-            return new Vector2(PLAYER_NICKNAME_TITLE_POSITION_X, offsetY);
         }
 
         private static int GetRowVerticalPositionOffset(int indexY)
         {
             return FIRST_TABLE_ROW_POSITION_Y + ROW_STEP * indexY;
-        }
-
-        private static Vector2 GetScoreCellPosition(int indexY)
-        {
-            var offsetY = GetRowVerticalPositionOffset(indexY);
-            return new Vector2(PLAYER_SCORE_TITLE_POSITION_X, offsetY);
         }
 
         private void GoToMainMenuButtonClickHandler(object? sender, EventArgs e)

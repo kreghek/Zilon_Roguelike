@@ -364,4 +364,7 @@
   <data name="PropBrokenDurabilityValueTitle" xml:space="preserve">
     <value>Сломан</value>
   </data>
+  <data name="LeaderBoardButtonTitle" xml:space="preserve">
+    <value>Доска лидеров</value>
+  </data>
 </root>
