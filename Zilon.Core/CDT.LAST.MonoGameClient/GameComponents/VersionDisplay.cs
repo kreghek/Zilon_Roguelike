@@ -5,7 +5,7 @@ namespace CDT.LAST.MonoGameClient.GameComponents
 {
     internal class VersionDisplay : DrawableGameComponent
     {
-        private readonly string _version = "ver.2.5.8-gdw21.7";
+        private readonly string _version = "ver.2.5.8-gdw21.8";
         private SpriteBatch _spriteBatch;
         private readonly SpriteFont _font;
 
