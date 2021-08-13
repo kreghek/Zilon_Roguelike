@@ -29,6 +29,7 @@ namespace Zilon.Core.PersonGeneration
             var rolledTemplate = Dice.RollFromList(templates);
 
             person.PersonEquipmentTemplate = rolledTemplate.Name;
+            person.PersonEquipmentDescriptionTemplate = rolledTemplate.Description;
 
             var headDropScheme = rolledTemplate.HeadEquipments;
             FillSlot(person, headDropScheme, HeadSlotIndex);

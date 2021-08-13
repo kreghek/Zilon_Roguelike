@@ -29,6 +29,11 @@ namespace Zilon.Core.Persons
         /// </summary>
         public ILocalizedString? PersonEquipmentTemplate { get; set; }
 
+        /// <summary>
+        /// Temporary property to show template name.
+        /// </summary>
+        public ILocalizedString? PersonEquipmentDescriptionTemplate { get; set; }
+
         public override PhysicalSizePattern PhysicalSize => PhysicalSizePattern.Size1;
 
         public IPlayerEventLogService? PlayerEventLogService { get; set; }
