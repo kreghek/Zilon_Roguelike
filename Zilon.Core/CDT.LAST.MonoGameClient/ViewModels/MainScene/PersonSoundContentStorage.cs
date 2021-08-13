@@ -213,6 +213,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _actStartDict = new Dictionary<string, SoundEffect>
             {
                 ["bite"] = contentManager.Load<SoundEffect>("Audio/HunterHitEffect"),
+                ["pig-bite"] = contentManager.Load<SoundEffect>("Audio/PigHitEffect"),
                 ["punch"] = contentManager.Load<SoundEffect>("Audio/PunchStartHitEffect"),
                 ["slash"] = contentManager.Load<SoundEffect>("Audio/SwordStartHitEffect"),
                 ["pierce"] = contentManager.Load<SoundEffect>("Audio/SpearPierceEffect"),

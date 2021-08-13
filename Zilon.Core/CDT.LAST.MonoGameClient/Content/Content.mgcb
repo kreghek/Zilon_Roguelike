@@ -121,6 +121,12 @@
 /processorParam:Quality=Best
 /build:Audio/HunterImpact.mp3
 
+#begin Audio/PigHitEffect.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/PigHitEffect.mp3
+
 #begin Audio/PunchStartHitEffect.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
@@ -1845,18 +1851,6 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color16Bit
-/build:Sprites/ui/PropIcons/MedKit.png
-
-#begin Sprites/ui/PropIcons/MedKit.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/ui/PropIcons/MedKit.png
 
@@ -1871,18 +1865,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color16Bit
 /build:Sprites/ui/PropIcons/Necklace.png
-
-#begin Sprites/ui/PropIcons/PackedFood.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color16Bit
-/build:Sprites/ui/PropIcons/PackedFood.png
 
 #begin Sprites/ui/PropIcons/PackedFood.png
 /importer:TextureImporter
@@ -1955,18 +1937,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color16Bit
 /build:Sprites/ui/PropIcons/Vegemilk.png
-
-#begin Sprites/ui/PropIcons/Waterskin.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color16Bit
-/build:Sprites/ui/PropIcons/Waterskin.png
 
 #begin Sprites/ui/PropIcons/Waterskin.png
 /importer:TextureImporter
