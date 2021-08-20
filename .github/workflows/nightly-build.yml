@@ -19,8 +19,6 @@ jobs:
           - win-x64
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: master
 
       - name: Setup .NET5
         uses: actions/setup-dotnet@v1
