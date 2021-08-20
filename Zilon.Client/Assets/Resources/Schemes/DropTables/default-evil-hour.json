@@ -2,6 +2,10 @@
   "Rolls": 1,
   "Records": [
     {
+      "SchemeSid": "evil-pumpkin",
+      "Weight": 1
+    },
+    {
       "SchemeSid": null,
       "Weight": 95
     }
