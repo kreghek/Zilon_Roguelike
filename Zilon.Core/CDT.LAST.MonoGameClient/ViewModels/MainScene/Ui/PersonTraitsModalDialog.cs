@@ -10,8 +10,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
+using Zilon.Core.Components;
+using Zilon.Core.Localization;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
+using Zilon.Core.Schemes;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
@@ -48,6 +51,47 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             DrawHintIfSelected(spriteBatch);
         }
 
+        private sealed class ProfessionPerk : IPerk
+        {
+            public ProfessionPerk(ILocalizedString personEquipmentTemplate, ILocalizedString descriptionEquipmentTemplate)
+            {
+                Scheme = new PersonPerkScheme()
+                {
+                    Name = new LocalizedStringSubScheme()
+                    { 
+                        Ru = personEquipmentTemplate.Ru,
+                        En = personEquipmentTemplate.En
+                    },
+                    Description = new LocalizedStringSubScheme
+                    {
+                        Ru = descriptionEquipmentTemplate.Ru,
+                        En = descriptionEquipmentTemplate.En
+                    }
+                };
+            }
+
+            public PerkLevel? CurrentLevel { get; set; }
+            public IPerkScheme Scheme { get; }
+            public Zilon.Core.IJob[]? CurrentJobs { get; }
+        }
+
+        private sealed class PersonPerkScheme : IPerkScheme
+        {
+            public PerkConditionSubScheme?[]? BaseConditions { get; set; }
+            public string? IconSid { get; set; }
+            public bool IsBuildIn => true;
+            public JobSubScheme?[]? Jobs { get; set; }
+            public PerkLevelSubScheme?[]? Levels { get; set; }
+            public int Order { get; set; }
+            public PerkRuleSubScheme?[]? Rules { get; set; }
+            public PropSet?[]? Sources { get; set; }
+            public PerkConditionSubScheme?[]? VisibleConditions { get; set; }
+            public LocalizedStringSubScheme? Description { get; set; }
+            public bool Disabled { get; }
+            public LocalizedStringSubScheme? Name { get; set; }
+            public string? Sid { get; set; }
+        }
+
         /// <inheritdoc />
         protected override void InitContent()
         {
@@ -72,10 +116,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             int MAX_ITEM_IN_ROW = 8;
             int MAX_ITEM_COUNT = MAX_ITEM_IN_ROW * 2;
 
+            var profession = CreateProfession(
+                ((HumanPerson)person).PersonEquipmentTemplate,
+                ((HumanPerson)person).PersonEquipmentDescriptionTemplate);
+
             var perks = evolutionModule.GetArchievedPerks().Take(MAX_ITEM_COUNT).ToArray();
-            for (var itemIndex = 0; itemIndex < perks.Length; itemIndex++)
+
+            var allPerks = new IPerk[] { profession }.Concat(perks).ToArray();
+
+            for (var itemIndex = 0; itemIndex < allPerks.Length; itemIndex++)
             {
-                var perk = perks[itemIndex];
+                var perk = allPerks[itemIndex];
                 var colIndex = itemIndex / MAX_ITEM_IN_ROW;
                 var rowIndex = itemIndex % MAX_ITEM_IN_ROW;
                 var relativeX = colWidth * colIndex;
@@ -90,6 +141,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             _currentAttributesItems = currentAttributeItemList.ToArray();
+        }
+
+        private IPerk CreateProfession(ILocalizedString? personEquipmentTemplate, ILocalizedString? personEquipmentDescriptionTemplate)
+        {
+            var profession = new ProfessionPerk(personEquipmentTemplate, personEquipmentDescriptionTemplate);
+            return profession;
         }
 
         protected override void UpdateContent()
