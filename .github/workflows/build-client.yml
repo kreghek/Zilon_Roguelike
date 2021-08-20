@@ -3,7 +3,7 @@ name: Build game clients
 on:
   push:
     branches:
-      - develop-gdw21
+      - develop-gdw21-release
 
 jobs:
   build:
