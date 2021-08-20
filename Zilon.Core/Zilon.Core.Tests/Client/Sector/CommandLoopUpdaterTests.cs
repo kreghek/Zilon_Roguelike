@@ -291,7 +291,7 @@ namespace Zilon.Core.Client.Sector.Tests
             // ASSERT
             commandPoolMock.Verify(x => x.Pop(), Times.AtMost(2));
 
-            act.Should().Throw<TaskCanceledException>();
+            await act.Should().ThrowAsync<TaskCanceledException>().ConfigureAwait(false);
             commandLoopTaskException.Should().BeNull();
         }
 
