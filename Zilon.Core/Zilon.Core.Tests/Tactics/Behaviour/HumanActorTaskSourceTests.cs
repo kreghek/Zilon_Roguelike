@@ -62,7 +62,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             };
 
             // ASSERT
-            act.Should().Throw<TaskCanceledException>();
+            await act.Should().ThrowAsync<TaskCanceledException>().ConfigureAwait(false);
         }
 
         /// <summary>
