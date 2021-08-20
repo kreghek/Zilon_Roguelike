@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
+using System.Threading;
 
 using CDT.LAST.MonoGameClient.Engine;
 using CDT.LAST.MonoGameClient.GameComponents;
@@ -33,9 +35,9 @@ namespace CDT.LAST.MonoGameClient
             _serviceProvider = serviceProvider;
         }
 
-        public ServiceProvider ServiceProvider => _serviceProvider;
-
         public GraphicsDeviceManager Graphics => _graphics;
+
+        public ServiceProvider ServiceProvider => _serviceProvider;
 
         protected override void Draw(GameTime gameTime)
         {
@@ -62,8 +64,8 @@ namespace CDT.LAST.MonoGameClient
 
             InitCommandLoop();
 
-            System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo("ru-RU");
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("ru-RU");
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("ru-RU");
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("ru-RU");
 
             base.Initialize();
         }
@@ -120,8 +122,10 @@ namespace CDT.LAST.MonoGameClient
             Components.Add(soundtrackManagerComponent);
 #if !DEBUG
             _graphics.IsFullScreen = true;
-            _graphics.PreferredBackBufferWidth = 1280;
-            _graphics.PreferredBackBufferHeight = 720;
+            _graphics.PreferredBackBufferWidth
+ = 1280;
+            _graphics.PreferredBackBufferHeight
+ = 720;
             _graphics.ApplyChanges();
 #endif
 

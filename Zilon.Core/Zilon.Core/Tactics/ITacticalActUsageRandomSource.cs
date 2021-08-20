@@ -31,6 +31,8 @@ namespace Zilon.Core.Tactics
         /// <returns> Возвращает случайное значение эффективности использования. </returns>
         int RollEfficient(Roll roll);
 
+        int RollPushRule();
+
         /// <summary>
         /// Бросок проверки на попадание действием.
         /// </summary>
@@ -46,7 +48,5 @@ namespace Zilon.Core.Tactics
         /// Используется для проверки удара вторым оружием.
         /// </remarks>
         int RollUseSecondaryAct();
-
-        int RollPushRule();
     }
 }

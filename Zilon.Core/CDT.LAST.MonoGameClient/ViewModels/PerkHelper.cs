@@ -8,29 +8,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels
 {
     public static class PerkHelper
     {
-        public static string GetPropTitle(IPerk perk)
-        {
-            var text = perk.Scheme.Name?.En;
-
-            var currentLanguage = Thread.CurrentThread.CurrentUICulture;
-            var langName = currentLanguage.TwoLetterISOLanguageName;
-            if (string.Equals(langName, "en", StringComparison.InvariantCultureIgnoreCase))
-            {
-                text = perk.Scheme.Name?.En;
-            }
-            else if (string.Equals(langName, "ru", StringComparison.InvariantCultureIgnoreCase))
-            {
-                text = perk.Scheme.Name?.Ru;
-            }
-            else
-            {
-                Debug.Fail(
-                    $"Unknown language {langName} is selected. All available language must be supported in the client.");
-            }
-
-            return text ?? "<Undef>";
-        }
-
         public static string? GetPerkDescription(IPerk perk)
         {
             var text = perk.Scheme.Name?.En;
@@ -63,10 +40,31 @@ namespace CDT.LAST.MonoGameClient.ViewModels
             {
                 return $"{title}\n{new string('-', 8)}\n{description}";
             }
+
+            return title;
+        }
+
+        public static string GetPropTitle(IPerk perk)
+        {
+            var text = perk.Scheme.Name?.En;
+
+            var currentLanguage = Thread.CurrentThread.CurrentUICulture;
+            var langName = currentLanguage.TwoLetterISOLanguageName;
+            if (string.Equals(langName, "en", StringComparison.InvariantCultureIgnoreCase))
+            {
+                text = perk.Scheme.Name?.En;
+            }
+            else if (string.Equals(langName, "ru", StringComparison.InvariantCultureIgnoreCase))
+            {
+                text = perk.Scheme.Name?.Ru;
+            }
             else
             {
-                return title;
+                Debug.Fail(
+                    $"Unknown language {langName} is selected. All available language must be supported in the client.");
             }
+
+            return text ?? "<Undef>";
         }
     }
 }

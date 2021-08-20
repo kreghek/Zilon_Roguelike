@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
+using Zilon.Core.Components;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -48,7 +49,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         protected override void DrawContent(SpriteBatch spriteBatch)
         {
             // Separator
-            spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), new Rectangle(ContentRect.Center.X, ContentRect.Top, 2, ContentRect.Height), Color.White);
+            spriteBatch.Draw(_uiContentStorage.GetButtonTexture(),
+                new Rectangle(ContentRect.Center.X, ContentRect.Top, 2, ContentRect.Height), Color.White);
 
             DrawEquipments(spriteBatch);
             DrawInventory(spriteBatch);
@@ -76,7 +78,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             var halfWidth = ContentRect.Width / 2;
             InitEquipment(person, new Rectangle(ContentRect.Left, ContentRect.Top, halfWidth - 2, ContentRect.Height));
-            InitInventory(person, new Rectangle(ContentRect.Center.X + 2 * 2, ContentRect.Top, halfWidth - 2 * 2, ContentRect.Height));
+            InitInventory(person,
+                new Rectangle(ContentRect.Center.X + 2 * 2, ContentRect.Top, halfWidth - 2 * 2, ContentRect.Height));
         }
 
         protected override void UpdateContent()
@@ -175,11 +178,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 if (item.Equipment is not null)
                 {
                     var propTitle = PropHelper.GetPropTitle(item.Equipment);
-                    spriteBatch.DrawString(_uiContentStorage.GetButtonFont(), propTitle, new Vector2(item.Control.Rect.Right + 2, item.Control.Rect.Top), Color.Wheat);
+                    spriteBatch.DrawString(_uiContentStorage.GetButtonFont(), propTitle,
+                        new Vector2(item.Control.Rect.Right + 2, item.Control.Rect.Top), Color.Wheat);
                 }
                 else
                 {
-                    spriteBatch.DrawString(_uiContentStorage.GetButtonFont(), UiResources.NoneEquipmentTitle, new Vector2(item.Control.Rect.Right + 2, item.Control.Rect.Top), Color.Gray);
+                    spriteBatch.DrawString(_uiContentStorage.GetButtonFont(), UiResources.NoneEquipmentTitle,
+                        new Vector2(item.Control.Rect.Right + 2, item.Control.Rect.Top), Color.Gray);
                 }
             }
         }
@@ -202,7 +207,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 {
                     propTitle += $" x{resource.Count}";
                 }
-                spriteBatch.DrawString(_uiContentStorage.GetButtonFont(), propTitle, new Vector2(item.Control.Rect.Right + 2, item.Control.Rect.Top), Color.Wheat);
+
+                spriteBatch.DrawString(_uiContentStorage.GetButtonFont(), propTitle,
+                    new Vector2(item.Control.Rect.Right + 2, item.Control.Rect.Top), Color.Wheat);
             }
         }
 
@@ -263,15 +270,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 {
                     switch (slot.Types)
                     {
-                        case Zilon.Core.Components.EquipmentSlotTypes.Head:
+                        case EquipmentSlotTypes.Head:
                             sid = "HeadSlot";
                             break;
 
-                        case Zilon.Core.Components.EquipmentSlotTypes.Body:
+                        case EquipmentSlotTypes.Body:
                             sid = "BodySlot";
                             break;
 
-                        case Zilon.Core.Components.EquipmentSlotTypes.Hand:
+                        case EquipmentSlotTypes.Hand:
                             if (slot.IsMain)
                             {
                                 sid = "RightHandSlot";
@@ -280,9 +287,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                             {
                                 sid = "LeftHandSlot";
                             }
+
                             break;
 
-                        case Zilon.Core.Components.EquipmentSlotTypes.Aux:
+                        case EquipmentSlotTypes.Aux:
                             sid = "AuxSlot";
                             break;
                     }

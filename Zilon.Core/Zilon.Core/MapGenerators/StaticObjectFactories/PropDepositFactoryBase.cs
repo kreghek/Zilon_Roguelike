@@ -11,8 +11,8 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
     public abstract class PropDepositFactoryBase : IStaticObjectFactory
     {
         private readonly IDropResolver _dropResolver;
-        private readonly bool _isSightBlocks;
         private readonly string _dropTableSchemeSid;
+        private readonly bool _isSightBlocks;
         private readonly ISchemeService _schemeService;
         private readonly string[] _toolTags;
 

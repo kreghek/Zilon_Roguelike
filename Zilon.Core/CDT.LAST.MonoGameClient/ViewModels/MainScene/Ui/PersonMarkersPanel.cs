@@ -96,18 +96,19 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
                 if (testedCombatAct is not null)
                 {
-
                     var selectedCombatActRange = testedCombatAct.Stats.Range;
                     var map = _sectorViewModelContext.Sector.Map;
                     var activeActorNode = _sectorUiState.ActiveActor.Actor.Node;
                     var monsterNode = item.Actor.Node;
                     if (selectedCombatActRange.Contains(map.DistanceBetween(activeActorNode, monsterNode)))
                     {
-                        spriteBatch.Draw(_uiContentStorage.GetPersonMarkerTextureSheet(), rect, new Rectangle(0, 0, 16, 32), Color.White);
+                        spriteBatch.Draw(_uiContentStorage.GetPersonMarkerTextureSheet(), rect,
+                            new Rectangle(0, 0, 16, 32), Color.White);
                     }
                     else
                     {
-                        spriteBatch.Draw(_uiContentStorage.GetPersonMarkerTextureSheet(), rect, new Rectangle(16, 0, 16, 32), Color.White);
+                        spriteBatch.Draw(_uiContentStorage.GetPersonMarkerTextureSheet(), rect,
+                            new Rectangle(16, 0, 16, 32), Color.White);
                     }
 
                     _drawnItemList.Add(new Marker(rect, item));
@@ -160,6 +161,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             MouseIsOver = _drawnItemList.Any(x => x.ActorViewModel.IsGraphicsOutlined);
         }
 
+        private static ICombatAct GetDefaultCombatAct(ISectorUiState uiState)
+        {
+            var availableCombatActs =
+                uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>().GetCurrentCombatActs();
+            var punchAct = availableCombatActs.Single(x => x.Scheme.Sid == "punch");
+
+            return punchAct;
+        }
+
         private void HandleMarkerClick(MouseState mouse, Marker item)
         {
             if (!_sectorUiState.CanPlayerGivesCommand)
@@ -187,15 +197,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private static void SelectPunchAsDefaultCombatAct(ISectorUiState uiState)
         {
             uiState.TacticalAct = GetDefaultCombatAct(uiState);
-        }
-
-        private static ICombatAct GetDefaultCombatAct(ISectorUiState uiState)
-        {
-            var availableCombatActs =
-                uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>().GetCurrentCombatActs();
-            var punchAct = availableCombatActs.Single(x => x.Scheme.Sid == "punch");
-
-            return punchAct;
         }
 
         private record Marker(Rectangle Rect, ActorViewModel ActorViewModel);

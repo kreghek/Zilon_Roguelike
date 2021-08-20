@@ -27,12 +27,12 @@ namespace Zilon.Core.Persons
         /// <summary>
         /// Temporary property to show template name.
         /// </summary>
-        public ILocalizedString? PersonEquipmentTemplate { get; set; }
+        public ILocalizedString? PersonEquipmentDescriptionTemplate { get; set; }
 
         /// <summary>
         /// Temporary property to show template name.
         /// </summary>
-        public ILocalizedString? PersonEquipmentDescriptionTemplate { get; set; }
+        public ILocalizedString? PersonEquipmentTemplate { get; set; }
 
         public override PhysicalSizePattern PhysicalSize => PhysicalSizePattern.Size1;
 

@@ -18,6 +18,8 @@
         /// </summary>
         int? Cooldown { get; }
 
+        int? EnergyCost { get; }
+
         /// <summary>
         /// Количество ресурсов, необходимых для использования действия.
         /// </summary>
@@ -27,7 +29,5 @@
         /// Тип ресурсов, необходимых для выполнения действия.
         /// </summary>
         string? PropResourceType { get; }
-
-        int? EnergyCost { get; }
     }
 }

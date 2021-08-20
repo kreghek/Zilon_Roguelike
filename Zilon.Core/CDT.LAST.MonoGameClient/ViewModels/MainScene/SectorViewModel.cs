@@ -25,14 +25,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly Camera _camera;
         private readonly GameObjectsViewModel _gameObjectsViewModel;
         private readonly IActorInteractionBus _intarectionBus;
+        private readonly IPlayerEventLogService _logService;
 
         private readonly MapViewModel _mapViewModel;
         private readonly IPlayer _player;
         private readonly SectorInteractor _sectorInteractor;
         private readonly SpriteBatch _spriteBatch;
         private readonly ISectorUiState _uiState;
-        private IScoreManager _scoreManager;
-        private readonly IPlayerEventLogService _logService;
+        private readonly IScoreManager _scoreManager;
 
         public SectorViewModel(Game game, Camera camera, SpriteBatch spriteBatch)
         {

@@ -130,7 +130,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         break;
 
                     case "skeleton-equipment":
-                        graphics = new MonoGraphics("skeleton-equipment", gameObjectParams.PersonVisualizationContentStorage);
+                        graphics = new MonoGraphics("skeleton-equipment",
+                            gameObjectParams.PersonVisualizationContentStorage);
                         break;
 
                     case "gallbladder":

@@ -48,7 +48,6 @@ namespace Zilon.Bot.Players.Triggers
 
         public void Update()
         {
-
         }
 
         public void Reset()

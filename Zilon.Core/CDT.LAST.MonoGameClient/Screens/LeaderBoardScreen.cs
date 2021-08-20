@@ -3,9 +3,11 @@ namespace CDT.LAST.MonoGameClient.Screens
     using System;
     using System.Collections.Generic;
 
-    using CDT.LAST.MonoGameClient.Database;
-    using CDT.LAST.MonoGameClient.Engine;
-    using CDT.LAST.MonoGameClient.Resources;
+    using Database;
+
+    using Engine;
+
+    using Resources;
 
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Xna.Framework;
@@ -31,20 +33,25 @@ namespace CDT.LAST.MonoGameClient.Screens
         private const int SCORE_TABLE_HEADERS_ROW_OFFSET_Y = 2;
 
         private const int TABLE_RESULTS_OFFSET_Y = 3;
-        private readonly IUiContentStorage uiContentStorage;
+
+        private const int RANK_COLUMN_WIDTH = 30;
+        private const int NAME_COLUMN_WIDTH = 150;
+        private const int SCORES_COLUMN_WIDTH = 80;
+        private const int TABLE_WIDTH = RANK_COLUMN_WIDTH + NAME_COLUMN_WIDTH + SCORES_COLUMN_WIDTH;
         private readonly DbContext _dbContext;
 
         private readonly SpriteFont _font;
 
         private readonly TextButton _goToMainMenuButton;
 
+        private readonly List<PlayerScore> _leaderBoardRecords;
+
         private readonly SpriteBatch _spriteBatch;
 
         private readonly Color _tableHeaderColor = Color.White;
 
         private readonly Color _tableResultsColor = Color.White;
-
-        private readonly List<PlayerScore> _leaderBoardRecords;
+        private readonly IUiContentStorage uiContentStorage;
 
         /// <inheritdoc />
         public LeaderBoardScreen(Game game, SpriteBatch spriteBatch)
@@ -55,7 +62,6 @@ namespace CDT.LAST.MonoGameClient.Screens
             var serviceScope = ((LivGame)Game).ServiceProvider;
 
             uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
-
 
             _dbContext = serviceScope.GetRequiredService<DbContext>();
 
@@ -88,7 +94,8 @@ namespace CDT.LAST.MonoGameClient.Screens
             _spriteBatch.DrawString(
                 scoresFont,
                 UiResources.LeaderboardMenuTitle,
-                new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - titleSize.X / 2, LEADERBOARD_MENU_TITLE_POSITION_Y),
+                new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - titleSize.X / 2,
+                    LEADERBOARD_MENU_TITLE_POSITION_Y),
                 Color.White);
 
             _goToMainMenuButton.Rect = new Rectangle(Game.GraphicsDevice.Viewport.Bounds.Center.X - BUTTON_WIDTH / 2,
@@ -114,11 +121,6 @@ namespace CDT.LAST.MonoGameClient.Screens
             DrawScoreTableResults(positionY + 20 + 30);
         }
 
-        const int RANK_COLUMN_WIDTH = 30;
-        const int NAME_COLUMN_WIDTH = 150;
-        const int SCORES_COLUMN_WIDTH = 80;
-        const int TABLE_WIDTH = RANK_COLUMN_WIDTH + NAME_COLUMN_WIDTH + SCORES_COLUMN_WIDTH;
-
         private void DrawScoreTableHeaders(int positionY)
         {
             var offsetY = positionY;
@@ -130,13 +132,16 @@ namespace CDT.LAST.MonoGameClient.Screens
             _spriteBatch.DrawString(
                 _font,
                 UiResources.ScoreTableNickColumnTitle,
-                new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - (TABLE_WIDTH) / 2 + RANK_COLUMN_WIDTH, offsetY),
+                new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - (TABLE_WIDTH) / 2 + RANK_COLUMN_WIDTH,
+                    offsetY),
                 _tableHeaderColor);
 
             _spriteBatch.DrawString(
                 _font,
                 UiResources.ScoreTableScoreColumnTitle,
-                new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - (TABLE_WIDTH) / 2 + RANK_COLUMN_WIDTH + NAME_COLUMN_WIDTH, offsetY),
+                new Vector2(
+                    Game.GraphicsDevice.Viewport.Bounds.Center.X - (TABLE_WIDTH) / 2 + RANK_COLUMN_WIDTH +
+                    NAME_COLUMN_WIDTH, offsetY),
                 _tableHeaderColor);
         }
 

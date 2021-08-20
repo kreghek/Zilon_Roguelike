@@ -12,6 +12,11 @@
         int BaseScore { get; }
 
         /// <summary>
+        /// The action the monster performs when attacking.
+        /// </summary>
+        ITacticalActStatsSubScheme?[]? CombatActs { get; }
+
+        /// <summary>
         /// The characteristics of the monster's defense.
         /// </summary>
         IMonsterDefenseSubScheme? Defense { get; }
@@ -34,11 +39,6 @@
         /// With a coefficient of 2, the monster manages to move twice in one iteration of the sector.
         /// </remarks>
         float? MoveSpeedFactor { get; }
-
-        /// <summary>
-        /// The action the monster performs when attacking.
-        /// </summary>
-        ITacticalActStatsSubScheme?[]? CombatActs { get; }
 
         /// <summary>
         /// Tags for classifying monsters.

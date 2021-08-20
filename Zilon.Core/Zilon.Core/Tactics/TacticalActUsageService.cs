@@ -224,7 +224,8 @@ namespace Zilon.Core.Tactics
             // Monster's act has no energy cost.
             if (act.Constrains?.EnergyCost != null)
             {
-                actor.Person.GetModule<ISurvivalModule>().DecreaseStat(SurvivalStatType.Energy, act.Constrains.EnergyCost.Value);
+                actor.Person.GetModule<ISurvivalModule>()
+                    .DecreaseStat(SurvivalStatType.Energy, act.Constrains.EnergyCost.Value);
             }
         }
 

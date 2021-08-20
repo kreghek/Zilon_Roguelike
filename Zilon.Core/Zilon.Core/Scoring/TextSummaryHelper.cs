@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 
 using Zilon.Core.Tactics;
@@ -23,34 +24,34 @@ namespace Zilon.Core.Scoring
 
             if (botName is null)
             {
-                if (string.Equals(lang, "en", System.StringComparison.InvariantCultureIgnoreCase))
+                if (string.Equals(lang, "en", StringComparison.InvariantCultureIgnoreCase))
                 {
                     summaryStringBuilder.AppendLine("YOU DIED");
                 }
-                else if (string.Equals(lang, "ru", System.StringComparison.InvariantCultureIgnoreCase))
+                else if (string.Equals(lang, "ru", StringComparison.InvariantCultureIgnoreCase))
                 {
                     summaryStringBuilder.AppendLine("ВЫ МЕРТВЫ");
                 }
             }
             else
             {
-                if (string.Equals(lang, "en", System.StringComparison.InvariantCultureIgnoreCase))
+                if (string.Equals(lang, "en", StringComparison.InvariantCultureIgnoreCase))
                 {
                     summaryStringBuilder.AppendLine($"YOU (BOT {botName}) DIED");
                 }
-                else if (string.Equals(lang, "ru", System.StringComparison.InvariantCultureIgnoreCase))
+                else if (string.Equals(lang, "ru", StringComparison.InvariantCultureIgnoreCase))
                 {
                     summaryStringBuilder.AppendLine($"ВЫ (БОТ {botName}) МЕРТВЫ");
                 }
             }
 
-            if (string.Equals(lang, "en", System.StringComparison.InvariantCultureIgnoreCase))
+            if (string.Equals(lang, "en", StringComparison.InvariantCultureIgnoreCase))
             {
                 summaryStringBuilder.AppendLine($"SCORES: {scores.BaseScores}");
 
                 summaryStringBuilder.AppendLine("=== You survived ===");
             }
-            else if (string.Equals(lang, "ru", System.StringComparison.InvariantCultureIgnoreCase))
+            else if (string.Equals(lang, "ru", StringComparison.InvariantCultureIgnoreCase))
             {
                 summaryStringBuilder.AppendLine($"ОЧКИ: {scores.BaseScores}");
 
@@ -59,11 +60,11 @@ namespace Zilon.Core.Scoring
 
             var lifetime = ScoreCalculator.ConvertTurnsToDetailed(scores.Turns);
 
-            if (string.Equals(lang, "en", System.StringComparison.InvariantCultureIgnoreCase))
+            if (string.Equals(lang, "en", StringComparison.InvariantCultureIgnoreCase))
             {
                 summaryStringBuilder.AppendLine($"{lifetime.Days} days {lifetime.Hours} hours");
             }
-            else if (string.Equals(lang, "ru", System.StringComparison.InvariantCultureIgnoreCase))
+            else if (string.Equals(lang, "ru", StringComparison.InvariantCultureIgnoreCase))
             {
                 summaryStringBuilder.AppendLine($"{lifetime.Days} дней {lifetime.Hours} часов");
             }
@@ -83,7 +84,7 @@ namespace Zilon.Core.Scoring
 
             if (scores.Diseases.Any())
             {
-                if (string.Equals(lang, "en", System.StringComparison.InvariantCultureIgnoreCase))
+                if (string.Equals(lang, "en", StringComparison.InvariantCultureIgnoreCase))
                 {
                     summaryStringBuilder.AppendLine("=== Infections ===");
 
@@ -94,7 +95,7 @@ namespace Zilon.Core.Scoring
                         summaryStringBuilder.AppendLine(name);
                     }
                 }
-                else if (string.Equals(lang, "ru", System.StringComparison.InvariantCultureIgnoreCase))
+                else if (string.Equals(lang, "ru", StringComparison.InvariantCultureIgnoreCase))
                 {
                     summaryStringBuilder.AppendLine("=== Инфекции ===");
 
@@ -107,7 +108,7 @@ namespace Zilon.Core.Scoring
                 }
             }
 
-            if (string.Equals(lang, "en", System.StringComparison.InvariantCultureIgnoreCase))
+            if (string.Equals(lang, "en", StringComparison.InvariantCultureIgnoreCase))
             {
                 summaryStringBuilder.AppendLine("=== You killed ===");
                 foreach (var frag in scores.Frags)
@@ -116,7 +117,7 @@ namespace Zilon.Core.Scoring
                         $"{frag.Key.Name?.En ?? frag.Key.ToString()}: {frag.Value}");
                 }
             }
-            else if (string.Equals(lang, "ru", System.StringComparison.InvariantCultureIgnoreCase))
+            else if (string.Equals(lang, "ru", StringComparison.InvariantCultureIgnoreCase))
             {
                 summaryStringBuilder.AppendLine("=== Вы убили ===");
                 foreach (var frag in scores.Frags)

@@ -8,7 +8,8 @@ namespace Zilon.Core.Tactics.ActorInteractionEvents
     [ExcludeFromCodeCoverage]
     public class PureMissActorInteractionEvent : ActorInteractionEventBase
     {
-        public PureMissActorInteractionEvent(IActor actor, IActor targetActor, ActDescription usedActDescription) : base(actor)
+        public PureMissActorInteractionEvent(IActor actor, IActor targetActor, ActDescription usedActDescription) :
+            base(actor)
         {
             TargetActor = targetActor ?? throw new ArgumentNullException(nameof(targetActor));
             UsedActDescription = usedActDescription;

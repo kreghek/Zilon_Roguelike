@@ -1,5 +1,4 @@
-﻿
-using Microsoft.Xna.Framework.Audio;
+﻿using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 
 namespace CDT.LAST.MonoGameClient.Engine

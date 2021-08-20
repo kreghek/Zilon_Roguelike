@@ -24,9 +24,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         private const float MAP_UPDATE_DELAY_SECONDS = 0.05f;
         private readonly Game _game;
+        private readonly Texture2D _hexMarkerTextures;
 
         private readonly Texture2D _hexSprite;
-        private readonly Texture2D _hexMarkerTextures;
         private readonly ConcurrentDictionary<OffsetCoords, SpriteContainer> _hexSprites;
         private readonly IPlayer _player;
         private readonly ISector _sector;
@@ -154,13 +154,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         Position = new Vector2(
                             (float)(worldCoords[0] * hexSize * Math.Sqrt(3)),
                             worldCoords[1] * hexSize * 2 / 2
-                        ),
+                        )
                     };
                     hexSpriteContainer.AddChild(hexSprite);
 
                     if (_sector.Map.Transitions.TryGetValue(fowNode.Node, out var transition))
                     {
-                        if (transition.SectorNode.Biome.LocationScheme.Sid == "dungeon" || transition.SectorNode.Biome.LocationScheme.Sid == "elder-temple")
+                        if (transition.SectorNode.Biome.LocationScheme.Sid == "dungeon" ||
+                            transition.SectorNode.Biome.LocationScheme.Sid == "elder-temple")
                         {
                             var transitionMarkerSprite = new Sprite(_hexMarkerTextures)
                             {
@@ -178,7 +179,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         }
                     }
 
-                    _hexSprites.AddOrUpdate(node.OffsetCoords, hexSpriteContainer, (offsetCoords, sprite) => { return sprite; });
+                    _hexSprites.AddOrUpdate(node.OffsetCoords, hexSpriteContainer,
+                        (offsetCoords, sprite) => { return sprite; });
                     currentHexSprite = hexSpriteContainer;
                 }
 

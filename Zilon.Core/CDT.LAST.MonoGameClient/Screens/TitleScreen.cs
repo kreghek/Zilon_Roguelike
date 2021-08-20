@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading;
 
 using CDT.LAST.MonoGameClient.Engine;
@@ -16,11 +17,11 @@ namespace CDT.LAST.MonoGameClient.Screens
     {
         private const string TITLETEXT = "LAST IMPERIAL VAGABOND";
         private readonly GlobeSelectionScreen _globeGenerationScene;
+        private readonly TextButton _leaderBoardButton;
         private readonly SpriteBatch _spriteBatch;
         private readonly TextButton _startButton;
         private readonly TextButton _switchLanguageButton;
         private readonly TextButton _switchResolutionButton;
-        private readonly TextButton _leaderBoardButton;
 
         public TitleScreen(Game game, SpriteBatch spriteBatch) : base(game)
         {
@@ -55,37 +56,6 @@ namespace CDT.LAST.MonoGameClient.Screens
             _leaderBoardButton.OnClick += LeaderBoardButton_OnClick;
         }
 
-        private void LeaderBoardButton_OnClick(object? sender, EventArgs e)
-        {
-            TargetScene = new LeaderBoardScreen(Game, _spriteBatch);
-        }
-
-        private void SwitchResolutionButton_OnClick(object? sender, EventArgs e)
-        {
-            var graphicsManager = ((LivGame)Game).Graphics;
-            if (graphicsManager.PreferredBackBufferWidth == 800)
-            {
-                graphicsManager.IsFullScreen = true;
-                graphicsManager.PreferredBackBufferWidth = 1920;
-                graphicsManager.PreferredBackBufferHeight = 1080;
-                graphicsManager.ApplyChanges();
-            }
-            else if (graphicsManager.PreferredBackBufferWidth == 1920)
-            {
-                graphicsManager.IsFullScreen = true;
-                graphicsManager.PreferredBackBufferWidth = 1280;
-                graphicsManager.PreferredBackBufferHeight = 720;
-                graphicsManager.ApplyChanges();
-            }
-            else if (graphicsManager.PreferredBackBufferWidth == 1280)
-            {
-                graphicsManager.IsFullScreen = false;
-                graphicsManager.PreferredBackBufferWidth = 800;
-                graphicsManager.PreferredBackBufferHeight = 480;
-                graphicsManager.ApplyChanges();
-            }
-        }
-
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
@@ -100,30 +70,39 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             var logoSize = titleFont.MeasureString(TITLETEXT);
 
-            _spriteBatch.DrawString(titleFont, TITLETEXT, new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - logoSize.X / 2, 100), Color.White);
-            _spriteBatch.DrawString(font, "(demo)", new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - logoSize.X / 2 + logoSize.X, 100), Color.Wheat);
+            _spriteBatch.DrawString(titleFont, TITLETEXT,
+                new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - logoSize.X / 2, 100), Color.White);
+            _spriteBatch.DrawString(font, "(demo)",
+                new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - logoSize.X / 2 + logoSize.X, 100),
+                Color.Wheat);
 
             _startButton.Title = UiResources.StartGameButtonTitle;
-            _startButton.Rect = new Rectangle(Game.GraphicsDevice.Viewport.Bounds.Center.X - BUTTON_WIDTH / 2, 150, BUTTON_WIDTH, BUTTON_HEIGHT);
+            _startButton.Rect = new Rectangle(Game.GraphicsDevice.Viewport.Bounds.Center.X - BUTTON_WIDTH / 2, 150,
+                BUTTON_WIDTH, BUTTON_HEIGHT);
             _startButton.Draw(_spriteBatch);
 
             _switchLanguageButton.Title = UiResources.SwitchLanguagebuttonTitle;
-            _switchLanguageButton.Rect = new Rectangle(Game.GraphicsDevice.Viewport.Bounds.Center.X - BUTTON_WIDTH / 2, 200, BUTTON_WIDTH, BUTTON_HEIGHT);
+            _switchLanguageButton.Rect = new Rectangle(Game.GraphicsDevice.Viewport.Bounds.Center.X - BUTTON_WIDTH / 2,
+                200, BUTTON_WIDTH, BUTTON_HEIGHT);
             _switchLanguageButton.Draw(_spriteBatch);
 
             _spriteBatch.DrawString(font, Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName,
                 new Vector2(_switchLanguageButton.Rect.Right + 5, _switchLanguageButton.Rect.Top), Color.White);
 
             _switchResolutionButton.Title = UiResources.SwitchResolutionButtonTitle;
-            _switchResolutionButton.Rect = new Rectangle(Game.GraphicsDevice.Viewport.Bounds.Center.X - BUTTON_WIDTH / 2, 250, BUTTON_WIDTH, BUTTON_HEIGHT);
+            _switchResolutionButton.Rect =
+                new Rectangle(Game.GraphicsDevice.Viewport.Bounds.Center.X - BUTTON_WIDTH / 2, 250, BUTTON_WIDTH,
+                    BUTTON_HEIGHT);
             _switchResolutionButton.Draw(_spriteBatch);
 
             _leaderBoardButton.Title = UiResources.LeaderBoardButtonTitle;
-            _leaderBoardButton.Rect = new Rectangle(Game.GraphicsDevice.Viewport.Bounds.Center.X - BUTTON_WIDTH / 2, 300, BUTTON_WIDTH, BUTTON_HEIGHT);
+            _leaderBoardButton.Rect = new Rectangle(Game.GraphicsDevice.Viewport.Bounds.Center.X - BUTTON_WIDTH / 2,
+                300, BUTTON_WIDTH, BUTTON_HEIGHT);
             _leaderBoardButton.Draw(_spriteBatch);
 
             var graphicsManager = ((LivGame)Game).Graphics;
-            _spriteBatch.DrawString(font, $"{graphicsManager.PreferredBackBufferWidth} x {graphicsManager.PreferredBackBufferHeight}",
+            _spriteBatch.DrawString(font,
+                $"{graphicsManager.PreferredBackBufferWidth} x {graphicsManager.PreferredBackBufferHeight}",
                 new Vector2(_switchResolutionButton.Rect.Right + 5, _switchResolutionButton.Rect.Top), Color.White);
 
             _spriteBatch.End();
@@ -150,6 +129,11 @@ namespace CDT.LAST.MonoGameClient.Screens
             _leaderBoardButton.Update();
         }
 
+        private void LeaderBoardButton_OnClick(object? sender, EventArgs e)
+        {
+            TargetScene = new LeaderBoardScreen(Game, _spriteBatch);
+        }
+
         private void StartButtonClickHandler(object? sender, EventArgs e)
         {
             TargetScene = _globeGenerationScene;
@@ -161,15 +145,41 @@ namespace CDT.LAST.MonoGameClient.Screens
             if (string.Equals(currentLanguage.TwoLetterISOLanguageName, "en",
                 StringComparison.InvariantCultureIgnoreCase))
             {
-                var newCulture = System.Globalization.CultureInfo.GetCultureInfo("ru-RU");
+                var newCulture = CultureInfo.GetCultureInfo("ru-RU");
                 Thread.CurrentThread.CurrentCulture = newCulture;
                 Thread.CurrentThread.CurrentUICulture = newCulture;
             }
             else
             {
-                var newCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+                var newCulture = CultureInfo.GetCultureInfo("en-US");
                 Thread.CurrentThread.CurrentCulture = newCulture;
                 Thread.CurrentThread.CurrentUICulture = newCulture;
+            }
+        }
+
+        private void SwitchResolutionButton_OnClick(object? sender, EventArgs e)
+        {
+            var graphicsManager = ((LivGame)Game).Graphics;
+            if (graphicsManager.PreferredBackBufferWidth == 800)
+            {
+                graphicsManager.IsFullScreen = true;
+                graphicsManager.PreferredBackBufferWidth = 1920;
+                graphicsManager.PreferredBackBufferHeight = 1080;
+                graphicsManager.ApplyChanges();
+            }
+            else if (graphicsManager.PreferredBackBufferWidth == 1920)
+            {
+                graphicsManager.IsFullScreen = true;
+                graphicsManager.PreferredBackBufferWidth = 1280;
+                graphicsManager.PreferredBackBufferHeight = 720;
+                graphicsManager.ApplyChanges();
+            }
+            else if (graphicsManager.PreferredBackBufferWidth == 1280)
+            {
+                graphicsManager.IsFullScreen = false;
+                graphicsManager.PreferredBackBufferWidth = 800;
+                graphicsManager.PreferredBackBufferHeight = 480;
+                graphicsManager.ApplyChanges();
             }
         }
     }

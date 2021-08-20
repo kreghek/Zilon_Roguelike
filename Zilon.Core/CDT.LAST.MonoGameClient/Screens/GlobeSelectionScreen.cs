@@ -19,6 +19,9 @@ namespace CDT.LAST.MonoGameClient.Screens
     internal class GlobeSelectionScreen : GameSceneBase
     {
         private const string START_LOCATION_SID = "intro";
+
+        private const int BUTTON_WIDTH = 100;
+        private const int BUTTON_HEIGHT = 20;
         private readonly ICommandLoopUpdater _commandLoop;
         private readonly TextButton _generateButton;
         private readonly IGlobeInitializer _globeInitializer;
@@ -53,9 +56,6 @@ namespace CDT.LAST.MonoGameClient.Screens
             _generateButton.OnClick += GenerateButtonClickHandlerAsync;
         }
 
-        private const int BUTTON_WIDTH = 100;
-        private const int BUTTON_HEIGHT = 20;
-
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
@@ -67,9 +67,11 @@ namespace CDT.LAST.MonoGameClient.Screens
             const string TITLE_TEXT = "Генерация мира";
             var titleTextSize = font.MeasureString(TITLE_TEXT);
 
-            _spriteBatch.DrawString(font, TITLE_TEXT, new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - titleTextSize.X / 2, 100), Color.White);
+            _spriteBatch.DrawString(font, TITLE_TEXT,
+                new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - titleTextSize.X / 2, 100), Color.White);
 
-            _generateButton.Rect = new Rectangle(Game.GraphicsDevice.Viewport.Bounds.Center.X - BUTTON_WIDTH / 2, 150, BUTTON_WIDTH, BUTTON_HEIGHT);
+            _generateButton.Rect = new Rectangle(Game.GraphicsDevice.Viewport.Bounds.Center.X - BUTTON_WIDTH / 2, 150,
+                BUTTON_WIDTH, BUTTON_HEIGHT);
             _generateButton.Draw(_spriteBatch);
 
             _spriteBatch.End();

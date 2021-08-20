@@ -114,8 +114,8 @@ namespace Zilon.Bot.Players.Logics
 
         private record AttackParams
         {
-            public bool IsAvailable { get; init; }
             public ICombatAct CombatAct { get; init; }
+            public bool IsAvailable { get; init; }
         }
     }
 }

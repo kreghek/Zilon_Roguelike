@@ -8,7 +8,8 @@ namespace Zilon.Core.Tactics.ActorInteractionEvents
     [ExcludeFromCodeCoverage]
     public class DodgeActorInteractionEvent : ActorInteractionEventBase
     {
-        public DodgeActorInteractionEvent(IActor actor, IActor targetActor, PersonDefenceItem personDefenceItem, ActDescription usedActDescription) :
+        public DodgeActorInteractionEvent(IActor actor, IActor targetActor, PersonDefenceItem personDefenceItem,
+            ActDescription usedActDescription) :
             base(actor)
         {
             TargetActor = targetActor ?? throw new ArgumentNullException(nameof(targetActor));
@@ -18,9 +19,9 @@ namespace Zilon.Core.Tactics.ActorInteractionEvents
 
         public int FactToHitRoll { get; internal set; }
         public PersonDefenceItem PersonDefenceItem { get; }
-        public ActDescription UsedActDescription { get; }
         public int SuccessToHitRoll { get; internal set; }
 
         public IActor TargetActor { get; }
+        public ActDescription UsedActDescription { get; }
     }
 }

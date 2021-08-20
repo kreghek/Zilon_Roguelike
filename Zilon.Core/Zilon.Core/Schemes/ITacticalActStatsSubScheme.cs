@@ -7,6 +7,8 @@ namespace Zilon.Core.Schemes
 {
     public interface ITacticalActStatsSubScheme : ISubScheme
     {
+        float? Duration { get; }
+
         /// <summary>
         /// Эффект, который оказывает действие.
         /// </summary>
@@ -41,6 +43,8 @@ namespace Zilon.Core.Schemes
         /// </summary>
         Range<int>? Range { get; }
 
+        CombatActRule[] Rules { get; }
+
         /// <summary>
         /// Tags of the act.
         /// Now used to determine video and audio effect.
@@ -51,10 +55,6 @@ namespace Zilon.Core.Schemes
         /// Доступные цели действия.
         /// </summary>
         TacticalActTargets Targets { get; }
-
-        float? Duration { get; }
-
-        CombatActRule[] Rules { get; }
     }
 
     [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]

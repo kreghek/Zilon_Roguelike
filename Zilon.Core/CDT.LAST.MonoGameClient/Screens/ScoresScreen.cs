@@ -1,11 +1,17 @@
-﻿namespace CDT.LAST.MonoGameClient.Screens
+﻿using System.Threading;
+
+using Zilon.Core.Localization;
+
+namespace CDT.LAST.MonoGameClient.Screens
 {
     using System;
     using System.Text;
 
-    using CDT.LAST.MonoGameClient.Database;
-    using CDT.LAST.MonoGameClient.Engine;
-    using CDT.LAST.MonoGameClient.Resources;
+    using Database;
+
+    using Engine;
+
+    using Resources;
 
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Xna.Framework;
@@ -37,21 +43,21 @@
         private const string DEFAULT_PLAYER_NICK_NAME = "Безымянный бродяга";
 
         private readonly DbContext _dbContext;
+        private readonly IDeathReasonService _deathReasonService;
+        private readonly IPlayerEventLogService _eventLog;
 
         private readonly SpriteFont _font;
 
         private readonly Color _playerInfoColor = Color.Yellow;
 
         private readonly StringBuilder _playerNicknameSb = new();
-        private readonly IScoreManager _scoreManager;
         private readonly Scores _score;
+        private readonly IScoreManager _scoreManager;
         private readonly string _scoreSummary;
 
         private readonly SpriteBatch _spriteBatch;
 
         private readonly IUiContentStorage _uiContentStorage;
-        private readonly IDeathReasonService _deathReasonService;
-        private readonly IPlayerEventLogService _eventLog;
 
         private TextButton _leaderboardScreenButton;
 
@@ -66,7 +72,7 @@
 
             _scoreManager = serviceProvider.GetRequiredService<IScoreManager>();
 
-            var currentLanguage = System.Threading.Thread.CurrentThread.CurrentUICulture;
+            var currentLanguage = Thread.CurrentThread.CurrentUICulture;
             var langName = currentLanguage.TwoLetterISOLanguageName;
 
             _score = _scoreManager.Scores;
@@ -123,8 +129,9 @@
         private bool CheckEmptyNickName()
         {
             if (_playerNicknameSb.Length > 0)
+            {
                 return false;
-
+            }
 
             return true;
         }
@@ -139,7 +146,8 @@
         {
             var inputSize = new Vector2(256, 32);
 
-            var buttonPosition = new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - inputSize.X / 2 + 128 / 2, inputSize.Y + 5 + 10);
+            var buttonPosition = new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - inputSize.X / 2 + 128 / 2,
+                inputSize.Y + 5 + 10);
             _leaderboardScreenButton.Rect = new Rectangle(buttonPosition.ToPoint(), new Point(128, 20));
             _leaderboardScreenButton.Draw(_spriteBatch);
         }
@@ -147,7 +155,8 @@
         private void DrawNickInput()
         {
             var inputSize = new Vector2(256, 32);
-            var inputRect = new Rectangle((int)(Game.GraphicsDevice.Viewport.Width - inputSize.X) / 2, 10, (int)inputSize.X, (int)inputSize.Y);
+            var inputRect = new Rectangle((int)(Game.GraphicsDevice.Viewport.Width - inputSize.X) / 2, 10,
+                (int)inputSize.X, (int)inputSize.Y);
 
             _spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), inputRect, Color.Gray);
 
@@ -161,8 +170,10 @@
         private void DrawScoreSummary()
         {
             var baseScoreSize = _uiContentStorage.GetScoresFont().MeasureString(_score.BaseScores.ToString());
-            var scoresPosition = new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - baseScoreSize.X / 2, 10 + 20 + 48 + 5);
-            _spriteBatch.DrawString(_uiContentStorage.GetScoresFont(), _score.BaseScores.ToString(), scoresPosition, Color.White);
+            var scoresPosition = new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - baseScoreSize.X / 2,
+                10 + 20 + 48 + 5);
+            _spriteBatch.DrawString(_uiContentStorage.GetScoresFont(), _score.BaseScores.ToString(), scoresPosition,
+                Color.White);
 
             try
             {
@@ -170,12 +181,14 @@
                 if (lastEvent is not null)
                 {
                     //TODO Use current game culture
-                    var deathReasonText = _deathReasonService.GetDeathReasonSummary(lastEvent, Zilon.Core.Localization.Language.Ru);
+                    var deathReasonText = _deathReasonService.GetDeathReasonSummary(lastEvent, Language.Ru);
                     if (deathReasonText is not null)
                     {
                         var fullDeathReasonText = $"Причина смерти: {deathReasonText}";
                         var deathReasonSize = _font.MeasureString(fullDeathReasonText);
-                        var deathReasonPosition = new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - deathReasonSize.X / 2, scoresPosition.Y + baseScoreSize.Y + 5);
+                        var deathReasonPosition =
+                            new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - deathReasonSize.X / 2,
+                                scoresPosition.Y + baseScoreSize.Y + 5);
                         _spriteBatch.DrawString(_font, fullDeathReasonText, deathReasonPosition, Color.Wheat);
                     }
                 }
@@ -186,7 +199,8 @@
             }
 
             var summarySize = _uiContentStorage.GetScoresFont().MeasureString(_scoreSummary);
-            var summaryPosition = new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - summarySize.X / 2, 10 + 20 + 48 + 5 + baseScoreSize.Y + 5 + 20);
+            var summaryPosition = new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - summarySize.X / 2,
+                10 + 20 + 48 + 5 + baseScoreSize.Y + 5 + 20);
 
             _spriteBatch.DrawString(
                 _font,
@@ -234,10 +248,14 @@
             }
 
             if (CheckEmptyNickName())
+            {
                 return;
+            }
 
             if (e.Key == Keys.Back)
+            {
                 _playerNicknameSb.Remove(_playerNicknameSb.Length - 1, 1);
+            }
         }
 
         private static bool IsPrintedChar(char ch)
@@ -248,7 +266,9 @@
         private void SetDefaultNickNameOnEmptyNickName()
         {
             if (_playerNicknameSb.Length > 0)
+            {
                 return;
+            }
 
             PlayerNickname = DEFAULT_PLAYER_NICK_NAME;
         }

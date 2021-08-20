@@ -40,18 +40,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
             base.DoDraw(spriteBatch, zindex);
         }
 
-        private static Vector2 GetSpritePosition(string sid)
-        {
-            return sid switch
-            {
-                "predator" or "predator-meat" => new Vector2(0, -12),
-                "warthog" => new Vector2(-5, -12),
-                "skeleton" or "skeleton-equipment" => new Vector2(0, -22),
-                "gallbladder" => new Vector2(0, -12),
-                _ => new Vector2(0, -12),
-            };
-        }
-
         private static SpriteContainer CreateSpriteHierarchy(Texture2D texture2D, Vector2 spritePosition)
         {
             var container = new SpriteContainer();
@@ -63,6 +51,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
             });
 
             return container;
+        }
+
+        private static Vector2 GetSpritePosition(string sid)
+        {
+            return sid switch
+            {
+                "predator" or "predator-meat" => new Vector2(0, -12),
+                "warthog" => new Vector2(-5, -12),
+                "skeleton" or "skeleton-equipment" => new Vector2(0, -22),
+                "gallbladder" => new Vector2(0, -12),
+                _ => new Vector2(0, -12)
+            };
         }
 
         public SpriteContainer RootSprite => this;

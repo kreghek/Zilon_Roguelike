@@ -27,6 +27,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private const int ICON_SPACING = 2;
         private const double ALERT_VISIBLE_DURATION_SECONDS = 3;
         private const double ALERT_DELAY_DURATION_SECONDS = 3;
+        private static int _alertIterationIndex;
 
         private readonly IList<IPersonCondition> _alertedConditions;
         private readonly SoundEffectInstance _alertSoundEffect;
@@ -40,7 +41,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private readonly ISectorUiState _uiState;
 
         private double _alertCounter;
-        private static int _alertIterationIndex;
         private IPersonCondition? _selectedCondition;
         private int? _selectedConditionIconIndex;
 
@@ -202,17 +202,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
         }
 
-        private static string? GetSymptomTitle(DiseaseSymptomCondition diseaseSymptomCondition)
-        {
-            var diseasesTitles = diseaseSymptomCondition.Diseases.Select(x => GetName(x));
-            var fullDeseasesList = string.Join(",", diseasesTitles);
-            return $"{diseaseSymptomCondition.Symptom.Name?.Ru ?? diseaseSymptomCondition.Symptom.Name?.En} ({fullDeseasesList})";
-        }
-
         private static string GetName(IDisease disease)
         {
             var name =
-                        $"{disease.Name.Secondary?.Ru} {disease.Name.PrimaryPrefix?.Ru}{disease.Name.Primary?.Ru} {disease.Name.Subject?.Ru}";
+                $"{disease.Name.Secondary?.Ru} {disease.Name.PrimaryPrefix?.Ru}{disease.Name.Primary?.Ru} {disease.Name.Subject?.Ru}";
             return name;
         }
 
@@ -268,6 +261,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             return $"{conditionTitle}\n{new string('-', 8)}\n{conditionDescription}";
         }
 
+        private static string? GetSymptomTitle(DiseaseSymptomCondition diseaseSymptomCondition)
+        {
+            var diseasesTitles = diseaseSymptomCondition.Diseases.Select(x => GetName(x));
+            var fullDeseasesList = string.Join(",", diseasesTitles);
+            return
+                $"{diseaseSymptomCondition.Symptom.Name?.Ru ?? diseaseSymptomCondition.Symptom.Name?.En} ({fullDeseasesList})";
+        }
+
         private void UpdateAlert(IConditionsModule conditionsModule, GameTime gameTime)
         {
             var conditionRectangles = conditionsModule.Items.Select((x, index) => new
@@ -303,7 +304,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                         }
                     }
 
-                    if (visiblilitySin > 0 && _alertedConditions.Any() && _alertSoundEffect.State != SoundState.Playing && _alertIterationIndex < ALERT_SOUND_COUNT)
+                    if (visiblilitySin > 0 && _alertedConditions.Any() &&
+                        _alertSoundEffect.State != SoundState.Playing && _alertIterationIndex < ALERT_SOUND_COUNT)
                     {
                         _alertIterationIndex++;
 

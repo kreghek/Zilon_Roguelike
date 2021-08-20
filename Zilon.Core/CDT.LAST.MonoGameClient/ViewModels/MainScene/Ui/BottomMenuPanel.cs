@@ -34,13 +34,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private readonly IconButton _combatModeSwitcherButton;
 
         private readonly IconButton _idleModeSwitcherButton;
+        private readonly IPlayerEventLogService _logService;
+        private readonly ISectorUiState _sectorUiState;
 
         private readonly TravelPanel _travelPanel;
         private readonly IUiContentStorage _uiContentStorage;
-        private readonly ISectorUiState _sectorUiState;
-        private readonly IPlayerEventLogService _logService;
 
         private IBottomSubPanel _currentModeMenu;
+
+        private KeyboardState? _lastKeyboard;
         private Rectangle _storedPanelRect;
 
         public BottomMenuPanel(
@@ -54,7 +56,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             ICommandLoopContext commandLoopContext,
             IPlayerEventLogService logService)
         {
-            _travelPanel = new TravelPanel(humanActorTaskSource, uiContentStorage, commandPool, commandFactory, commandLoopContext);
+            _travelPanel = new TravelPanel(humanActorTaskSource, uiContentStorage, commandPool, commandFactory,
+                commandLoopContext);
             _combatActPanel = new CombatActPanel(combatActModule, equipmentModule, uiContentStorage, sectorUiState);
 
             _travelPanel.PropButtonClicked += PersonPropButton_OnClick;
@@ -88,15 +91,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 iconData: combatButtonIcon,
                 rect: new Rectangle(0, 0, SWITCHER_MODE_BUTTON_WIDTH, SWITCHER_MODE_BUTTON_HEIGHT));
             _combatModeSwitcherButton.OnClick += CombatModeSwitcherButton_OnClick;
-        }
-
-        private void FastDeathButtonClicked(object? sender, EventArgs e)
-        {
-            var endOfLifeEvent = new EndOfLifeEvent();
-            _logService.Log(endOfLifeEvent);
-
-            var survivalModule = _sectorUiState.ActiveActor.Actor.Person.GetModule<ISurvivalModule>();
-            survivalModule.SetStatForce(SurvivalStatType.Health, 0);
         }
 
         public static bool MouseIsOver { get; private set; }
@@ -146,23 +140,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             HandleHotkeys();
         }
 
-        private KeyboardState? _lastKeyboard;
-
-        private void HandleHotkeys()
-        {
-            var keyboardState = Keyboard.GetState();
-            if (keyboardState.IsKeyUp(Keys.Space) && _lastKeyboard?.IsKeyDown(Keys.Space) == true)
-            {
-                _travelPanel._idleButton.Click();
-            }
-            else
-            {
-                // No hotkeys have been pressed. Do nothing.
-            }
-
-            _lastKeyboard = keyboardState;
-        }
-
         private void CombatModeSwitcherButton_OnClick(object? sender, EventArgs e)
         {
             _currentModeMenu = _combatActPanel;
@@ -183,6 +160,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 Color.White);
         }
 
+        private void FastDeathButtonClicked(object? sender, EventArgs e)
+        {
+            var endOfLifeEvent = new EndOfLifeEvent();
+            _logService.Log(endOfLifeEvent);
+
+            var survivalModule = _sectorUiState.ActiveActor.Actor.Person.GetModule<ISurvivalModule>();
+            survivalModule.SetStatForce(SurvivalStatType.Health, 0);
+        }
+
         private IconButton GetActiveSwitcherButton()
         {
             return _combatActModule.IsCombatMode ? _idleModeSwitcherButton : _combatModeSwitcherButton;
@@ -193,6 +179,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             var panelX = (graphicsDevice.Viewport.Width - PANEL_WIDTH) / 2;
 
             return new Rectangle(panelX, graphicsDevice.Viewport.Height - PANEL_HEIGHT, PANEL_WIDTH, PANEL_HEIGHT);
+        }
+
+        private void HandleHotkeys()
+        {
+            var keyboardState = Keyboard.GetState();
+            if (keyboardState.IsKeyUp(Keys.Space) && _lastKeyboard?.IsKeyDown(Keys.Space) == true)
+            {
+                _travelPanel._idleButton.Click();
+            }
+
+            _lastKeyboard = keyboardState;
         }
 
         private void IdleModeSwitcherButton_OnClick(object? sender, EventArgs e)

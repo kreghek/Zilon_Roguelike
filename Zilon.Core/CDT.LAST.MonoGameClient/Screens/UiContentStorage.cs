@@ -17,7 +17,6 @@ namespace CDT.LAST.MonoGameClient.Screens
         private Texture2D? _attributeIconsTexture;
         private Texture2D? _attributesBackgroundTexture;
         private SpriteFont? _auxFont;
-        private SpriteFont _scoresFont;
         private Texture2D? _bottomPanelBackground;
         private SpriteFont? _buttonFont;
         private Texture2D? _buttonTexture;
@@ -29,6 +28,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         private Texture2D? _contextualMenuBorderTexture;
         private Texture2D? _contextualMenuItemBackgroundTexture;
         private SpriteFont? _contextualMenuItemFont;
+        private Texture2D? _hexMarkersTexture;
 
         private Texture2D? _hintBackgorundTexture;
         private SpriteFont? _hintTitleFont;
@@ -36,12 +36,12 @@ namespace CDT.LAST.MonoGameClient.Screens
         private Texture2D? _modalShadowTexture;
         private Texture2D[]? _modalTopTextures;
         private Texture2D? _personMarkerTextureSheet;
+        private SpriteFont _scoresFont;
         private Texture2D? _selectedButtonMarker;
         private Texture2D? _smallVerticalButtonBackgroundTexture;
         private Texture2D? _smallVerticalButtonIconsTexture;
 
         private IDictionary<SurvivalStatType, Texture2D>? _survivalStatConditionIcons;
-        private Texture2D? _hexMarkersTexture;
 
         public UiContentStorage()
         {
@@ -87,7 +87,12 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private void InitCombatActIcons(ContentManager contentManager)
         {
-            Texture2D loadIcon(string name) { return contentManager.Load<Texture2D>($"Sprites/ui/CombatActIcons/{name}"); };
+            Texture2D loadIcon(string name)
+            {
+                return contentManager.Load<Texture2D>($"Sprites/ui/CombatActIcons/{name}");
+            }
+
+            ;
 
             _combatActDict = new Dictionary<string, Texture2D>
             {
@@ -112,7 +117,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
                 ["chop"] = loadIcon("AxeCut"),
 
-                ["swing"] = loadIcon("Swing"),
+                ["swing"] = loadIcon("Swing")
             };
         }
 

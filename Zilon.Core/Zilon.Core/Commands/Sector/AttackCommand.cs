@@ -67,7 +67,8 @@ namespace Zilon.Core.Commands
                 return CanExecuteCheckResult.CreateFailed("Act is not assigned.");
             }
 
-            if (act.Constrains?.EnergyCost > 0 && activeActorViewModel.Actor.Person.GetModule<ISurvivalModule>().Stats.SingleOrDefault(x => x.Type == SurvivalStatType.Energy)?.Value < 0)
+            if (act.Constrains?.EnergyCost > 0 && activeActorViewModel.Actor.Person.GetModule<ISurvivalModule>().Stats
+                .SingleOrDefault(x => x.Type == SurvivalStatType.Energy)?.Value < 0)
             {
                 return CanExecuteCheckResult.CreateFailed("The energy is critically low.");
             }

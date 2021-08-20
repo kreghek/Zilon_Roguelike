@@ -23,7 +23,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         private double? _highlightCounter;
 
-        public StaticObjectViewModel(Game game, IStaticObject staticObject, SpriteBatch spriteBatch, bool createHighlighted = false)
+        public StaticObjectViewModel(Game game, IStaticObject staticObject, SpriteBatch spriteBatch,
+            bool createHighlighted = false)
         {
             _game = game;
             StaticObject = staticObject;
@@ -35,7 +36,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var hexSize = MapMetrics.UnitSize / 2;
             var staticObjectPosition = new Vector2(
-                (int)Math.Round(worldCoords[0] * hexSize * Math.Sqrt(HIGHLIGHT_DURATION_SECONDS), MidpointRounding.ToEven),
+                (int)Math.Round(worldCoords[0] * hexSize * Math.Sqrt(HIGHLIGHT_DURATION_SECONDS),
+                    MidpointRounding.ToEven),
                 (int)Math.Round(worldCoords[1] * hexSize * 2 / 2, MidpointRounding.ToEven)
             );
 
@@ -44,7 +46,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 Position = staticObjectPosition
             };
 
-            var hasNoShadow = StaticObject.Purpose == PropContainerPurpose.Puddle || StaticObject.Purpose == PropContainerPurpose.Pit;
+            var hasNoShadow = StaticObject.Purpose == PropContainerPurpose.Puddle ||
+                              StaticObject.Purpose == PropContainerPurpose.Pit;
             if (!hasNoShadow)
             {
                 var shadowTexture = _game.Content.Load<Texture2D>("Sprites/game-objects/simple-object-shadow");

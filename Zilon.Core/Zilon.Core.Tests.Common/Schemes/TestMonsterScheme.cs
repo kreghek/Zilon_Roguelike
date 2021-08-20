@@ -7,6 +7,7 @@ namespace Zilon.Core.Tests.Common.Schemes
     [ExcludeFromCodeCoverage]
     public class TestMonsterScheme : SchemeBase, IMonsterScheme
     {
+        public ITacticalActStatsSubScheme PrimaryAct { get; set; }
         public int BaseScore { get; set; }
 
         // ReSharper disable once UnassignedGetOnlyAutoProperty
@@ -16,8 +17,6 @@ namespace Zilon.Core.Tests.Common.Schemes
         public string[] DropTableSids { get; }
 
         public int Hp { get; set; }
-
-        public ITacticalActStatsSubScheme PrimaryAct { get; set; }
 
         /// <inheritdoc cref="IMonsterScheme" />
         public string[] Tags { get; set; }

@@ -208,7 +208,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 {
                     propTitle += $" x{resource.Count}";
                 }
-                spriteBatch.DrawString(_uiContentStorage.GetButtonFont(), propTitle, new Vector2(item.Control.Rect.Right + 2, item.Control.Rect.Top), Color.Wheat);
+
+                spriteBatch.DrawString(_uiContentStorage.GetButtonFont(), propTitle,
+                    new Vector2(item.Control.Rect.Right + 2, item.Control.Rect.Top), Color.Wheat);
             }
         }
 

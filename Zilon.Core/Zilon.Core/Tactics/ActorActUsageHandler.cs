@@ -203,7 +203,8 @@ namespace Zilon.Core.Tactics
             }
             else
             {
-                ProcessFailedHit(actor, targetActor, combatActRoll, prefferedDefenceItem, successToHitRoll, factToHitRoll);
+                ProcessFailedHit(actor, targetActor, combatActRoll, prefferedDefenceItem, successToHitRoll,
+                    factToHitRoll);
             }
         }
 
@@ -430,11 +431,12 @@ namespace Zilon.Core.Tactics
 
             var usedActDescription = ActDescription.CreateFromActStats(combatActRoll.CombatAct.Stats);
 
-            var interactEvent = new DodgeActorInteractionEvent(actor, targetActor, personDefenceItem, usedActDescription)
-            {
-                SuccessToHitRoll = successToHitRoll,
-                FactToHitRoll = factToHitRoll
-            };
+            var interactEvent =
+                new DodgeActorInteractionEvent(actor, targetActor, personDefenceItem, usedActDescription)
+                {
+                    SuccessToHitRoll = successToHitRoll,
+                    FactToHitRoll = factToHitRoll
+                };
 
             ActorInteractionBus.PushEvent(interactEvent);
         }
@@ -465,7 +467,8 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void ProcessFailedHit(IActor actor, IActor targetActor, CombatActRoll combatActRoll, PersonDefenceItem? prefferedDefenceItem,
+        private void ProcessFailedHit(IActor actor, IActor targetActor, CombatActRoll combatActRoll,
+            PersonDefenceItem? prefferedDefenceItem,
             int successToHitRoll, int factToHitRoll)
         {
             if (prefferedDefenceItem != null)
@@ -489,7 +492,8 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void ProcessPureMissEvent(IActor actor, IActor targetActor, CombatActRoll combatActRoll, int successToHitRoll, int factToHitRoll)
+        private void ProcessPureMissEvent(IActor actor, IActor targetActor, CombatActRoll combatActRoll,
+            int successToHitRoll, int factToHitRoll)
         {
             if (ActorInteractionBus == null)
             {

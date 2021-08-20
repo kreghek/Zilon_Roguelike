@@ -14,8 +14,6 @@ namespace Zilon.Core.Tactics.Behaviour
     {
         private readonly ITacticalActUsageService _actService;
 
-        private int _cost;
-
         public AttackTask(IActor actor,
             IActorTaskContext context,
             IAttackTarget target,
@@ -32,26 +30,12 @@ namespace Zilon.Core.Tactics.Behaviour
 
             var combatActDuration = tacticalAct.Stats.Duration.GetValueOrDefault(1);
             var durationBonus = GetDurationBonus(actor);
-            var durationWithBonus = (int)Math.Round(GlobeMetrics.OneIterationLength * combatActDuration * durationBonus);
-            _cost = durationWithBonus;
+            var durationWithBonus =
+                (int)Math.Round(GlobeMetrics.OneIterationLength * combatActDuration * durationBonus);
+            Cost = durationWithBonus;
         }
 
-        private static float GetDurationBonus(IActor actor)
-        {
-            var dexterity = (actor.Person.GetModuleSafe<IAttributesModule>()?.GetAttribute(PersonAttributeType.Dexterity)?.Value).GetValueOrDefault(10);
-            if (dexterity > 10)
-            {
-                return 0.75f;
-            }
-            else if (dexterity < 10)
-            {
-                return 1.25f;
-            }
-
-            return 1f;
-        }
-
-        public override int Cost => _cost;
+        public override int Cost { get; }
 
         public ICombatAct TacticalAct { get; }
 
@@ -121,6 +105,24 @@ namespace Zilon.Core.Tactics.Behaviour
             }
 
             return stopToUseAct;
+        }
+
+        private static float GetDurationBonus(IActor actor)
+        {
+            var dexterity =
+                (actor.Person.GetModuleSafe<IAttributesModule>()?.GetAttribute(PersonAttributeType.Dexterity)?.Value)
+                .GetValueOrDefault(10);
+            if (dexterity > 10)
+            {
+                return 0.75f;
+            }
+
+            if (dexterity < 10)
+            {
+                return 1.25f;
+            }
+
+            return 1f;
         }
 
         private IEnumerable<ICombatAct> GetSecondaryUsedActs()

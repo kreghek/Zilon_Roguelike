@@ -5,9 +5,9 @@ namespace CDT.LAST.MonoGameClient.GameComponents
 {
     internal class VersionDisplay : DrawableGameComponent
     {
-        private readonly string _version = "ver.2.5.8-gdw21.10";
-        private readonly SpriteBatch _spriteBatch;
         private readonly SpriteFont _font;
+        private readonly SpriteBatch _spriteBatch;
+        private readonly string _version = "ver.2.5.8-gdw21.10";
 
         public VersionDisplay(Game game, SpriteBatch spriteBatch, SpriteFont font) : base(game)
         {
@@ -24,13 +24,13 @@ namespace CDT.LAST.MonoGameClient.GameComponents
                 _font,
                 _version,
                 new Vector2(Game.GraphicsDevice.Viewport.Bounds.Right - size.X - 1 - 1,
-                Game.GraphicsDevice.Viewport.Bounds.Bottom - size.Y - 1),
+                    Game.GraphicsDevice.Viewport.Bounds.Bottom - size.Y - 1),
                 Color.Black);
             _spriteBatch.DrawString(
                 _font,
                 _version,
                 new Vector2(Game.GraphicsDevice.Viewport.Bounds.Right - size.X - 1,
-                Game.GraphicsDevice.Viewport.Bounds.Bottom - size.Y),
+                    Game.GraphicsDevice.Viewport.Bounds.Bottom - size.Y),
                 Color.White);
             _spriteBatch.End();
         }

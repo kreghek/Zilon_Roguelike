@@ -23,18 +23,20 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private const int HINT_TEXT_SPACING = 8;
 
         private readonly IconButton _autoplayModeButton;
-        public readonly IconButton _idleButton;
         private readonly IconButton[] _buttons;
-
-        private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _humanActorTaskSource;
-        private readonly IUiContentStorage _uiContentStorage;
-        private readonly ICommandPool _commandPool;
         private readonly ServiceProviderCommandFactory _commandFactory;
         private readonly ICommandLoopContext _commandLoopContext;
+        private readonly ICommandPool _commandPool;
+
+        private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _humanActorTaskSource;
+        public readonly IconButton _idleButton;
         private readonly IconButton _personPropButton;
         private readonly IconButton _personStatsButton;
+        private readonly IUiContentStorage _uiContentStorage;
         private bool _autoplayHintIsShown;
         private string _autoplayModeButtonTitle;
+
+        private KeyboardState? _lastKeyboard;
 
         public TravelPanel(IHumanActorTaskSource<ISectorTaskSourceContext> humanActorTaskSource,
             IUiContentStorage uiContentStorage,
@@ -80,7 +82,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 rect: new Rectangle(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
             personStatsButton.OnClick += PersonStatsButton_OnClick;
 
-
             var personTraitsButton = new IconButton(
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 iconData: new IconData(
@@ -89,7 +90,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 ),
                 rect: new Rectangle(48, 32, BUTTON_WIDTH, BUTTON_HEIGHT));
             personTraitsButton.OnClick += PersonTraitsButton_OnClick;
-
 
             var gameSpeedButton = new IconButton(
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
@@ -144,21 +144,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 #endif
         }
 
-        private void FastDeathButton_OnClick(object? sender, EventArgs e)
-        {
-            FastDeathButtonClicked?.Invoke(this, EventArgs.Empty);
-
-        }
-
-        private void IdleButton_OnClick(object? sender, EventArgs e)
-        {
-            if (_commandLoopContext.CanPlayerGiveCommand)
-            {
-                var idleCommand = _commandFactory.GetCommand<IdleCommand>();
-                _commandPool.Push(idleCommand);
-            }
-        }
-
         private void AutoplayModeButton_OnClick(object? sender, EventArgs e)
         {
             var humanTaskSource = _humanActorTaskSource;
@@ -195,6 +180,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _autoplayHintIsShown = autoplayButtonRect.Intersects(mouseRect);
         }
 
+        private void FastDeathButton_OnClick(object? sender, EventArgs e)
+        {
+            FastDeathButtonClicked?.Invoke(this, EventArgs.Empty);
+        }
+
         private void GameSpeedButton_OnClick(object? sender, EventArgs e)
         {
             if (GameState.GameSpeed == 1)
@@ -213,6 +203,30 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             {
                 Debug.Fail("Unknown game state.");
                 GameState.GameSpeed = 1;
+            }
+        }
+
+        private void HandleHotkeys()
+        {
+            var keyboardState = Keyboard.GetState();
+            if (keyboardState.IsKeyUp(Keys.I) && _lastKeyboard?.IsKeyDown(Keys.I) == true)
+            {
+                _personPropButton.Click();
+            }
+            else if (keyboardState.IsKeyUp(Keys.C) && _lastKeyboard?.IsKeyDown(Keys.C) == true)
+            {
+                _personStatsButton.Click();
+            }
+
+            _lastKeyboard = keyboardState;
+        }
+
+        private void IdleButton_OnClick(object? sender, EventArgs e)
+        {
+            if (_commandLoopContext.CanPlayerGiveCommand)
+            {
+                var idleCommand = _commandFactory.GetCommand<IdleCommand>();
+                _commandPool.Push(idleCommand);
             }
         }
 
@@ -278,27 +292,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             HandleHotkeys();
         }
-
-        private void HandleHotkeys()
-        {
-            var keyboardState = Keyboard.GetState();
-            if (keyboardState.IsKeyUp(Keys.I) && _lastKeyboard?.IsKeyDown(Keys.I) == true)
-            {
-                _personPropButton.Click();
-            }
-            else if (keyboardState.IsKeyUp(Keys.C) && _lastKeyboard?.IsKeyDown(Keys.C) == true)
-            {
-                _personStatsButton.Click();
-            }
-            else
-            {
-                // No hotkeys have been pressed. Do nothing.
-            }
-
-            _lastKeyboard = keyboardState;
-        }
-
-        private KeyboardState? _lastKeyboard;
 
         public void UnsubscribeEvents()
         {

@@ -21,12 +21,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private const int MAX_COMBAT_ACT_COUNT = 8;
         private const int COMBAT_ACT_BUTTON_SIZE = 32;
 
+        private const int HINT_TEXT_SPACING = 8;
+
         private readonly CombatActButtonGroup _buttonGroup;
         private readonly IList<CombatActButton> _buttons;
         private readonly ICombatActModule _combatActModule;
         private readonly IEquipmentModule _equipmentModule;
         private readonly ISectorUiState _sectorUiState;
         private readonly IUiContentStorage _uiContentStorage;
+
+        private CombatActButton? _hoverCombatActButton;
 
         public CombatActPanel(ICombatActModule combatActModule, IEquipmentModule equipmentModule,
             IUiContentStorage uiContentStorage, ISectorUiState sectorUiState)
@@ -56,6 +60,28 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             var textY = button.Rect.Top - stringSize.Y;
 
             spriteBatch.DrawString(spriteFont, text, new Vector2(textX, textY), Color.White);
+        }
+
+        private void DrawCombatActHint(CombatActButton button, SpriteBatch spriteBatch)
+        {
+            var combatActHintText = CombatActHelper.GetActHintText(button.CombatAct);
+
+            var titleTextSizeVector = _uiContentStorage.GetHintTitleFont().MeasureString(combatActHintText);
+
+            var autoplayButtonRect = button.Rect;
+
+            var hintRectangle = new Rectangle(
+                autoplayButtonRect.Left,
+                autoplayButtonRect.Top - (int)titleTextSizeVector.Y - (HINT_TEXT_SPACING * 2),
+                (int)titleTextSizeVector.X + (HINT_TEXT_SPACING * 2),
+                (int)titleTextSizeVector.Y + (HINT_TEXT_SPACING * 2));
+
+            spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), hintRectangle, Color.DarkSlateGray);
+
+            spriteBatch.DrawString(_uiContentStorage.GetHintTitleFont(),
+                combatActHintText,
+                new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
+                Color.Wheat);
         }
 
         private void EquipmentModule_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)
@@ -183,32 +209,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 }
             }
         }
-
-        private const int HINT_TEXT_SPACING = 8;
-
-        private void DrawCombatActHint(CombatActButton button, SpriteBatch spriteBatch)
-        {
-            var combatActHintText = CombatActHelper.GetActHintText(button.CombatAct);
-
-            var titleTextSizeVector = _uiContentStorage.GetHintTitleFont().MeasureString(combatActHintText);
-
-            var autoplayButtonRect = button.Rect;
-
-            var hintRectangle = new Rectangle(
-                autoplayButtonRect.Left,
-                autoplayButtonRect.Top - (int)titleTextSizeVector.Y - (HINT_TEXT_SPACING * 2),
-                (int)titleTextSizeVector.X + (HINT_TEXT_SPACING * 2),
-                (int)titleTextSizeVector.Y + (HINT_TEXT_SPACING * 2));
-
-            spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), hintRectangle, Color.DarkSlateGray);
-
-            spriteBatch.DrawString(_uiContentStorage.GetHintTitleFont(),
-                combatActHintText,
-                new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
-                Color.Wheat);
-        }
-
-        private CombatActButton? _hoverCombatActButton;
 
         public void Update()
         {

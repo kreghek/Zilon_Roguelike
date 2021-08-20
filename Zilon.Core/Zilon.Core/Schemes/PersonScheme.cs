@@ -7,18 +7,18 @@ namespace Zilon.Core.Schemes
     /// </summary>
     public class PersonScheme : SchemeBase, IPersonScheme
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public int Hp { get; set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public PersonSlotSubScheme?[]? Slots { get; set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         [JsonConverter(typeof(ConcreteTypeConverter<PersonSurvivalStatSubScheme[]>))]
         [JsonProperty]
         public IPersonSurvivalStatSubScheme?[]? SurvivalStats { get; private set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public string?[]? DefaultActs { get; set; }
     }
 }

@@ -17,13 +17,13 @@ namespace Zilon.Core.Tactics
         }
 
         /// <summary>
-        /// Эффективность действия.
-        /// </summary>
-        public int Efficient { get; }
-
-        /// <summary>
         /// Действие, которое было совершено.
         /// </summary>
         public ICombatAct CombatAct { get; }
+
+        /// <summary>
+        /// Эффективность действия.
+        /// </summary>
+        public int Efficient { get; }
     }
 }

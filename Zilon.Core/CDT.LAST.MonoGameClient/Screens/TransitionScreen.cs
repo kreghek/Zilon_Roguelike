@@ -49,7 +49,6 @@ namespace CDT.LAST.MonoGameClient.Screens
                 catch (InvalidOperationException)
                 {
                     // The exception was thrown because player.Globe.SectorNodes was modified during enumeration.
-                    return;
                 }
             }
         }

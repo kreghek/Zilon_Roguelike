@@ -65,6 +65,53 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             ProcessKeyboardCommands(sectorViewModelContext);
         }
 
+        private bool DidOpenDropMenu(KeyboardState keyboardState)
+        {
+            if (!keyboardState.IsKeyUp(Keys.O) || _lastKeyboardState?.IsKeyDown(Keys.O) != true)
+            {
+                return false;
+            }
+
+            _lastKeyboardState = keyboardState;
+
+            var openCommand = _commandFactory.GetCommand<OpenContainerCommand>();
+
+            var actor = _uiState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                Debug.Fail(
+                    "Active actor must be assigned before the sector view model and the sector interactor start processing of user input.");
+                return true;
+            }
+
+            _uiState.SelectedViewModel = GetStaticObjectUnderActor(actor);
+            if (openCommand.CanExecute().IsSuccess)
+            {
+                _commandPool.Push(openCommand);
+            }
+
+            return true;
+        }
+
+        private bool DidTransferToOtherSector(KeyboardState keyboardState)
+        {
+            if (!keyboardState.IsKeyUp(Keys.T) || _lastKeyboardState?.IsKeyDown(Keys.T) != true)
+            {
+                return false;
+            }
+
+            _lastKeyboardState = keyboardState;
+
+            var transitionCommand = _commandFactory.GetCommand<SectorTransitionMoveCommand>();
+
+            if (transitionCommand.CanExecute().IsSuccess)
+            {
+                _commandPool.Push(transitionCommand);
+            }
+
+            return true;
+        }
+
         private ISelectableViewModel? GetStaticObjectUnderActor(IActor actor)
         {
             var staticObjectsUnderActor = _sector.StaticObjectManager.Items.Where(x => x.Node == actor.Node).ToArray();
@@ -118,57 +165,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             var keyboardState = Keyboard.GetState();
             if (DidTransferToOtherSector(keyboardState))
+            {
                 return true;
+            }
 
             if (DidOpenDropMenu(keyboardState))
+            {
                 return true;
+            }
 
             _lastKeyboardState = keyboardState;
 
             return false;
-        }
-
-        private bool DidOpenDropMenu(KeyboardState keyboardState)
-        {
-            if (!keyboardState.IsKeyUp(Keys.O) || _lastKeyboardState?.IsKeyDown(Keys.O) != true)
-                return false;
-
-            _lastKeyboardState = keyboardState;
-
-            var openCommand = _commandFactory.GetCommand<OpenContainerCommand>();
-
-            var actor = _uiState.ActiveActor?.Actor;
-            if (actor is null)
-            {
-                Debug.Fail(
-                    "Active actor must be assigned before the sector view model and the sector interactor start processing of user input.");
-                return true;
-            }
-
-            _uiState.SelectedViewModel = GetStaticObjectUnderActor(actor);
-            if (openCommand.CanExecute().IsSuccess)
-            {
-                _commandPool.Push(openCommand);
-            }
-
-            return true;
-        }
-
-        private bool DidTransferToOtherSector(KeyboardState keyboardState)
-        {
-            if (!keyboardState.IsKeyUp(Keys.T) || _lastKeyboardState?.IsKeyDown(Keys.T) != true)
-                return false;
-
-            _lastKeyboardState = keyboardState;
-
-            var transitionCommand = _commandFactory.GetCommand<SectorTransitionMoveCommand>();
-
-            if (transitionCommand.CanExecute().IsSuccess)
-            {
-                _commandPool.Push(transitionCommand);
-            }
-
-            return true;
         }
 
         private void ProcessKeyboardCommands(SectorViewModelContext sectorViewModelContext)

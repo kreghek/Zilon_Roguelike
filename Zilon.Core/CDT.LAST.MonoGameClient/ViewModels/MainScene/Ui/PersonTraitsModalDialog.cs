@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using Zilon.Core;
 using Zilon.Core.Client;
 using Zilon.Core.Components;
 using Zilon.Core.Localization;
@@ -51,47 +52,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             DrawHintIfSelected(spriteBatch);
         }
 
-        private sealed class ProfessionPerk : IPerk
-        {
-            public ProfessionPerk(ILocalizedString personEquipmentTemplate, ILocalizedString descriptionEquipmentTemplate)
-            {
-                Scheme = new PersonPerkScheme()
-                {
-                    Name = new LocalizedStringSubScheme()
-                    {
-                        Ru = personEquipmentTemplate.Ru,
-                        En = personEquipmentTemplate.En
-                    },
-                    Description = new LocalizedStringSubScheme
-                    {
-                        Ru = descriptionEquipmentTemplate.Ru,
-                        En = descriptionEquipmentTemplate.En
-                    }
-                };
-            }
-
-            public PerkLevel? CurrentLevel { get; set; }
-            public IPerkScheme Scheme { get; }
-            public Zilon.Core.IJob[]? CurrentJobs { get; }
-        }
-
-        private sealed class PersonPerkScheme : IPerkScheme
-        {
-            public PerkConditionSubScheme?[]? BaseConditions { get; set; }
-            public string? IconSid { get; set; }
-            public bool IsBuildIn => true;
-            public JobSubScheme?[]? Jobs { get; set; }
-            public PerkLevelSubScheme?[]? Levels { get; set; }
-            public int Order { get; set; }
-            public PerkRuleSubScheme?[]? Rules { get; set; }
-            public PropSet?[]? Sources { get; set; }
-            public PerkConditionSubScheme?[]? VisibleConditions { get; set; }
-            public LocalizedStringSubScheme? Description { get; set; }
-            public bool Disabled { get; }
-            public LocalizedStringSubScheme? Name { get; set; }
-            public string? Sid { get; set; }
-        }
-
         /// <inheritdoc />
         protected override void InitContent()
         {
@@ -113,8 +73,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             var currentAttributeItemList = new List<PersonPerkUiItem>();
             var colWidth = ContentRect.Width / 2;
 
-            int MAX_ITEM_IN_ROW = 8;
-            int MAX_ITEM_COUNT = MAX_ITEM_IN_ROW * 2;
+            var MAX_ITEM_IN_ROW = 8;
+            var MAX_ITEM_COUNT = MAX_ITEM_IN_ROW * 2;
 
             var profession = CreateProfession(
                 ((HumanPerson)person).PersonEquipmentTemplate,
@@ -122,7 +82,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             var perks = evolutionModule.GetArchievedPerks().Take(MAX_ITEM_COUNT).ToArray();
 
-            var allPerks = new IPerk[] { profession }.Concat(perks).ToArray();
+            var allPerks = new[] { profession }.Concat(perks).ToArray();
 
             for (var itemIndex = 0; itemIndex < allPerks.Length; itemIndex++)
             {
@@ -143,12 +103,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _currentAttributesItems = currentAttributeItemList.ToArray();
         }
 
-        private IPerk CreateProfession(ILocalizedString? personEquipmentTemplate, ILocalizedString? personEquipmentDescriptionTemplate)
-        {
-            var profession = new ProfessionPerk(personEquipmentTemplate, personEquipmentDescriptionTemplate);
-            return profession;
-        }
-
         protected override void UpdateContent()
         {
             if (_currentAttributesItems is null)
@@ -165,20 +119,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _selectedAttributeItem = effectUnderMouse;
         }
 
-        private void DrawPerk(PersonPerkUiItem item, SpriteBatch spriteBatch)
+        private IPerk CreateProfession(ILocalizedString? personEquipmentTemplate,
+            ILocalizedString? personEquipmentDescriptionTemplate)
         {
-            var sourceRect = GetPerkIcon(item.Perk);
-            spriteBatch.Draw(_uiContentStorage.GetAttributeBackgroundTexture(),
-                new Vector2(item.UiRect.Left, item.UiRect.Top), Color.White);
-            spriteBatch.Draw(_uiContentStorage.GetAttributeIconsTexture(),
-                new Vector2(item.UiRect.Left, item.UiRect.Top), sourceRect, Color.White);
-
-            var attributeTitle = GetPerkTitle(item.Perk);
-            spriteBatch.DrawString(
-               _uiContentStorage.GetButtonFont(),
-               attributeTitle,
-               new Vector2(item.UiRect.Right + ATTRIBUTE_ITEM_SPACING, item.UiRect.Top),
-               new Color(195, 180, 155));
+            var profession = new ProfessionPerk(personEquipmentTemplate, personEquipmentDescriptionTemplate);
+            return profession;
         }
 
         private void DrawHintIfSelected(SpriteBatch spriteBatch)
@@ -206,6 +151,22 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 Color.Wheat);
         }
 
+        private void DrawPerk(PersonPerkUiItem item, SpriteBatch spriteBatch)
+        {
+            var sourceRect = GetPerkIcon(item.Perk);
+            spriteBatch.Draw(_uiContentStorage.GetAttributeBackgroundTexture(),
+                new Vector2(item.UiRect.Left, item.UiRect.Top), Color.White);
+            spriteBatch.Draw(_uiContentStorage.GetAttributeIconsTexture(),
+                new Vector2(item.UiRect.Left, item.UiRect.Top), sourceRect, Color.White);
+
+            var attributeTitle = GetPerkTitle(item.Perk);
+            spriteBatch.DrawString(
+                _uiContentStorage.GetButtonFont(),
+                attributeTitle,
+                new Vector2(item.UiRect.Right + ATTRIBUTE_ITEM_SPACING, item.UiRect.Top),
+                new Color(195, 180, 155));
+        }
+
         private static string GetPerkDescription(IPerk perk)
         {
             return PerkHelper.GetPerkHintText(perk);
@@ -217,15 +178,55 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             {
                 return new Rectangle(0, 64, 32, 32);
             }
-            else
-            {
-                return new Rectangle(32, 64, 32, 32);
-            }
+
+            return new Rectangle(32, 64, 32, 32);
         }
 
         private static string GetPerkTitle(IPerk perk)
         {
             return PerkHelper.GetPropTitle(perk);
+        }
+
+        private sealed class ProfessionPerk : IPerk
+        {
+            public ProfessionPerk(ILocalizedString personEquipmentTemplate,
+                ILocalizedString descriptionEquipmentTemplate)
+            {
+                Scheme = new PersonPerkScheme
+                {
+                    Name = new LocalizedStringSubScheme
+                    {
+                        Ru = personEquipmentTemplate.Ru,
+                        En = personEquipmentTemplate.En
+                    },
+                    Description = new LocalizedStringSubScheme
+                    {
+                        Ru = descriptionEquipmentTemplate.Ru,
+                        En = descriptionEquipmentTemplate.En
+                    }
+                };
+            }
+
+            public PerkLevel? CurrentLevel { get; set; }
+            public IPerkScheme Scheme { get; }
+            public IJob[]? CurrentJobs { get; }
+        }
+
+        private sealed class PersonPerkScheme : IPerkScheme
+        {
+            public PerkConditionSubScheme?[]? BaseConditions { get; set; }
+            public string? IconSid { get; set; }
+            public bool IsBuildIn => true;
+            public JobSubScheme?[]? Jobs { get; set; }
+            public PerkLevelSubScheme?[]? Levels { get; set; }
+            public int Order { get; set; }
+            public PerkRuleSubScheme?[]? Rules { get; set; }
+            public PropSet?[]? Sources { get; set; }
+            public PerkConditionSubScheme?[]? VisibleConditions { get; set; }
+            public LocalizedStringSubScheme? Description { get; set; }
+            public bool Disabled { get; }
+            public LocalizedStringSubScheme? Name { get; set; }
+            public string? Sid { get; set; }
         }
 
         private record PersonPerkUiItem

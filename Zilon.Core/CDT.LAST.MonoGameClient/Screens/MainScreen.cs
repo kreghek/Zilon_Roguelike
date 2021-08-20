@@ -34,26 +34,34 @@ namespace CDT.LAST.MonoGameClient.Screens
         private const int STAT_ROW_HEIGHT = 16;
         private const int STAT_NUMS_X_POSITION = 32;
 
+        private static bool _showControlTutorial = true;
+
         private readonly IAnimationBlockerService _animationBlockerService;
         private readonly BottomMenuPanel _bottomMenu;
         private readonly Camera _camera;
         private readonly ServiceProviderCommandFactory _commandFactory;
         private readonly ICommandPool _commandPool;
         private readonly ContainerModalDialog _containerModal;
+        private readonly IPlayerEventLogService _logService;
         private readonly PersonConditionsPanel _personEffectsPanel;
         private readonly ModalDialogBase _personEquipmentModal;
         private readonly PersonStatsModalDialog _personStatsModal;
         private readonly PersonTraitsModalDialog _personTraitsModal;
         private readonly IPlayer _player;
+        private readonly IScoreManager _scoreManager;
         private readonly SpriteBatch _spriteBatch;
         private readonly ITransitionPool _transitionPool;
         private readonly IUiContentStorage _uiContentStorage;
         private readonly ISectorUiState _uiState;
-        private readonly IScoreManager _scoreManager;
-        private readonly IPlayerEventLogService _logService;
         private ISector? _currentSector;
 
+        private bool _isBeginTransition;
+
         private bool _isTransitionPerforming;
+
+        private KeyboardState? _lastKeyboardState;
+
+        private double _loadingAnimCounter;
         private PersonMarkersPanel? _personMarkerPanel;
 
         private SectorViewModel? _sectorViewModel;
@@ -78,7 +86,8 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             _camera = new Camera();
             _personEffectsPanel =
-                new PersonConditionsPanel(_uiState, screenX: game.GraphicsDevice.Viewport.Bounds.Center.X, screenY: 8, _uiContentStorage, uiSoundStorage,
+                new PersonConditionsPanel(_uiState, screenX: game.GraphicsDevice.Viewport.Bounds.Center.X, screenY: 8,
+                    _uiContentStorage, uiSoundStorage,
                     soundtrackManager, GraphicsDevice);
 
             _personEquipmentModal = new PersonPropsModalDialog(
@@ -128,7 +137,6 @@ namespace CDT.LAST.MonoGameClient.Screens
             _bottomMenu.TraitsButtonClicked += BottomMenu_TraitsButtonClicked;
 
             _scoreManager = serviceScope.GetRequiredService<IScoreManager>();
-
         }
 
         public override void Draw(GameTime gameTime)
@@ -148,16 +156,14 @@ namespace CDT.LAST.MonoGameClient.Screens
             {
                 _loadingAnimCounter += gameTime.ElapsedGameTime.TotalSeconds;
                 _spriteBatch.Begin();
-                _spriteBatch.Draw(_uiContentStorage.GetHintBackgroundTexture(), Game.GraphicsDevice.Viewport.Bounds, Color.Black);
+                _spriteBatch.Draw(_uiContentStorage.GetHintBackgroundTexture(), Game.GraphicsDevice.Viewport.Bounds,
+                    Color.Black);
                 var pointCount = ((int)_loadingAnimCounter) % 4;
-                _spriteBatch.DrawString(_uiContentStorage.GetButtonFont(), "Loading" + new string('.', pointCount), Game.GraphicsDevice.Viewport.Bounds.Center.ToVector2(), Color.White);
+                _spriteBatch.DrawString(_uiContentStorage.GetButtonFont(), "Loading" + new string('.', pointCount),
+                    Game.GraphicsDevice.Viewport.Bounds.Center.ToVector2(), Color.White);
                 _spriteBatch.End();
             }
         }
-
-        private double _loadingAnimCounter;
-
-        private bool _isBeginTransition = false;
 
         public override void Update(GameTime gameTime)
         {
@@ -222,7 +228,10 @@ namespace CDT.LAST.MonoGameClient.Screens
             _lastKeyboardState = keyboardState;
         }
 
-        private KeyboardState? _lastKeyboardState;
+        private void Actor_BeginTransitionToOtherSector(object? sender, EventArgs e)
+        {
+            _isBeginTransition = true;
+        }
 
         private void Actor_OpenedContainer(object? sender, OpenContainerEventArgs e)
         {
@@ -237,11 +246,6 @@ namespace CDT.LAST.MonoGameClient.Screens
                 _uiState.ActiveActor.Actor.OpenedContainer += Actor_OpenedContainer;
                 _uiState.ActiveActor.Actor.BeginTransitionToOtherSector += Actor_BeginTransitionToOtherSector;
             }
-        }
-
-        private void Actor_BeginTransitionToOtherSector(object? sender, EventArgs e)
-        {
-            _isBeginTransition = true;
         }
 
         private void BottomMenu_PropButtonClicked(object? sender, EventArgs e)
@@ -284,7 +288,19 @@ namespace CDT.LAST.MonoGameClient.Screens
             return null;
         }
 
-        private static bool _showControlTutorial = true;
+        private void DrawControlsTutorial(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        {
+            var controlsTutorialText = UiResources.ControlsTutorialText;
+            var spriteFont = _uiContentStorage.GetButtonFont();
+            var textSize = spriteFont.MeasureString(controlsTutorialText);
+            const int MARGIN = 15;
+            spriteBatch.DrawString(
+                spriteFont,
+                controlsTutorialText,
+                new Vector2(graphicsDevice.Viewport.Bounds.Right - textSize.X - MARGIN,
+                    graphicsDevice.Viewport.Bounds.Top + MARGIN),
+                Color.White);
+        }
 
         private void DrawHud()
         {
@@ -317,23 +333,11 @@ namespace CDT.LAST.MonoGameClient.Screens
             var detailedLifetime = ScoreCalculator.ConvertTurnsToDetailed(turns);
             //if (detailedLifetime.Days > 3 && !(_player.MainPerson?.CheckIsDead()).GetValueOrDefault())
             {
-                _spriteBatch.DrawString(_uiContentStorage.GetButtonFont(), $"{detailedLifetime.Days}d {detailedLifetime.Hours}h", new Vector2(5, 5), Color.White);
+                _spriteBatch.DrawString(_uiContentStorage.GetButtonFont(),
+                    $"{detailedLifetime.Days}d {detailedLifetime.Hours}h", new Vector2(5, 5), Color.White);
             }
 
             _spriteBatch.End();
-        }
-
-        private void DrawControlsTutorial(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
-        {
-            var controlsTutorialText = UiResources.ControlsTutorialText;
-            var spriteFont = _uiContentStorage.GetButtonFont();
-            var textSize = spriteFont.MeasureString(controlsTutorialText);
-            const int MARGIN = 15;
-            spriteBatch.DrawString(
-                spriteFont,
-                controlsTutorialText,
-                new Vector2(graphicsDevice.Viewport.Bounds.Right - textSize.X - MARGIN, graphicsDevice.Viewport.Bounds.Top + MARGIN),
-                Color.White);
         }
 
         private void DrawModals()
@@ -372,7 +376,8 @@ namespace CDT.LAST.MonoGameClient.Screens
             }
 
             var position = new Vector2(viewPortWidth - 100, viewPortHeight - 100);
-            spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), MonsterHelper.GetPerkHintText(monsterPerson), position, Color.White);
+            spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), MonsterHelper.GetPerkHintText(monsterPerson),
+                position, Color.White);
             var isNumbersShow = false;
 
 #if SHOW_NUMS
