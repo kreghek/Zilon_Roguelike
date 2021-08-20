@@ -4,7 +4,7 @@
     "Ru": "Драконоубийца",
     "En": "Dragon Chaser"
   },
-  "Description":{
+  "Description": {
     "Ru": "Вы охотитесь на драконов. Существуют ли они? Простой люд врядли когда либо видел дракона.\nНо они имеют право не знать об этом. Это их выбор.\nИменно по этому вы должны продолжать охоту на драконов, чтобы драконы не пришли в их дома."
   },
   "HeadEquipments": {
@@ -17,7 +17,7 @@
     ]
   },
   "MainHandEquipments": {
-	"Rolls": 1,
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "great-sword",
@@ -26,7 +26,7 @@
     ]
   },
   "InventoryProps": {
-	  "Rolls": 1,
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "med-kit",

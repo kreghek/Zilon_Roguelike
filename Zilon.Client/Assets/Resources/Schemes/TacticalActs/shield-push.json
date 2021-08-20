@@ -3,10 +3,9 @@
     "Ru": "Толчок щитом",
     "En": "Shield push"
   },
-  "Description":
-  {
+  "Description": {
     "Ru": "Ковартый таран щитом прямо в оппонента.\nА таран - удел героев.\nЕсли повезёт, то может отбросить недруга.",
-	"En": "Crafty battering ram with a shield directly at the opponent.\nAnd the ram is the lot of heroes.\nIf you're lucky, you can throw off your foe."
+    "En": "Crafty battering ram with a shield directly at the opponent.\nAnd the ram is the lot of heroes.\nIf you're lucky, you can throw off your foe."
   },
   "Stats": {
     "Efficient": {
@@ -26,9 +25,11 @@
       "Impact": "Kinetic",
       "ApRank": 1
     },
-	"Rules": ["NormalPush"]
-  },
-    "Tags": [
-      "punch"
+    "Rules": [
+      "NormalPush"
     ]
+  },
+  "Tags": [
+    "punch"
+  ]
 }

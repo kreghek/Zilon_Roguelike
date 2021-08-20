@@ -3,16 +3,15 @@
     "Ru": "Грязный трюк",
     "En": "Dirty trick"
   },
-  "Description":
-  {
+  "Description": {
     "Ru": "Далеко не уползёшь, если под лопаткой нож.\nНо постарайся не устать от этих выкрутасов.",
-	"En": "You will not crawl far if there is a knife under the shoulder blade.\nBut try not to get tired of these freaks."
+    "En": "You will not crawl far if there is a knife under the shoulder blade.\nBut try not to get tired of these freaks."
   },
   "Stats": {
     "Efficient": {
       "Dice": 6,
       "Count": 1,
-	  "Modifiers": {
+      "Modifiers": {
         "ResultBuff": 1
       }
     },
@@ -24,19 +23,20 @@
     "Targets": "Enemy",
     "HitCount": 1,
     "IsMelee": true,
-	"Duration": 0.75,
+    "Duration": 0.75,
     "Offence": {
       "Type": "Tactical",
       "Impact": "Kinetic",
       "ApRank": 4
     },
-	"Rules": ["MoveBackward"],
+    "Rules": [
+      "MoveBackward"
+    ],
     "Tags": [
       "slash"
     ]
   },
-  "Constrains":
-  {
-	  "EnergyCost": 50
+  "Constrains": {
+    "EnergyCost": 50
   }
 }

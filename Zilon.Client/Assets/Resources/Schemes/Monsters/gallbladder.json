@@ -4,30 +4,30 @@
     "En": "Gallbladder"
   },
   "Hp": 10,
-  "CombatActs":[
+  "CombatActs": [
     {
-		"Efficient": {
-		  "Dice": 6,
-		  "Count": 2,
-		  "Modifiers": {
-			"ResultBuff": 2
-		  }
-		},
-		"Range": {
-		  "Min": 1,
-		  "Max": 4
-		},
-		"Effect": "Damage",
-		"Targets": "Enemy",
-		"Offence": {
-		  "Type": "Tactical",
-		  "Impact": "Kinetic"
-		},
-		"IsMelee": true,
-		"Tags": [
-		  "slash"
-		]
-	}
+      "Efficient": {
+        "Dice": 6,
+        "Count": 2,
+        "Modifiers": {
+          "ResultBuff": 2
+        }
+      },
+      "Range": {
+        "Min": 1,
+        "Max": 4
+      },
+      "Effect": "Damage",
+      "Targets": "Enemy",
+      "Offence": {
+        "Type": "Tactical",
+        "Impact": "Kinetic"
+      },
+      "IsMelee": true,
+      "Tags": [
+        "slash"
+      ]
+    }
   ],
   "DropTableSids": [
     "survival-medkit",

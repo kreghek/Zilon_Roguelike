@@ -3,10 +3,9 @@
     "Ru": "Удар кулаком",
     "En": "Punch"
   },
-  "Description":
-  {
+  "Description": {
     "Ru": "Простой удар кулаком. Не очень быстрый и сильный.\nИспользуется как автоатака, если нет никакого оружия.\nИли если оружие не может работать в клинче.",
-	"En": "A simple hit with a hand. Not very fast and powerful.\nUsed as an auto attack if there aren't any weapons.\nOr if the weapon cannot work in a clinch."
+    "En": "A simple hit with a hand. Not very fast and powerful.\nUsed as an auto attack if there aren't any weapons.\nOr if the weapon cannot work in a clinch."
   },
   "Stats": {
     "Efficient": {
@@ -33,8 +32,7 @@
       "punch"
     ]
   },
-  "Constrains":
-  {
-	  "EnergyCost": 1
+  "Constrains": {
+    "EnergyCost": 1
   }
 }

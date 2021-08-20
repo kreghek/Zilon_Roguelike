@@ -4,7 +4,7 @@
     "Ru": "Горец",
     "En": "Highlander"
   },
-  "Description":{
+  "Description": {
     "Ru": "Мир приходит в упадок. Цивилизации - чахнут и дряхлеют. Чудища пожрают всё живое.\nС гор пришёл человек. Человек, чья необузданная жестокость спасёт мир."
   },
   "HeadEquipments": {
@@ -32,10 +32,10 @@
         "SchemeSid": "battle-axe",
         "Weight": 1
       },
-	  {
+      {
         "SchemeSid": "cudgel",
         "Weight": 1
-      },
+      }
     ]
   },
   "InventoryProps": {
