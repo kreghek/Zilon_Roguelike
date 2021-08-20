@@ -149,7 +149,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                         SourceRectangle = new Rectangle(hexTextureIndexX * 28, hexTextureIndexY * 16, 28, 16)
                     };
 
-                    var hexSpriteContainer = new SpriteContainer {
+                    var hexSpriteContainer = new SpriteContainer
+                    {
                         Position = new Vector2(
                             (float)(worldCoords[0] * hexSize * Math.Sqrt(3)),
                             worldCoords[1] * hexSize * 2 / 2

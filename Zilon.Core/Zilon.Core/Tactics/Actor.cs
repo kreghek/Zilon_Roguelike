@@ -508,7 +508,7 @@ namespace Zilon.Core.Tactics
         }
     }
 
-    public sealed class ActorMoveEventArgs: EventArgs
+    public sealed class ActorMoveEventArgs : EventArgs
     {
         public ActorMoveEventArgs(bool forced)
         {

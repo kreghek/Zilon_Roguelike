@@ -160,7 +160,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     survivalModule.SetStatForce(SurvivalStatType.Health, 0);
                 }
                 catch (InvalidOperationException)
-                { 
+                {
                     // Error occured then person removed (i think after transiton)
                     // and death event handler try remove person again.
                 }

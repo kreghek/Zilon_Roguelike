@@ -105,7 +105,7 @@ namespace CDT.LAST.MonoGameClient
 
             var cheatInput = new CheatInput(this, _spriteBatch, font);
             Components.Add(cheatInput);
-            
+
             _graphics.IsFullScreen = false;
             _graphics.PreferredBackBufferWidth = 800;
             _graphics.PreferredBackBufferHeight = 480;

@@ -285,7 +285,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             for (var itemIndex = 0; itemIndex < props.Length; itemIndex++)
             {
                 var prop = props[itemIndex];
-                
+
                 var relativeY = itemIndex * (EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING);
                 var buttonRect = new Rectangle(
                     ContentRect.Left,

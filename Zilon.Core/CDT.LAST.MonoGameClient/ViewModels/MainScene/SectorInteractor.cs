@@ -132,7 +132,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             if (!keyboardState.IsKeyUp(Keys.O) || _lastKeyboardState?.IsKeyDown(Keys.O) != true)
                 return false;
-            
+
             _lastKeyboardState = keyboardState;
 
             var openCommand = _commandFactory.GetCommand<OpenContainerCommand>();
@@ -158,7 +158,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             if (!keyboardState.IsKeyUp(Keys.T) || _lastKeyboardState?.IsKeyDown(Keys.T) != true)
                 return false;
-            
+
             _lastKeyboardState = keyboardState;
 
             var transitionCommand = _commandFactory.GetCommand<SectorTransitionMoveCommand>();

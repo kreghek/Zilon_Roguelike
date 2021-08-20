@@ -100,7 +100,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
                 ["slash"] = loadIcon("SwordCut"),
                 ["evasion-slash"] = loadIcon("EvasionSlash"),
-                
+
                 ["pierce"] = loadIcon("NormalPierce"),
 
                 ["shield-push"] = loadIcon("ShieldBash"),

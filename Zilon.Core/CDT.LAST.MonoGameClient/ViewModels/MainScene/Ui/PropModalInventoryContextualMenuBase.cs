@@ -82,7 +82,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         {
             if (_size == null)
                 return;
-            
+
             var mouseState = Mouse.GetState();
             var mouseRect = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
             var menuRect = new Rectangle(_position, _size.Value);

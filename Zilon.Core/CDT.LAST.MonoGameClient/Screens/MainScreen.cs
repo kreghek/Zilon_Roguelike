@@ -128,7 +128,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             _bottomMenu.TraitsButtonClicked += BottomMenu_TraitsButtonClicked;
 
             _scoreManager = serviceScope.GetRequiredService<IScoreManager>();
-            
+
         }
 
         public override void Draw(GameTime gameTime)

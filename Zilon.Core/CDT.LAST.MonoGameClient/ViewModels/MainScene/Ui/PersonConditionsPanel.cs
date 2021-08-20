@@ -204,7 +204,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private static string? GetSymptomTitle(DiseaseSymptomCondition diseaseSymptomCondition)
         {
-            var diseasesTitles = diseaseSymptomCondition.Diseases.Select(x=>GetName(x));
+            var diseasesTitles = diseaseSymptomCondition.Diseases.Select(x => GetName(x));
             var fullDeseasesList = string.Join(",", diseasesTitles);
             return $"{diseaseSymptomCondition.Symptom.Name?.Ru ?? diseaseSymptomCondition.Symptom.Name?.En} ({fullDeseasesList})";
         }
@@ -293,7 +293,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 if (_alertCounter < ALERT_VISIBLE_DURATION_SECONDS)
                 {
                     var t = _alertCounter / ALERT_VISIBLE_DURATION_SECONDS;
-                    
+
                     var visiblilitySin = Math.Sin(t * Math.PI * 2 * 3);
                     if (visiblilitySin > 0)
                     {
@@ -326,7 +326,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             if (!criticalConditions.Any())
-            { 
+            {
                 _alertIterationIndex = 0;
             }
         }

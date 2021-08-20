@@ -238,7 +238,7 @@ namespace Zilon.Core.PersonGeneration
                 throw new InvalidOperationException();
             }
 
-            var defaultActSchemes = person.Scheme.DefaultActs.Select(x=> SchemeService.GetScheme<ITacticalActScheme>(x));
+            var defaultActSchemes = person.Scheme.DefaultActs.Select(x => SchemeService.GetScheme<ITacticalActScheme>(x));
             var combatActModule = new CombatActModule(
                 defaultActSchemes,
                 equipmentModule,

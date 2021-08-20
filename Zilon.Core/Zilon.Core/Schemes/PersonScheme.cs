@@ -17,7 +17,7 @@ namespace Zilon.Core.Schemes
         [JsonConverter(typeof(ConcreteTypeConverter<PersonSurvivalStatSubScheme[]>))]
         [JsonProperty]
         public IPersonSurvivalStatSubScheme?[]? SurvivalStats { get; private set; }
-        
+
         /// <inheritdoc/>
         public string?[]? DefaultActs { get; set; }
     }

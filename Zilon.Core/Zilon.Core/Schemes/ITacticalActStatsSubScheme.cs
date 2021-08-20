@@ -59,7 +59,7 @@ namespace Zilon.Core.Schemes
 
     [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     public enum CombatActRule
-    { 
+    {
         Undefined,
         NormalPush,
         MoveBackward

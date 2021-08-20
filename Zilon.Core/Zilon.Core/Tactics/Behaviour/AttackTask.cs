@@ -177,7 +177,7 @@ namespace Zilon.Core.Tactics.Behaviour
                 {
                     // If no equipment was selected then use default act. Each person has only one default act in current moment. -- INCORRECT
                     // THERE ARE MULTYPLE DIFFERENT DEFAULT ACTS.
-                    yield return currentActs.First(x=>x.Scheme.Sid == "punch");
+                    yield return currentActs.First(x => x.Scheme.Sid == "punch");
                 }
             }
         }

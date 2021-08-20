@@ -79,7 +79,7 @@ namespace Zilon.Core.PersonModules
             var perks = new List<IPerk>(_buildInPerks);
             if (Perks != null)
             {
-                perks.AddRange(Perks.Where(x=>!x.Scheme.IsBuildIn));
+                perks.AddRange(Perks.Where(x => !x.Scheme.IsBuildIn));
             }
 
             foreach (var perkScheme in schemes)

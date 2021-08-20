@@ -58,7 +58,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 Scheme = new PersonPerkScheme()
                 {
                     Name = new LocalizedStringSubScheme()
-                    { 
+                    {
                         Ru = personEquipmentTemplate.Ru,
                         En = personEquipmentTemplate.En
                     },
@@ -174,11 +174,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 new Vector2(item.UiRect.Left, item.UiRect.Top), sourceRect, Color.White);
 
             var attributeTitle = GetPerkTitle(item.Perk);
-             spriteBatch.DrawString(
-                _uiContentStorage.GetButtonFont(),
-                attributeTitle,
-                new Vector2(item.UiRect.Right + ATTRIBUTE_ITEM_SPACING, item.UiRect.Top),
-                new Color(195, 180, 155));
+            spriteBatch.DrawString(
+               _uiContentStorage.GetButtonFont(),
+               attributeTitle,
+               new Vector2(item.UiRect.Right + ATTRIBUTE_ITEM_SPACING, item.UiRect.Top),
+               new Color(195, 180, 155));
         }
 
         private void DrawHintIfSelected(SpriteBatch spriteBatch)
