@@ -79,14 +79,14 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             var halfWidth = ContentRect.Width / 2;
             const int MARGIN_X = 2;
             var equipmentRect = new Rectangle(ContentRect.Left,
-             ContentRect.Top,
-              halfWidth - MARGIN_X,
-               ContentRect.Height);
+                ContentRect.Top,
+                halfWidth - MARGIN_X,
+                ContentRect.Height);
             InitEquipment(person, equipmentRect);
             var inventoryRect = new Rectangle(ContentRect.Center.X + (MARGIN_X * 2),
-             ContentRect.Top,
-              halfWidth - (MARGIN_X * 2),
-               ContentRect.Height);
+                ContentRect.Top,
+                halfWidth - (MARGIN_X * 2),
+                ContentRect.Height);
             InitInventory(person, inventoryRect);
         }
 
