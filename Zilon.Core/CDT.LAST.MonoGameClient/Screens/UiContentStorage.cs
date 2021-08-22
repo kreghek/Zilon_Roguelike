@@ -92,8 +92,6 @@ namespace CDT.LAST.MonoGameClient.Screens
                 return contentManager.Load<Texture2D>($"Sprites/ui/CombatActIcons/{name}");
             }
 
-            ;
-
             _combatActDict = new Dictionary<string, Texture2D>
             {
                 ["default"] = loadIcon("SwordCut"),
