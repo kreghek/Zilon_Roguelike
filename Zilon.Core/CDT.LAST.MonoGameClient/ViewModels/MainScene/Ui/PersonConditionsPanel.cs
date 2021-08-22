@@ -94,16 +94,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             DrawHintIfSelected(spriteBatch);
         }
 
-        private Rectangle GetUiRect(int conditionIndex)
-        {
-            var offsetX = conditionIndex * (ICON_SIZE + ICON_SPACING);
-            var rect = new Rectangle(offsetX - ICON_SPACING + _screenX,
-                 _screenY,
-                ICON_SIZE,
-                ICON_SIZE);
-            return rect;
-        }
-
         public void Update(GameTime gameTime)
         {
             var person = _uiState.ActiveActor?.Actor?.Person;
@@ -276,6 +266,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             var fullDeseasesList = string.Join(",", diseasesTitles);
             return
                 $"{diseaseSymptomCondition.Symptom.Name?.Ru ?? diseaseSymptomCondition.Symptom.Name?.En} ({fullDeseasesList})";
+        }
+
+        private Rectangle GetUiRect(int conditionIndex)
+        {
+            var offsetX = conditionIndex * (ICON_SIZE + ICON_SPACING);
+            var rect = new Rectangle(offsetX - ICON_SPACING + _screenX,
+                _screenY,
+                ICON_SIZE,
+                ICON_SIZE);
+            return rect;
         }
 
         private void UpdateAlert(IConditionsModule conditionsModule, GameTime gameTime)
