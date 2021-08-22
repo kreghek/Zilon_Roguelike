@@ -394,7 +394,8 @@ namespace CDT.LAST.MonoGameClient.Screens
                 for (var statIndex = 0; statIndex < stats.Length; statIndex++)
                 {
                     var stat = stats[statIndex];
-                    var statPosition = new Vector2(0, 32 + statIndex * 16);
+                    var offsetY = statIndex * 16;
+                    var statPosition = new Vector2(0, 32 + offsetY);
                     var statText = $"{stat.Type} - {stat.Value} ({stat.ValueShare:0.##})";
                     spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(), statText, position + statPosition,
                         Color.White);
