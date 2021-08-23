@@ -112,9 +112,10 @@ namespace Zilon.Core.Tests.MapGenerators
             var scheme = new TestMonsterScheme
             {
                 Sid = sid,
-                PrimaryAct = new TestTacticalActStatsSubScheme
-                {
-                    Efficient = new Roll(6, 1)
+                CombatActs = new[]{ new TestTacticalActStatsSubScheme
+                    {
+                        Efficient = new Roll(6, 1)
+                    }
                 }
             };
             return scheme;
