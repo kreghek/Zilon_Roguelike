@@ -119,7 +119,7 @@ namespace Zilon.Bot.Players.DevelopmentTests
             TestContext.Out.WriteLine($"Details:  {scoreDetails}");
 
             var playerEventLogService = serviceProvider.GetRequiredService<IPlayerEventLogService>();
-            var deathReasonService = serviceProvider.GetRequiredService<DeathReasonService>();
+            var deathReasonService = serviceProvider.GetRequiredService<IDeathReasonService>();
             var lastEvent = playerEventLogService.GetPlayerEvent();
 
             if (lastEvent != null)
