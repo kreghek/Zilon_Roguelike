@@ -11,19 +11,20 @@ Background:
 	Given Есть карта размером 2
 	And Есть актёр игрока класса human-person в ячейке (0, 0)
 
-@survival @dev1 @dev2 @dev17
-Scenario Outline: Снятие угроз выживания
-	Given Актёр имеет эффект <startEffect>
-	And В инвентаре у актёра есть еда: <propSid> количество: 100
-	When Актёр использует предмет <propSid> на себя 1 раз
-	Then Актёр под эффектом <effect>
+# Rewrite this test to use test-depending stats instead real
+#@survival @dev1 @dev2 @dev17
+#Scenario Outline: Снятие угроз выживания
+#	Given Актёр имеет эффект <startEffect>
+#	And В инвентаре у актёра есть еда: <propSid> количество: 100
+#	When Актёр использует предмет <propSid> на себя 1 раз
+#	Then Актёр под эффектом <effect>
 
-Examples: 
-    | startEffect  | propSid      | effect       |
-    | Слабый голод | packed-food  | нет          |
-    | Слабая жажда | water-bottle | нет          |
-    | Голод        | packed-food  | Слабый голод |
-    | Жажда        | water-bottle | нет          |
+#Examples: 
+#    | startEffect  | propSid      | effect       |
+#    | Слабый голод | packed-food  | нет          |
+#    | Слабая жажда | water-bottle | нет          |
+#    | Голод        | packed-food  | Слабый голод |
+#    | Жажда        | water-bottle | нет          |
 
 @survival @dev1 @dev17
 Scenario Outline: Употребление медикаментов для восстановления Hp.
@@ -50,21 +51,22 @@ Scenario Outline: Употребление медикаментов снижае
 	| 2          | Сильная токсикация     | med-kit |
 	| 3          | Смертельная токсикация | med-kit |
 
-@survival @dev1 @dev17
-Scenario Outline: Наступление выживальных состояний (жажда/голод/утомление)
-	# special perk to exclude other hazard influence
-	Given Актёр игрока получает перк <testPerk>
-	When Я жду <iterations> итераций
-	Then Актёр под эффектом <effect>
-
-	Examples: 
-	| iterations | stat    | effect        | testPerk        |
-	| 250        | сытость | Слабый голод  | thrist-immunity |
-	| 1000       | сытость | Голод         | thrist-immunity |
-	| 3300       | сытость | Голодание     | thrist-immunity |
-	| 268        | вода    | Слабая жажда  | hunger-immunity |
-	| 400        | вода    | Жажда         | hunger-immunity |
-	| 1288       | вода    | Обезвоживание | hunger-immunity |
+# Rewrite this test to use test-depending stats instead real
+#@survival @dev1 @dev17
+#Scenario Outline: Наступление выживальных состояний (жажда/голод/утомление)
+#	# special perk to exclude other hazard influence
+#	Given Актёр игрока получает перк <testPerk>
+#	When Я жду <iterations> итераций
+#	Then Актёр под эффектом <effect>
+#
+#	Examples: 
+#	| iterations | stat    | effect        | testPerk        |
+#	| 250        | сытость | Слабый голод  | thrist-immunity |
+#	| 1000       | сытость | Голод         | thrist-immunity |
+#	| 3300       | сытость | Голодание     | thrist-immunity |
+#	| 268        | вода    | Слабая жажда  | hunger-immunity |
+#	| 400        | вода    | Жажда         | hunger-immunity |
+#	| 1288       | вода    | Обезвоживание | hunger-immunity |
 
 #@survival @dev1 @dev17
 #Scenario Outline: Эффекты угроз выживания наносят урон актёру.
@@ -77,19 +79,20 @@ Scenario Outline: Наступление выживальных состояни
 #	| Голодание     | 3              | Слабая рана |
 #	| Обезвоживание | 3              | Слабая рана |
 
-@survival @dev1 @dev17
-Scenario Outline: Угрозы выживания (имеются изначально) снижают эффективность тактических действий у актёра игрока.
-	Given В инвентаре у актёра игрока есть предмет: <equipmentSid>
-	And Актёр имеет эффект <startEffect>
-	When Экипирую предмет <equipmentSid> в слот Index: <slotIndex>
-	And Жду 1000 единиц времени
-	Then Тактическое умение <tacticalActSid> имеет дебафф на эффективность
+# Rewrite this test to use test-depending stats instead real
+#@survival @dev1 @dev17
+#Scenario Outline: Угрозы выживания (имеются изначально) снижают эффективность тактических действий у актёра игрока.
+#	Given В инвентаре у актёра игрока есть предмет: <equipmentSid>
+#	And Актёр имеет эффект <startEffect>
+#	When Экипирую предмет <equipmentSid> в слот Index: <slotIndex>
+#	And Жду 1000 единиц времени
+#	Then Тактическое умение <tacticalActSid> имеет дебафф на эффективность
 
-Examples: 
-| startEffect   | equipmentSid | slotIndex | tacticalActSid |
-| Слабый голод  | short-sword  | 2         | weak-swing     |
-| Голод         | short-sword  | 2         | weak-swing     |
-| Голодание     | short-sword  | 2         | weak-swing     |
-| Слабая жажда  | short-sword  | 2         | weak-swing     |
-| Жажда         | short-sword  | 2         | weak-swing     |
-| Обезвоживание | short-sword  | 2         | weak-swing     |
+#Examples: 
+#| startEffect   | equipmentSid | slotIndex | tacticalActSid |
+#| Слабый голод  | short-sword  | 2         | weak-swing     |
+#| Голод         | short-sword  | 2         | weak-swing     |
+#| Голодание     | short-sword  | 2         | weak-swing     |
+#| Слабая жажда  | short-sword  | 2         | weak-swing     |
+#| Жажда         | short-sword  | 2         | weak-swing     |
+#| Обезвоживание | short-sword  | 2         | weak-swing     |
