@@ -2,7 +2,7 @@
   "Rolls": 5,
   "Records": [
     {
-      "SchemeSid": "packed-food",
+      "SchemeSid": "raw-meat",
       "MinCount": 1,
       "MaxCount": 1,
       "Weight": 2
@@ -14,10 +14,10 @@
       "Weight": 3
     },
     {
-      "SchemeSid": "med-kit",
+      "SchemeSid": "gall-gland",
       "MinCount": 1,
       "MaxCount": 1,
-      "Weight": 6
+      "Weight": 1
     },
     {
       "SchemeSid": null,

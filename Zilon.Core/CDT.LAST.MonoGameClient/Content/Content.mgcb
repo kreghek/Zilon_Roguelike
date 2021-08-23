@@ -1806,6 +1806,18 @@
 /processorParam:TextureFormat=Color16Bit
 /build:Sprites/ui/PropIcons/EvilPumpkin.png
 
+#begin Sprites/ui/PropIcons/GallGland.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/PropIcons/GallGland.png
+
 #begin Sprites/ui/PropIcons/HungerModerator.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1889,6 +1901,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color16Bit
 /build:Sprites/ui/PropIcons/PowerShieldGenerator.png
+
+#begin Sprites/ui/PropIcons/RawMeat.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ui/PropIcons/RawMeat.png
 
 #begin Sprites/ui/PropIcons/Ring.png
 /importer:TextureImporter

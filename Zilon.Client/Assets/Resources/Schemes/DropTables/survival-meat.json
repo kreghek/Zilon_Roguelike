@@ -2,7 +2,7 @@
   "Rolls": 1,
   "Records": [
     {
-      "SchemeSid": "packed-food",
+      "SchemeSid": "raw-meat",
       "MinCount": 1,
       "MaxCount": 1,
       "Weight": 1

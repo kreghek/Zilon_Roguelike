@@ -2,7 +2,7 @@
   "Rolls": 1,
   "Records": [
     {
-      "SchemeSid": "med-kit",
+      "SchemeSid": "gall-gland",
       "MinCount": 1,
       "MaxCount": 1,
       "Weight": 2

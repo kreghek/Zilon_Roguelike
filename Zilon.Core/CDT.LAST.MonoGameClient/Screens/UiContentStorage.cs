@@ -244,6 +244,12 @@ namespace CDT.LAST.MonoGameClient.Screens
                 new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/Waterskin") });
             _propIcons.Add("packed-food",
                 new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/PackedFood") });
+            _propIcons.Add("raw-meat",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/RawMeat") });
+            _propIcons.Add("vege-milk",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/Vegemilk") });
+            _propIcons.Add("gall-gland",
+                new[] { contentManager.Load<Texture2D>("Sprites/ui/PropIcons/GallGland") });
 
             // Aux
             _propIcons.Add("evil-pumpkin",

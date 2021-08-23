@@ -116,7 +116,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels
                     return "Ранен";
                 }
             }
-            else if (valueShare < 0.1f)
+            else if (valueShare <= 0.1f)
             {
                 var currentLanguage = Thread.CurrentThread.CurrentUICulture;
                 var langName = currentLanguage.TwoLetterISOLanguageName;

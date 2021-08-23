@@ -2,7 +2,7 @@
   "Rolls": 1,
   "Records": [
     {
-      "SchemeSid": "water-bottle",
+      "SchemeSid": "vege-milk",
       "MinCount": 1,
       "MaxCount": 1,
       "Weight": 2
