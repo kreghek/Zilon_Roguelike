@@ -18,7 +18,7 @@ namespace Zilon.TextClient
         {
             var scoreManager = gameState.ServiceScope.ServiceProvider.GetRequiredService<IScoreManager>();
 
-            var summary = TextSummaryHelper.CreateTextSummary(scoreManager.Scores);
+            var summary = TextSummaryHelper.CreateTextSummary(scoreManager.Scores, "en");
 
             Console.WriteLine(summary);
 

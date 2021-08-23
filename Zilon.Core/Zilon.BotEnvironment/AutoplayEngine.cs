@@ -185,7 +185,7 @@ namespace Zilon.BotEnvironment
         private void WriteScores(IServiceProvider serviceFactory, IScoreManager scoreManager, string mode,
             string scoreFilePreffix)
         {
-            var summaryText = TextSummaryHelper.CreateTextSummary(scoreManager.Scores);
+            var summaryText = TextSummaryHelper.CreateTextSummary(scoreManager.Scores, "en");
 
             Log(summaryText);
 

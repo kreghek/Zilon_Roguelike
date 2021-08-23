@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.PersonModules;
@@ -54,9 +55,13 @@ namespace Zilon.Core.Specs.Mocks
                 сonditionModule, evolutionModule, equipmentModule);
             person.AddModule(survivalModule);
 
-            var defaultActScheme = _schemeService.GetScheme<ITacticalActScheme>(person.Scheme.DefaultActs);
-            var combatActModule =
-                new CombatActModule(defaultActScheme, equipmentModule, сonditionModule, evolutionModule);
+            var defaultActScheme = _schemeService.GetScheme<ITacticalActScheme>(person.Scheme.DefaultActs.First());
+            var defaultActSchemes = new[] { defaultActScheme };
+            var combatActModule = new CombatActModule(
+                defaultActSchemes,
+                equipmentModule,
+                сonditionModule,
+                evolutionModule);
             person.AddModule(combatActModule);
 
             var combatStatsModule = new CombatStatsModule(evolutionModule, equipmentModule);
