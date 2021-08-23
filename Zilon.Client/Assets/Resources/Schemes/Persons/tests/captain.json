@@ -3,7 +3,9 @@
     "Ru": "Пиратский Капитан"
   },
   "Hp": 120,
-  "DefaultAct": "punch",
+  "DefaultActs": [
+    "punch"
+  ],
   "Slots": [
     {
       "Types": "Head"

@@ -27,9 +27,9 @@
     },
     "Rules": [
       "NormalPush"
+    ],
+	"Tags": [
+	  "punch"
     ]
-  },
-  "Tags": [
-    "punch"
-  ]
+  }
 }

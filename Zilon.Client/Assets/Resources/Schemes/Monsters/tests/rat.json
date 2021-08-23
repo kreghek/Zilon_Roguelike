@@ -4,7 +4,7 @@
     "En": "Rat"
   },
   "Hp": 2,
-  "PrimaryAct": {
+  "CombatActs":[ {
     "Efficient": {
       "Dice": 1,
       "Count": 1
@@ -23,7 +23,7 @@
     "Tags": [
       "bite"
     ]
-  },
+  }],
   "DropTableSids": [
     "survival",
     "default",
