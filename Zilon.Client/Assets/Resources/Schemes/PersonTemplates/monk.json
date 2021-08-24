@@ -5,7 +5,8 @@
     "En": "Monk"
   },
   "Description": {
-    "Ru": "Долгое отшельничество и священный обет помогли вам достичь\nвысокого духовного развития.\nПоэтому вы знаете цену жизни. И могущество смерти.\nПоэтому вы оказались здесь."
+    "Ru": "Долгое отшельничество и священный обет помогли вам достичь\nвысокого духовного развития.\nПоэтому вы знаете цену жизни. И могущество смерти.\nПоэтому вы оказались здесь.",
+	"En": "A long hermitage and a sacred vow helped you to achieve\nhigh spiritual growth.\nTherefore, you know the value of life. And the power of death.\nThis is why you ended up here."
   },
   "BodyEquipments": {
     "Rolls": 1,

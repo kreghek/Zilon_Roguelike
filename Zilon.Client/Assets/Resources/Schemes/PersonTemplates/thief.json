@@ -5,7 +5,8 @@
     "En": "Thief"
   },
   "Description": {
-    "Ru": "Ваш отец был вором. Это был его договор с обществом.\n\"Если я что-то украл, значит я заслужил это по праву.\"\nВы глубоко прониклись этой философией. Теперь вы на месте своего отца."
+    "Ru": "Ваш отец был вором. Это был его договор с обществом.\n\"Если я что-то украл, значит я заслужил это по праву.\"\nВы глубоко прониклись этой философией. Теперь вы на месте своего отца.",
+	"En": "Your father was a thief. It was his contract with society.\n\" If I stole something, then I deserve it by right.\"\nYou deeply imbued with this philosophy. Now you are in your father's place."
   },
   "HeadEquipments": {
     "Rolls": 1,
