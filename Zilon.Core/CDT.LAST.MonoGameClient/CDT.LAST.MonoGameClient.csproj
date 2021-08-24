@@ -62,15 +62,13 @@
       <LastGenOutput>UiResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Content\Sprites\game-objects\Monographics\Outlined\" />
-  </ItemGroup>
-    <Target Name="CopySchemeCatalogToClientBin" BeforeTargets="PrepareForBuild">
-        <ItemGroup>
-            <SchemeCatalogFiles Include="$(ProjectDir)../../Zilon.Client/Assets/Resources/Schemes/**/*.json" />
-        </ItemGroup>
-        <Message Text="Copy the Scheme Catalog from $(SchemeCatalogFiles) to $(TargetDir)." />
-        <RemoveDir Directories="$(TargetDir)/Content/Schemes" />
-        <Copy SourceFiles="@(SchemeCatalogFiles)" DestinationFiles="@(SchemeCatalogFiles->'$(TargetDir)/Content/Schemes/%(RecursiveDir)%(Filename)%(Extension)')" />
-    </Target>
+
+  <Target Name="CopySchemeCatalogToClientBin" BeforeTargets="PrepareForBuild">
+    <ItemGroup>
+      <SchemeCatalogFiles Include="$(ProjectDir)../../Zilon.Client/Assets/Resources/Schemes/**/*.json" />
+    </ItemGroup>
+    <Message Text="Copy the Scheme Catalog from $(SchemeCatalogFiles) to $(TargetDir)." />
+    <RemoveDir Directories="$(TargetDir)/Content/Schemes" />
+    <Copy SourceFiles="@(SchemeCatalogFiles)" DestinationFiles="@(SchemeCatalogFiles->'$(TargetDir)/Content/Schemes/%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
 </Project>
