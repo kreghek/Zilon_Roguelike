@@ -74,7 +74,7 @@ jobs:
           path: bin/version.txt
           contents: |
             echo "Hello World!"
-          write-mode: override
+          write-mode: overwrite
 
       - uses: actions/upload-artifact@v2
         with:
