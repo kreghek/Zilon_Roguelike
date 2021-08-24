@@ -68,13 +68,13 @@ jobs:
         with:
           token: ${{secrets.github_token}}
 
-      - name: Write version to file $GITHUB_SHA
+      - name: Write version to file ${{ env.GITHUB_SHA }}
         uses: DamianReeves/write-file-action@v1.0
         with:
           path: bin/version.txt
           contents: |
             ver.2.5.8.${{ steps.buildnumber.outputs.build_number }}
-            $GITHUB_SHA
+            ${{ env.GITHUB_SHA }}
           write-mode: overwrite
 
       - uses: actions/upload-artifact@v2
