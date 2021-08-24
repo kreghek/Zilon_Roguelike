@@ -74,8 +74,10 @@ jobs:
           path: bin/version.txt
           contents: |
             ver.2.5.8.${{ steps.buildnumber.outputs.build_number }}
-            ${{ GITHUB_SHA }}
+            $CommitInfo
           write-mode: overwrite
+          env:
+            CommitInfo: $GITHUB_SHA
 
       - uses: actions/upload-artifact@v2
         with:
