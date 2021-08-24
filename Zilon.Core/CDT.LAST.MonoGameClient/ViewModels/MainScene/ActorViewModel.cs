@@ -402,9 +402,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var consumableType = e.UsedProp.Scheme.Sid switch
             {
-                "med-kit" => ConsumeEffectType.Heal,
-                "water-bottle" => ConsumeEffectType.Drink,
-                "packed-food" => ConsumeEffectType.Eat,
+                "med-kit" or "gall-gland" => ConsumeEffectType.Heal,
+                "water-bottle" or "vege-milk" => ConsumeEffectType.Drink,
+                "packed-food" or "raw-meat" or "evil-pumpkin" => ConsumeEffectType.Eat,
                 _ => ConsumeEffectType.UseCommon
             };
 
