@@ -5,7 +5,8 @@
   },
   "Description":
   {
-    "Ru": "Ваши руки должны быть в музее эталонов мер и весов.\nСодержание такого произведения искуства\nобходится вам дорого, но оно того стоит."
+    "Ru": "Ваши руки должны быть в музее эталонов мер и весов.\nСодержание такого произведения искуства\nобходится вам дорого, но оно того стоит.",
+	"En": "Your hands should be in the Weights and Measures Museum.\nThe content of such a work of art\ncosts you dear, but it is worth it."
   },
   "IsBuildIn": true
 }

@@ -5,7 +5,8 @@
   },
   "Description":
   {
-    "Ru": "Вы лезете в драку со всем, что шевелится.\nВ прочем, вы просто всё время лезете в драку.\nИз-за постоянной практики ваши удары более эффективны."
+    "Ru": "Вы лезете в драку со всем, что шевелится.\nВ прочем, вы просто всё время лезете в драку.\nИз-за постоянной практики ваши удары более эффективны.",
+	"En": "You get into fights with everything that moves.\nOtherwise, you just get into fights all the time.\nDue to constant practice, your punches are more effective."
   },
   "IsBuildIn": true
 }

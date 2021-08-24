@@ -5,7 +5,8 @@
   },
   "Description":
   {
-    "Ru": "Вы, как угольная печь.\nВсё, что попадает внутрь, мгновенно перерабатывается в энергию.\nПоэтому вы постоянно хотите есть.\nИ двигаться. И снова есть."
+    "Ru": "Вы, как угольная печь.\nВсё, что попадает внутрь, мгновенно перерабатывается в энергию.\nПоэтому вы постоянно хотите есть.\nИ двигаться. И снова есть.",
+	"En": "You are like a charcoal stove.\nAnything that goes inside is instantly converted into energy.\nSo you are constantly hungry.\nAnd move. And again there is."
   },
   "IsBuildIn": true
 }

@@ -5,7 +5,8 @@
   },
   "Description":
   {
-    "Ru": "Из-за какого-то нарушения обмена веществ, у вас очень широкая кость.\nПорхать, как пчела... Ну вы избегаете этого."
+    "Ru": "Из-за какого-то нарушения обмена веществ, у вас очень широкая кость.\nПорхать, как пчела... Ну, вы избегаете этого.",
+	"En": "Due to some metabolic disorder, you have a very wide bone.\nFlitter like a bee ... Well, you avoid it."
   },
   "IsBuildIn": true
 }

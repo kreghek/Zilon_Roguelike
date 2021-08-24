@@ -5,7 +5,8 @@
   },
   "Description":
   {
-    "Ru": "Как-то так случилось, что вы не можете нормально работать двумя руками.\nНо то, что вы делате одной рукой - эффективнее."
+    "Ru": "Как-то так случилось, что вы не можете нормально работать двумя руками.\nНо то, что вы делате одной рукой - эффективнее.",
+	"En": "It somehow happened that you cannot work normally with two hands.\nBut what you do with one hand is more effective."
   },
   "IsBuildIn": true
 }

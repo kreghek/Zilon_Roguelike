@@ -5,7 +5,8 @@
   },
   "Description":
   {
-    "Ru": "Вы постоянно двигаетесь - бегаете, прягаете. И не можете остановиться.\nКак результат, у вас, может и не рельефные, но очень мощные ноги.\nПросто камень. Но этот камень нужно кормить."
+    "Ru": "Вы постоянно двигаетесь - бегаете, прягаете. И не можете остановиться.\nКак результат, у вас, может и не рельефные, но очень мощные ноги.\nПросто камень. Но этот камень нужно кормить.",
+	"En": "You are constantly moving - running, jumping. And you cannot stop. \nAs a result, you may not have embossed, but very powerful legs.\nJust a stone. But this stone needs to be fed."
   },
   "IsBuildIn": true
 }

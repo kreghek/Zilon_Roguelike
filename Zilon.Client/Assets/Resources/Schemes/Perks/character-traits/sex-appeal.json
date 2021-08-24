@@ -5,7 +5,8 @@
   },
   "Description":
   {
-    "Ru": "У вас очень аппетитная внешность.\nВозможно, это когда-нибудь вам пригодится в жестоком диком мире."
+    "Ru": "У вас очень аппетитная внешность.\nВозможно, это когда-нибудь вам пригодится в жестоком диком мире.",
+	"En": "You have a very appetizing appearance.\nMaybe it will come in handy in the cruel wild world someday.",
   },
   "IsBuildIn": true
 }

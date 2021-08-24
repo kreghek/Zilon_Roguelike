@@ -5,7 +5,8 @@
   },
   "Description":
   {
-    "Ru": "Чем бы вы не занялись, всё у вас получается.\nИз-за этого вы не сильно цените свои достижения."
+    "Ru": "Чем бы вы не занялись, всё у вас получается.\nИз-за этого вы не сильно цените свои достижения.",
+	"En": "Whatever you do, you succeed.\nThus, you don't really value your accomplishments."
   },
   "IsBuildIn": true
 }
