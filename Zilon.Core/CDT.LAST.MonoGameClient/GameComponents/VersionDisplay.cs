@@ -1,4 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.IO;
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace CDT.LAST.MonoGameClient.GameComponents
@@ -7,16 +10,35 @@ namespace CDT.LAST.MonoGameClient.GameComponents
     {
         private readonly SpriteFont _font;
         private readonly SpriteBatch _spriteBatch;
-        private readonly string _version = "ver.2.5.8-gdw21.10";
+        private readonly string _version;
 
         public VersionDisplay(Game game, SpriteBatch spriteBatch, SpriteFont font) : base(game)
         {
             _spriteBatch = spriteBatch;
             _font = font;
+
+            var binPath = AppContext.BaseDirectory;
+
+            if (string.IsNullOrWhiteSpace(binPath))
+            {
+                throw new InvalidOperationException("Path to bin directiory is null.");
+            }
+
+            var versionFile = Path.Combine(binPath, "version.txt");
+
+            if (File.Exists(versionFile))
+            {
+                _version = File.ReadAllText(versionFile);
+            }
         }
 
         public override void Draw(GameTime gameTime)
         {
+            if (string.IsNullOrWhiteSpace(_version))
+            {
+                return;
+            }
+
             var size = _font.MeasureString(_version);
 
             _spriteBatch.Begin();

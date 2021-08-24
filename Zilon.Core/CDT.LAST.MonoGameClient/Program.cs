@@ -25,9 +25,9 @@ namespace CDT.LAST.MonoGameClient
         [STAThread]
         private static void Main()
         {
-            var newCulture = new CultureInfo("en-US");
-            Thread.CurrentThread.CurrentCulture = newCulture;
-            Thread.CurrentThread.CurrentUICulture = newCulture;
+            var defaultCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentCulture = defaultCulture;
+            Thread.CurrentThread.CurrentUICulture = defaultCulture;
 
             var serviceContainer = new ServiceCollection();
             var startUp = new StartUp();

@@ -64,9 +64,6 @@ namespace CDT.LAST.MonoGameClient
 
             InitCommandLoop();
 
-            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("ru-RU");
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("ru-RU");
-
             base.Initialize();
         }
 
