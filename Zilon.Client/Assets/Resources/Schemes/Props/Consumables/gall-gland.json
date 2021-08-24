@@ -1,0 +1,23 @@
+{
+  "Name": {
+    "En": "Gall gland",
+	"Ru": "Желчная гланда"
+  },
+  "Description":{
+	  "Ru": "Странный внутренний орган некоторых инсектоидов.\nТоксичен, но при употреблении чудестным образом исцеляет раны.",
+	  "En": "A strange internal organ of some insectoids.\nToxic, but miraculously heals wounds when consumed."
+  },
+  "Use": {
+    "Consumable": true,
+    "CommonRules": [
+      {
+        "Type": "Health",
+        "Level": "Grand"
+      },
+	  {
+        "Type": "Intoxication",
+        "Level": "Normal"
+      }
+    ]
+  }
+}

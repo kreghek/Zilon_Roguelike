@@ -1,16 +1,27 @@
-﻿using System;
+﻿using System.Threading;
 
-using CDT.LAST.MonoGameClient.Engine;
-using CDT.LAST.MonoGameClient.Resources;
-
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
-using Zilon.Core.Scoring;
+using Zilon.Core.Localization;
 
 namespace CDT.LAST.MonoGameClient.Screens
 {
+    using System;
+    using System.Text;
+
+    using Database;
+
+    using Engine;
+
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Graphics;
+    using Microsoft.Xna.Framework.Input;
+
+    using Resources;
+
+    using Zilon.Core.ScoreResultGenerating;
+    using Zilon.Core.Scoring;
+    using Zilon.Core.Tactics;
+
     /// <summary>
     /// Scores screen to show a user's score when a character died.
     /// </summary>
@@ -18,80 +29,72 @@ namespace CDT.LAST.MonoGameClient.Screens
     {
         private const int RESTART_BUTTON_POSITION_X = 150;
 
-        private const int BUTTON_POSITION_Y = 150;
+        private const int RESTART_BUTTON_POSITION_Y = SCORE_MENU_TITLE_POSITION_Y + 50;
 
         private const int BUTTON_WIDTH = 100;
 
         private const int BUTTON_HEIGHT = 20;
 
-        private const int BUTTON_WIDTH_OFFSET = 100;
-
-        private const int SCORE_MENU_TITLE_POSITION_X = 50;
-
         private const int SCORE_MENU_TITLE_POSITION_Y = 100;
 
-        private readonly GlobeSelectionScreen _globeGenerationScene;
+        private const int NICKNAME_MAX_LENGTH = 50;
 
-        private readonly TextButton _goToMainMenu;
+        //TODO Use localized value
+        private const string DEFAULT_PLAYER_NICK_NAME = "Безымянный бродяга";
 
-        private readonly TextButton _goToNextScreen;
+        private readonly DbContext _dbContext;
+        private readonly IDeathReasonService _deathReasonService;
+        private readonly IPlayerEventLogService _eventLog;
 
-        private readonly TextButton _restartButton;
+        private readonly SpriteFont _font;
 
+        private readonly Color _playerInfoColor = Color.Yellow;
+
+        private readonly StringBuilder _playerNicknameSb = new();
+        private readonly Scores _score;
+        private readonly IScoreManager _scoreManager;
         private readonly string _scoreSummary;
 
         private readonly SpriteBatch _spriteBatch;
 
         private readonly IUiContentStorage _uiContentStorage;
 
+        private TextButton _leaderboardScreenButton;
+
         /// <inheritdoc />
         public ScoresScreen(Game game, SpriteBatch spriteBatch)
             : base(game)
         {
+            game.Window.TextInput += InputNickName;
             _spriteBatch = spriteBatch;
 
-            var serviceScope = ((LivGame)Game).ServiceProvider;
-            var scoreManager = serviceScope.GetRequiredService<IScoreManager>();
-            _scoreSummary = TextSummaryHelper.CreateTextSummary(scoreManager.Scores);
-            _uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
+            var serviceProvider = ((LivGame)Game).ServiceProvider;
 
-            _globeGenerationScene = new GlobeSelectionScreen(game: game, spriteBatch: spriteBatch);
+            _scoreManager = serviceProvider.GetRequiredService<IScoreManager>();
 
-            var buttonTexture = _uiContentStorage.GetButtonTexture();
-            var font = _uiContentStorage.GetButtonFont();
+            var currentLanguage = Thread.CurrentThread.CurrentUICulture;
+            var langName = currentLanguage.TwoLetterISOLanguageName;
 
-            _restartButton = new TextButton(
-                title: UiResources.StartGameButtonTitle,
-                texture: buttonTexture,
-                font: font,
-                rect: new Rectangle(
-                    x: RESTART_BUTTON_POSITION_X,
-                    y: BUTTON_POSITION_Y,
-                    width: BUTTON_WIDTH,
-                    height: BUTTON_HEIGHT));
-            _restartButton.OnClick += RestartButtonClickHandler;
+            _score = _scoreManager.Scores;
 
-            _goToMainMenu = new TextButton(
-                title: UiResources.MainMenuButtonTitle,
-                texture: buttonTexture,
-                font: font,
-                rect: new Rectangle(
-                    x: RESTART_BUTTON_POSITION_X + (BUTTON_WIDTH_OFFSET * 2),
-                    y: BUTTON_POSITION_Y,
-                    width: BUTTON_WIDTH,
-                    height: BUTTON_HEIGHT));
-            _goToMainMenu.OnClick += GoToMainMenuButtonClickHandler;
+            _scoreSummary = TextSummaryHelper.CreateTextSummary(_score, langName);
+            _uiContentStorage = serviceProvider.GetRequiredService<IUiContentStorage>();
+            _deathReasonService = serviceProvider.GetRequiredService<IDeathReasonService>();
+            _eventLog = serviceProvider.GetRequiredService<IPlayerEventLogService>();
 
-            _goToNextScreen = new TextButton(
-                title: UiResources.NextScreenButtonTitle,
-                texture: buttonTexture,
-                font: font,
-                rect: new Rectangle(
-                    x: RESTART_BUTTON_POSITION_X + (BUTTON_WIDTH_OFFSET * 4),
-                    y: BUTTON_POSITION_Y,
-                    width: BUTTON_WIDTH,
-                    height: BUTTON_HEIGHT));
-            _goToNextScreen.OnClick += GoToNextScreenButtonClickHandler;
+            _dbContext = serviceProvider.GetRequiredService<DbContext>();
+
+            _font = _uiContentStorage.GetButtonFont();
+
+            InitButtons();
+
+            PlayerNickname = DEFAULT_PLAYER_NICK_NAME;
+        }
+
+        private string PlayerNickname
+        {
+            get => _playerNicknameSb.ToString();
+            set => _playerNicknameSb.Append(value);
         }
 
         /// <inheritdoc />
@@ -101,22 +104,11 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             _spriteBatch.Begin();
 
-            _restartButton.Draw(_spriteBatch);
-            _goToMainMenu.Draw(_spriteBatch);
-            _goToNextScreen.Draw(_spriteBatch);
+            DrawNickInput();
 
-            var font = _uiContentStorage.GetButtonFont();
+            DrawMenuButtons();
 
-            _spriteBatch.DrawString(
-                spriteFont: font,
-                text: UiResources.ScoreMenuTitle,
-                position: new Vector2(x: SCORE_MENU_TITLE_POSITION_X, y: SCORE_MENU_TITLE_POSITION_Y),
-                color: Color.White);
-            _spriteBatch.DrawString(
-                spriteFont: font,
-                text: _scoreSummary,
-                position: new Vector2(x: SCORE_MENU_TITLE_POSITION_X * 3, y: SCORE_MENU_TITLE_POSITION_Y * 2),
-                color: Color.White);
+            DrawScoreSummary();
 
             _spriteBatch.End();
         }
@@ -126,24 +118,164 @@ namespace CDT.LAST.MonoGameClient.Screens
         {
             base.Update(gameTime);
 
-            _restartButton.Update();
-            _goToMainMenu.Update();
-            _goToNextScreen.Update();
+            UpdateMenuButtons();
         }
 
-        private void GoToMainMenuButtonClickHandler(object? sender, EventArgs e)
+        private bool CanInputMore()
         {
-            TargetScene = new TitleScreen(game: Game, spriteBatch: _spriteBatch);
+            return _playerNicknameSb.Length < NICKNAME_MAX_LENGTH;
+        }
+
+        private bool CheckEmptyNickName()
+        {
+            if (_playerNicknameSb.Length > 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private void ClearPlayerNickNameClickHandler(object? sender, EventArgs e)
+        {
+            _playerNicknameSb.Clear();
+            CheckEmptyNickName();
+        }
+
+        private void DrawMenuButtons()
+        {
+            var inputSize = new Vector2(256, 32);
+
+            var buttonPosition = new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - inputSize.X / 2 + 128 / 2,
+                inputSize.Y + 5 + 10);
+            _leaderboardScreenButton.Rect = new Rectangle(buttonPosition.ToPoint(), new Point(128, 20));
+            _leaderboardScreenButton.Draw(_spriteBatch);
+        }
+
+        private void DrawNickInput()
+        {
+            var inputSize = new Vector2(256, 32);
+            var inputRect = new Rectangle((int)(Game.GraphicsDevice.Viewport.Width - inputSize.X) / 2, 10,
+                (int)inputSize.X, (int)inputSize.Y);
+
+            _spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), inputRect, Color.Gray);
+
+            _spriteBatch.DrawString(
+                _uiContentStorage.GetScoresFont(),
+                PlayerNickname,
+                inputRect.Location.ToVector2(),
+                _playerInfoColor);
+        }
+
+        private void DrawScoreSummary()
+        {
+            var baseScoreSize = _uiContentStorage.GetScoresFont().MeasureString(_score.BaseScores.ToString());
+            var scoresPosition = new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - baseScoreSize.X / 2,
+                10 + 20 + 48 + 5);
+            _spriteBatch.DrawString(_uiContentStorage.GetScoresFont(), _score.BaseScores.ToString(), scoresPosition,
+                Color.White);
+
+            try
+            {
+                var lastEvent = _eventLog.GetPlayerEvent();
+                if (lastEvent is not null)
+                {
+                    //TODO Use current game culture
+                    var deathReasonText = _deathReasonService.GetDeathReasonSummary(lastEvent, Language.Ru);
+                    if (deathReasonText is not null)
+                    {
+                        var fullDeathReasonText = $"Причина смерти: {deathReasonText}";
+                        var deathReasonSize = _font.MeasureString(fullDeathReasonText);
+                        var deathReasonPosition =
+                            new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - deathReasonSize.X / 2,
+                                scoresPosition.Y + baseScoreSize.Y + 5);
+                        _spriteBatch.DrawString(_font, fullDeathReasonText, deathReasonPosition, Color.Wheat);
+                    }
+                }
+            }
+            catch
+            {
+                //TODO Fast safe solution
+            }
+
+            var summarySize = _uiContentStorage.GetScoresFont().MeasureString(_scoreSummary);
+            var summaryPosition = new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - summarySize.X / 2,
+                10 + 20 + 48 + 5 + baseScoreSize.Y + 5 + 20);
+
+            _spriteBatch.DrawString(
+                _font,
+                _scoreSummary,
+                summaryPosition,
+                Color.White);
         }
 
         private void GoToNextScreenButtonClickHandler(object? sender, EventArgs e)
         {
-            TargetScene = new LeaderBoardScreen(game: Game, spriteBatch: _spriteBatch);
+            SetDefaultNickNameOnEmptyNickName();
+            _dbContext.AppendScores(PlayerNickname, _scoreSummary);
+
+            _scoreManager.ResetScores();
+
+            TargetScene = new LeaderBoardScreen(Game, _spriteBatch);
         }
 
-        private void RestartButtonClickHandler(object? sender, EventArgs e)
+        private void InitButtons()
         {
-            TargetScene = _globeGenerationScene;
+            InitRestartButton();
+        }
+
+        private void InitRestartButton()
+        {
+            _leaderboardScreenButton = new TextButton(
+                UiResources.LeaderBoardButtonTitle,
+                _uiContentStorage.GetButtonTexture(),
+                _font,
+                new Rectangle(
+                    RESTART_BUTTON_POSITION_X,
+                    RESTART_BUTTON_POSITION_Y,
+                    BUTTON_WIDTH,
+                    BUTTON_HEIGHT));
+            _leaderboardScreenButton.OnClick += GoToNextScreenButtonClickHandler;
+        }
+
+        private void InputNickName(object? sender, TextInputEventArgs e)
+        {
+            var playerChar = e.Character;
+
+            if (CanInputMore() && IsPrintedChar(playerChar))
+            {
+                _playerNicknameSb.Append(playerChar);
+            }
+
+            if (CheckEmptyNickName())
+            {
+                return;
+            }
+
+            if (e.Key == Keys.Back)
+            {
+                _playerNicknameSb.Remove(_playerNicknameSb.Length - 1, 1);
+            }
+        }
+
+        private static bool IsPrintedChar(char ch)
+        {
+            return char.IsLetterOrDigit(ch);
+        }
+
+        private void SetDefaultNickNameOnEmptyNickName()
+        {
+            if (_playerNicknameSb.Length > 0)
+            {
+                return;
+            }
+
+            PlayerNickname = DEFAULT_PLAYER_NICK_NAME;
+        }
+
+        private void UpdateMenuButtons()
+        {
+            _leaderboardScreenButton.Update();
         }
     }
 }

@@ -3,5 +3,10 @@
     "Ru": "Повышенная потливость",
 	"En": "Increased perspiration"
   },
+  "Description":
+  {
+    "Ru": "Ваша одежда постоянно мокрая. Вам обычно не очень комфортно.\nЛадошки мокрые. Это мешает.",
+	"En": "Your clothes are constantly wet. You are usually not very comfortable.\nThe hands are wet. It gets in the way.",
+  },
   "IsBuildIn": true
 }

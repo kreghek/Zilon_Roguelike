@@ -10,6 +10,7 @@ using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
 using Zilon.Core.Tactics.ActorInteractionEvents;
+using Zilon.Core.Tactics.Spatial;
 
 namespace Zilon.Core.Tactics
 {
@@ -69,13 +70,13 @@ namespace Zilon.Core.Tactics
         /// <param name="targetActor"> Целевой актёр. </param>
         /// <param name="tacticalActRoll"> Результат броска исходной эфективности действия. </param>
         /// <returns> Возвращает числовое значение эффективности действия. </returns>
-        private DamageEfficientCalc CalcEfficient(IActor targetActor, TacticalActRoll tacticalActRoll)
+        private DamageEfficientCalc CalcEfficient(IActor targetActor, CombatActRoll tacticalActRoll)
         {
             var damageEfficientCalcResult = new DamageEfficientCalc();
 
-            var actApRank = GetActApRank(tacticalActRoll.TacticalAct);
+            var actApRank = GetActApRank(tacticalActRoll.CombatAct);
             damageEfficientCalcResult.ActApRank = actApRank;
-            var armorRank = GetArmorRank(targetActor, tacticalActRoll.TacticalAct);
+            var armorRank = GetArmorRank(targetActor, tacticalActRoll.CombatAct);
             damageEfficientCalcResult.ArmorRank = armorRank;
 
             var actEfficientArmorBlocked = tacticalActRoll.Efficient;
@@ -85,12 +86,12 @@ namespace Zilon.Core.Tactics
             {
                 var factArmorSaveRoll = RollArmorSave();
                 damageEfficientCalcResult.FactArmorSaveRoll = factArmorSaveRoll;
-                var successArmorSaveRoll = GetSuccessArmorSave(targetActor, tacticalActRoll.TacticalAct);
+                var successArmorSaveRoll = GetSuccessArmorSave(targetActor, tacticalActRoll.CombatAct);
                 damageEfficientCalcResult.SuccessArmorSaveRoll = successArmorSaveRoll;
                 if (factArmorSaveRoll >= successArmorSaveRoll)
                 {
                     damageEfficientCalcResult.TargetSuccessfullUsedArmor = true;
-                    var armorAbsorbtion = GetArmorAbsorbtion(targetActor, tacticalActRoll.TacticalAct);
+                    var armorAbsorbtion = GetArmorAbsorbtion(targetActor, tacticalActRoll.CombatAct);
                     damageEfficientCalcResult.ArmorAbsorbtion = armorAbsorbtion;
                     actEfficientArmorBlocked = AbsorbActEfficient(actEfficientArmorBlocked, armorAbsorbtion);
                 }
@@ -177,12 +178,12 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="actor"> Актёр, который совершил действие. </param>
         /// <param name="targetActor"> Цель использования действия. </param>
-        /// <param name="tacticalActRoll"> Эффективность действия. </param>
-        private void DamageActor(IActor actor, IActor targetActor, TacticalActRoll tacticalActRoll)
+        /// <param name="combatActRoll"> Эффективность действия. </param>
+        private void DamageActor(IActor actor, IActor targetActor, CombatActRoll combatActRoll, ISectorMap map)
         {
             var targetIsDeadLast = targetActor.Person.CheckIsDead();
 
-            var offence = tacticalActRoll.TacticalAct.Stats.Offence;
+            var offence = combatActRoll.CombatAct.Stats.Offence;
             if (offence is null)
             {
                 throw new InvalidOperationException();
@@ -193,16 +194,17 @@ namespace Zilon.Core.Tactics
 
             var prefferedDefenceItem = HitHelper.CalcPreferredDefense(usedDefences);
             var successToHitRoll = HitHelper.CalcSuccessToHit(prefferedDefenceItem);
-            var factToHitRoll = _actUsageRandomSource.RollToHit(tacticalActRoll.TacticalAct.ToHit);
+            var factToHitRoll = _actUsageRandomSource.RollToHit(combatActRoll.CombatAct.ToHit);
 
             if (factToHitRoll >= successToHitRoll)
             {
-                ProcessSuccessfullHit(actor, targetActor, tacticalActRoll, targetIsDeadLast, successToHitRoll,
-                    factToHitRoll);
+                ProcessSuccessfullHit(actor, targetActor, combatActRoll, targetIsDeadLast, successToHitRoll,
+                    factToHitRoll, map);
             }
             else
             {
-                ProcessFailedHit(actor, targetActor, prefferedDefenceItem, successToHitRoll, factToHitRoll);
+                ProcessFailedHit(actor, targetActor, combatActRoll, prefferedDefenceItem, successToHitRoll,
+                    factToHitRoll);
             }
         }
 
@@ -389,7 +391,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="targetActor"> Цель использования действия. </param>
         /// <param name="tacticalActRoll"> Эффективность действия. </param>
-        private static void HealActor(IActor targetActor, TacticalActRoll tacticalActRoll)
+        private static void HealActor(IActor targetActor, CombatActRoll tacticalActRoll)
         {
             targetActor.Person.GetModuleSafe<ISurvivalModule>()
                 ?.RestoreStat(SurvivalStatType.Health, tacticalActRoll.Efficient);
@@ -417,6 +419,7 @@ namespace Zilon.Core.Tactics
         private void ProcessAttackDodgeEvent(
             IActor actor,
             IActor targetActor,
+            CombatActRoll combatActRoll,
             PersonDefenceItem personDefenceItem,
             int successToHitRoll,
             int factToHitRoll)
@@ -426,11 +429,14 @@ namespace Zilon.Core.Tactics
                 return;
             }
 
-            var interactEvent = new DodgeActorInteractionEvent(actor, targetActor, personDefenceItem)
-            {
-                SuccessToHitRoll = successToHitRoll,
-                FactToHitRoll = factToHitRoll
-            };
+            var usedActDescription = ActDescription.CreateFromActStats(combatActRoll.CombatAct.Stats);
+
+            var interactEvent =
+                new DodgeActorInteractionEvent(actor, targetActor, personDefenceItem, usedActDescription)
+                {
+                    SuccessToHitRoll = successToHitRoll,
+                    FactToHitRoll = factToHitRoll
+                };
 
             ActorInteractionBus.PushEvent(interactEvent);
         }
@@ -461,7 +467,8 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void ProcessFailedHit(IActor actor, IActor targetActor, PersonDefenceItem? prefferedDefenceItem,
+        private void ProcessFailedHit(IActor actor, IActor targetActor, CombatActRoll combatActRoll,
+            PersonDefenceItem? prefferedDefenceItem,
             int successToHitRoll, int factToHitRoll)
         {
             if (prefferedDefenceItem != null)
@@ -469,6 +476,7 @@ namespace Zilon.Core.Tactics
                 // Это промах, потому что целевой актёр увернулся.
                 ProcessAttackDodgeEvent(actor,
                     targetActor,
+                    combatActRoll,
                     prefferedDefenceItem,
                     successToHitRoll,
                     factToHitRoll);
@@ -478,19 +486,23 @@ namespace Zilon.Core.Tactics
                 // Это промах чистой воды.
                 ProcessPureMissEvent(actor,
                     targetActor,
+                    combatActRoll,
                     successToHitRoll,
                     factToHitRoll);
             }
         }
 
-        private void ProcessPureMissEvent(IActor actor, IActor targetActor, int successToHitRoll, int factToHitRoll)
+        private void ProcessPureMissEvent(IActor actor, IActor targetActor, CombatActRoll combatActRoll,
+            int successToHitRoll, int factToHitRoll)
         {
             if (ActorInteractionBus == null)
             {
                 return;
             }
 
-            var damageEvent = new PureMissActorInteractionEvent(actor, targetActor)
+            var usedActDescription = ActDescription.CreateFromActStats(combatActRoll.CombatAct.Stats);
+
+            var damageEvent = new PureMissActorInteractionEvent(actor, targetActor, usedActDescription)
             {
                 SuccessToHitRoll = successToHitRoll,
                 FactToHitRoll = factToHitRoll
@@ -526,10 +538,10 @@ namespace Zilon.Core.Tactics
             ActorInteractionBus.PushEvent(damageEvent);
         }
 
-        private void ProcessSuccessfullHit(IActor actor, IActor targetActor, TacticalActRoll tacticalActRoll,
-            bool targetIsDeadLast, int successToHitRoll, int factToHitRoll)
+        private void ProcessSuccessfullHit(IActor actor, IActor targetActor, CombatActRoll combatActRoll,
+            bool targetIsDeadLast, int successToHitRoll, int factToHitRoll, ISectorMap map)
         {
-            var damageEfficientCalcResult = CalcEfficient(targetActor, tacticalActRoll);
+            var damageEfficientCalcResult = CalcEfficient(targetActor, combatActRoll);
             var actEfficient = damageEfficientCalcResult.ResultEfficient;
 
             ProcessSuccessfulAttackEvent(
@@ -538,23 +550,76 @@ namespace Zilon.Core.Tactics
                 damageEfficientCalcResult,
                 successToHitRoll,
                 factToHitRoll,
-                tacticalActRoll.TacticalAct);
+                combatActRoll.CombatAct);
 
             if (actEfficient > 0)
             {
                 targetActor.TakeDamage(actEfficient);
 
-                CountTargetActorAttack(actor, targetActor, tacticalActRoll.TacticalAct);
+                if (combatActRoll.CombatAct.Stats.Rules is not null)
+                {
+                    var hasPushRule = false;
+                    var pushSuccessfullRoll = 0;
+                    if (combatActRoll.CombatAct.Stats.Rules.Contains(CombatActRule.NormalPush))
+                    {
+                        pushSuccessfullRoll = 2;
+                        hasPushRule = true;
+                    }
+
+                    if (hasPushRule && !targetActor.Person.CheckIsDead())
+                    {
+                        var pushRuleRoll = _actUsageRandomSource.RollPushRule();
+
+                        if (pushRuleRoll >= pushSuccessfullRoll)
+                        {
+                            var neighbours = map.GetNext(targetActor.Node);
+                            var orderedNeighbours = neighbours
+                                .Select(x => new { Distance = map.DistanceBetween(x, actor.Node), Node = x })
+                                .Where(x => x.Distance > map.DistanceBetween(actor.Node, targetActor.Node))
+                                .Select(x => x.Node);
+                            var pushTargetNode = orderedNeighbours.FirstOrDefault();
+                            if (pushTargetNode is not null)
+                            {
+                                map.ReleaseNode(targetActor.Node, targetActor);
+                                targetActor.ForcedMoveToNode(pushTargetNode);
+                                map.HoldNode(pushTargetNode, targetActor);
+                            }
+                        }
+                    }
+                }
+
+                CountTargetActorAttack(actor, targetActor, combatActRoll.CombatAct);
 
                 ProcessDiseaseInfection(actor, targetActor);
 
-                LogDamagePlayerEvent(actor, targetActor, tacticalActRoll.TacticalAct);
+                LogDamagePlayerEvent(actor, targetActor, combatActRoll.CombatAct);
 
                 ReduceTargetEquipmentDurability(targetActor);
 
                 if (!targetIsDeadLast && targetActor.Person.CheckIsDead())
                 {
                     CountTargetActorDefeat(actor, targetActor);
+                }
+            }
+
+            // handle move backward rule
+            if (combatActRoll.CombatAct.Stats.Rules is not null && !actor.Person.CheckIsDead())
+            {
+                if (combatActRoll.CombatAct.Stats.Rules.Contains(CombatActRule.MoveBackward))
+                {
+                    var neighbours = map.GetNext(actor.Node);
+                    var orderedNeighbours = neighbours
+                        .Select(x => new { Distance = map.DistanceBetween(x, targetActor.Node), Node = x })
+                        .Where(x => x.Distance > map.DistanceBetween(actor.Node, targetActor.Node))
+                        .Select(x => x.Node);
+                    var moveBackwardTargetNode = orderedNeighbours.FirstOrDefault();
+
+                    if (moveBackwardTargetNode is not null)
+                    {
+                        map.ReleaseNode(actor.Node, actor);
+                        actor.ForcedMoveToNode(moveBackwardTargetNode);
+                        map.HoldNode(moveBackwardTargetNode, actor);
+                    }
                 }
             }
         }
@@ -592,22 +657,22 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="actor"> Актёр, который совершил действие. </param>
         /// <param name="targetActor"> Цель использования действия. </param>
-        /// <param name="tacticalActRoll"> Эффективность действия. </param>
-        private void UseOnActor(IActor actor, IActor targetActor, TacticalActRoll tacticalActRoll)
+        /// <param name="combatActRoll"> Эффективность действия. </param>
+        private void UseOnActor(IActor actor, IActor targetActor, CombatActRoll combatActRoll, ISectorMap map)
         {
-            switch (tacticalActRoll.TacticalAct.Stats.Effect)
+            switch (combatActRoll.CombatAct.Stats.Effect)
             {
                 case TacticalActEffectType.Damage:
-                    DamageActor(actor, targetActor, tacticalActRoll);
+                    DamageActor(actor, targetActor, combatActRoll, map);
                     break;
 
                 case TacticalActEffectType.Heal:
-                    HealActor(targetActor, tacticalActRoll);
+                    HealActor(targetActor, combatActRoll);
                     break;
 
                 default:
-                    var effect = tacticalActRoll.TacticalAct.Stats.Effect;
-                    var tacticalAct = tacticalActRoll.TacticalAct;
+                    var effect = combatActRoll.CombatAct.Stats.Effect;
+                    var tacticalAct = combatActRoll.CombatAct;
                     throw new ArgumentException($"Не определённый эффект {effect} действия {tacticalAct}.");
             }
         }
@@ -616,7 +681,7 @@ namespace Zilon.Core.Tactics
         public Type TargetType => typeof(IActor);
 
         /// <inheritdoc />
-        public void ProcessActUsage(IActor actor, IAttackTarget target, TacticalActRoll tacticalActRoll)
+        public void ProcessActUsage(IActor actor, IAttackTarget target, CombatActRoll tacticalActRoll, ISectorMap map)
         {
             if (actor is null)
             {
@@ -633,7 +698,7 @@ namespace Zilon.Core.Tactics
                 throw new ArgumentNullException(nameof(tacticalActRoll));
             }
 
-            UseOnActor(actor, (IActor)target, tacticalActRoll);
+            UseOnActor(actor, (IActor)target, tacticalActRoll, map);
         }
     }
 }

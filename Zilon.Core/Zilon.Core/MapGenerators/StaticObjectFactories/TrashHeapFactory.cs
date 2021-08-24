@@ -12,7 +12,7 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
         public TrashHeapFactory(
             ISchemeService schemeService,
             IDropResolver dropResolver) : base(toolTags: new[] { "shovel" }, dropTableSchemeSid: "trash-heap",
-            PropContainerPurpose.TrashHeap, schemeService, dropResolver)
+            PropContainerPurpose.TrashHeap, schemeService, dropResolver, false)
         {
         }
 

@@ -3,5 +3,10 @@
     "Ru": "Хрупкие кости",
 	"En": "Brittle bones"
   },
+  "Description":
+  {
+    "Ru": "Ваши кости, как стекло, постоянно ломаются. Падать - это не ваше.\nПоэтому критические раны появляются чаще.",
+	"En": "Your bones, like glass, are constantly breaking. Falling is not yours.\nTherefore, critical wounds appear more often."
+  },
   "IsBuildIn": true
 }

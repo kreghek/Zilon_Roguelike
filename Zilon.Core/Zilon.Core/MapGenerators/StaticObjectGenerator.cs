@@ -53,7 +53,7 @@ namespace Zilon.Core.MapGenerators
                     return;
                 }
 
-                var checkPass = sector.Scheme?.Sid != "globe-node";
+                var checkPass = (sector.Scheme?.Sid?.Contains("globe-node")).GetValueOrDefault();
                 foreach (var region in sector.Map.Regions)
                 {
                     var regionNodes = region.Nodes.Cast<HexNode>().ToArray();

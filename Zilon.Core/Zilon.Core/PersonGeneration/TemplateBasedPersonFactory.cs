@@ -29,6 +29,7 @@ namespace Zilon.Core.PersonGeneration
             var rolledTemplate = Dice.RollFromList(templates);
 
             person.PersonEquipmentTemplate = rolledTemplate.Name;
+            person.PersonEquipmentDescriptionTemplate = rolledTemplate.Description;
 
             var headDropScheme = rolledTemplate.HeadEquipments;
             FillSlot(person, headDropScheme, HeadSlotIndex);
@@ -60,7 +61,7 @@ namespace Zilon.Core.PersonGeneration
         private static IPersonTemplateScheme[] GetInterventionalistsPersonTemplates(ISchemeService schemeService)
         {
             return schemeService.GetSchemes<IPersonTemplateScheme>()
-                .Where(x => x.FractionSid == "interventionists" && x.Sid == "tester")
+                .Where(x => x.FractionSid == "interventionists")
                 .ToArray();
         }
 
@@ -69,7 +70,7 @@ namespace Zilon.Core.PersonGeneration
         private static IPersonTemplateScheme[] GetMilitiaPersonTemplates(ISchemeService schemeService)
         {
             return schemeService.GetSchemes<IPersonTemplateScheme>()
-                .Where(x => x.FractionSid == "militia" && x.Sid == "tester").ToArray();
+                .Where(x => x.FractionSid == "militia").ToArray();
         }
 
         private static IPersonTemplateScheme[] GetPersonTemplateByFraction(IFraction fraction,
@@ -96,7 +97,7 @@ namespace Zilon.Core.PersonGeneration
         private static IPersonTemplateScheme[] GetPlayerPersonTemplates(ISchemeService schemeService)
         {
             return schemeService.GetSchemes<IPersonTemplateScheme>()
-                .Where(x => x.FractionSid == "player" && x.Sid == "tester").ToArray();
+                .Where(x => x.FractionSid == "player").ToArray();
         }
 
         [ExcludeFromCodeCoverage(Justification = "This event is very rare and we have no stable unit-tests for this." +
@@ -104,7 +105,7 @@ namespace Zilon.Core.PersonGeneration
         private static IPersonTemplateScheme[] GetTroublemakerPersonTemplates(ISchemeService schemeService)
         {
             return schemeService.GetSchemes<IPersonTemplateScheme>()
-                .Where(x => x.FractionSid == "troublemakers" && x.Sid == "tester")
+                .Where(x => x.FractionSid == "troublemakers")
                 .ToArray();
         }
     }

@@ -2,12 +2,17 @@
   "Tags": [ "weapon", "tool", "shovel" ],
   "Equip": {
     "ActSids": [
-      "chop"
+      "swing"
     ],
-    "SlotTypes": [ "Hand" ]
+    "SlotTypes": [ "Hand" ],
+	"EquipRestrictions": { "PropHandUsage": "TwoHanded" }
   },
   "Name": {
     "Ru": "Лопата",
 	"En": "Shovel"
+  },
+  "Description":
+  {
+    "Ru": "Прекрасный инструмент и неплохое оружие,\nесли как следует заточить железный кончик."
   }
 }

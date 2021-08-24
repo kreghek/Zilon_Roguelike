@@ -3,14 +3,17 @@
     "Ru": "Свинг",
     "En": "Swing"
   },
+  "Description": {
+    "Ru": "Широчайших замах чем-нибудь длинным."
+  },
   "Stats": {
     "Efficient": {
       "Dice": 6,
       "Count": 1
     },
     "Range": {
-      "Min": 1,
-      "Max": 1
+      "Min": 2,
+      "Max": 4
     },
     "Effect": "Damage",
     "Targets": "Enemy",

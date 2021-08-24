@@ -32,6 +32,12 @@ namespace Zilon.Core.Tactics
         IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; }
 
         /// <summary>
+        /// Форсированное перемещение актёра в указанный узел карты.
+        /// </summary>
+        /// <param name="targetNode"> Целевой узел карты. </param>
+        void ForcedMoveToNode(IGraphNode targetNode);
+
+        /// <summary>
         /// Добыча ресурса из залежей.
         /// </summary>
         /// <param name="deposit"> Целевые залежи. </param>
@@ -73,7 +79,7 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Происходит, когда актёр переместился.
         /// </summary>
-        event EventHandler? Moved;
+        event EventHandler<ActorMoveEventArgs>? Moved;
 
         /// <summary>
         /// Происходит, когда актёр открывает контейнер в секторе.

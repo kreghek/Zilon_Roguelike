@@ -2,16 +2,23 @@
   "Tags": [ "shield" ],
   "Equip": {
     "SlotTypes": [ "Hand" ],
+	"ActSids": [
+      "shield-push"
+    ],
     "Armors": [
       {
         "Impact": "Kinetic",
         "AbsorbtionLevel": "Normal",
-        "ArmorRank": 10
+        "ArmorRank": 5
       }
     ]
   },
   "Name": {
     "En": "Wood shield",
     "Ru": "Деревянный щит"
+  },
+  "Description":
+  {
+    "Ru": "Прочная доска для защиты воина от ударов."
   }
 }

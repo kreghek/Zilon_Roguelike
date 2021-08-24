@@ -57,6 +57,8 @@ namespace Zilon.Core.PersonGeneration
             AddResource(inventory, "packed-food", 1);
             AddResource(inventory, "water-bottle", 1);
             AddResource(inventory, "med-kit", 1);
+            AddEquipment(inventory, "med-mask");
+            AddEquipment(inventory, "med-gloves");
         }
 
         protected static void AddEquipment(IEquipmentModule equipmentModule, int slotIndex, Equipment equipment)
@@ -231,14 +233,15 @@ namespace Zilon.Core.PersonGeneration
 
             RollStartEquipment(inventoryModule, person);
 
-            if (person.Scheme.DefaultAct is null)
+            if (person.Scheme.DefaultActs is null)
             {
                 throw new InvalidOperationException();
             }
 
-            var defaultActScheme = SchemeService.GetScheme<ITacticalActScheme>(person.Scheme.DefaultAct);
+            var defaultActSchemes =
+                person.Scheme.DefaultActs.Select(x => SchemeService.GetScheme<ITacticalActScheme>(x));
             var combatActModule = new CombatActModule(
-                defaultActScheme,
+                defaultActSchemes,
                 equipmentModule,
                 effectsModule,
                 evolutionModule);

@@ -23,17 +23,14 @@ namespace Zilon.Core.PersonGeneration
             var movingModule = new MonsterMovingModule(monsterScheme);
             monsterPerson.AddModule(movingModule);
 
-            if (monsterScheme?.PrimaryAct is null)
+            if (monsterScheme?.CombatActs is null)
             {
                 throw new InvalidOperationException();
             }
 
-            var Acts = new ICombatAct[]
-            {
-                new MonsterCombatAct(monsterScheme.PrimaryAct)
-            };
+            var combatActs = monsterScheme.CombatActs.Select(x => new MonsterCombatAct(x)).ToArray();
 
-            var combaActModule = new MonsterCombatActModule(Acts);
+            var combaActModule = new MonsterCombatActModule(combatActs);
 
             monsterPerson.AddModule(combaActModule);
 

@@ -4,55 +4,30 @@
     "Ru": "Драконоубийца",
     "En": "Dragon Chaser"
   },
-  "BodyEquipments": {
+  "Description": {
+    "Ru": "Вы охотитесь на драконов. Существуют ли они? Простой люд врядли когда либо видел дракона.\nНо они имеют право не знать об этом. Это их выбор.\nИменно по этому вы должны продолжать охоту на драконов, чтобы драконы не пришли в их дома.",
+    "En": "You hunt dragons. Do they exist? Ordinary people have hardly ever seen a dragon.\nBut they have a right not to know about it. It is their choice.\nThat is why you must continue to hunt dragons so that dragons do not come to their homes."
+  },
+  "HeadEquipments": {
+    "Rolls": 1,
     "Records": [
       {
-        "SchemeSid": "steel-armor",
-        "Weight": 2
-      },
-      {
-        "SchemeSid": null,
+        "SchemeSid": "steel-helmet",
         "Weight": 1
       }
     ]
   },
   "MainHandEquipments": {
+    "Rolls": 1,
     "Records": [
       {
-        "SchemeSid": "short-sword",
-        "Weight": 1
-      },
-      {
-        "SchemeSid": "battle-axe",
-        "Weight": 1
-      },
-      {
-        "SchemeSid": "mace",
-        "Weight": 1
-      },
-      {
-        "SchemeSid": "club",
-        "Weight": 1
-      },
-      {
-        "SchemeSid": "glaive",
-        "Weight": 1
-      }
-    ]
-  },
-  "OffHandEquipments": {
-    "Records": [
-      {
-        "SchemeSid": "wooden-shield",
-        "Weight": 2
-      },
-      {
-        "SchemeSid": null,
+        "SchemeSid": "great-sword",
         "Weight": 1
       }
     ]
   },
   "InventoryProps": {
+    "Rolls": 1,
     "Records": [
       {
         "SchemeSid": "med-kit",

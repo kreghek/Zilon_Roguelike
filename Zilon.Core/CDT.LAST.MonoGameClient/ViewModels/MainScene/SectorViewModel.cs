@@ -10,8 +10,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.ActorInteractionEvents;
 using Zilon.Core.World;
@@ -23,9 +25,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly Camera _camera;
         private readonly GameObjectsViewModel _gameObjectsViewModel;
         private readonly IActorInteractionBus _intarectionBus;
+        private readonly IPlayerEventLogService _logService;
 
         private readonly MapViewModel _mapViewModel;
         private readonly IPlayer _player;
+        private readonly IScoreManager _scoreManager;
         private readonly SectorInteractor _sectorInteractor;
         private readonly SpriteBatch _spriteBatch;
         private readonly ISectorUiState _uiState;
@@ -49,6 +53,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var personSoundContentStorage = serviceScope.GetRequiredService<IPersonSoundContentStorage>();
             var gameObjectVisualizationContentStorage =
                 serviceScope.GetRequiredService<IGameObjectVisualizationContentStorage>();
+
+            _scoreManager = serviceScope.GetRequiredService<IScoreManager>();
+            _logService = serviceScope.GetRequiredService<IPlayerEventLogService>();
 
             var sector = GetPlayerSectorNode(_player).Sector;
 
@@ -138,6 +145,26 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
 
             _sectorInteractor.Update(ViewModelContext);
+
+            var turns = _scoreManager.Scores.Turns;
+            var detailedLifetime = ScoreCalculator.ConvertTurnsToDetailed(turns);
+            if (detailedLifetime.Days >= 3 && !(_player.MainPerson?.CheckIsDead()).GetValueOrDefault())
+            {
+                var endOfLifeEvent = new EndOfLifeEvent();
+                _logService.Log(endOfLifeEvent);
+
+                var survivalModule = _player.MainPerson.GetModule<ISurvivalModule>();
+
+                try
+                {
+                    survivalModule.SetStatForce(SurvivalStatType.Health, 0);
+                }
+                catch (InvalidOperationException)
+                {
+                    // Error occured then person removed (i think after transiton)
+                    // and death event handler try remove person again.
+                }
+            }
         }
 
         private void DrawCorpses()
@@ -187,6 +214,30 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     {
                         targetViewModel.RunDamageReceivedAnimation(attackerViewModel.Node);
                     }
+                }
+            }
+            else if (e.ActorInteractionEvent is DodgeActorInteractionEvent dodgeActorInteractionEvent)
+            {
+                var actDescription = dodgeActorInteractionEvent.UsedActDescription;
+                var targetActor = dodgeActorInteractionEvent.TargetActor;
+
+                var attackerViewModel = ViewModelContext.GameObjects.OfType<ActorViewModel>()
+                    .Single(x => x.Actor == dodgeActorInteractionEvent.Actor);
+                if (attackerViewModel.CanDraw)
+                {
+                    attackerViewModel.RunCombatActUsageAnimation(actDescription, targetActor.Node);
+                }
+            }
+            else if (e.ActorInteractionEvent is PureMissActorInteractionEvent pureMissActorInteractionEvent)
+            {
+                var actDescription = pureMissActorInteractionEvent.UsedActDescription;
+                var targetActor = pureMissActorInteractionEvent.TargetActor;
+
+                var attackerViewModel = ViewModelContext.GameObjects.OfType<ActorViewModel>()
+                    .Single(x => x.Actor == pureMissActorInteractionEvent.Actor);
+                if (attackerViewModel.CanDraw)
+                {
+                    attackerViewModel.RunCombatActUsageAnimation(actDescription, targetActor.Node);
                 }
             }
         }

@@ -1,6 +1,7 @@
 {
   "Hp": 2,
-  "PrimaryAct": {
+  "CombatActs": [
+  {
     "Efficient": {
       "Dice": 3,
       "Count": 1
@@ -14,8 +15,8 @@
       "Impact": "Kinetic"
     },
 	"Effect": "Damage",
-	"Targets": "Enemy",
-  },
+	"Targets": "Enemy"
+  }],
   "DropTableSids": [ "survival" ],
   "Defense": {
     "Defenses": [

@@ -62,6 +62,21 @@ jobs:
         if: ${{ contains(matrix.project, 'MonoGameClient') }}
         run: cp -a /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes/. /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/bin/Content/Schemes/
 
+      - name: Generate build number
+        id: buildnumber
+        uses: einaregilsson/build-number@v3 
+        with:
+          token: ${{secrets.github_token}}
+
+      - name: Write version to file ${{ env.GITHUB_SHA }}
+        uses: DamianReeves/write-file-action@v1.0
+        with:
+          path: bin/version.txt
+          contents: |
+            ver.2.5.8.${{ steps.buildnumber.outputs.build_number }}
+            ${{ env.GITHUB_SHA }}
+          write-mode: overwrite
+
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.project }}-${{ matrix.configuration }}-${{ matrix.runtime }}

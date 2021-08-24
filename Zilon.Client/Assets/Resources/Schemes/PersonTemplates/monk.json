@@ -1,0 +1,56 @@
+{
+  "FractionSid": "player",
+  "Name": {
+    "Ru": "Монах",
+    "En": "Monk"
+  },
+  "Description": {
+    "Ru": "Долгое отшельничество и священный обет помогли вам достичь\nвысокого духовного развития.\nПоэтому вы знаете цену жизни. И могущество смерти.\nПоэтому вы оказались здесь.",
+    "En": "A long hermitage and a sacred vow helped you to achieve\nhigh spiritual growth.\nTherefore, you know the value of life. And the power of death.\nThis is why you ended up here."
+  },
+  "BodyEquipments": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "traveler-camisole",
+        "Weight": 1
+      }
+    ]
+  },
+  "MainHandEquipments": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "combat-staff",
+        "Weight": 1
+      }
+    ]
+  },
+  "InventoryProps": {
+    "Rolls": 3,
+    "Records": [
+      {
+        "SchemeSid": "med-kit",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "packed-food",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "water-bottle",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": null,
+        "Weight": 4
+      }
+    ]
+  }
+}

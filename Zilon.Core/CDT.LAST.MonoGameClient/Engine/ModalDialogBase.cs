@@ -46,8 +46,8 @@ namespace CDT.LAST.MonoGameClient.Engine
             ContentRect = new Rectangle(
                 _dialogRect.Left + MODAL_CONTENT_MARGIN,
                 _dialogRect.Top + MODAL_CONTENT_MARGIN + MODAL_HEADER_HEIGHT,
-                _dialogRect.Right - MODAL_CONTENT_MARGIN,
-                _dialogRect.Bottom - MODAL_CONTENT_MARGIN);
+                _dialogRect.Width - MODAL_CONTENT_MARGIN * 2,
+                _dialogRect.Height - MODAL_CONTENT_MARGIN * 2 - MODAL_HEADER_HEIGHT);
         }
 
         public bool IsVisible { get; private set; }

@@ -4,12 +4,13 @@
     "Rules": [
 	  {
 	    "Type": "ThristResistance",
-		"Level": "Absolute"
+		"Level": "Lesser"
 	  }
 	]
   },
   "Name": {
-    "En": "Hydro necklace",
-    "Ru": "Гидро-ожерелье"
-  }
+    "En": "Hydropendant",
+    "Ru": "Гидрокулон"
+  }, 
+  "Description" :{ "Ru": "На оправе стеклянного шара с трудом различимая надпись.\nОна очень древняя. Там написана мудрость: \"Не дай себе засохнуть\"" }
 }

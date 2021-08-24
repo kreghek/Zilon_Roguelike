@@ -7,10 +7,15 @@
     <!-- PublishTrimmed have to be false. Because GH Actions thrws error about optimization until trimming is true. -->
     <PublishTrimmed>false</PublishTrimmed>
     <Nullable>enable</Nullable>
+    <Configurations>Debug;Release;Balance</Configurations>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Balance'">
+    <Optimize>false</Optimize>
+    <DefineConstants>TRACE;DEBUG;SHOW_NUMS</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Content\bin\**" />
@@ -57,12 +62,18 @@
       <LastGenOutput>UiResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-    <Target Name="CopySchemeCatalogToClientBin" BeforeTargets="PrepareForBuild">
-        <ItemGroup>
-            <SchemeCatalogFiles Include="$(ProjectDir)../../Zilon.Client/Assets/Resources/Schemes/**/*.json" />
-        </ItemGroup>
-        <Message Text="Copy the Scheme Catalog from $(SchemeCatalogFiles) to $(TargetDir)." />
-        <RemoveDir Directories="$(TargetDir)/Content/Schemes" />
-        <Copy SourceFiles="@(SchemeCatalogFiles)" DestinationFiles="@(SchemeCatalogFiles->'$(TargetDir)/Content/Schemes/%(RecursiveDir)%(Filename)%(Extension)')" />
-    </Target>
+  <ItemGroup>
+    <None Update="version.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Target Name="CopySchemeCatalogToClientBin" BeforeTargets="PrepareForBuild">
+    <ItemGroup>
+      <SchemeCatalogFiles Include="$(ProjectDir)../../Zilon.Client/Assets/Resources/Schemes/**/*.json" />
+    </ItemGroup>
+    <Message Text="Copy the Scheme Catalog from $(SchemeCatalogFiles) to $(TargetDir)." />
+    <RemoveDir Directories="$(TargetDir)/Content/Schemes" />
+    <Copy SourceFiles="@(SchemeCatalogFiles)" DestinationFiles="@(SchemeCatalogFiles->'$(TargetDir)/Content/Schemes/%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
 </Project>

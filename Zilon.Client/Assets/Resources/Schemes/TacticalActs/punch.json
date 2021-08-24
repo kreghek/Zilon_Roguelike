@@ -1,0 +1,38 @@
+{
+  "Name": {
+    "Ru": "Удар кулаком",
+    "En": "Punch"
+  },
+  "Description": {
+    "Ru": "Простой удар кулаком. Не очень быстрый и сильный.\nИспользуется как автоатака, если нет никакого оружия.\nИли если оружие не может работать в клинче.",
+    "En": "A simple hit with a hand. Not very fast and powerful.\nUsed as an auto attack if there aren't any weapons.\nOr if the weapon cannot work in a clinch."
+  },
+  "Stats": {
+    "Efficient": {
+      "Dice": 3,
+      "Count": 1,
+      "Modifiers": {
+        "ResultBuff": 1
+      }
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 2
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy",
+    "HitCount": 1,
+    "IsMelee": true,
+    "Offence": {
+      "Type": "Tactical",
+      "Impact": "Kinetic",
+      "ApRank": 1
+    },
+    "Tags": [
+      "punch"
+    ]
+  },
+  "Constrains": {
+    "EnergyCost": 1
+  }
+}

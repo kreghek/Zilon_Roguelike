@@ -116,6 +116,23 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [LMB] to move and attack.
+        ///[T] to transit to other stage.
+        ///[O] to give loot up.
+        ///[I] to open inventory.
+        ///[C] to open character stats.
+        ///[SPACE] to wait a little.
+        ///[ALT] to highlight interactive.
+        ///[1-8] to select combat action.
+        ///[NUM1-NUM9] to move step by step..
+        /// </summary>
+        internal static string ControlsTutorialText {
+            get {
+                return ResourceManager.GetString("ControlsTutorialText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Defective.
         /// </summary>
         internal static string DefectiveAttributeValueTitle {
@@ -171,6 +188,46 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Energy is needed to deliver powerful blows.
+        ///When the energy ends, the character gets tired.
+        ///A tired character is less effective in combat.
+        ///And the exhausted character begins to lose vitality
+        ///and may die of overwork..
+        /// </summary>
+        internal static string EnergyConditionDescription {
+            get {
+                return ResourceManager.GetString("EnergyConditionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to EXHAUSTED!.
+        /// </summary>
+        internal static string EnergyCriticalConditionTitle {
+            get {
+                return ResourceManager.GetString("EnergyCriticalConditionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Easy tired.
+        /// </summary>
+        internal static string EnergyLesserConditionTitle {
+            get {
+                return ResourceManager.GetString("EnergyLesserConditionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tired.
+        /// </summary>
+        internal static string EnergyStrongConditionTitle {
+            get {
+                return ResourceManager.GetString("EnergyStrongConditionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Equip in slot: {0}.
         /// </summary>
         internal static string EquipInSlotTemplateCommandButton {
@@ -207,6 +264,17 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Any character needs to eat.
+        ///A hungry character is less efficient.
+        ///Ultimately, starvation kills the character..
+        /// </summary>
+        internal static string HungerConditionDescription {
+            get {
+                return ResourceManager.GetString("HungerConditionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Starvation!.
         /// </summary>
         internal static string HungerCriticalConditionTitle {
@@ -234,7 +302,20 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INTOXICATION!.
+        ///   Looks up a localized string similar to The use of medicines increases the level of intoxication of the character.
+        ///Toxins slightly reduce the effectiveness of the character,
+        ///but erode over time.
+        ///If the intoxication grows too much, an overdose will occur.
+        ///and the character will die..
+        /// </summary>
+        internal static string IntoxicationConditionDescription {
+            get {
+                return ResourceManager.GetString("IntoxicationConditionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OVERDOSE!.
         /// </summary>
         internal static string IntoxicationCriticalConditionTitle {
             get {
@@ -257,6 +338,15 @@ namespace CDT.LAST.MonoGameClient.Resources {
         internal static string IntoxicationStrongConditionTitle {
             get {
                 return ResourceManager.GetString("IntoxicationStrongConditionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Leaderboard.
+        /// </summary>
+        internal static string LeaderBoardButtonTitle {
+            get {
+                return ResourceManager.GetString("LeaderBoardButtonTitle", resourceCulture);
             }
         }
         
@@ -293,6 +383,15 @@ namespace CDT.LAST.MonoGameClient.Resources {
         internal static string NextScreenButtonTitle {
             get {
                 return ResourceManager.GetString("NextScreenButtonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        internal static string NoneEquipmentTitle {
+            get {
+                return ResourceManager.GetString("NoneEquipmentTitle", resourceCulture);
             }
         }
         
@@ -351,6 +450,51 @@ namespace CDT.LAST.MonoGameClient.Resources {
         internal static string PlayerInputNicknamePrompt {
             get {
                 return ResourceManager.GetString("PlayerInputNicknamePrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your leader board rating: {0}.
+        /// </summary>
+        internal static string PlayerRatingLabel {
+            get {
+                return ResourceManager.GetString("PlayerRatingLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Broken.
+        /// </summary>
+        internal static string PropBrokenDurabilityValueTitle {
+            get {
+                return ResourceManager.GetString("PropBrokenDurabilityValueTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Damaged.
+        /// </summary>
+        internal static string PropDamagedDurabilityValueTitle {
+            get {
+                return ResourceManager.GetString("PropDamagedDurabilityValueTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unbroken.
+        /// </summary>
+        internal static string PropFullDurabilityValueTitle {
+            get {
+                return ResourceManager.GetString("PropFullDurabilityValueTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shabby.
+        /// </summary>
+        internal static string PropShabbyDurabilityValueTitle {
+            get {
+                return ResourceManager.GetString("PropShabbyDurabilityValueTitle", resourceCulture);
             }
         }
         
@@ -481,11 +625,41 @@ namespace CDT.LAST.MonoGameClient.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Switch lang.
+        /// </summary>
+        internal static string SwitchLanguagebuttonTitle {
+            get {
+                return ResourceManager.GetString("SwitchLanguagebuttonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch res.
+        /// </summary>
+        internal static string SwitchResolutionButtonTitle {
+            get {
+                return ResourceManager.GetString("SwitchResolutionButtonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Take in inventory.
         /// </summary>
         internal static string TakePropInInventoryButtonTitle {
             get {
                 return ResourceManager.GetString("TakePropInInventoryButtonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All characters need to drink.
+        ///Thirst reduces the effectiveness of characters
+        ///and can lead to dehydration.
+        ///Dehydration is death!.
+        /// </summary>
+        internal static string ThristConditionDescription {
+            get {
+                return ResourceManager.GetString("ThristConditionDescription", resourceCulture);
             }
         }
         
@@ -531,6 +705,18 @@ namespace CDT.LAST.MonoGameClient.Resources {
         internal static string UseCommandButtonTitle {
             get {
                 return ResourceManager.GetString("UseCommandButtonTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The character is alive as long as he has vitality.
+        ///Damage, external or internal, takes away vitality.
+        ///Gradually, any wounds heal. Ultimately, the game
+        ///continues as long as there is at least some life in the character..
+        /// </summary>
+        internal static string WoundConditionDescription {
+            get {
+                return ResourceManager.GetString("WoundConditionDescription", resourceCulture);
             }
         }
         

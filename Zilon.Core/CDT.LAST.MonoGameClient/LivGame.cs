@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
+using System.Threading;
 
 using CDT.LAST.MonoGameClient.Engine;
 using CDT.LAST.MonoGameClient.GameComponents;
@@ -11,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 using Zilon.Core.Client;
 using Zilon.Core.Client.Sector;
@@ -31,6 +34,8 @@ namespace CDT.LAST.MonoGameClient
             IsMouseVisible = false;
             _serviceProvider = serviceProvider;
         }
+
+        public GraphicsDeviceManager Graphics => _graphics;
 
         public ServiceProvider ServiceProvider => _serviceProvider;
 
@@ -55,13 +60,11 @@ namespace CDT.LAST.MonoGameClient
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
-            base.Initialize();
-
             InitGlobeLoop();
 
             InitCommandLoop();
+
+            base.Initialize();
         }
 
         protected override void LoadContent()
@@ -94,43 +97,41 @@ namespace CDT.LAST.MonoGameClient
 
             Components.Add(sceneManager);
 
+            var font = Content.Load<SpriteFont>("Fonts/Main");
 #if DEBUG
-
-            var fpsCounter = new FpsCounter(this, _spriteBatch, Content.Load<SpriteFont>("Fonts/Main"));
+            var fpsCounter = new FpsCounter(this, _spriteBatch, font);
             Components.Add(fpsCounter);
 
-            var cheatInput = new CheatInput(this, _spriteBatch, Content.Load<SpriteFont>("Fonts/Main"));
+            var cheatInput = new CheatInput(this, _spriteBatch, font);
             Components.Add(cheatInput);
+
+            _graphics.IsFullScreen = false;
+            _graphics.PreferredBackBufferWidth = 800;
+            _graphics.PreferredBackBufferHeight = 480;
+            _graphics.ApplyChanges();
 #endif
+
+            var soundtrackManagerComponent = new SoundtrackManagerComponent(this);
+            var soundtrackManager = ServiceProvider.GetRequiredService<SoundtrackManager>();
+            var titleSong = Content.Load<Song>("Audio/TitleBackgroundTrack");
+            soundtrackManager.Initialize(titleSong);
+            soundtrackManagerComponent.Initialize(soundtrackManager);
+            Components.Add(soundtrackManagerComponent);
+#if !DEBUG
+            _graphics.IsFullScreen = true;
+            _graphics.PreferredBackBufferWidth
+ = 1280;
+            _graphics.PreferredBackBufferHeight
+ = 720;
+            _graphics.ApplyChanges();
+#endif
+
+            var versionDisplay = new VersionDisplay(this, _spriteBatch, font);
+            Components.Add(versionDisplay);
         }
 
         protected override void Update(GameTime gameTime)
         {
-            if (!CheatInput.IsCheating)
-            {
-                if (Keyboard.GetState().IsKeyDown(Keys.F))
-                {
-                    _graphics.IsFullScreen = true;
-                    _graphics.PreferredBackBufferWidth = 1920;
-                    _graphics.PreferredBackBufferHeight = 1080;
-                    _graphics.ApplyChanges();
-                }
-                else if (Keyboard.GetState().IsKeyDown(Keys.G))
-                {
-                    _graphics.IsFullScreen = false;
-                    _graphics.PreferredBackBufferWidth = 800;
-                    _graphics.PreferredBackBufferHeight = 480;
-                    _graphics.ApplyChanges();
-                }
-                else if (Keyboard.GetState().IsKeyDown(Keys.H))
-                {
-                    _graphics.IsFullScreen = true;
-                    _graphics.PreferredBackBufferWidth = 1280;
-                    _graphics.PreferredBackBufferHeight = 720;
-                    _graphics.ApplyChanges();
-                }
-            }
-
             base.Update(gameTime);
         }
 

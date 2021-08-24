@@ -17,6 +17,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         Texture2D GetCombatActIconTexture(string? sid, string[] tags);
         PersonConditionTextures GetConditionIconTextures(IPersonCondition personCondition);
         Texture2D GetContextualMenuBorderTexture();
+        Texture2D GetHexMarkers();
         Texture2D GetHintBackgroundTexture();
 
         SpriteFont GetHintTitleFont();
@@ -32,6 +33,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         Texture2D GetPersonMarkerTextureSheet();
 
         Texture2D[] GetPropIconLayers(string sid);
+        SpriteFont GetScoresFont();
         Texture2D GetSelectedButtonMarkerTexture();
         Texture2D GetSmallVerticalButtonBackgroundTexture();
         Texture2D GetSmallVerticalButtonIconsTexture();

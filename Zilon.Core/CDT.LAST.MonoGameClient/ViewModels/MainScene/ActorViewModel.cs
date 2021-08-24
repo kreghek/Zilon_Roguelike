@@ -5,6 +5,7 @@ using System.Linq;
 
 using CDT.LAST.MonoGameClient.Engine;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization;
+using CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene.VisualEffects;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -108,11 +109,39 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
             else
             {
-                var graphicsRoot = new AnimalGraphics(gameObjectParams.PersonVisualizationContentStorage);
+                var monsterPerson = Actor.Person as MonsterPerson;
+                SpriteContainer? graphics = null;
+                switch (monsterPerson.Scheme.Sid)
+                {
+                    case "predator":
+                        graphics = new AnimalGraphics(gameObjectParams.PersonVisualizationContentStorage);
+                        break;
 
-                _rootSprite.AddChild(graphicsRoot);
+                    case "warthog":
+                        graphics = new MonoGraphics("warthog", gameObjectParams.PersonVisualizationContentStorage);
+                        break;
 
-                _graphicsRoot = graphicsRoot;
+                    case "predator-meat":
+                        graphics = new AnimalGraphics(gameObjectParams.PersonVisualizationContentStorage);
+                        break;
+
+                    case "skeleton":
+                        graphics = new MonoGraphics("skeleton", gameObjectParams.PersonVisualizationContentStorage);
+                        break;
+
+                    case "skeleton-equipment":
+                        graphics = new MonoGraphics("skeleton-equipment",
+                            gameObjectParams.PersonVisualizationContentStorage);
+                        break;
+
+                    case "gallbladder":
+                        graphics = new MonoGraphics("gallbladder", gameObjectParams.PersonVisualizationContentStorage);
+                        break;
+                }
+
+                _rootSprite.AddChild(graphics);
+
+                _graphicsRoot = (IActorGraphics)graphics;
             }
 
             var hexSize = MapMetrics.UnitSize / 2;
@@ -160,6 +189,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         public override void HandleRemove()
         {
             base.HandleRemove();
+
+            UnsubscribeEventHandlers();
 
             foreach (var state in _actorStateEngineList)
             {
@@ -294,7 +325,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             AddStateEngine(stateEngine);
         }
 
-        private void Actor_Moved(object? sender, EventArgs e)
+        private void Actor_Moved(object? sender, ActorMoveEventArgs e)
         {
             var hexSize = MapMetrics.UnitSize / 2;
             var playerActorWorldCoords = HexHelper.ConvertToWorld(((HexNode)Actor.Node).OffsetCoords);
@@ -324,15 +355,30 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                 moveSoundEffectInstance = moveSoundEffect?.CreateInstance();
             }
 
-            var moveEngine = new ActorMoveEngine(
-                _rootSprite,
-                _graphicsRoot.RootSprite,
-                _shadowSprite,
-                newPosition,
-                animationBlockerService,
-                moveSoundEffectInstance);
+            if (!e.Forced)
+            {
+                var moveEngine = new ActorMoveEngine(
+                    _rootSprite,
+                    _graphicsRoot.RootSprite,
+                    _shadowSprite,
+                    newPosition,
+                    animationBlockerService,
+                    moveSoundEffectInstance);
 
-            AddStateEngine(moveEngine);
+                AddStateEngine(moveEngine);
+            }
+            else
+            {
+                var pushEngine = new ActorPushEngine(
+                    _rootSprite,
+                    _graphicsRoot.RootSprite,
+                    _shadowSprite,
+                    newPosition,
+                    animationBlockerService,
+                    moveSoundEffectInstance);
+
+                AddStateEngine(pushEngine);
+            }
         }
 
         private void Actor_PropTransferPerformed(object? sender, EventArgs e)
@@ -356,9 +402,9 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var consumableType = e.UsedProp.Scheme.Sid switch
             {
-                "med-kit" => ConsumeEffectType.Heal,
-                "water-bottle" => ConsumeEffectType.Drink,
-                "packed-food" => ConsumeEffectType.Eat,
+                "med-kit" or "gall-gland" => ConsumeEffectType.Heal,
+                "water-bottle" or "vege-milk" => ConsumeEffectType.Drink,
+                "packed-food" or "raw-meat" or "evil-pumpkin" => ConsumeEffectType.Eat,
                 _ => ConsumeEffectType.UseCommon
             };
 

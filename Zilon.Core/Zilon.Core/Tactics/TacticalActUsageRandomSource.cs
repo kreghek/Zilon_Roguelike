@@ -97,5 +97,10 @@ namespace Zilon.Core.Tactics
             var rollIndex = _dice.Roll(0, count - 1);
             return armorEquipments.ElementAt(rollIndex);
         }
+
+        public int RollPushRule()
+        {
+            return RollD6();
+        }
     }
 }

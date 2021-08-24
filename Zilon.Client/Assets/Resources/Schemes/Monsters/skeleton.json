@@ -1,0 +1,40 @@
+{
+  "Name": {
+    "Ru": "Скелет",
+    "En": "Skeleton"
+  },
+  "Hp": 100,
+  "CombatActs": [
+    {
+      "Efficient": {
+        "Dice": 3,
+        "Count": 1,
+        "Modifiers": {
+          "ResultBuff": 1
+        }
+      },
+      "Range": {
+        "Min": 1,
+        "Max": 2
+      },
+      "Effect": "Damage",
+      "Targets": "Enemy",
+      "Offence": {
+        "Type": "Tactical",
+        "Impact": "Kinetic"
+      },
+      "IsMelee": true,
+      "Tags": [
+        "punch"
+      ]
+    }
+  ],
+  "DropTableSids": [
+    "default",
+    "default-evil-hour"
+  ],
+  "BaseScore": 300,
+  "Tags": [
+    "beast"
+  ]
+}

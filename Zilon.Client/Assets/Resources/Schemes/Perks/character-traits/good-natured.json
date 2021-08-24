@@ -3,5 +3,10 @@
     "Ru": "Добрая душа",
 	"En": "Good natured"
   },
+  "Description":
+  {
+    "Ru": "У вас большое сердце. Причинять вред другим - не ваша стезя.\nИногда кажется, что эта вообще лишняя черта в таком мире.",
+	"En": "You have a big heart. Harming others is not your path.\nSometimes it seems like this is a superfluous trait in such a world."
+  },
   "IsBuildIn": true
 }

@@ -1,0 +1,28 @@
+{
+  "Name": {
+    "En": "Raw meat",
+	"Ru": "Сыроя мясо"
+  },
+  "Description":{
+	  "Ru": "Кусок сырого мяса. Может немного утолить голод, но вызывает жажду.",
+	  "En": "A piece of raw meat. May satisfy hunger a little, but it makes you thirsty."
+  },
+  "Use": {
+    "Consumable": true,
+    "CommonRules": [
+      {
+        "Type": "Satiety",
+        "Level": "Normal"
+      },
+	  {
+        "Type": "Health",
+        "Level": "Lesser"
+      },
+	  {
+        "Type": "Thirst",
+        "Level": "Lesser",
+		"Direction": "Negative"
+      }
+    ]
+  },
+}

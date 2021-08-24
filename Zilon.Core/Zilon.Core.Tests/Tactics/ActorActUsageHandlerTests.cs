@@ -66,9 +66,11 @@ namespace Zilon.Core.Tests.Tactics
             actMock.SetupGet(x => x.Stats).Returns(actScheme);
             var act = actMock.Object;
 
+            var map = Mock.Of<ISectorMap>();
+
             // ACT
-            var usedActs = new TacticalActRoll(act, 1);
-            actUsageService.ProcessActUsage(actor, monster, usedActs);
+            var usedActs = new CombatActRoll(act, 1);
+            actUsageService.ProcessActUsage(actor, monster, usedActs, map);
 
             // ASSERT
             monsterMock.Verify(x => x.TakeDamage(It.IsAny<int>()), Times.Once);
@@ -120,10 +122,12 @@ namespace Zilon.Core.Tests.Tactics
             tacticalActMock.SetupGet(x => x.Stats).Returns(actStatScheme);
             var tacticalAct = tacticalActMock.Object;
 
-            var usedActs = new TacticalActRoll(tacticalAct, 1);
+            var usedActs = new CombatActRoll(tacticalAct, 1);
+
+            var map = Mock.Of<ISectorMap>();
 
             // ACT
-            actUsageService.ProcessActUsage(actor, actor, usedActs);
+            actUsageService.ProcessActUsage(actor, actor, usedActs, map);
 
             // ASSERT
             survivalModuleMock.Verify(x =>
@@ -162,9 +166,11 @@ namespace Zilon.Core.Tests.Tactics
             var monster = monsterMock.Object;
             var act = CreateTestAct();
 
+            var map = Mock.Of<ISectorMap>();
+
             // ACT
-            var usedActs = new TacticalActRoll(act, 1);
-            actUsageService.ProcessActUsage(actor, monster, usedActs);
+            var usedActs = new CombatActRoll(act, 1);
+            actUsageService.ProcessActUsage(actor, monster, usedActs, map);
 
             // ASSERT
             perkResolverMock.Verify(x => x.ApplyProgress(
@@ -217,9 +223,11 @@ namespace Zilon.Core.Tests.Tactics
             actMock.SetupGet(x => x.Stats).Returns(actScheme);
             var act = actMock.Object;
 
+            var map = Mock.Of<ISectorMap>();
+
             // ACT
-            var usedActs = new TacticalActRoll(act, 1);
-            actUsageService.ProcessActUsage(actor, monster, usedActs);
+            var usedActs = new CombatActRoll(act, 1);
+            actUsageService.ProcessActUsage(actor, monster, usedActs, map);
 
             // ASSERT
             monsterMock.Verify(x => x.TakeDamage(It.IsAny<int>()), Times.Once);
@@ -272,9 +280,11 @@ namespace Zilon.Core.Tests.Tactics
             actMock.SetupGet(x => x.Stats).Returns(actScheme);
             var act = actMock.Object;
 
+            var map = Mock.Of<ISectorMap>();
+
             // ACT
-            var usedActs = new TacticalActRoll(act, FAKE_ACTEFFICIENT_ROLL);
-            actUsageService.ProcessActUsage(actor, monster, usedActs);
+            var usedActs = new CombatActRoll(act, FAKE_ACTEFFICIENT_ROLL);
+            actUsageService.ProcessActUsage(actor, monster, usedActs, map);
 
             // ASSERT
             actUsageRandomSourceMock.Verify(x => x.RollArmorSave(), Times.Once);

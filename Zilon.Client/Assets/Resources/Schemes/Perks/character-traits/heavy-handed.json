@@ -3,5 +3,10 @@
     "Ru": "Тяжелая рука",
 	"En": "Heavy handed"
   },
+  "Description":
+  {
+    "Ru": "С такими, как вы, предпочитают просто разговаривать.\nПотому что когда вы хотите просто погладить щенка,\nон случайно получает смертельную рану.",
+	"En": "They prefer to just talk to people like you.\nBecause when you just want to pet a puppy,\nhe accidentally gets a fatal wound."
+  },
   "IsBuildIn": true
 }

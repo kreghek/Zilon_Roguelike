@@ -1,0 +1,36 @@
+{
+  "Name": {
+    "En": "Dungeon",
+    "Ru": "Подземелье"
+  },
+  "SectorLevels": [
+    {
+      "Sid": "intro",
+      "IsStart": true,
+      "RegularMonsterSids": [
+        "skeleton"
+      ],
+      "RareMonsterSids": [
+        "skeleton-equipment"
+      ],
+      "MapGeneratorOptions": {
+        "MapGenerator": "CellularAutomaton",
+        "MapWidth": 55,
+        "MapHeight": 55,
+        "ChanceToStartAlive": 45
+      },
+      "RegionMonsterCount": 2,
+      "TotalChestCount": 20,
+      "RegionChestCountRatio": 9,
+      "ChestDropTableSids": [
+        "survival",
+        "default"
+      ],
+      "TransSectorSids": [
+        {
+          "SectorLevelSid": null
+        }
+      ]
+    }
+  ]
+}

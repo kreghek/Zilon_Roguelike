@@ -1,0 +1,39 @@
+{
+  "Name": {
+    "Ru": "Смертельный удар смерти",
+    "En": "Death punch of the death"
+  },
+  "Description": {
+    "Ru": "Мощнейший сокрушительный удар!\nСильно измытывает.\nСмотри не поранься!",
+    "En": "The most powerful crushing blow!.\nIt is very draining.\nMake sure you don't hurt yourself!"
+  },
+  "Stats": {
+    "Efficient": {
+      "Dice": 3,
+      "Count": 3,
+      "Modifiers": {
+        "ResultBuff": 3
+      }
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 2
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy",
+    "HitCount": 1,
+    "IsMelee": true,
+    "Offence": {
+      "Type": "Tactical",
+      "Impact": "Kinetic",
+      "ApRank": 2
+    },
+    "Tags": [
+      "punch",
+      "overpower"
+    ]
+  },
+  "Constrains": {
+    "EnergyCost": 50
+  }
+}
