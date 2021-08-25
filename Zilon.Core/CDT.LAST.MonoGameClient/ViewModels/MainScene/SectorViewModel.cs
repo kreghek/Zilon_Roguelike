@@ -25,11 +25,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly Camera _camera;
         private readonly GameObjectsViewModel _gameObjectsViewModel;
         private readonly IActorInteractionBus _intarectionBus;
-        private readonly IPlayerEventLogService _logService;
-
         private readonly MapViewModel _mapViewModel;
         private readonly IPlayer _player;
-        private readonly IScoreManager _scoreManager;
         private readonly SectorInteractor _sectorInteractor;
         private readonly SpriteBatch _spriteBatch;
         private readonly ISectorUiState _uiState;
@@ -53,9 +50,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             var personSoundContentStorage = serviceScope.GetRequiredService<IPersonSoundContentStorage>();
             var gameObjectVisualizationContentStorage =
                 serviceScope.GetRequiredService<IGameObjectVisualizationContentStorage>();
-
-            _scoreManager = serviceScope.GetRequiredService<IScoreManager>();
-            _logService = serviceScope.GetRequiredService<IPlayerEventLogService>();
 
             var sector = GetPlayerSectorNode(_player).Sector;
 
