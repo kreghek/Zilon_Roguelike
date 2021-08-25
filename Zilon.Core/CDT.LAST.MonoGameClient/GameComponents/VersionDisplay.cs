@@ -48,7 +48,7 @@ namespace CDT.LAST.MonoGameClient.GameComponents
             const int BORDER = 2;
             const int SHADOW_OFFSET = 1;
             var position = new Vector2(Game.GraphicsDevice.Viewport.Bounds.Right - size.X - BORDER,
-                    Game.GraphicsDevice.Viewport.Bounds.Bottom - size.Y - BORDER);
+                Game.GraphicsDevice.Viewport.Bounds.Bottom - size.Y - BORDER);
             var shadowOffset = new Vector2(SHADOW_OFFSET, SHADOW_OFFSET);
             var shadowPosition = position + shadowOffset;
 
