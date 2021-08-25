@@ -1,0 +1,41 @@
+{
+  "Rolls": 1,
+  "Records": [
+    {
+      "SchemeSid": "work-clothes",
+      "Weight": 3
+    },
+    {
+      "SchemeSid": "traveler-camisole",
+      "Weight": 1
+    },
+    {
+      "SchemeSid": "knitted-hat",
+      "Weight": 3
+    },
+    {
+      "SchemeSid": "steel-helmet",
+      "Weight": 1
+    },
+    {
+      "SchemeSid": "great-sword",
+      "Weight": 1
+    },
+    {
+      "SchemeSid": "combat-staff",
+      "Weight": 1
+    },
+    {
+      "SchemeSid": "tribal-spear",
+      "Weight": 1
+    },
+    {
+      "SchemeSid": "wooden-shield",
+      "Weight": 2
+    },
+    {
+      "SchemeSid": "short-sword",
+      "Weight": 1
+    }
+  ]
+}

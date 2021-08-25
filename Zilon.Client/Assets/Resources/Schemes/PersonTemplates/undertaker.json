@@ -4,11 +4,24 @@
     "Ru": "Гробовщик",
     "En": "Undertaker"
   },
+  "Description": {
+    "Ru": "Когда-то ваш учитель, безумный маг и окультист, пытался похоронить вас защиво.\nНо вы превзошли учителя. Он бы гордился гробом, в котором вы его закопали в итоге.\nЭто был шедевр, ваш Magnum opus. Но иногда вы до сих пор слышите шопот учителя среди воя его паствы мертвецов.",
+    "En": "Once upon a time your teacher, a mad magician and occultist, tried to bury you on the defensive.\nBut you surpassed the teacher. He would be proud of the coffin in which you ended up burying him.\nThis was a masterpiece, your Magnum opus.\nBut sometimes you can still hear the teacher whispering amid the howling of his flock of the dead. "
+  },
+  "HeadEquipments": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "knitted-hat",
+        "Weight": 1
+      }
+    ]
+  },
   "BodyEquipments": {
     "Rolls": 1,
     "Records": [
       {
-        "SchemeSid": "leather-jacket",
+        "SchemeSid": "work-clothes",
         "Weight": 1
       }
     ]

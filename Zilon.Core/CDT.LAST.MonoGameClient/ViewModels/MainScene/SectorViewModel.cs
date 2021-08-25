@@ -10,8 +10,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.ActorInteractionEvents;
 using Zilon.Core.World;
@@ -23,7 +25,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private readonly Camera _camera;
         private readonly GameObjectsViewModel _gameObjectsViewModel;
         private readonly IActorInteractionBus _intarectionBus;
-
         private readonly MapViewModel _mapViewModel;
         private readonly IPlayer _player;
         private readonly SectorInteractor _sectorInteractor;
@@ -187,6 +188,30 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     {
                         targetViewModel.RunDamageReceivedAnimation(attackerViewModel.Node);
                     }
+                }
+            }
+            else if (e.ActorInteractionEvent is DodgeActorInteractionEvent dodgeActorInteractionEvent)
+            {
+                var actDescription = dodgeActorInteractionEvent.UsedActDescription;
+                var targetActor = dodgeActorInteractionEvent.TargetActor;
+
+                var attackerViewModel = ViewModelContext.GameObjects.OfType<ActorViewModel>()
+                    .Single(x => x.Actor == dodgeActorInteractionEvent.Actor);
+                if (attackerViewModel.CanDraw)
+                {
+                    attackerViewModel.RunCombatActUsageAnimation(actDescription, targetActor.Node);
+                }
+            }
+            else if (e.ActorInteractionEvent is PureMissActorInteractionEvent pureMissActorInteractionEvent)
+            {
+                var actDescription = pureMissActorInteractionEvent.UsedActDescription;
+                var targetActor = pureMissActorInteractionEvent.TargetActor;
+
+                var attackerViewModel = ViewModelContext.GameObjects.OfType<ActorViewModel>()
+                    .Single(x => x.Actor == pureMissActorInteractionEvent.Actor);
+                if (attackerViewModel.CanDraw)
+                {
+                    attackerViewModel.RunCombatActUsageAnimation(actDescription, targetActor.Node);
                 }
             }
         }

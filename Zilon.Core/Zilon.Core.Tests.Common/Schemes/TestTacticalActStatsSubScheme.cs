@@ -20,13 +20,34 @@ namespace Zilon.Core.Tests.Common.Schemes
             Targets = TacticalActTargets.Enemy;
         }
 
+        /// <inheritdoc />
         public TacticalActEffectType Effect { get; set; }
+
+        /// <inheritdoc />
         public Roll Efficient { get; set; }
+
+        /// <inheritdoc />
         public int HitCount { get; }
+
+        /// <inheritdoc />
         public bool IsMelee { get; }
+
+        /// <inheritdoc />
         public ITacticalActOffenceSubScheme Offence { get; set; }
+
+        /// <inheritdoc />
         public Range<int> Range { get; set; }
+
+        /// <inheritdoc />
         public TacticalActTargets Targets { get; set; }
+
+        /// <inheritdoc />
         public string[] Tags { get; }
+
+        /// <inheritdoc />
+        public float? Duration { get; }
+
+        /// <inheritdoc />
+        public CombatActRule[] Rules { get; }
     }
 }

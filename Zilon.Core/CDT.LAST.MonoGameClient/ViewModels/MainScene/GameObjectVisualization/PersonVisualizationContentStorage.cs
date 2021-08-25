@@ -20,6 +20,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
         private readonly Dictionary<string, HandPart[]> _handParts;
         private readonly Dictionary<string, HeadPart[]> _headParts;
 
+        private IDictionary<string, Texture2D> _monographicsTexture;
+
         public PersonVisualizationContentStorage()
         {
             _bodyParts = new Dictionary<string, BodyPart[]>();
@@ -91,6 +93,41 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
                 new HandPart(HandPartType.Base, load("WoodenShieldBase")),
                 new HandPart(HandPartType.BaseBack, load("WoodenShieldBase"))
             });
+
+            _handParts.Add("cudgel", new[]
+            {
+                new HandPart(HandPartType.Base, load("CudgelBase"))
+            });
+
+            _handParts.Add("knife", new[]
+            {
+                new HandPart(HandPartType.Base, load("KnifeBase"))
+            });
+
+            _handParts.Add("battle-axe", new[]
+            {
+                new HandPart(HandPartType.Base, load("BattleAxeBase"))
+            });
+
+            _handParts.Add("pick-axe", new[]
+            {
+                new HandPart(HandPartType.Base, load("PickAxeBase"))
+            });
+
+            _handParts.Add("shovel", new[]
+            {
+                new HandPart(HandPartType.Base, load("ShovelBase"))
+            });
+
+            _handParts.Add("mace", new[]
+            {
+                new HandPart(HandPartType.Base, load("MaceBase"))
+            });
+
+            _handParts.Add("katana", new[]
+            {
+                new HandPart(HandPartType.Base, load("KatanaBase"))
+            });
         }
 
         private void LoadHeadParts(ContentManager content)
@@ -106,6 +143,22 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
             {
                 new HeadPart(HeadPartType.Base, content.Load<Texture2D>(PATH_TO_HEAD_PARTS + "SteelHelmetBase")),
                 new HeadPart(HeadPartType.Inside, content.Load<Texture2D>(PATH_TO_HEAD_PARTS + "SteelHelmetInside"))
+            });
+
+            _headParts.Add("headband", new[]
+            {
+                new HeadPart(HeadPartType.Base, content.Load<Texture2D>(PATH_TO_HEAD_PARTS + "HeadbandBase"))
+            });
+
+            _headParts.Add("highlander-helmet", new[]
+            {
+                new HeadPart(HeadPartType.Base, content.Load<Texture2D>(PATH_TO_HEAD_PARTS + "HighlanderHelmetBase")),
+                new HeadPart(HeadPartType.Inside, content.Load<Texture2D>(PATH_TO_HEAD_PARTS + "SteelHelmetInside"))
+            });
+
+            _headParts.Add("evil-pumpkin", new[]
+            {
+                new HeadPart(HeadPartType.Base, content.Load<Texture2D>(PATH_TO_HEAD_PARTS + "EvilPumpkinBase"))
             });
         }
 
@@ -235,6 +288,32 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
             LoadHeadParts(content);
 
             LoadAnimalParts(content);
+
+            _monographicsTexture = new Dictionary<string, Texture2D>
+            {
+                { "gallbladder", content.Load<Texture2D>("Sprites/game-objects/Monographics/Gallbladder") },
+                {
+                    "gallbladder/Outlined",
+                    content.Load<Texture2D>("Sprites/game-objects/Monographics/Outlined/Gallbladder")
+                },
+
+                { "skeleton", content.Load<Texture2D>("Sprites/game-objects/Monographics/Skeleton") },
+                { "skeleton/Outlined", content.Load<Texture2D>("Sprites/game-objects/Monographics/Outlined/Skeleton") },
+
+                { "skeleton-equipment", content.Load<Texture2D>("Sprites/game-objects/Monographics/SkeletonElite") },
+                {
+                    "skeleton-equipment/Outlined",
+                    content.Load<Texture2D>("Sprites/game-objects/Monographics/Outlined/SkeletonElite")
+                },
+
+                { "warthog", content.Load<Texture2D>("Sprites/game-objects/Monographics/Warthog") },
+                { "warthog/Outlined", content.Load<Texture2D>("Sprites/game-objects/Monographics/Outlined/Warthog") }
+            };
+        }
+
+        public Texture2D GetMonographicTexture(string sid)
+        {
+            return _monographicsTexture[sid];
         }
     }
 }

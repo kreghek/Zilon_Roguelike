@@ -24,10 +24,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     {
         private const float MAP_UPDATE_DELAY_SECONDS = 0.05f;
         private readonly Game _game;
+        private readonly Texture2D _hexMarkerTextures;
 
         private readonly Texture2D _hexSprite;
-
-        private readonly ConcurrentDictionary<OffsetCoords, Sprite> _hexSprites;
+        private readonly ConcurrentDictionary<OffsetCoords, SpriteContainer> _hexSprites;
         private readonly IPlayer _player;
         private readonly ISector _sector;
         private readonly SpriteBatch _spriteBatch;
@@ -38,6 +38,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         public MapViewModel(Game game, IPlayer player, ISectorUiState uiState, ISector sector, SpriteBatch spriteBatch)
         {
             _hexSprite = game.Content.Load<Texture2D>("Sprites/hex");
+            _hexMarkerTextures = game.Content.Load<Texture2D>("Sprites/ui/HexMarkers");
 
             _spriteBatch = spriteBatch;
             _game = game;
@@ -45,7 +46,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _uiState = uiState;
             _sector = sector;
 
-            _hexSprites = new ConcurrentDictionary<OffsetCoords, Sprite>();
+            _hexSprites = new ConcurrentDictionary<OffsetCoords, SpriteContainer>();
 
             sector.TrasitionUsed += Sector_TrasitionUsed;
         }
@@ -64,7 +65,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public void Update(GameTime gameTime)
         {
-            UpdateSpriteMatrix(gameTime);
+            try
+            {
+                UpdateSpriteMatrix(gameTime);
+            }
+            catch (ArgumentException)
+            {
+                // Do nothing.
+                // visibleFowNodeData.Nodes can throw the exception in multuthreading environment.
+                // This can crash the game.
+                // But we can ignore this frame and try to make the new one. User will not see the broken frame.
+            }
         }
 
         private void Sector_TrasitionUsed(object? sender, TransitionUsedEventArgs e)
@@ -116,11 +127,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     nodeColor = Color.White;
                 }
 
-                if (_sector.Map.Transitions.ContainsKey(fowNode.Node))
-                {
-                    nodeColor = Color.Lerp(nodeColor, new Color(255, 0, 0, 255), 0.3f);
-                }
-
                 if (fowNode.State != SectorMapNodeFowState.Observing)
                 {
                     nodeColor = Color.Lerp(nodeColor, new Color(0, 0, 0, 0), 0.5f);
@@ -138,18 +144,44 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     // Remember. Hex width is less that size (radius).
                     // It equals R*Sqrt(3)/2. So sprite width is R*Sqrt(3)/2*2 or R*Sqrt(3). It's about 28 pixels.
                     // You should make sprite 28*16.
-                    var newSprite = new Sprite(_hexSprite)
+                    var hexSprite = new Sprite(_hexSprite)
                     {
-                        Color = nodeColor,
-                        Position = new Vector2(
-                            (float)(worldCoords[0] * hexSize * Math.Sqrt(3)),
-                            worldCoords[1] * hexSize * 2 / 2
-                        ),
                         SourceRectangle = new Rectangle(hexTextureIndexX * 28, hexTextureIndexY * 16, 28, 16)
                     };
 
-                    _hexSprites.AddOrUpdate(node.OffsetCoords, newSprite, (offsetCoords, sprite) => { return sprite; });
-                    currentHexSprite = newSprite;
+                    var hexSpriteContainer = new SpriteContainer
+                    {
+                        Position = new Vector2(
+                            (float)(worldCoords[0] * hexSize * Math.Sqrt(3)),
+                            worldCoords[1] * hexSize * 2 / 2
+                        )
+                    };
+                    hexSpriteContainer.AddChild(hexSprite);
+
+                    if (_sector.Map.Transitions.TryGetValue(fowNode.Node, out var transition))
+                    {
+                        if (transition.SectorNode.Biome.LocationScheme.Sid == "dungeon" ||
+                            transition.SectorNode.Biome.LocationScheme.Sid == "elder-temple")
+                        {
+                            var transitionMarkerSprite = new Sprite(_hexMarkerTextures)
+                            {
+                                SourceRectangle = new Rectangle(28, 0, 28, 16)
+                            };
+                            hexSpriteContainer.AddChild(transitionMarkerSprite);
+                        }
+                        else
+                        {
+                            var transitionMarkerSprite = new Sprite(_hexMarkerTextures)
+                            {
+                                SourceRectangle = new Rectangle(0, 0, 28, 16)
+                            };
+                            hexSpriteContainer.AddChild(transitionMarkerSprite);
+                        }
+                    }
+
+                    _hexSprites.AddOrUpdate(node.OffsetCoords, hexSpriteContainer,
+                        (offsetCoords, sprite) => { return sprite; });
+                    currentHexSprite = hexSpriteContainer;
                 }
 
                 currentHexSprite.Color = nodeColor;

@@ -11,6 +11,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         None,
         ShortBlade = 1,
         Teeth = 2,
+        Punch = 4,
 
         Backing = 1024
     }

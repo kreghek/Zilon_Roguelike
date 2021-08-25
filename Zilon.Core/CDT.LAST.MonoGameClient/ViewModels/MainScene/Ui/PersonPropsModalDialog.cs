@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 
 using CDT.LAST.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.Resources;
 using CDT.LAST.MonoGameClient.Screens;
 
 using Microsoft.Xna.Framework;
@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
+using Zilon.Core.Components;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -22,7 +23,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
     {
         private const int EQUIPMENT_ITEM_SIZE = 32;
         private const int EQUIPMENT_ITEM_SPACING = 2;
-        private const int MAX_INVENTORY_ROW_ITEMS = 8;
+        private const int MAX_INVENTORY_ROWS = 8;
         private readonly IServiceProvider _serviceProvider;
 
         private readonly IUiContentStorage _uiContentStorage;
@@ -47,6 +48,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         protected override void DrawContent(SpriteBatch spriteBatch)
         {
+            // Separator
+            spriteBatch.Draw(_uiContentStorage.GetButtonTexture(),
+                new Rectangle(ContentRect.Center.X, ContentRect.Top, 2, ContentRect.Height), Color.White);
+
             DrawEquipments(spriteBatch);
             DrawInventory(spriteBatch);
 
@@ -71,8 +76,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 throw new InvalidOperationException("Active person must be selected before this dialog was opened.");
             }
 
-            InitEquipment(person);
-            InitInventory(person);
+            var halfWidth = ContentRect.Width / 2;
+            const int MARGIN_X = 2;
+            var equipmentRect = new Rectangle(ContentRect.Left,
+                ContentRect.Top,
+                halfWidth - MARGIN_X,
+                ContentRect.Height);
+            InitEquipment(person, equipmentRect);
+            var inventoryRect = new Rectangle(ContentRect.Center.X + (MARGIN_X * 2),
+                ContentRect.Top,
+                halfWidth - (MARGIN_X * 2),
+                ContentRect.Height);
+            InitInventory(person, inventoryRect);
         }
 
         protected override void UpdateContent()
@@ -134,12 +149,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private void DrawEquipmentHintIfSelected(SpriteBatch spriteBatch)
         {
-            if (_hoverEquipmentItem is null)
+            if (_hoverEquipmentItem is null || _hoverEquipmentItem.Equipment is null)
             {
                 return;
             }
 
-            var equipmentTitle = PropHelper.GetPropTitle(_hoverEquipmentItem.Equipment);
+            var equipmentTitle = PropHelper.GetPropHintText(_hoverEquipmentItem.Equipment);
             var hintTitleFont = _uiContentStorage.GetHintTitleFont();
             var titleTextSizeVector = hintTitleFont.MeasureString(equipmentTitle);
 
@@ -167,6 +182,18 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             foreach (var item in _currentEquipmentItems)
             {
                 item.Control.Draw(spriteBatch);
+
+                if (item.Equipment is not null)
+                {
+                    var propTitle = PropHelper.GetPropTitle(item.Equipment);
+                    spriteBatch.DrawString(_uiContentStorage.GetButtonFont(), propTitle,
+                        new Vector2(item.Control.Rect.Right + 2, item.Control.Rect.Top), Color.Wheat);
+                }
+                else
+                {
+                    spriteBatch.DrawString(_uiContentStorage.GetButtonFont(), UiResources.NoneEquipmentTitle,
+                        new Vector2(item.Control.Rect.Right + 2, item.Control.Rect.Top), Color.Gray);
+                }
             }
         }
 
@@ -177,9 +204,20 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 return;
             }
 
-            foreach (var item in _currentInventoryItems)
+            var pagedItems = _currentInventoryItems.Take(MAX_INVENTORY_ROWS).ToArray();
+
+            foreach (var item in pagedItems)
             {
                 item.Control.Draw(spriteBatch);
+
+                var propTitle = PropHelper.GetPropTitle(item.Prop);
+                if (item.Prop is Resource resource)
+                {
+                    propTitle += $" x{resource.Count}";
+                }
+
+                spriteBatch.DrawString(_uiContentStorage.GetButtonFont(), propTitle,
+                    new Vector2(item.Control.Rect.Right + 2, item.Control.Rect.Top), Color.Wheat);
             }
         }
 
@@ -190,9 +228,10 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 return;
             }
 
-            var inventoryTitle = PropHelper.GetPropTitle(_hoverInventoryItem.Prop);
+            var inventoryItemHintText = PropHelper.GetPropHintText(_hoverInventoryItem.Prop);
+
             var hintTitleFont = _uiContentStorage.GetHintTitleFont();
-            var titleTextSizeVector = hintTitleFont.MeasureString(inventoryTitle);
+            var titleTextSizeVector = hintTitleFont.MeasureString(inventoryItemHintText);
 
             const int HINT_TEXT_SPACING = 8;
             var hintRectangle = new Rectangle(
@@ -203,12 +242,12 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), hintRectangle, Color.DarkSlateGray);
 
-            spriteBatch.DrawString(hintTitleFont, inventoryTitle,
+            spriteBatch.DrawString(hintTitleFont, inventoryItemHintText,
                 new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
                 Color.Wheat);
         }
 
-        private void InitEquipment(IPerson person)
+        private void InitEquipment(IPerson person, Rectangle rect)
         {
             var equipmentModule = person.GetModuleSafe<IEquipmentModule>();
             if (equipmentModule is null)
@@ -218,27 +257,59 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             var currentEquipmentItemList = new List<EquipmentUiItem>();
-            foreach (var equipment in equipmentModule)
+            var equipmentSlotList = equipmentModule.Slots.ToArray();
+            for (var itemIndex = 0; itemIndex < equipmentSlotList.Length; itemIndex++)
             {
-                if (equipment is null)
+                var slot = equipmentSlotList[itemIndex];
+
+                var sid = string.Empty;
+                Equipment equipment = null;
+                if (equipmentModule[itemIndex] is not null)
                 {
-                    continue;
+                    equipment = equipmentModule[itemIndex];
+                    sid = equipment.Scheme.Sid;
+                    if (string.IsNullOrEmpty(sid))
+                    {
+                        Debug.Fail("All equipment must have symbolic identifier (SID).");
+                        sid = "EmptyPropIcon";
+                    }
+                }
+                else
+                {
+                    switch (slot.Types)
+                    {
+                        case EquipmentSlotTypes.Head:
+                            sid = "HeadSlot";
+                            break;
+
+                        case EquipmentSlotTypes.Body:
+                            sid = "BodySlot";
+                            break;
+
+                        case EquipmentSlotTypes.Hand:
+                            if (slot.IsMain)
+                            {
+                                sid = "RightHandSlot";
+                            }
+                            else
+                            {
+                                sid = "LeftHandSlot";
+                            }
+
+                            break;
+
+                        case EquipmentSlotTypes.Aux:
+                            sid = "AuxSlot";
+                            break;
+                    }
                 }
 
-                var lastIndex = currentEquipmentItemList.Count;
-                var relativeX = lastIndex * (EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING);
+                var relativeY = itemIndex * (EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING);
                 var buttonRect = new Rectangle(
-                    relativeX + ContentRect.Left,
-                    ContentRect.Top,
+                    rect.Left,
+                    rect.Top + relativeY,
                     EQUIPMENT_ITEM_SIZE,
                     EQUIPMENT_ITEM_SIZE);
-
-                var sid = equipment.Scheme.Sid;
-                if (string.IsNullOrEmpty(sid))
-                {
-                    Debug.Fail("All equipment must have symbolic identifier (SID).");
-                    sid = "EmptyPropIcon";
-                }
 
                 var equipmentButton = new EquipmentButton(
                     _uiContentStorage.GetButtonTexture(),
@@ -246,7 +317,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     buttonRect,
                     new Rectangle(0, 0, EQUIPMENT_ITEM_SIZE, EQUIPMENT_ITEM_SIZE));
 
-                var uiItem = new EquipmentUiItem(equipmentButton, equipment, lastIndex, buttonRect);
+                var uiItem = new EquipmentUiItem(equipmentButton, equipment, itemIndex, buttonRect);
 
                 currentEquipmentItemList.Add(uiItem);
             }
@@ -254,7 +325,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _currentEquipmentItems = currentEquipmentItemList.ToArray();
         }
 
-        private void InitInventory(IPerson person)
+        private void InitInventory(IPerson person, Rectangle rect)
         {
             var inventoryModule = person.GetModuleSafe<IInventoryModule>();
             if (inventoryModule is null)
@@ -264,24 +335,19 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             var currentInventoryItemList = new List<InventoryUiItem>();
-            var inventoryItems = inventoryModule.CalcActualItems();
-            foreach (var prop in inventoryItems)
+            var inventoryItems = inventoryModule.CalcActualItems().ToArray();
+            for (var itemIndex = 0; itemIndex < inventoryItems.Length; itemIndex++)
             {
+                var prop = inventoryItems[itemIndex];
                 if (prop is null)
                 {
                     continue;
                 }
 
-                const int EQUIPMENT_ROW_HEIGHT = EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING;
-
-                var lastIndex = currentInventoryItemList.Count;
-                var columnIndex = lastIndex % MAX_INVENTORY_ROW_ITEMS;
-                var rowIndex = lastIndex / MAX_INVENTORY_ROW_ITEMS;
-                var relativeX = columnIndex * (EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING);
-                var relativeY = rowIndex * (EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING);
+                var relativeY = itemIndex * (EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING);
                 var buttonRect = new Rectangle(
-                    relativeX + ContentRect.Left,
-                    ContentRect.Top + relativeY + EQUIPMENT_ROW_HEIGHT,
+                    rect.Left,
+                    rect.Top + relativeY,
                     EQUIPMENT_ITEM_SIZE,
                     EQUIPMENT_ITEM_SIZE);
 
@@ -298,7 +364,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     buttonRect);
                 propButton.OnClick += PropButton_OnClick;
 
-                var uiItem = new InventoryUiItem(propButton, prop, lastIndex, buttonRect);
+                var uiItem = new InventoryUiItem(propButton, prop, itemIndex, buttonRect);
 
                 currentInventoryItemList.Add(uiItem);
             }
@@ -372,7 +438,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             public EquipmentUiItem(EquipmentButton control, Equipment equipment, int uiIndex, Rectangle uiRect)
             {
                 Control = control ?? throw new ArgumentNullException(nameof(control));
-                Equipment = equipment ?? throw new ArgumentNullException(nameof(equipment));
+                Equipment = equipment;
                 UiIndex = uiIndex;
                 UiRect = uiRect;
             }

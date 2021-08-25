@@ -12,6 +12,7 @@ using Zilon.Core;
 using Zilon.Core.Client;
 using Zilon.Core.Commands;
 using Zilon.Core.Common;
+using Zilon.Core.PersonModules;
 using Zilon.Core.Tactics;
 using Zilon.Core.Tactics.Spatial;
 
@@ -62,6 +63,53 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             ProcessMouseCommands(sectorViewModelContext);
 
             ProcessKeyboardCommands(sectorViewModelContext);
+        }
+
+        private bool DidOpenDropMenu(KeyboardState keyboardState)
+        {
+            if (!keyboardState.IsKeyUp(Keys.O) || _lastKeyboardState?.IsKeyDown(Keys.O) != true)
+            {
+                return false;
+            }
+
+            _lastKeyboardState = keyboardState;
+
+            var openCommand = _commandFactory.GetCommand<OpenContainerCommand>();
+
+            var actor = _uiState.ActiveActor?.Actor;
+            if (actor is null)
+            {
+                Debug.Fail(
+                    "Active actor must be assigned before the sector view model and the sector interactor start processing of user input.");
+                return true;
+            }
+
+            _uiState.SelectedViewModel = GetStaticObjectUnderActor(actor);
+            if (openCommand.CanExecute().IsSuccess)
+            {
+                _commandPool.Push(openCommand);
+            }
+
+            return true;
+        }
+
+        private bool DidTransferToOtherSector(KeyboardState keyboardState)
+        {
+            if (!keyboardState.IsKeyUp(Keys.T) || _lastKeyboardState?.IsKeyDown(Keys.T) != true)
+            {
+                return false;
+            }
+
+            _lastKeyboardState = keyboardState;
+
+            var transitionCommand = _commandFactory.GetCommand<SectorTransitionMoveCommand>();
+
+            if (transitionCommand.CanExecute().IsSuccess)
+            {
+                _commandPool.Push(transitionCommand);
+            }
+
+            return true;
         }
 
         private ISelectableViewModel? GetStaticObjectUnderActor(IActor actor)
@@ -116,40 +164,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         private bool HandleHotKeys()
         {
             var keyboardState = Keyboard.GetState();
-            if (keyboardState.IsKeyUp(Keys.T) && _lastKeyboardState?.IsKeyDown(Keys.T) == true)
+            if (DidTransferToOtherSector(keyboardState))
             {
-                _lastKeyboardState = keyboardState;
-
-                var transitionCommand = _commandFactory.GetCommand<SectorTransitionMoveCommand>();
-
-                if (transitionCommand.CanExecute().IsSuccess)
-                {
-                    _commandPool.Push(transitionCommand);
-                }
-
                 return true;
             }
 
-            if (keyboardState.IsKeyUp(Keys.O) && _lastKeyboardState?.IsKeyDown(Keys.O) == true)
+            if (DidOpenDropMenu(keyboardState))
             {
-                _lastKeyboardState = keyboardState;
-
-                var openCommand = _commandFactory.GetCommand<OpenContainerCommand>();
-
-                var actor = _uiState.ActiveActor?.Actor;
-                if (actor is null)
-                {
-                    Debug.Fail(
-                        "Active actor must be assigned befor sector view model and command input starts processing of user input.");
-                    return true;
-                }
-
-                _uiState.SelectedViewModel = GetStaticObjectUnderActor(actor);
-                if (openCommand.CanExecute().IsSuccess)
-                {
-                    _commandPool.Push(openCommand);
-                }
-
                 return true;
             }
 
@@ -300,7 +321,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
                     if (_uiState.TacticalAct is null)
                     {
-                        Debug.Fail("Combat act is not selected.");
+                        SelectPunchAsDefaultCombatAct(_uiState);
                     }
 
                     return commandFactory.GetCommand<AttackCommand>();
@@ -312,6 +333,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
                     throw new InvalidOperationException(
                         $"Object of unknown type (${selectedViewModel.GetType()}) was selected.");
             }
+        }
+
+        private static void SelectPunchAsDefaultCombatAct(ISectorUiState uiState)
+        {
+            var availableCombatActs =
+                uiState.ActiveActor.Actor.Person.GetModule<ICombatActModule>().GetCurrentCombatActs();
+            var punchAct = availableCombatActs.Single(x => x.Scheme.Sid == "punch");
+
+            uiState.TacticalAct = punchAct;
         }
     }
 }

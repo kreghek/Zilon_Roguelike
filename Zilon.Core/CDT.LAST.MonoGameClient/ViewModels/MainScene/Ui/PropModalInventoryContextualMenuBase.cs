@@ -75,17 +75,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 button.Update();
             }
 
-            // Close menu if mouse is not on menu.
-            if (_size != null)
-            {
-                var mouseState = Mouse.GetState();
-                var mouseRect = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
-                var menuRect = new Rectangle(_position, _size.Value);
-                if (!mouseRect.Intersects(menuRect))
-                {
-                    CloseMenu();
-                }
-            }
+            CloseMenuIfAnyMouseButtonPressed();
         }
 
         protected void CloseMenu()
@@ -94,6 +84,26 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         }
 
         protected abstract TextButton[] InitItems(IProp prop);
+
+        private void CloseMenuIfAnyMouseButtonPressed()
+        {
+            if (_size == null)
+            {
+                return;
+            }
+
+            var mouseState = Mouse.GetState();
+            var mouseRect = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
+            var menuRect = new Rectangle(_position, _size.Value);
+            var wasPressedAnyMouseButton = mouseState.LeftButton == ButtonState.Pressed ||
+                                           mouseState.RightButton == ButtonState.Pressed ||
+                                           mouseState.MiddleButton == ButtonState.Pressed;
+            var isClickMenuOut = !mouseRect.Intersects(menuRect);
+            if (isClickMenuOut && wasPressedAnyMouseButton)
+            {
+                CloseMenu();
+            }
+        }
 
         private void DrawBorder(SpriteBatch spriteBatch, Point size)
         {

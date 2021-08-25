@@ -9,11 +9,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using Zilon.Core.Client.Sector;
+using Zilon.Core.Commands;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 {
-    public sealed class TravelPanel : IBottomSubPanel
+    internal sealed class TravelPanel : IBottomSubPanel
     {
         private const int BUTTON_WIDTH = 16;
         private const int BUTTON_HEIGHT = 32;
@@ -21,18 +24,32 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         private readonly IconButton _autoplayModeButton;
         private readonly IconButton[] _buttons;
+        private readonly ServiceProviderCommandFactory _commandFactory;
+        private readonly ICommandLoopContext _commandLoopContext;
+        private readonly ICommandPool _commandPool;
 
         private readonly IHumanActorTaskSource<ISectorTaskSourceContext> _humanActorTaskSource;
+        public readonly IconButton _idleButton;
+        private readonly IconButton _personPropButton;
+        private readonly IconButton _personStatsButton;
         private readonly IUiContentStorage _uiContentStorage;
-
         private bool _autoplayHintIsShown;
         private string _autoplayModeButtonTitle;
 
+        private KeyboardState? _lastKeyboard;
+
         public TravelPanel(IHumanActorTaskSource<ISectorTaskSourceContext> humanActorTaskSource,
-            IUiContentStorage uiContentStorage)
+            IUiContentStorage uiContentStorage,
+            ICommandPool commandPool,
+            ServiceProviderCommandFactory commandFactory,
+            ICommandLoopContext commandLoopContext)
         {
             _humanActorTaskSource = humanActorTaskSource;
             _uiContentStorage = uiContentStorage;
+            _commandPool = commandPool;
+            _commandFactory = commandFactory;
+            _commandLoopContext = commandLoopContext;
+
             _autoplayModeButton = new IconButton(
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 iconData: new IconData(
@@ -54,6 +71,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 rect: new Rectangle(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
             personPropButton.OnClick += PersonEquipmentButton_OnClick;
 
+            _personPropButton = personPropButton;
+
             var personStatsButton = new IconButton(
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
                 iconData: new IconData(
@@ -62,6 +81,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 ),
                 rect: new Rectangle(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
             personStatsButton.OnClick += PersonStatsButton_OnClick;
+
+            var personTraitsButton = new IconButton(
+                texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
+                iconData: new IconData(
+                    uiContentStorage.GetSmallVerticalButtonIconsTexture(),
+                    new Rectangle(48, 32, BUTTON_WIDTH, BUTTON_HEIGHT)
+                ),
+                rect: new Rectangle(48, 32, BUTTON_WIDTH, BUTTON_HEIGHT));
+            personTraitsButton.OnClick += PersonTraitsButton_OnClick;
 
             var gameSpeedButton = new IconButton(
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
@@ -72,13 +100,48 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 rect: new Rectangle(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
             gameSpeedButton.OnClick += GameSpeedButton_OnClick;
 
+            _personStatsButton = personStatsButton;
+
+            var idleButton = new IconButton(texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
+                iconData: new IconData(
+                    uiContentStorage.GetSmallVerticalButtonIconsTexture(),
+                    new Rectangle(32, 32, BUTTON_WIDTH, BUTTON_HEIGHT)
+                ),
+                rect: new Rectangle(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
+
+            idleButton.OnClick += IdleButton_OnClick;
+
+            _idleButton = idleButton;
+
+            var fastDeathButton = new IconButton(texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
+                iconData: new IconData(
+                    uiContentStorage.GetSmallVerticalButtonIconsTexture(),
+                    new Rectangle(32, 32, BUTTON_WIDTH, BUTTON_HEIGHT)
+                ),
+                rect: new Rectangle(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
+
+            fastDeathButton.OnClick += FastDeathButton_OnClick;
+
+#if DEBUG
             _buttons = new[]
             {
                 _autoplayModeButton,
                 personPropButton,
                 personStatsButton,
-                gameSpeedButton
+                personTraitsButton,
+                idleButton,
+                gameSpeedButton,
+                fastDeathButton
             };
+#else
+            _buttons = new[]
+            {
+                personPropButton,
+                personStatsButton,
+                personTraitsButton,
+                idleButton
+            };
+#endif
         }
 
         private void AutoplayModeButton_OnClick(object? sender, EventArgs e)
@@ -117,6 +180,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             _autoplayHintIsShown = autoplayButtonRect.Intersects(mouseRect);
         }
 
+        private void FastDeathButton_OnClick(object? sender, EventArgs e)
+        {
+            FastDeathButtonClicked?.Invoke(this, EventArgs.Empty);
+        }
+
         private void GameSpeedButton_OnClick(object? sender, EventArgs e)
         {
             if (GameState.GameSpeed == 1)
@@ -138,6 +206,30 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
         }
 
+        private void HandleHotkeys()
+        {
+            var keyboardState = Keyboard.GetState();
+            if (keyboardState.IsKeyUp(Keys.I) && _lastKeyboard?.IsKeyDown(Keys.I) == true)
+            {
+                _personPropButton.Click();
+            }
+            else if (keyboardState.IsKeyUp(Keys.C) && _lastKeyboard?.IsKeyDown(Keys.C) == true)
+            {
+                _personStatsButton.Click();
+            }
+
+            _lastKeyboard = keyboardState;
+        }
+
+        private void IdleButton_OnClick(object? sender, EventArgs e)
+        {
+            if (_commandLoopContext.CanPlayerGiveCommand)
+            {
+                var idleCommand = _commandFactory.GetCommand<IdleCommand>();
+                _commandPool.Push(idleCommand);
+            }
+        }
+
         private void PersonEquipmentButton_OnClick(object? sender, EventArgs e)
         {
             PropButtonClicked?.Invoke(this, EventArgs.Empty);
@@ -146,6 +238,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private void PersonStatsButton_OnClick(object? sender, EventArgs e)
         {
             StatButtonClicked?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void PersonTraitsButton_OnClick(object? sender, EventArgs e)
+        {
+            TraitsButtonClicked?.Invoke(this, EventArgs.Empty);
         }
 
         public void Draw(SpriteBatch spriteBatch, Rectangle contentRect)
@@ -192,6 +289,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             }
 
             DetectAutoplayHint();
+
+            HandleHotkeys();
         }
 
         public void UnsubscribeEvents()
@@ -202,5 +301,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         public event EventHandler? PropButtonClicked;
         public event EventHandler? StatButtonClicked;
+        public event EventHandler? TraitsButtonClicked;
+        public event EventHandler? FastDeathButtonClicked;
     }
 }

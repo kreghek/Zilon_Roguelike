@@ -4,6 +4,10 @@
     "Ru": "Горец",
     "En": "Highlander"
   },
+  "Description": {
+    "Ru": "Мир приходит в упадок. Цивилизации - чахнут и дряхлеют. Чудища пожрают всё живое.\nС гор пришёл человек. Человек, чья необузданная жестокость спасёт мир.",
+    "En": "The world is in decline. Civilizations are withering and decrepit. Monsters will devour all living things.\nA man came from the mountains. A man whose unbridled cruelty will save the world."
+  },
   "HeadEquipments": {
     "Rolls": 1,
     "Records": [
@@ -17,23 +21,20 @@
     "Rolls": 1,
     "Records": [
       {
-        "SchemeSid": "short-sword",
+        "SchemeSid": "battle-axe",
         "Weight": 1
-      },
+      }
+    ]
+  },
+  "OffHandEquipments": {
+    "Rolls": 1,
+    "Records": [
       {
         "SchemeSid": "battle-axe",
         "Weight": 1
       },
       {
-        "SchemeSid": "mace",
-        "Weight": 1
-      },
-      {
-        "SchemeSid": "club",
-        "Weight": 1
-      },
-      {
-        "SchemeSid": "claw-sword",
+        "SchemeSid": "cudgel",
         "Weight": 1
       }
     ]

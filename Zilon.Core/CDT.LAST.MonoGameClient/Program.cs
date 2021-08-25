@@ -4,6 +4,7 @@ using System.Threading;
 
 using CDT.LAST.MonoGameClient.Database;
 using CDT.LAST.MonoGameClient.Engine;
+using CDT.LAST.MonoGameClient.GameComponents;
 using CDT.LAST.MonoGameClient.Screens;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene;
 using CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Zilon.Core.Commands;
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.Players;
+using Zilon.Core.ScoreResultGenerating;
 using Zilon.Core.Tactics;
 using Zilon.Core.World;
 
@@ -23,9 +25,9 @@ namespace CDT.LAST.MonoGameClient
         [STAThread]
         private static void Main()
         {
-            var newCulture = new CultureInfo("en-US");
-            Thread.CurrentThread.CurrentCulture = newCulture;
-            Thread.CurrentThread.CurrentUICulture = newCulture;
+            var defaultCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentCulture = defaultCulture;
+            Thread.CurrentThread.CurrentUICulture = defaultCulture;
 
             var serviceContainer = new ServiceCollection();
             var startUp = new StartUp();
@@ -48,6 +50,7 @@ namespace CDT.LAST.MonoGameClient
             serviceContainer.AddSingleton<IPersonSoundContentStorage, PersonSoundContentStorage>();
             serviceContainer
                 .AddSingleton<IGameObjectVisualizationContentStorage, GameObjectVisualizationContentStorage>();
+            serviceContainer.AddSingleton<SoundtrackManager>();
 
             using var serviceProvider = serviceContainer.BuildServiceProvider();
 

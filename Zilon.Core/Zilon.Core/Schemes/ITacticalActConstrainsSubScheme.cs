@@ -18,6 +18,8 @@
         /// </summary>
         int? Cooldown { get; }
 
+        int? EnergyCost { get; }
+
         /// <summary>
         /// Количество ресурсов, необходимых для использования действия.
         /// </summary>

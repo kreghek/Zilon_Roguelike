@@ -1,0 +1,36 @@
+{
+  "Name": {
+    "Ru": "Удар дубиной",
+    "En": "Bludgeon"
+  },
+  "Description": {
+    "Ru": "Не претендующий на изящество,\nно крайне эффективный и тупой удар палкой.\nНикто не устоит и будет отброшен.",
+    "En": "Not pretending to be graceful,\nbut extremely effective and blunt blow with a stick.\nNo one will stand and will be thrown away."
+  },
+  "Stats": {
+    "Efficient": {
+      "Dice": 3,
+      "Count": 1,
+      "Modifiers": {
+        "ResultBuff": 4
+      }
+    },
+    "Range": {
+      "Min": 2,
+      "Max": 3
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy",
+    "HitCount": 1,
+    "IsMelee": true,
+    "Duration": 1.75,
+    "Offence": {
+      "Type": "Concentrated",
+      "Impact": "Kinetic",
+      "ApRank": 1
+    },
+    "Rules": [
+      "NormalPush"
+    ]
+  }
+}

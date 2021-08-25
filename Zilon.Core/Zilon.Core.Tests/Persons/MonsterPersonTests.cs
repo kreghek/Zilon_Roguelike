@@ -25,7 +25,7 @@ namespace Zilon.Core.Tests.Persons
             // ARRANGE
             var monsterScheme = new TestMonsterScheme
             {
-                PrimaryAct = new TestTacticalActStatsSubScheme()
+                CombatActs = new[] { new TestTacticalActStatsSubScheme() }
             };
 
             var survivalRandomSourceMock = new Mock<ISurvivalRandomSource>();
@@ -81,7 +81,7 @@ namespace Zilon.Core.Tests.Persons
         {
             var monsterScheme = new TestMonsterScheme
             {
-                PrimaryAct = new TestTacticalActStatsSubScheme()
+                CombatActs = new[] { new TestTacticalActStatsSubScheme() }
             };
 
             var monster = new MonsterPerson(monsterScheme);

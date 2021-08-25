@@ -11,12 +11,6 @@
         "Ru": "Испытательный"
       },
       "IsStart": true,
-      "RegularMonsterSids": [
-        "rat",
-        "bat"
-      ],
-      "RareMonsterSids": null,
-      "ChampionMonsterSids": null,
       "RegionMonsterCount": 0,
       "TransSectorSids": [
         {
@@ -43,16 +37,10 @@
         "Ru": "Конец Испытательного"
       },
       "RegularMonsterSids": [
-        "rat",
-        "bat"
-      ],
-      "RareMonsterSids": null,
-      "ChampionMonsterSids": [
-        "rat-mutant",
-        "moon-rat"
+        "predator"
       ],
       "MinRegionMonsterCount": 1,
-      "RegionMonsterCount": 2,
+      "RegionMonsterCount": 1,
       "TotalChestCount": 0,
       "RegionChestCountRatio": 0,
       "ChestDropTableSids": [
@@ -61,9 +49,9 @@
       ],
       "MapGeneratorOptions": {
         "MapGenerator": "CellularAutomaton",
-        "MapWidth": 25,
-        "MapHeight": 25,
-        "ChanceToStartAlive": 45
+        "MapWidth": 35,
+        "MapHeight": 35,
+        "ChanceToStartAlive": 35
       },
       "TransSectorSids": [
         {

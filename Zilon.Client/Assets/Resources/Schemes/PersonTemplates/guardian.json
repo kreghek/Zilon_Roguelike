@@ -4,23 +4,15 @@
     "Ru": "Гвардеец",
     "En": "Guardian"
   },
-  "BodyEquipments": {
+  "Description": {
+    "Ru": "Годы службы в элитныхпривелегированных войсковых подразделениях\nнаучили вас вставать рано на охрану.",
+    "En": "Years of service in the elite, privileged military units\nlearned you to get up early for protection."
+  },
+  "HeadEquipments": {
     "Rolls": 1,
     "Records": [
       {
-        "SchemeSid": "steel-armor",
-        "Weight": 2
-      },
-      {
-        "SchemeSid": "leather-jacket",
-        "Weight": 2
-      },
-      {
-        "SchemeSid": "quilted-coat",
-        "Weight": 2
-      },
-      {
-        "SchemeSid": null,
+        "SchemeSid": "steel-helmet",
         "Weight": 1
       }
     ]
@@ -33,19 +25,7 @@
         "Weight": 1
       },
       {
-        "SchemeSid": "battle-axe",
-        "Weight": 1
-      },
-      {
         "SchemeSid": "mace",
-        "Weight": 1
-      },
-      {
-        "SchemeSid": "club",
-        "Weight": 1
-      },
-      {
-        "SchemeSid": "glaive",
         "Weight": 1
       }
     ]

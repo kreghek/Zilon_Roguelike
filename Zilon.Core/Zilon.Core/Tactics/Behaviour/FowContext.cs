@@ -30,7 +30,8 @@ namespace Zilon.Core.Tactics.Behaviour
 
             foreach (var linePoint in line)
             {
-                var staticObjects = _staticObjectManager.Items.Where(x => (x.Node as HexNode)?.CubeCoords == linePoint)
+                var staticObjects = _staticObjectManager.Items.Where(x =>
+                        x.Node != baseNode && x.Node != targetNode && (x.Node as HexNode)?.CubeCoords == linePoint)
                     .ToArray();
                 foreach (var staticObject in staticObjects)
                 {

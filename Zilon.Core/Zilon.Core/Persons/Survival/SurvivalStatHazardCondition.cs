@@ -114,9 +114,17 @@ namespace Zilon.Core.Persons
 
             if (Level == SurvivalStatHazardLevel.Max && Type != SurvivalStatType.Health)
             {
-                var roll = _survivalRandomSource.RollMaxHazardDamage();
-                var successRoll = GetSuccessHazardDamageRoll();
-                if (roll >= successRoll)
+                if (Type != SurvivalStatType.Energy)
+                {
+                    var roll = _survivalRandomSource.RollMaxHazardDamage();
+                    var successRoll = GetSuccessHazardDamageRoll();
+                    if (roll >= successRoll)
+                    {
+                        survivalData.DecreaseStat(SurvivalStatType.Health, 1);
+                        LogPlayerEvent();
+                    }
+                }
+                else
                 {
                     survivalData.DecreaseStat(SurvivalStatType.Health, 1);
                     LogPlayerEvent();

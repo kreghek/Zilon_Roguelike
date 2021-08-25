@@ -1,5 +1,6 @@
 {
-  "PrimaryAct": {
+  "CombatActs": [
+  {
     "Efficient": {
       "Dice": 3,
       "Count": 1
@@ -14,5 +15,5 @@
     },
 	"Effect": "Damage",
 	"Targets": "Enemy",
-  }
+  }]
 }

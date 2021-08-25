@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Zilon.Core.Tactics.Spatial;
+
 namespace Zilon.Core.Tactics
 {
     /// <summary>
@@ -12,7 +14,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="target"> Цель использования действия. </param>
         /// <param name="tacticalActRoll"> Эффективность действия. </param>
-        private static void UseOnStaticObject(IAttackTarget target, TacticalActRoll tacticalActRoll)
+        private static void UseOnStaticObject(IAttackTarget target, CombatActRoll tacticalActRoll)
         {
             if (target is null)
             {
@@ -26,7 +28,7 @@ namespace Zilon.Core.Tactics
         public Type TargetType => typeof(IStaticObject);
 
         /// <inheritdoc />
-        public void ProcessActUsage(IActor actor, IAttackTarget target, TacticalActRoll tacticalActRoll)
+        public void ProcessActUsage(IActor actor, IAttackTarget target, CombatActRoll tacticalActRoll, ISectorMap map)
         {
             if (tacticalActRoll is null)
             {

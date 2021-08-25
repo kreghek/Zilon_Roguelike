@@ -80,7 +80,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Benchmarks.Fow",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Benchmarks.MassGameplay", "Zilon.Core.Benchmarks.MassGameplay\Zilon.Core.Benchmarks.MassGameplay.csproj", "{6B7927A5-9E1A-4DCB-A100-9240E066911A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDT.LAST.Outliner", "CDT.LAST.Outliner\CDT.LAST.Outliner.csproj", "{F77D9810-02C7-45DC-8A80-CC21B625742C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDT.LAST.Outliner", "CDT.LAST.Outliner\CDT.LAST.Outliner.csproj", "{F77D9810-02C7-45DC-8A80-CC21B625742C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

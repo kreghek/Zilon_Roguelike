@@ -145,7 +145,7 @@
     <value>Легкая токсикация</value>
   </data>
   <data name="IntoxicationCriticalConditionTitle" xml:space="preserve">
-    <value>ТОКСИКАЦИЯ!</value>
+    <value>ПЕРЕДОЗИРОВКА!</value>
   </data>
   <data name="HungerStrongConditionTitle" xml:space="preserve">
     <value>Голод</value>
@@ -287,5 +287,84 @@
   </data>
   <data name="PlayerInputNicknamePrompt" xml:space="preserve">
     <value>Введите свое прозвище</value>
+  </data>
+  <data name="NoneEquipmentTitle" xml:space="preserve">
+    <value>Пусто</value>
+  </data>
+  <data name="EnergyLesserConditionTitle" xml:space="preserve">
+    <value>Слабо выдохся</value>
+  </data>
+  <data name="EnergyStrongConditionTitle" xml:space="preserve">
+    <value>Одышка</value>
+  </data>
+  <data name="EnergyCriticalConditionTitle" xml:space="preserve">
+    <value>ИЗМОТАННОСТЬ!</value>
+  </data>
+  <data name="ControlsTutorialText" xml:space="preserve">
+    <value>[LMB] для передвижения и атаки.
+[T] для перехода в следующую локацию.
+[O] чтобы подобрать предмет.
+[I] окно инвентаря.
+[С] окно персонажа.
+[SPACE] немного подождать.
+[ALT] подсветить интерактив.
+[1-8] выбрать действие в бою.
+[NUM1-NUM9] передвинуться на 1 шаг.</value>
+  </data>
+  <data name="SwitchLanguagebuttonTitle" xml:space="preserve">
+    <value>Смена языка</value>
+  </data>
+  <data name="SwitchResolutionButtonTitle" xml:space="preserve">
+    <value>Разрешение</value>
+  </data>
+  <data name="PlayerRatingLabel" xml:space="preserve">
+    <value>Ваш рейтинг в таблице лидеров: {0}</value>
+  </data>
+  <data name="EnergyConditionDescription" xml:space="preserve">
+    <value>Энергия нужна, чтобы выполнять мощные удары.
+Когда энергия заканчивается - персонаж устает.
+Уставший персонаж менее эффективен в бою.
+А измотанный персонаж начинает терять жизненные силы
+и может умереть от переутомления.</value>
+  </data>
+  <data name="HungerConditionDescription" xml:space="preserve">
+    <value>Любому персонажу нужно есть.
+Голодный персонаж менее эффективен.
+В конечном счете, голодание убивает персонажа.</value>
+  </data>
+  <data name="IntoxicationConditionDescription" xml:space="preserve">
+    <value>Употребление медикаментов повышает уровень интоксикации персонажа.
+Токсины немного снижают эффективность персонажа,
+но со временем выветриваются.
+Если интоксикация вырастет слишком сильно - наступит передозировка
+и персонаж умрёт.</value>
+  </data>
+  <data name="ThristConditionDescription" xml:space="preserve">
+    <value>Всем персонажам нужно пить.
+Жажда снижает эффективность персонажам
+и может привести к обезвоживанию.
+Обезвоживание - это смерть!</value>
+  </data>
+  <data name="WoundConditionDescription" xml:space="preserve">
+    <value>Персонаж жив, пока у него есть жизненные силы.
+Повреждения, наружные или внутренние,
+отнимают жизненные силы. Постепенно любые ранения
+затягиваются. В конечном счёте, игра продолжается,
+пока в персонаже есть хоть немного жизни.</value>
+  </data>
+  <data name="PropFullDurabilityValueTitle" xml:space="preserve">
+    <value>Целый</value>
+  </data>
+  <data name="PropShabbyDurabilityValueTitle" xml:space="preserve">
+    <value>Потёртый</value>
+  </data>
+  <data name="PropDamagedDurabilityValueTitle" xml:space="preserve">
+    <value>Повреждён</value>
+  </data>
+  <data name="PropBrokenDurabilityValueTitle" xml:space="preserve">
+    <value>Сломан</value>
+  </data>
+  <data name="LeaderBoardButtonTitle" xml:space="preserve">
+    <value>Доска лидеров</value>
   </data>
 </root>

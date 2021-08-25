@@ -6,6 +6,7 @@ using Zilon.Core.Components;
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
+using Zilon.Core.World;
 
 namespace Zilon.Core.Tactics.Behaviour
 {
@@ -26,7 +27,15 @@ namespace Zilon.Core.Tactics.Behaviour
             TacticalAct = tacticalAct ?? throw new ArgumentNullException(nameof(tacticalAct));
 
             TargetNode = target.Node;
+
+            var combatActDuration = tacticalAct.Stats.Duration.GetValueOrDefault(1);
+            var durationBonus = GetDurationBonus(actor);
+            var durationWithBonus =
+                (int)Math.Round(GlobeMetrics.OneIterationLength * combatActDuration * durationBonus);
+            Cost = durationWithBonus;
         }
+
+        public override int Cost { get; }
 
         public ICombatAct TacticalAct { get; }
 
@@ -98,6 +107,24 @@ namespace Zilon.Core.Tactics.Behaviour
             return stopToUseAct;
         }
 
+        private static float GetDurationBonus(IActor actor)
+        {
+            var dexterity =
+                (actor.Person.GetModuleSafe<IAttributesModule>()?.GetAttribute(PersonAttributeType.Dexterity)?.Value)
+                .GetValueOrDefault(10);
+            if (dexterity > 10)
+            {
+                return 0.75f;
+            }
+
+            if (dexterity < 10)
+            {
+                return 1.25f;
+            }
+
+            return 1f;
+        }
+
         private IEnumerable<ICombatAct> GetSecondaryUsedActs()
         {
             var equipmentModule = Actor.Person.GetModuleSafe<IEquipmentModule>();
@@ -121,6 +148,12 @@ namespace Zilon.Core.Tactics.Behaviour
                         continue;
                     }
 
+                    //TODO Add CanUseAsSecondary to equipment
+                    if (slotEquipment.Scheme.Tags?.Contains("shield") == true)
+                    {
+                        continue;
+                    }
+
                     if ((slots[i].Types & EquipmentSlotTypes.Hand) == 0)
                     {
                         continue;
@@ -128,6 +161,8 @@ namespace Zilon.Core.Tactics.Behaviour
 
                     var equipmentActs = from act in currentActs
                                         where act.Equipment == slotEquipment
+                                        //TODO Add CanUseAsSecondary to combat act
+                                        //where act.Scheme.Sid != "shield-push"
                                         select act;
 
                     var usedAct = equipmentActs.FirstOrDefault();
@@ -142,8 +177,9 @@ namespace Zilon.Core.Tactics.Behaviour
 
                 if (!usedEquipmentActs)
                 {
-                    // If no equipment was selected then use default act. Each person has only one default act in current moment.
-                    yield return currentActs.Single();
+                    // If no equipment was selected then use default act. Each person has only one default act in current moment. -- INCORRECT
+                    // THERE ARE MULTYPLE DIFFERENT DEFAULT ACTS.
+                    yield return currentActs.First(x => x.Scheme.Sid == "punch");
                 }
             }
         }

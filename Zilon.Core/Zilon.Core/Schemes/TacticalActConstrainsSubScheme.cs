@@ -12,6 +12,10 @@ namespace Zilon.Core.Schemes
     {
         /// <inheritdoc />
         [JsonProperty]
+        public float? Duration { get; private set; }
+
+        /// <inheritdoc />
+        [JsonProperty]
         public int? PropResourceCount { get; private set; }
 
         /// <inheritdoc />
@@ -21,5 +25,9 @@ namespace Zilon.Core.Schemes
         /// <inheritdoc />
         [JsonProperty]
         public int? Cooldown { get; private set; }
+
+        /// <inheritdoc />
+        [JsonProperty]
+        public int? EnergyCost { get; private set; }
     }
 }

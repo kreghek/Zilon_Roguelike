@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
+using Zilon.Core.Common;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 
@@ -20,12 +21,16 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private const int MAX_COMBAT_ACT_COUNT = 8;
         private const int COMBAT_ACT_BUTTON_SIZE = 32;
 
+        private const int HINT_TEXT_SPACING = 8;
+
         private readonly CombatActButtonGroup _buttonGroup;
         private readonly IList<CombatActButton> _buttons;
         private readonly ICombatActModule _combatActModule;
         private readonly IEquipmentModule _equipmentModule;
         private readonly ISectorUiState _sectorUiState;
         private readonly IUiContentStorage _uiContentStorage;
+
+        private CombatActButton? _hoverCombatActButton;
 
         public CombatActPanel(ICombatActModule combatActModule, IEquipmentModule equipmentModule,
             IUiContentStorage uiContentStorage, ISectorUiState sectorUiState)
@@ -57,6 +62,28 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             spriteBatch.DrawString(spriteFont, text, new Vector2(textX, textY), Color.White);
         }
 
+        private void DrawCombatActHint(CombatActButton button, SpriteBatch spriteBatch)
+        {
+            var combatActHintText = CombatActHelper.GetActHintText(button.CombatAct);
+
+            var titleTextSizeVector = _uiContentStorage.GetHintTitleFont().MeasureString(combatActHintText);
+
+            var autoplayButtonRect = button.Rect;
+
+            var hintRectangle = new Rectangle(
+                autoplayButtonRect.Left,
+                autoplayButtonRect.Top - (int)titleTextSizeVector.Y - (HINT_TEXT_SPACING * 2),
+                (int)titleTextSizeVector.X + (HINT_TEXT_SPACING * 2),
+                (int)titleTextSizeVector.Y + (HINT_TEXT_SPACING * 2));
+
+            spriteBatch.Draw(_uiContentStorage.GetButtonTexture(), hintRectangle, Color.DarkSlateGray);
+
+            spriteBatch.DrawString(_uiContentStorage.GetHintTitleFont(),
+                combatActHintText,
+                new Vector2(hintRectangle.Left + HINT_TEXT_SPACING, hintRectangle.Top + HINT_TEXT_SPACING),
+                Color.Wheat);
+        }
+
         private void EquipmentModule_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)
         {
             _buttons.Clear();
@@ -83,6 +110,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             return null;
         }
 
+        private static string GetRollAsString(Roll roll)
+        {
+            return $"{roll.Count}D{roll.Dice} +{roll.Modifiers?.ResultBuff ?? 0}";
+        }
+
         private void HandleHotkeys()
         {
             var keyboardState = Keyboard.GetState();
@@ -92,14 +124,22 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             {
                 var buttonIndex = buttonNumber.Value - 1;
                 var pressedButton = _buttons[buttonIndex];
-                pressedButton.Click();
+
+                if (_buttonGroup.Selected != pressedButton)
+                {
+                    pressedButton.Click();
+                }
             }
         }
 
         private void Initialize(IList<CombatActButton> buttons)
         {
             var acts = _combatActModule.GetCurrentCombatActs();
-            var actsOrdered = acts.OrderBy(x => x.Scheme?.Sid).Take(MAX_COMBAT_ACT_COUNT).ToArray();
+            var actsOrdered = acts.OrderBy(x => x.Constrains is null)
+                .ThenBy(x => x.Stats.Duration)
+                .ThenBy(x => x.Constrains?.EnergyCost)
+                .ThenBy(x => x.Scheme?.Sid)
+                .Take(MAX_COMBAT_ACT_COUNT).ToArray();
             foreach (var act in actsOrdered)
             {
                 var tags = act.Scheme?.Stats?.Tags?.Where(x => x != null)?.Select(x => x!)?.ToArray() ??
@@ -148,7 +188,25 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
                 button.Draw(spriteBatch);
 
+                var showNums = false;
+
+#if SHOW_NUMS
+                showNums = true;
+#endif
+
+                if (showNums)
+                {
+                    spriteBatch.DrawString(_uiContentStorage.GetAuxTextFont(),
+                        GetRollAsString(button.CombatAct.Efficient), new Vector2(buttonRect.Left, buttonRect.Top),
+                        Color.White);
+                }
+
                 DrawButtonHotkey(actIndex, button, spriteBatch);
+
+                if (_hoverCombatActButton is not null)
+                {
+                    DrawCombatActHint(_hoverCombatActButton, spriteBatch);
+                }
             }
         }
 
@@ -156,14 +214,23 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         {
             HandleHotkeys();
 
+            var mouse = Mouse.GetState();
+            var mouseRect = new Rectangle(mouse.X, mouse.Y, 1, 1);
+
             _buttonGroup.Selected = null;
+            _hoverCombatActButton = null;
             foreach (var button in _buttons)
             {
                 button.Update();
 
-                if (button.TacticalAct == _sectorUiState.TacticalAct)
+                if (button.CombatAct == _sectorUiState.TacticalAct)
                 {
                     _buttonGroup.Selected = button;
+                }
+
+                if (button.Rect.Contains(mouseRect))
+                {
+                    _hoverCombatActButton = button;
                 }
             }
         }

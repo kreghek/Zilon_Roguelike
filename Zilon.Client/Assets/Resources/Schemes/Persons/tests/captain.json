@@ -1,0 +1,32 @@
+{
+  "Name": {
+    "Ru": "Пиратский Капитан"
+  },
+  "Hp": 120,
+  "DefaultActs": [
+    "punch"
+  ],
+  "Slots": [
+    {
+      "Types": "Head"
+    },
+    {
+      "Types": "Body"
+    },
+    {
+      "Types": "Hand"
+    },
+    {
+      "Types": "Hand"
+    },
+    {
+      "Types": "Aux"
+    },
+    {
+      "Types": "Aux"
+    },
+    {
+      "Types": "Aux"
+    }
+  ]
+}

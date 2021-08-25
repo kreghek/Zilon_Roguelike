@@ -16,7 +16,7 @@ namespace Zilon.Core.Persons
             Stats = stats ?? throw new ArgumentNullException(nameof(stats));
             if (stats.Efficient is null)
             {
-                throw new ArgumentException($"{stats.Efficient} is null.", nameof(stats));
+                throw new ArgumentNullException(nameof(stats));
             }
 
             Efficient = stats.Efficient;

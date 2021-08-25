@@ -104,6 +104,29 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             {
                 key = "human";
             }
+            else if (person is MonsterPerson monsterPerson)
+            {
+                switch (monsterPerson.Scheme.Sid)
+                {
+                    case "predator":
+                    case "predator-meat":
+                        key = "dog";
+                        break;
+
+                    case "warthog":
+                        key = "pig";
+                        break;
+
+                    case "gallbladder":
+                        key = "insect";
+                        break;
+
+                    case "skeleton":
+                    case "skeleton-equipment":
+                        key = "skeleton";
+                        break;
+                }
+            }
 
             if (_deathDict.TryGetValue(key, out var soundEffect))
             {
@@ -172,8 +195,11 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         {
             _deathDict = new Dictionary<string, SoundEffect>
             {
-                ["human"] = contentManager.Load<SoundEffect>("Audio/HumanDeath"),
-                ["monster"] = contentManager.Load<SoundEffect>("Audio/HunterDeath")
+                ["human"] = contentManager.Load<SoundEffect>("Audio/Deaths/HumanDeath"),
+                ["dog"] = contentManager.Load<SoundEffect>("Audio/Deaths/DogDeath"),
+                ["pig"] = contentManager.Load<SoundEffect>("Audio/Deaths/PigDeath"),
+                ["insect"] = contentManager.Load<SoundEffect>("Audio/Deaths/InsectDeath"),
+                ["skeleton"] = contentManager.Load<SoundEffect>("Audio/Deaths/SkeletonDeath")
             };
 
             _impactDict = new Dictionary<string, SoundEffect>
@@ -187,6 +213,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _actStartDict = new Dictionary<string, SoundEffect>
             {
                 ["bite"] = contentManager.Load<SoundEffect>("Audio/HunterHitEffect"),
+                ["pig-bite"] = contentManager.Load<SoundEffect>("Audio/PigHitEffect"),
                 ["punch"] = contentManager.Load<SoundEffect>("Audio/PunchStartHitEffect"),
                 ["slash"] = contentManager.Load<SoundEffect>("Audio/SwordStartHitEffect"),
                 ["pierce"] = contentManager.Load<SoundEffect>("Audio/SpearPierceEffect"),

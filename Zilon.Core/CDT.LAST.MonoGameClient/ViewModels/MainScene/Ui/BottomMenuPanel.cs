@@ -8,7 +8,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using Zilon.Core.Client;
+using Zilon.Core.Client.Sector;
+using Zilon.Core.Commands;
 using Zilon.Core.PersonModules;
+using Zilon.Core.Persons;
+using Zilon.Core.Scoring;
 using Zilon.Core.Tactics.Behaviour;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
@@ -30,11 +34,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
         private readonly IconButton _combatModeSwitcherButton;
 
         private readonly IconButton _idleModeSwitcherButton;
+        private readonly IPlayerEventLogService _logService;
+        private readonly ISectorUiState _sectorUiState;
 
         private readonly TravelPanel _travelPanel;
         private readonly IUiContentStorage _uiContentStorage;
 
         private IBottomSubPanel _currentModeMenu;
+
+        private KeyboardState? _lastKeyboard;
         private Rectangle _storedPanelRect;
 
         public BottomMenuPanel(
@@ -42,35 +50,45 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             ICombatActModule combatActModule,
             IUiContentStorage uiContentStorage,
             IEquipmentModule equipmentModule,
-            ISectorUiState sectorUiState)
+            ISectorUiState sectorUiState,
+            ICommandPool commandPool,
+            ServiceProviderCommandFactory commandFactory,
+            ICommandLoopContext commandLoopContext,
+            IPlayerEventLogService logService)
         {
-            _travelPanel = new TravelPanel(humanActorTaskSource, uiContentStorage);
+            _travelPanel = new TravelPanel(humanActorTaskSource, uiContentStorage, commandPool, commandFactory,
+                commandLoopContext);
             _combatActPanel = new CombatActPanel(combatActModule, equipmentModule, uiContentStorage, sectorUiState);
 
             _travelPanel.PropButtonClicked += PersonPropButton_OnClick;
             _travelPanel.StatButtonClicked += PersonStatsButton_OnClick;
+            _travelPanel.TraitsButtonClicked += PersonTraitsButton_OnClick;
+            _travelPanel.FastDeathButtonClicked += FastDeathButtonClicked;
 
             _currentModeMenu = _travelPanel;
 
-            var idleButtonIcon = new IconData(
+            var combatButtonIcon = new IconData(
                 uiContentStorage.GetSmallVerticalButtonIconsTexture(),
                 new Rectangle(48, 0, SWITCHER_MODE_BUTTON_WIDTH, SWITCHER_MODE_BUTTON_HEIGHT)
             );
 
-            var combatButtonIcon = new IconData(
+            var idleButtonIcon = new IconData(
                 uiContentStorage.GetSmallVerticalButtonIconsTexture(),
                 new Rectangle(0, 32, SWITCHER_MODE_BUTTON_WIDTH, SWITCHER_MODE_BUTTON_HEIGHT)
             );
 
-            _idleModeSwitcherButton = new IconButton(uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
-                combatButtonIcon,
+            _idleModeSwitcherButton = new IconButton(
+                uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
+                idleButtonIcon,
                 new Rectangle(0, 0, SWITCHER_MODE_BUTTON_WIDTH, SWITCHER_MODE_BUTTON_HEIGHT));
             _idleModeSwitcherButton.OnClick += IdleModeSwitcherButton_OnClick;
             _combatActModule = combatActModule;
             _uiContentStorage = uiContentStorage;
+            _sectorUiState = sectorUiState;
+            _logService = logService;
             _combatModeSwitcherButton = new IconButton(
                 texture: uiContentStorage.GetSmallVerticalButtonBackgroundTexture(),
-                iconData: idleButtonIcon,
+                iconData: combatButtonIcon,
                 rect: new Rectangle(0, 0, SWITCHER_MODE_BUTTON_WIDTH, SWITCHER_MODE_BUTTON_HEIGHT));
             _combatModeSwitcherButton.OnClick += CombatModeSwitcherButton_OnClick;
         }
@@ -118,6 +136,8 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             var activeSwitcherButton = GetActiveSwitcherButton();
             activeSwitcherButton.Update();
+
+            HandleHotkeys();
         }
 
         private void CombatModeSwitcherButton_OnClick(object? sender, EventArgs e)
@@ -140,6 +160,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 Color.White);
         }
 
+        private void FastDeathButtonClicked(object? sender, EventArgs e)
+        {
+            var endOfLifeEvent = new EndOfLifeEvent();
+            _logService.Log(endOfLifeEvent);
+
+            var survivalModule = _sectorUiState.ActiveActor.Actor.Person.GetModule<ISurvivalModule>();
+            survivalModule.SetStatForce(SurvivalStatType.Health, 0);
+        }
+
         private IconButton GetActiveSwitcherButton()
         {
             return _combatActModule.IsCombatMode ? _idleModeSwitcherButton : _combatModeSwitcherButton;
@@ -150,6 +179,17 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             var panelX = (graphicsDevice.Viewport.Width - PANEL_WIDTH) / 2;
 
             return new Rectangle(panelX, graphicsDevice.Viewport.Height - PANEL_HEIGHT, PANEL_WIDTH, PANEL_HEIGHT);
+        }
+
+        private void HandleHotkeys()
+        {
+            var keyboardState = Keyboard.GetState();
+            if (keyboardState.IsKeyUp(Keys.Space) && _lastKeyboard?.IsKeyDown(Keys.Space) == true)
+            {
+                _travelPanel._idleButton.Click();
+            }
+
+            _lastKeyboard = keyboardState;
         }
 
         private void IdleModeSwitcherButton_OnClick(object? sender, EventArgs e)
@@ -168,7 +208,13 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             StatButtonClicked?.Invoke(this, EventArgs.Empty);
         }
 
+        private void PersonTraitsButton_OnClick(object? sender, EventArgs e)
+        {
+            TraitsButtonClicked?.Invoke(this, EventArgs.Empty);
+        }
+
         public event EventHandler? PropButtonClicked;
         public event EventHandler? StatButtonClicked;
+        public event EventHandler? TraitsButtonClicked;
     }
 }

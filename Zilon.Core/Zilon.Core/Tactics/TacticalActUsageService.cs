@@ -57,11 +57,11 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="act"> Соверщённое действие. </param>
         /// <returns> Возвращает выпавшее значение эффективности. </returns>
-        private TacticalActRoll GetActEfficient(ICombatAct act)
+        private CombatActRoll GetActEfficient(ICombatAct act)
         {
             var rolledEfficient = _actUsageRandomSource.RollEfficient(act.Efficient);
 
-            var roll = new TacticalActRoll(act, rolledEfficient);
+            var roll = new CombatActRoll(act, rolledEfficient);
 
             return roll;
         }
@@ -183,7 +183,7 @@ namespace Zilon.Core.Tactics
                 var tacticalActRoll = GetActEfficient(act);
 
                 var actHandler = _actUsageHandlerSelector.GetHandler(target.TargetObject);
-                actHandler.ProcessActUsage(actor, target.TargetObject, tacticalActRoll);
+                actHandler.ProcessActUsage(actor, target.TargetObject, tacticalActRoll, map);
 
                 UseActResources(actor, act);
             }
@@ -219,6 +219,14 @@ namespace Zilon.Core.Tactics
 
             // Сброс КД, если он есть.
             act.StartCooldownIfItIs();
+
+            // Consume energy.
+            // Monster's act has no energy cost.
+            if (act.Constrains?.EnergyCost != null)
+            {
+                actor.Person.GetModule<ISurvivalModule>()
+                    .DecreaseStat(SurvivalStatType.Energy, act.Constrains.EnergyCost.Value);
+            }
         }
 
         public void UseOn(IActor actor, ActTargetInfo target, UsedTacticalActs usedActs, ISector sector)

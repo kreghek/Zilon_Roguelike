@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Zilon.Core.Tactics.Spatial;
+
 namespace Zilon.Core.Tactics
 {
     /// <summary>
@@ -19,6 +21,6 @@ namespace Zilon.Core.Tactics
         /// <param name="actor"> Актёр, совершивший действие. </param>
         /// <param name="target"> Цель применения действия. </param>
         /// <param name="tacticalActRoll"> Соверщенное действие и его эффективность. </param>
-        void ProcessActUsage(IActor actor, IAttackTarget target, TacticalActRoll tacticalActRoll);
+        void ProcessActUsage(IActor actor, IAttackTarget target, CombatActRoll tacticalActRoll, ISectorMap map);
     }
 }

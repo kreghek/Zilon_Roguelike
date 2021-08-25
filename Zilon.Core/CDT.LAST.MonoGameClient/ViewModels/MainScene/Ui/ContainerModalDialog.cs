@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 
 using CDT.LAST.MonoGameClient.Engine;
 using CDT.LAST.MonoGameClient.Resources;
@@ -54,7 +53,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
         protected override void DrawContent(SpriteBatch spriteBatch)
         {
-            DrawInventory(spriteBatch);
+            //DrawInventory(spriteBatch);
             DrawContainer(spriteBatch);
 
             if (_inventoryPropContextMenu != null)
@@ -66,7 +65,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 _containerPropContextMenu.Draw(spriteBatch);
             }
 
-            DrawInventoryHintIfSelected(spriteBatch);
+            //DrawInventoryHintIfSelected(spriteBatch);
             DrawContainerHintIfSelected(spriteBatch);
         }
 
@@ -120,7 +119,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 throw new InvalidOperationException("Active person must be selected before this dialog was opened.");
             }
 
-            InitInventory(person);
+            //InitInventory(person);
 
             InitContainerContent(container);
         }
@@ -203,6 +202,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
             foreach (var item in _currentContainerItems)
             {
                 item.Control.Draw(spriteBatch);
+
+                var propTitle = PropHelper.GetPropTitle(item.Prop);
+                if (item.Prop is Resource resource)
+                {
+                    propTitle += $" x{resource.Count}";
+                }
+
+                spriteBatch.DrawString(_uiContentStorage.GetButtonFont(), propTitle,
+                    new Vector2(item.Control.Rect.Right + 2, item.Control.Rect.Top), Color.Wheat);
             }
         }
 
@@ -213,7 +221,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 return;
             }
 
-            var inventoryTitle = PropHelper.GetPropTitle(_hoverContainerItem.Prop);
+            var inventoryTitle = PropHelper.GetPropHintText(_hoverContainerItem.Prop);
             var hintTitleFont = _uiContentStorage.GetHintTitleFont();
             var titleTextSizeVector = hintTitleFont.MeasureString(inventoryTitle);
 
@@ -251,7 +259,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                 return;
             }
 
-            var inventoryTitle = PropHelper.GetPropTitle(_hoverInventoryItem.Prop);
+            var inventoryTitle = PropHelper.GetPropHintText(_hoverInventoryItem.Prop);
             var hintTitleFont = _uiContentStorage.GetHintTitleFont();
             var titleTextSizeVector = hintTitleFont.MeasureString(inventoryTitle);
 
@@ -275,13 +283,15 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
 
             var currentContainerItemList = new List<InventoryUiItem>();
 
-            foreach (var prop in container.GetModule<IPropContainer>().Content.CalcActualItems())
+            var props = container.GetModule<IPropContainer>().Content.CalcActualItems().Take(8).ToArray();
+            for (var itemIndex = 0; itemIndex < props.Length; itemIndex++)
             {
-                var lastIndex = currentContainerItemList.Count;
-                var relativeX = lastIndex * (EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING);
+                var prop = props[itemIndex];
+
+                var relativeY = itemIndex * (EQUIPMENT_ITEM_SIZE + EQUIPMENT_ITEM_SPACING);
                 var buttonRect = new Rectangle(
-                    relativeX + ContentRect.Left,
-                    ContentRect.Top + EQUIPMENT_ITEM_SIZE + 100,
+                    ContentRect.Left,
+                    ContentRect.Top + relativeY,
                     EQUIPMENT_ITEM_SIZE,
                     EQUIPMENT_ITEM_SIZE);
 
@@ -298,7 +308,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.Ui
                     buttonRect);
                 propButton.OnClick += ContainerPropButton_OnClick;
 
-                var uiItem = new InventoryUiItem(propButton, prop, lastIndex, buttonRect);
+                var uiItem = new InventoryUiItem(propButton, prop, itemIndex, buttonRect);
 
                 currentContainerItemList.Add(uiItem);
             }
