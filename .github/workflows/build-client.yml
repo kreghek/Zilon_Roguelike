@@ -67,8 +67,8 @@ jobs:
         with:
           path: bin/version.txt
           contents: |
-            ver.2.5.8.$GITHUB_RUN_NUMBER
-            $GITHUB_SHA
+            ver.2.5.8.${{ github.run_number }}
+            ${{ github.sha }}
           write-mode: overwrite
 
       - uses: actions/upload-artifact@v2
