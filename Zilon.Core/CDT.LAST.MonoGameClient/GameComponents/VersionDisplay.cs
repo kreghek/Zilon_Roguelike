@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 
+using CDT.LAST.MonoGameClient.Engine;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -10,7 +12,7 @@ namespace CDT.LAST.MonoGameClient.GameComponents
     {
         private readonly SpriteFont _font;
         private readonly SpriteBatch _spriteBatch;
-        private readonly string _version;
+        private readonly string? _version;
 
         public VersionDisplay(Game game, SpriteBatch spriteBatch, SpriteFont font) : base(game)
         {
@@ -42,18 +44,24 @@ namespace CDT.LAST.MonoGameClient.GameComponents
             var size = _font.MeasureString(_version);
 
             _spriteBatch.Begin();
+
+            const int BORDER = 2;
+            const int SHADOW_OFFSET = 1;
+            var position = new Vector2(Game.GraphicsDevice.Viewport.Bounds.Right - size.X - BORDER,
+                    Game.GraphicsDevice.Viewport.Bounds.Bottom - size.Y - BORDER);
+            var shadowOffset = new Vector2(SHADOW_OFFSET, SHADOW_OFFSET);
+            var shadowPosition = position + shadowOffset;
+
             _spriteBatch.DrawString(
                 _font,
                 _version,
-                new Vector2(Game.GraphicsDevice.Viewport.Bounds.Right - size.X - 1 - 1,
-                    Game.GraphicsDevice.Viewport.Bounds.Bottom - size.Y - 1),
-                Color.Black);
+                shadowPosition,
+                LastColors.DarkGray);
             _spriteBatch.DrawString(
                 _font,
                 _version,
-                new Vector2(Game.GraphicsDevice.Viewport.Bounds.Right - size.X - 1,
-                    Game.GraphicsDevice.Viewport.Bounds.Bottom - size.Y),
-                Color.White);
+                position,
+                LastColors.LightWhite);
             _spriteBatch.End();
         }
     }
