@@ -145,26 +145,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             }
 
             _sectorInteractor.Update(ViewModelContext);
-
-            var turns = _scoreManager.Scores.Turns;
-            var detailedLifetime = ScoreCalculator.ConvertTurnsToDetailed(turns);
-            if (detailedLifetime.Days >= 3 && !(_player.MainPerson?.CheckIsDead()).GetValueOrDefault())
-            {
-                var endOfLifeEvent = new EndOfLifeEvent();
-                _logService.Log(endOfLifeEvent);
-
-                var survivalModule = _player.MainPerson.GetModule<ISurvivalModule>();
-
-                try
-                {
-                    survivalModule.SetStatForce(SurvivalStatType.Health, 0);
-                }
-                catch (InvalidOperationException)
-                {
-                    // Error occured then person removed (i think after transiton)
-                    // and death event handler try remove person again.
-                }
-            }
         }
 
         private void DrawCorpses()
