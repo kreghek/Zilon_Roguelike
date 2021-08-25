@@ -4,11 +4,11 @@ on:
   # Trigger analysis when pushing in master or pull requests, and when creating
   # a pull request.
   push:
-    branches:
-      - master
     branches-ignore:
       - dependabot/nuget/**
   pull_request:
+    branches:
+      - master
     types:
       - opened
       - synchronize
