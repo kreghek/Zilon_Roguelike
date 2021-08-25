@@ -11,7 +11,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
     public sealed class ActorPushEngine : IActorStateEngine
     {
-        private const float ANIMATION_DURATION_SECONDS = 1f;
+        private const float ANIMATION_DURATION_SECONDS = 2f;
         private readonly IAnimationBlockerService _animationBlockerService;
         private readonly SpriteContainer _graphicsRoot;
         private readonly ICommandBlocker _moveBlocker;
@@ -35,7 +35,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _targetPosition = targetPosition;
             _animationBlockerService = animationBlockerService;
             _soundEffectInstance = soundEffectInstance;
-            //_rootSprite.FlipX = (_startPosition - _targetPosition).X < 0;
 
             if (soundEffectInstance != null)
             {
@@ -72,11 +71,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             _animationCounterSeconds -= gameTime.ElapsedGameTime.TotalSeconds * 3 * GameState.GameSpeed;
             var t = _animationCounterSeconds / ANIMATION_DURATION_SECONDS;
-            var t2 = 1 - t;
-            var stepAmplitude = 4f;
-            var stepFrequncy = 2f;
-            var unitVector = Vector2.UnitY * -1f;
-            var stepCurrentValue = (float)Math.Abs(Math.Sin(t2 * Math.PI * stepFrequncy));
+            var t2 = Math.Cos(t * Math.PI / 2);
 
             _rootSprite.Position = Vector2.Lerp(_startPosition, _targetPosition, (float)t2);
 
