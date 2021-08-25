@@ -54,6 +54,13 @@ namespace Zilon.Core.StaticObjectModules
         public string Key => nameof(IPropContainer);
 
         /// <inheritdoc />
+        public void Open()
+        {
+            IsOpened = true;
+            DoSetIsOpened();
+        }
+
+        /// <inheritdoc />
         public event EventHandler? Opened;
 
         /// <inheritdoc />
@@ -61,12 +68,5 @@ namespace Zilon.Core.StaticObjectModules
 
         /// <inheritdoc />
         public event EventHandler<PropStoreEventArgs>? ItemsRemoved;
-
-        /// <inheritdoc />
-        public void Open()
-        {
-            IsOpened = true;
-            DoSetIsOpened();
-        }
     }
 }

@@ -1,0 +1,41 @@
+{
+  "Name": {
+    "Ru": "Удар с уклонением",
+	"En": "Evasion Slash"
+  },
+  "Description":
+  {
+    "Ru": "Приём, придуманный мастерами фехтования или трусами.\nУдарил, отшагнул, ударил снова.",
+	"En": "A technique invented by fencing masters or cowards.\nHit, stepped back, hit again."
+  },
+  "Stats": {
+    "Efficient": {
+      "Dice": 2,
+      "Count": 1,
+	  "Modifiers": {
+        "ResultBuff": 1
+      }
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 2
+    },
+	"Effect": "Damage",
+	"Targets": "Enemy",
+    "HitCount": 1,
+    "Offence": {
+      "Type": "Tactical",
+      "Impact":  "Kinetic",
+	  "ApRank": 2
+    },
+	"Rules": ["MoveBackward"],
+	"IsMelee": true,
+	"Tags": [
+      "slash"
+    ]
+  },
+  "Constrains":
+  {
+	  "EnergyCost": 10
+  }
+}

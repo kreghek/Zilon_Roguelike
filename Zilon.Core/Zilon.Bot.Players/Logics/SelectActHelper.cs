@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-
-using JetBrains.Annotations;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -16,12 +15,11 @@ namespace Zilon.Bot.Players.Logics
         /// <param name="acts"> Все возможные действия. </param>
         /// <param name="propStore"> Хранилище, в котором искать ресурсы. </param>
         /// <returns> Лучшее дейсвие среди указанных. </returns>
-        [NotNull]
-        public static ITacticalAct SelectBestAct(IEnumerable<ITacticalAct> acts, [CanBeNull] IPropStore propStore)
+        public static ICombatAct SelectBestAct(IEnumerable<ICombatAct> acts, IPropStore propStore)
         {
             if (acts is null)
             {
-                throw new System.ArgumentNullException(nameof(acts));
+                throw new ArgumentNullException(nameof(acts));
             }
 
             var availableActs = acts
@@ -57,8 +55,8 @@ namespace Zilon.Bot.Players.Logics
             return preferredPropResource != null && preferredPropResource.Count >= usedPropResourceCount;
         }
 
-        private static bool TacticalActIsAvailableByConstrains(ITacticalAct tacticalAct,
-            [CanBeNull] IPropStore propStore)
+        private static bool TacticalActIsAvailableByConstrains(ICombatAct tacticalAct,
+            IPropStore propStore)
         {
             if (tacticalAct.Constrains is null)
             {

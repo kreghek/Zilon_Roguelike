@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+﻿using System;
 
 using Zilon.Core.Graphs;
 using Zilon.Core.PersonModules;
@@ -14,8 +14,8 @@ namespace Zilon.Core.Tactics.Behaviour
 
         public MoveIntention(IGraphNode targetNode, ISector sector)
         {
-            TargetNode = targetNode ?? throw new System.ArgumentNullException(nameof(targetNode));
-            _sector = sector ?? throw new System.ArgumentNullException(nameof(sector));
+            TargetNode = targetNode ?? throw new ArgumentNullException(nameof(targetNode));
+            _sector = sector ?? throw new ArgumentNullException(nameof(sector));
         }
 
         public IGraphNode TargetNode { get; }
@@ -34,7 +34,7 @@ namespace Zilon.Core.Tactics.Behaviour
             return new MoveTask(actor, taskContext, TargetNode, taskContext.Sector.Map, moveCost);
         }
 
-        public IActorTask CreateActorTask([NotNull] IActor actor)
+        public IActorTask CreateActorTask(IActor actor)
         {
             return CreateMoveTaskInner(actor);
         }

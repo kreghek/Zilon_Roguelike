@@ -1,8 +1,7 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
-
-using JetBrains.Annotations;
 
 using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
@@ -14,16 +13,16 @@ namespace Zilon.Core.Client.Sector
     /// </summary>
     public sealed class GlobeLoopContext : IGlobeLoopContext
     {
-        [NotNull] private readonly IPlayer _player;
+        private readonly IPlayer _player;
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public GlobeLoopContext(IPlayer player)
         {
             _player = player ?? throw new ArgumentNullException(nameof(player));
         }
 
         /// <inheritdoc />
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public bool HasNextIteration
         {
             get

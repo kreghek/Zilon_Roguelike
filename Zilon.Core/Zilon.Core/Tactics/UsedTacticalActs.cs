@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics
@@ -14,20 +12,20 @@ namespace Zilon.Core.Tactics
     public sealed class UsedTacticalActs
     {
         [ExcludeFromCodeCoverage]
-        public UsedTacticalActs([NotNull][ItemNotNull] IEnumerable<ITacticalAct> primary) :
-            this(primary, new ITacticalAct[0])
+        public UsedTacticalActs(IEnumerable<ICombatAct> primary) :
+            this(primary, new ICombatAct[0])
         {
         }
 
         [ExcludeFromCodeCoverage]
-        public UsedTacticalActs([NotNull][ItemNotNull] IEnumerable<ITacticalAct> primary,
-            [NotNull][ItemNotNull] IEnumerable<ITacticalAct> secondary)
+        public UsedTacticalActs(IEnumerable<ICombatAct> primary,
+            IEnumerable<ICombatAct> secondary)
         {
             Primary = primary ?? throw new ArgumentNullException(nameof(primary));
             Secondary = secondary ?? throw new ArgumentNullException(nameof(secondary));
         }
 
-        public IEnumerable<ITacticalAct> Primary { get; }
-        public IEnumerable<ITacticalAct> Secondary { get; }
+        public IEnumerable<ICombatAct> Primary { get; }
+        public IEnumerable<ICombatAct> Secondary { get; }
     }
 }

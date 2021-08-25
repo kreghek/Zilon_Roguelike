@@ -1,7 +1,5 @@
 ﻿using System;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.Localization;
 using Zilon.Core.Schemes;
 using Zilon.Core.Scoring;
@@ -13,7 +11,7 @@ namespace Zilon.Core.Persons
     /// </summary>
     public class HumanPerson : PersonBase
     {
-        public HumanPerson([NotNull] IPersonScheme scheme, IFraction fraction) : base(fraction)
+        public HumanPerson(IPersonScheme scheme, IFraction fraction) : base(fraction)
         {
             Scheme = scheme;
 
@@ -25,6 +23,11 @@ namespace Zilon.Core.Persons
 
         /// <inheritdoc />
         public string Name { get; }
+
+        /// <summary>
+        /// Temporary property to show template name.
+        /// </summary>
+        public ILocalizedString? PersonEquipmentDescriptionTemplate { get; set; }
 
         /// <summary>
         /// Temporary property to show template name.

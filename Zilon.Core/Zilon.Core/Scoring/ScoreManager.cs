@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
@@ -12,7 +14,7 @@ namespace Zilon.Core.Scoring
     /// <seealso cref="IScoreManager" />
     public class ScoreManager : IScoreManager
     {
-        private const float TURN_INC = 0.1f;
+        private const float TURN_INC = 0.001f;
         private const int MONSTER_DEFAULT_BASE_SCORE = 25;
 
         public ScoreManager()
@@ -51,7 +53,7 @@ namespace Zilon.Core.Scoring
         {
             if (monster is null)
             {
-                throw new System.ArgumentNullException(nameof(monster));
+                throw new ArgumentNullException(nameof(monster));
             }
 
             var monsterScheme = monster.Scheme;
@@ -96,7 +98,7 @@ namespace Zilon.Core.Scoring
         }
 
         /// <summary>Обнуление текущих очков.</summary>
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public void ResetScores()
         {
             BaseScores = 0;
@@ -105,7 +107,7 @@ namespace Zilon.Core.Scoring
             Turns = 0;
         }
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public Scores Scores { get; set; }
     }
 }

@@ -33,7 +33,7 @@ namespace Zilon.Core.ScoreResultGenerating.Tests
                 {
                     foreach (var effectType in effectTypes)
                     {
-                        var effect = new SurvivalStatHazardEffect(
+                        var effect = new SurvivalStatHazardCondition(
                             effectType,
                             SurvivalStatHazardLevel.Max,
                             Mock.Of<ISurvivalRandomSource>());
@@ -48,7 +48,7 @@ namespace Zilon.Core.ScoreResultGenerating.Tests
                             continue;
                         }
 
-                        var act = Mock.Of<ITacticalAct>();
+                        var act = Mock.Of<ICombatAct>();
                         var monster = new MonsterPerson(monsterScheme);
                         var monsterActor = Mock.Of<IActor>(x => x.Person == monster);
                         var playerEvent = new PlayerDamagedEvent(act, monsterActor);

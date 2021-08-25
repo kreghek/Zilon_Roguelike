@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-using JetBrains.Annotations;
-
 namespace Zilon.Core.Tactics
 {
     /// <summary>
@@ -20,13 +18,11 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Контейнер, который пытались открыть.
         /// </summary>
-        [PublicAPI]
         public IStaticObject Deposit { get; }
 
         /// <summary>
         /// Результат добычи.
         /// </summary>
-        [PublicAPI]
         public IMineDepositResult Result { get; }
     }
 }

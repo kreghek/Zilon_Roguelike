@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.Common;
 using Zilon.Core.Components;
 using Zilon.Core.Graphs;
+using Zilon.Core.MapGenerators;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
-using Zilon.Core.Players;
 using Zilon.Core.Props;
 using Zilon.Core.Schemes;
 using Zilon.Core.StaticObjectModules;
@@ -31,7 +29,7 @@ namespace Zilon.Core.Tactics
 
         public Actor([NotNull] IPerson person, [NotNull] IActorTaskSource<ISectorTaskSourceContext> taskSource,
             [NotNull] IGraphNode node,
-            [CanBeNull] IPerkResolver perkResolver) : this(person, taskSource, node)
+            IPerkResolver? perkResolver) : this(person, taskSource, node)
         {
             _perkResolver = perkResolver;
         }
@@ -148,7 +146,7 @@ namespace Zilon.Core.Tactics
         }
 
         [ExcludeFromCodeCoverage]
-        private void DoUseAct(IGraphNode targetNode, ITacticalAct tacticalAct)
+        private void DoUseAct(IGraphNode targetNode, ICombatAct tacticalAct)
         {
             var args = new UsedActEventArgs(targetNode, tacticalAct);
             UsedAct?.Invoke(this, args);
@@ -325,7 +323,7 @@ namespace Zilon.Core.Tactics
         }
 
         /// <inheritdoc />
-        public event EventHandler? Moved;
+        public event EventHandler<ActorMoveEventArgs>? Moved;
 
         /// <inheritdoc />
         public event EventHandler<OpenContainerEventArgs>? OpenedContainer;
@@ -341,6 +339,12 @@ namespace Zilon.Core.Tactics
 
         /// <inheritdoc />
         public event EventHandler<UsedPropEventArgs>? UsedProp;
+
+        /// <inheritdoc />
+        public event EventHandler? PropTransferPerformed;
+
+        /// <inheritdoc />
+        public event EventHandler? BeginTransitionToOtherSector;
 
         /// <inheritdoc />
         /// <summary>
@@ -373,7 +377,13 @@ namespace Zilon.Core.Tactics
         public void MoveToNode(IGraphNode targetNode)
         {
             Node = targetNode;
-            Moved?.Invoke(this, new EventArgs());
+            Moved?.Invoke(this, new ActorMoveEventArgs(false));
+        }
+
+        public void ForcedMoveToNode(IGraphNode targetNode)
+        {
+            Node = targetNode;
+            Moved?.Invoke(this, new ActorMoveEventArgs(true));
         }
 
         public void OpenContainer(IStaticObject container, IOpenContainerMethod method)
@@ -394,7 +404,7 @@ namespace Zilon.Core.Tactics
         }
 
         /// <inheritdoc />
-        public void UseAct(IGraphNode targetNode, ITacticalAct tacticalAct)
+        public void UseAct(IGraphNode targetNode, ICombatAct tacticalAct)
         {
             DoUseAct(targetNode, tacticalAct);
         }
@@ -485,5 +495,26 @@ namespace Zilon.Core.Tactics
         {
             TaskSource = actorTaskSource;
         }
+
+        public void PerformTransfer()
+        {
+            PropTransferPerformed?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void MoveToOtherSector(ISector sector, SectorTransition sectorTransition)
+        {
+            BeginTransitionToOtherSector?.Invoke(this, EventArgs.Empty);
+            sector.UseTransition(this, sectorTransition);
+        }
+    }
+
+    public sealed class ActorMoveEventArgs : EventArgs
+    {
+        public ActorMoveEventArgs(bool forced)
+        {
+            Forced = forced;
+        }
+
+        public bool Forced { get; }
     }
 }

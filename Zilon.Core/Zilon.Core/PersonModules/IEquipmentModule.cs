@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
-using JetBrains.Annotations;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
@@ -21,14 +20,13 @@ namespace Zilon.Core.PersonModules
         /// могут изыматся из слотов в инвентарь или уничтожаться.
         /// Если указано null, то экипировка изымается из указанного слота.
         /// </remarks>
-        [CanBeNull]
+        [MaybeNull]
         Equipment? this[int index] { get; set; }
 
         /// <summary>
         /// Текущие слоты экипировки.
         /// </summary>
         [NotNull]
-        [ItemNotNull]
         PersonSlotSubScheme[] Slots { get; }
 
         /// <summary>

@@ -15,6 +15,7 @@
     "Effect": "Damage",
     "Targets": "Enemy",
     "HitCount": 1,
+    "IsMelee": true,
     "Offence": {
       "Type": "Rapid",
       "Impact": "Kinetic",

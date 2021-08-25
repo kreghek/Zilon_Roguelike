@@ -14,7 +14,7 @@ namespace Zilon.Core.MassSectorGenerator
         public static Task CheckSectorAsync(ISectorValidator[] validators, IServiceProvider scopeContainer,
             ISector sector)
         {
-            return Task.Run(() =>
+            return Task.Run(async () =>
             {
                 var stopWatch = new Stopwatch();
                 stopWatch.Start();
@@ -25,7 +25,7 @@ namespace Zilon.Core.MassSectorGenerator
 
                 try
                 {
-                    allTasks.Wait();
+                    await allTasks.ConfigureAwait(false);
                 }
                 catch (AggregateException exception)
                 {

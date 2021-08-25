@@ -1,0 +1,14 @@
+{
+  "Tags": [ "weapon", "sword" ],
+  "Equip": {
+    "ActSids": [
+      "slash"
+    ],
+    "SlotTypes": [ "Hand" ],
+	"EquipRestrictions": { "PropHandUsage": "TwoHanded" }
+  },
+  "Name": {
+    "Ru": "Большой меч",
+	"En": "Great sword"
+  }
+}

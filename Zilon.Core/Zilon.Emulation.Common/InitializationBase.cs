@@ -11,8 +11,8 @@ using Zilon.Core.CommonServices;
 using Zilon.Core.CommonServices.Dices;
 using Zilon.Core.MapGenerators;
 using Zilon.Core.MapGenerators.CellularAutomatonStyle;
+using Zilon.Core.MapGenerators.OpenStyle;
 using Zilon.Core.MapGenerators.RoomStyle;
-using Zilon.Core.MapGenerators.StaticObjectFactories;
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.Persons;
 using Zilon.Core.Players;
@@ -58,10 +58,10 @@ namespace Zilon.Emulation.Common
 
         protected virtual void RegisterChestGeneratorRandomSource(IServiceCollection serviceRegistry)
         {
-            serviceRegistry.AddScoped<StaticObstaclesGenerator>();
-            serviceRegistry.AddScoped<IStaticObstaclesGenerator, StaticObstaclesGenerator>(serviceProvider =>
+            serviceRegistry.AddScoped<StaticObjectGenerator>();
+            serviceRegistry.AddScoped<IStaticObjectsGenerator, StaticObjectGenerator>(serviceProvider =>
             {
-                var service = serviceProvider.GetRequiredService<StaticObstaclesGenerator>();
+                var service = serviceProvider.GetRequiredService<StaticObjectGenerator>();
                 service.MonsterIdentifierGenerator = serviceProvider.GetService<IMonsterIdentifierGenerator>();
                 return service;
             });
@@ -98,12 +98,13 @@ namespace Zilon.Emulation.Common
             serviceRegistry.AddSingleton<IMonsterGeneratorRandomSource, MonsterGeneratorRandomSource>();
         }
 
-        protected virtual void RegisterPersonFactory(IServiceCollection container)
+        protected virtual void RegisterPersonFactory<TPersonfactory>(IServiceCollection container)
+            where TPersonfactory : class, IPersonFactory
         {
-            container.AddSingleton<RandomHumanPersonFactory>(); //TODO Костяль, чтобы не прописывать всё в конструктор
-            container.AddSingleton<IPersonFactory, RandomHumanPersonFactory>(serviceProvider =>
+            container.AddSingleton<TPersonfactory>(); //TODO Костяль, чтобы не прописывать всё в конструктор
+            container.AddSingleton<IPersonFactory, TPersonfactory>(serviceProvider =>
             {
-                var factory = serviceProvider.GetRequiredService<RandomHumanPersonFactory>();
+                var factory = serviceProvider.GetRequiredService<TPersonfactory>();
                 factory.PlayerEventLogService = serviceProvider.GetService<IPlayerEventLogService>();
                 return factory;
             });
@@ -267,7 +268,7 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<ISurvivalRandomSource, SurvivalRandomSource>();
             container.AddSingleton<IEquipmentDurableService, EquipmentDurableService>();
             container.AddSingleton<IEquipmentDurableServiceRandomSource, EquipmentDurableServiceRandomSource>();
-            RegisterPersonFactory(container);
+            RegisterPersonFactory<TemplateBasedPersonFactory>(container);
             container.AddSingleton<IPersonPerkInitializator, PersonPerkInitializator>();
 
             container.AddSingleton<IMapFactorySelector, SwitchMapFactorySelector>();
@@ -275,6 +276,7 @@ namespace Zilon.Emulation.Common
             container.AddSingleton<IRoomGenerator, RoomGenerator>();
             container.AddSingleton(CreateRoomGeneratorRandomSource);
             container.AddSingleton<CellularAutomatonMapFactory>();
+            container.AddSingleton<OpenMapFactory>();
             container.AddSingleton<IInteriorObjectRandomSource, InteriorObjectRandomSource>();
 
             container.AddSingleton<IUserTimeProvider, UserTimeProvider>();
@@ -314,7 +316,7 @@ namespace Zilon.Emulation.Common
         {
             serviceCollection.AddSingleton<IScoreManager, ScoreManager>();
             serviceCollection.AddSingleton<IPlayerEventLogService, PlayerEventLogService>();
-            serviceCollection.AddSingleton<DeathReasonService>();
+            serviceCollection.AddSingleton<IDeathReasonService, DeathReasonService>();
             serviceCollection.AddSingleton<IPlayer, HumanPlayer>();
         }
 

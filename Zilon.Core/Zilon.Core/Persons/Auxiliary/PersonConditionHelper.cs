@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons.Survival;
 using Zilon.Core.Scoring;
@@ -25,11 +23,11 @@ namespace Zilon.Core.Persons.Auxiliary
         /// Ключевые сегменты, которые были пересечены при изменении характеристики.
         /// <param name="survivalRandomSource"> Источник рандома выживания. </param>
         public static void UpdateSurvivalСondition(
-            [NotNull] IConditionModule currentCondition,
+            [NotNull] IConditionsModule currentCondition,
             [NotNull] SurvivalStat stat,
-            [NotNull][ItemNotNull] SurvivalStatKeySegment[] keySegments,
+            [NotNull] SurvivalStatKeySegment[] keySegments,
             [NotNull] ISurvivalRandomSource survivalRandomSource,
-            [CanBeNull] IPlayerEventLogService? playerEventLogService)
+            [MaybeNull] IPlayerEventLogService? playerEventLogService)
         {
             ThrowExceptionIfArgumentsInvalid(currentCondition, stat, keySegments, survivalRandomSource);
 
@@ -63,7 +61,7 @@ namespace Zilon.Core.Persons.Auxiliary
                 if (currentSegment != null)
                 {
                     // Создаём эффект
-                    var newEffect = new SurvivalStatHazardEffect(
+                    var newEffect = new SurvivalStatHazardCondition(
                         statType,
                         currentSegment.Level,
                         survivalRandomSource)
@@ -76,16 +74,16 @@ namespace Zilon.Core.Persons.Auxiliary
             }
         }
 
-        private static SurvivalStatHazardEffect GetCurrentСondition(IConditionModule сonditionModule,
+        private static SurvivalStatHazardCondition GetCurrentСondition(IConditionsModule сonditionModule,
             SurvivalStatType statType)
         {
             return сonditionModule.Items
-                .OfType<SurvivalStatHazardEffect>()
+                .OfType<SurvivalStatHazardCondition>()
                 .SingleOrDefault(x => x.Type == statType);
         }
 
         [ExcludeFromCodeCoverage]
-        private static void ThrowExceptionIfArgumentsInvalid(IConditionModule currentСondition,
+        private static void ThrowExceptionIfArgumentsInvalid(IConditionsModule currentСondition,
             SurvivalStat stat,
             IEnumerable<SurvivalStatKeySegment> keyPoints,
             ISurvivalRandomSource survivalRandomSource)

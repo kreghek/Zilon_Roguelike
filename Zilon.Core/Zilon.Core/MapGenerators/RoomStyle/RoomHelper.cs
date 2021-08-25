@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Zilon.Core.Tactics.Spatial;
@@ -14,7 +15,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         {
             if (room is null)
             {
-                throw new System.ArgumentNullException(nameof(room));
+                throw new ArgumentNullException(nameof(room));
             }
 
             var neighbors = HexNodeHelper.GetSpatialNeighbors(node, room.Nodes);
@@ -41,22 +42,22 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         {
             if (targetMap is null)
             {
-                throw new System.ArgumentNullException(nameof(targetMap));
+                throw new ArgumentNullException(nameof(targetMap));
             }
 
             if (edgeHash is null)
             {
-                throw new System.ArgumentNullException(nameof(edgeHash));
+                throw new ArgumentNullException(nameof(edgeHash));
             }
 
             if (node is null)
             {
-                throw new System.ArgumentNullException(nameof(node));
+                throw new ArgumentNullException(nameof(node));
             }
 
             if (neighbor is null)
             {
-                throw new System.ArgumentNullException(nameof(neighbor));
+                throw new ArgumentNullException(nameof(neighbor));
             }
 
             var hashKey1 = $"{node}-{neighbor}";
@@ -83,7 +84,7 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         {
             if (map is null)
             {
-                throw new System.ArgumentNullException(nameof(map));
+                throw new ArgumentNullException(nameof(map));
             }
 
             var node = map.Nodes.OfType<HexNode>()
@@ -116,17 +117,17 @@ namespace Zilon.Core.MapGenerators.RoomStyle
         {
             if (edgeHash is null)
             {
-                throw new System.ArgumentNullException(nameof(edgeHash));
+                throw new ArgumentNullException(nameof(edgeHash));
             }
 
             if (node is null)
             {
-                throw new System.ArgumentNullException(nameof(node));
+                throw new ArgumentNullException(nameof(node));
             }
 
             if (neighbor is null)
             {
-                throw new System.ArgumentNullException(nameof(neighbor));
+                throw new ArgumentNullException(nameof(neighbor));
             }
 
             var hashKey1 = $"{node}-{neighbor}";

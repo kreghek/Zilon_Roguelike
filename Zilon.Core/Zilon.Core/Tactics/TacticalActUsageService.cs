@@ -57,11 +57,11 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="act"> Соверщённое действие. </param>
         /// <returns> Возвращает выпавшее значение эффективности. </returns>
-        private TacticalActRoll GetActEfficient(ITacticalAct act)
+        private CombatActRoll GetActEfficient(ICombatAct act)
         {
             var rolledEfficient = _actUsageRandomSource.RollEfficient(act.Efficient);
 
-            var roll = new TacticalActRoll(act, rolledEfficient);
+            var roll = new CombatActRoll(act, rolledEfficient);
 
             return roll;
         }
@@ -95,7 +95,7 @@ namespace Zilon.Core.Tactics
             return 5;
         }
 
-        private static bool IsInDistance(IActor actor, IGraphNode targetNode, ITacticalAct act, ISectorMap map)
+        private static bool IsInDistance(IActor actor, IGraphNode targetNode, ICombatAct act, ISectorMap map)
         {
             var actorNodes = GetActorNodes(actor.PhysicalSize, actor.Node, map);
 
@@ -111,7 +111,7 @@ namespace Zilon.Core.Tactics
             return false;
         }
 
-        private static void RemovePropResource(IActor actor, ITacticalAct act)
+        private static void RemovePropResource(IActor actor, ICombatAct act)
         {
             var propResources = from prop in actor.Person.GetModule<IInventoryModule>().CalcActualItems()
                                 where prop is Resource
@@ -149,7 +149,7 @@ namespace Zilon.Core.Tactics
             return sector.ActorManager.Items.Any(x => x == actor);
         }
 
-        private void UseAct(IActor actor, ActTargetInfo target, ITacticalAct act, ISectorMap map)
+        private void UseAct(IActor actor, ActTargetInfo target, ICombatAct act, ISectorMap map)
         {
             bool isInDistance;
             if ((act.Stats.Targets & TacticalActTargets.Self) > 0 && actor == target)
@@ -183,7 +183,7 @@ namespace Zilon.Core.Tactics
                 var tacticalActRoll = GetActEfficient(act);
 
                 var actHandler = _actUsageHandlerSelector.GetHandler(target.TargetObject);
-                actHandler.ProcessActUsage(actor, target.TargetObject, tacticalActRoll);
+                actHandler.ProcessActUsage(actor, target.TargetObject, tacticalActRoll, map);
 
                 UseActResources(actor, act);
             }
@@ -204,7 +204,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void UseActResources(IActor actor, ITacticalAct act)
+        private void UseActResources(IActor actor, ICombatAct act)
         {
             // Изъятие патронов
             if (act.Constrains?.PropResourceType != null)
@@ -219,6 +219,14 @@ namespace Zilon.Core.Tactics
 
             // Сброс КД, если он есть.
             act.StartCooldownIfItIs();
+
+            // Consume energy.
+            // Monster's act has no energy cost.
+            if (act.Constrains?.EnergyCost != null)
+            {
+                actor.Person.GetModule<ISurvivalModule>()
+                    .DecreaseStat(SurvivalStatType.Energy, act.Constrains.EnergyCost.Value);
+            }
         }
 
         public void UseOn(IActor actor, ActTargetInfo target, UsedTacticalActs usedActs, ISector sector)

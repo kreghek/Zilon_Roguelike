@@ -1,0 +1,369 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="DiseaseSymptomConditionTitle" xml:space="preserve">
+    <value>Disease</value>
+  </data>
+  <data name="HungerCriticalConditionTitle" xml:space="preserve">
+    <value>Starvation!</value>
+  </data>
+  <data name="HungerLesserConditionTitle" xml:space="preserve">
+    <value>Easy hunger</value>
+  </data>
+  <data name="HungerStrongConditionTitle" xml:space="preserve">
+    <value>Hunger</value>
+  </data>
+  <data name="IntoxicationCriticalConditionTitle" xml:space="preserve">
+    <value>OVERDOSE!</value>
+  </data>
+  <data name="IntoxicationLesserConditionTitle" xml:space="preserve">
+    <value>Easy intoxication</value>
+  </data>
+  <data name="IntoxicationStrongConditionTitle" xml:space="preserve">
+    <value>Intoxication</value>
+  </data>
+  <data name="StartGameButtonTitle" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="ThristCriticalConditionTitle" xml:space="preserve">
+    <value>Dehydration!</value>
+  </data>
+  <data name="ThristLesserConditionTitle" xml:space="preserve">
+    <value>Easy thrist</value>
+  </data>
+  <data name="ThristStrongConditionTitle" xml:space="preserve">
+    <value>Thrist</value>
+  </data>
+  <data name="WoundCriticalConditionTitle" xml:space="preserve">
+    <value>Mortal wound!</value>
+  </data>
+  <data name="WoundLesserConditionTitle" xml:space="preserve">
+    <value>Lesser wound</value>
+  </data>
+  <data name="WoundStrongConditionTitle" xml:space="preserve">
+    <value>Strong wound</value>
+  </data>
+  <data name="GenerateGlobeButtonTitle" xml:space="preserve">
+    <value>Generate</value>
+  </data>
+  <data name="SwitchAutomodeButtonOffTitle" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="SwitchAutomodeButtonOnTitle" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="SwitchAutomodeButtonTitle" xml:space="preserve">
+    <value>Autoplay: {0}</value>
+  </data>
+  <data name="PhysicalStrengthAttributeTitle" xml:space="preserve">
+    <value>Physical Strength</value>
+  </data>
+  <data name="DexterityAttributeTitle" xml:space="preserve">
+    <value>Dexterity</value>
+  </data>
+  <data name="PerceptionAttributeTitle" xml:space="preserve">
+    <value>Perception</value>
+  </data>
+  <data name="ConstitutionAttributeTitle" xml:space="preserve">
+    <value>Constitution</value>
+  </data>
+  <data name="PhysicalStrengthAttributeDescription" xml:space="preserve">
+    <value>Physical, brute strength of the character.
+Affects melee weapon damage.
+Acts as a restriction on the wearing of heavy equipment.</value>
+  </data>
+  <data name="DexterityAttributeDescription" xml:space="preserve">
+    <value>Agility, physical flexibility of the character, stretching.
+Acts as a restriction on equipment, such as daggers, staves.</value>
+  </data>
+  <data name="PerceptionAttributeDescription" xml:space="preserve">
+    <value>Perception, sight. Ability to see, notice.
+Acts as a restriction on the use of ranged weapons.
+Or weapons based on precise strikes rather than strength (daggers, spears).</value>
+  </data>
+  <data name="ConstitutionAttributeDescription" xml:space="preserve">
+    <value>Affects how many wounds can
+take out the character before he dies.</value>
+  </data>
+  <data name="UbnormalAttributeValueTitle" xml:space="preserve">
+    <value>Ubnormal</value>
+  </data>
+  <data name="DefectiveAttributeValueTitle" xml:space="preserve">
+    <value>Defective</value>
+  </data>
+  <data name="LowAttributeValueTitle" xml:space="preserve">
+    <value>Low</value>
+  </data>
+  <data name="NormalAttributeValueTitle" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="BelowNormalAttributeValueTitle" xml:space="preserve">
+    <value>Below normal</value>
+  </data>
+  <data name="AboveNormalAttributeValueTitle" xml:space="preserve">
+    <value>Above normal</value>
+  </data>
+  <data name="SuperAttributeValueTitle" xml:space="preserve">
+    <value>Super</value>
+  </data>
+  <data name="HealCommandButtonTitle" xml:space="preserve">
+    <value>Heal</value>
+  </data>
+  <data name="EatCommandButtonTitle" xml:space="preserve">
+    <value>Eat</value>
+  </data>
+  <data name="DrinkCommandButtonTitle" xml:space="preserve">
+    <value>Drink</value>
+  </data>
+  <data name="UseCommandButtonTitle" xml:space="preserve">
+    <value>Use</value>
+  </data>
+  <data name="EquipInSlotTemplateCommandButton" xml:space="preserve">
+    <value>Equip in slot: {0}</value>
+  </data>
+  <data name="SlotHand" xml:space="preserve">
+    <value>Hand</value>
+  </data>
+  <data name="SlotHead" xml:space="preserve">
+    <value>Head</value>
+  </data>
+  <data name="SlotBody" xml:space="preserve">
+    <value>Body</value>
+  </data>
+  <data name="SlotAux" xml:space="preserve">
+    <value>Aux</value>
+  </data>
+  <data name="TakePropInInventoryButtonTitle" xml:space="preserve">
+    <value>Take in inventory</value>
+  </data>
+  <data name="PutPropInContainerButtonTitleTemplate" xml:space="preserve">
+    <value>Put into {0}</value>
+  </data>
+  <data name="FakeContainerName" xml:space="preserve">
+    <value>the loot bag</value>
+  </data>
+  <data name="MainMenuButtonTitle" xml:space="preserve">
+    <value>Main menu</value>
+  </data>
+  <data name="NextScreenButtonTitle" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="ScoreMenuTitle" xml:space="preserve">
+    <value>Score menu</value>
+  </data>
+  <data name="LeaderboardMenuTitle" xml:space="preserve">
+    <value>Leaderboard menu</value>
+  </data>
+  <data name="ScoreTableScoreColumnTitle" xml:space="preserve">
+    <value>Score</value>
+  </data>
+  <data name="ScoreTableNumberColumnTitle" xml:space="preserve">
+    <value>Number</value>
+  </data>
+  <data name="ScoreTableNickColumnTitle" xml:space="preserve">
+    <value>Nickname</value>
+  </data>
+  <data name="AddPlayerNicknameButton" xml:space="preserve">
+    <value>Add nickname</value>
+  </data>
+  <data name="ClearPlayerNicknameButton" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="PlayerInputNicknamePrompt" xml:space="preserve">
+    <value>Please, enter your nickname</value>
+  </data>
+  <data name="NoneEquipmentTitle" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="EnergyLesserConditionTitle" xml:space="preserve">
+    <value>Easy tired</value>
+  </data>
+  <data name="EnergyStrongConditionTitle" xml:space="preserve">
+    <value>Tired</value>
+  </data>
+  <data name="EnergyCriticalConditionTitle" xml:space="preserve">
+    <value>EXHAUSTED!</value>
+  </data>
+  <data name="ControlsTutorialText" xml:space="preserve">
+    <value>[LMB] to move and attack.
+[T] to transit to other stage.
+[O] to give loot up.
+[I] to open inventory.
+[C] to open character stats.
+[SPACE] to wait a little.
+[ALT] to highlight interactive.
+[1-8] to select combat action.
+[NUM1-NUM9] to move step by step.</value>
+  </data>
+  <data name="SwitchLanguagebuttonTitle" xml:space="preserve">
+    <value>Switch lang</value>
+  </data>
+  <data name="SwitchResolutionButtonTitle" xml:space="preserve">
+    <value>Switch res</value>
+  </data>
+  <data name="PlayerRatingLabel" xml:space="preserve">
+    <value>Your leader board rating: {0}</value>
+  </data>
+  <data name="EnergyConditionDescription" xml:space="preserve">
+    <value>Energy is needed to deliver powerful blows.
+When the energy ends, the character gets tired.
+A tired character is less effective in combat.
+And the exhausted character begins to lose vitality
+and may die of overwork.</value>
+  </data>
+  <data name="HungerConditionDescription" xml:space="preserve">
+    <value>Any character needs to eat.
+A hungry character is less efficient.
+Ultimately, starvation kills the character.</value>
+  </data>
+  <data name="IntoxicationConditionDescription" xml:space="preserve">
+    <value>The use of medicines increases the level of intoxication of the character.
+Toxins slightly reduce the effectiveness of the character,
+but erode over time.
+If the intoxication grows too much, an overdose will occur.
+and the character will die.</value>
+  </data>
+  <data name="ThristConditionDescription" xml:space="preserve">
+    <value>All characters need to drink.
+Thirst reduces the effectiveness of characters
+and can lead to dehydration.
+Dehydration is death!</value>
+  </data>
+  <data name="WoundConditionDescription" xml:space="preserve">
+    <value>The character is alive as long as he has vitality.
+Damage, external or internal, takes away vitality.
+Gradually, any wounds heal. Ultimately, the game
+continues as long as there is at least some life in the character.</value>
+  </data>
+  <data name="PropFullDurabilityValueTitle" xml:space="preserve">
+    <value>Unbroken</value>
+  </data>
+  <data name="PropShabbyDurabilityValueTitle" xml:space="preserve">
+    <value>Shabby</value>
+  </data>
+  <data name="PropDamagedDurabilityValueTitle" xml:space="preserve">
+    <value>Damaged</value>
+  </data>
+  <data name="PropBrokenDurabilityValueTitle" xml:space="preserve">
+    <value>Broken</value>
+  </data>
+  <data name="LeaderBoardButtonTitle" xml:space="preserve">
+    <value>Leaderboard</value>
+  </data>
+</root>

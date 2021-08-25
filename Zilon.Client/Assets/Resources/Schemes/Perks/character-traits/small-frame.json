@@ -3,5 +3,10 @@
     "Ru": "Миниатюрный",
 	"En": "Small frame"
   },
+  "Description":
+  {
+    "Ru": "Ваш общий размер не внушает трепет.\nНо вам требуется меньше энергии.",
+	"En": "Your overall size is not awe-inspiring.\nBut you need less energy.",
+  },
   "IsBuildIn": true
 }

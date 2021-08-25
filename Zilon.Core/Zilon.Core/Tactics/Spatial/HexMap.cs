@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 
 using Zilon.Core.Common;
@@ -191,7 +193,7 @@ namespace Zilon.Core.Tactics.Spatial
             const int CELLWIDTH = 4;
 
             var matrix = _segmentDict.First().Value;
-            using System.IO.StreamWriter file = new System.IO.StreamWriter(fileName);
+            using StreamWriter file = new StreamWriter(fileName);
 
             file.Write(" ".PadLeft(CELLWIDTH, ' '));
             for (var x = 0; x < _segmentSize; x++)
@@ -224,15 +226,14 @@ namespace Zilon.Core.Tactics.Spatial
         {
             var segmentKey = new SegmentKey(0, 0);
             var segment = _segmentDict[segmentKey];
-            try
-            {
-                var node = segment[x, y];
-                return (HexNode)node;
-            }
-            catch (IndexOutOfRangeException)
+
+            if (x < 0 || y < 0 || x >= _segmentSize || y >= _segmentSize)
             {
                 return null;
             }
+
+            var node = segment[x, y];
+            return (HexNode)node;
         }
 
         private void CreateSegment(int segmentX, int segmentY)
@@ -318,27 +319,27 @@ namespace Zilon.Core.Tactics.Spatial
             // ReSharper disable once MemberCanBePrivate.Local
             public readonly int Y;
 
-            [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+            [ExcludeFromCodeCoverage]
             public SegmentKey(int x, int y)
             {
                 X = x;
                 Y = y;
             }
 
-            [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-            public override bool Equals(object obj)
+            [ExcludeFromCodeCoverage]
+            public override bool Equals(object? obj)
             {
                 return obj is SegmentKey key && Equals(key);
             }
 
-            [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+            [ExcludeFromCodeCoverage]
             public bool Equals(SegmentKey other)
             {
                 return X == other.X &&
                        Y == other.Y;
             }
 
-            [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+            [ExcludeFromCodeCoverage]
             public override int GetHashCode()
             {
                 unchecked
@@ -350,13 +351,13 @@ namespace Zilon.Core.Tactics.Spatial
                 }
             }
 
-            [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+            [ExcludeFromCodeCoverage]
             public static bool operator ==(SegmentKey left, SegmentKey right)
             {
                 return left.Equals(right);
             }
 
-            [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+            [ExcludeFromCodeCoverage]
             public static bool operator !=(SegmentKey left, SegmentKey right)
             {
                 return !(left == right);

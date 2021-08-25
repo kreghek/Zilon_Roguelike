@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -11,10 +12,10 @@ namespace Zilon.Core.Persons
 {
     public class AttackActorJobProgress : IJobProgress
     {
-        private readonly ITacticalAct _tacticalAct;
+        private readonly ICombatAct _tacticalAct;
         private readonly IActor _targetActor;
 
-        public AttackActorJobProgress(IActor targetActor, ITacticalAct tacticalAct)
+        public AttackActorJobProgress(IActor targetActor, ICombatAct tacticalAct)
         {
             _targetActor = targetActor;
             _tacticalAct = tacticalAct;
@@ -171,7 +172,7 @@ namespace Zilon.Core.Persons
             }
         }
 
-        private static bool WeaponHasTag(string tag, ITacticalAct tacticalAct)
+        private static bool WeaponHasTag(string tag, ICombatAct tacticalAct)
         {
             if (tacticalAct.Equipment is null)
             {
@@ -190,7 +191,7 @@ namespace Zilon.Core.Persons
         {
             if (currentJobs is null)
             {
-                throw new System.ArgumentNullException(nameof(currentJobs));
+                throw new ArgumentNullException(nameof(currentJobs));
             }
 
             var modifiedJobs = new List<IJob>();

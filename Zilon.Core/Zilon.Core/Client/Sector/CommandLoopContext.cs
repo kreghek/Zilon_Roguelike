@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.PersonModules;
 using Zilon.Core.Players;
@@ -21,7 +22,12 @@ namespace Zilon.Core.Client.Sector
             _animationBlockerService = animationBlockerService;
         }
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        private static bool GetControlState(IActorTaskControlSwitcher controlSwitcher)
+        {
+            return controlSwitcher.CurrentControl != ActorTaskSourceControl.Human;
+        }
+
+        [ExcludeFromCodeCoverage]
         public bool HasNextIteration
         {
             get
@@ -38,11 +44,20 @@ namespace Zilon.Core.Client.Sector
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public bool CanPlayerGiveCommand
         {
             get
             {
+                if (_humanActorTaskSource is IActorTaskControlSwitcher controlSwitcher)
+                {
+                    var isPlayerActorControlledByBot = GetControlState(controlSwitcher);
+                    if (isPlayerActorControlledByBot)
+                    {
+                        return false;
+                    }
+                }
+
                 var canIndentoToTaskSource = _humanActorTaskSource.CanIntent();
                 var animationsAreComplete = !_animationBlockerService.HasBlockers;
                 return canIndentoToTaskSource && animationsAreComplete;

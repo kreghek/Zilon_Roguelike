@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="BenchmarkDotNet" Version="0.12.1" />
+        <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
         <PackageReference Include="JetBrains.Annotations">
-            <Version>2021.1.0</Version>
+            <Version>2021.2.0</Version>
             <ExcludeAssets>runtime; build</ExcludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3">

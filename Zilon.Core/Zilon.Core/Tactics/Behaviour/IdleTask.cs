@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Tactics.Behaviour.Bots;
+﻿using System;
+
+using Zilon.Core.Tactics.Behaviour.Bots;
 using Zilon.Core.World;
 
 namespace Zilon.Core.Tactics.Behaviour
@@ -24,12 +26,12 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             if (actor is null)
             {
-                throw new System.ArgumentNullException(nameof(actor));
+                throw new ArgumentNullException(nameof(actor));
             }
 
             if (decisionSource is null)
             {
-                throw new System.ArgumentNullException(nameof(decisionSource));
+                throw new ArgumentNullException(nameof(decisionSource));
             }
 
             _counter = decisionSource.SelectIdleDuration(IDLE_MIN, IDLE_MAX);
@@ -39,7 +41,7 @@ namespace Zilon.Core.Tactics.Behaviour
         {
             if (actor is null)
             {
-                throw new System.ArgumentNullException(nameof(actor));
+                throw new ArgumentNullException(nameof(actor));
             }
 
             _counter = duration;

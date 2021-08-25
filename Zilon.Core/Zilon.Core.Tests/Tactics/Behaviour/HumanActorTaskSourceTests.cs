@@ -22,17 +22,22 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
     /// Тест проверяет, что источник намерений генерирует задачу после указания целевого узла.
     /// По окончанию задачи на перемещение должен выдавать пустые задачи.
     /// </summary>
+    /// <remarks>
+    /// - If tests are parallel they fail in containers of CI/CD randomly. So we set NonParallelizableAttribute implicitly.
+    /// May be this situation occured because CI/CD has few CPU resources.
+    /// </remarks>
     [TestFixture]
     // Ограничение по времени добавлено на случай, если эта тут наступит бесконечное ожидание.
     // Бесконечное ожидание задачи в тестах - признак ошибки.
     [Timeout(1000)]
+    [NonParallelizable]
     public class HumanActorTaskSourceTests
     {
         /// <summary>
         /// Тест проверяет сброс ожидания задачи.
         /// </summary>
         [Test]
-        public async Task DropIntention_WaitTask_InteroptsTaskWaiting()
+        public async Task DropIntention_WaitTask_InteruptsTaskWaiting()
         {
             // ARRANGE
 
@@ -57,7 +62,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             };
 
             // ASSERT
-            act.Should().Throw<TaskCanceledException>();
+            await act.Should().ThrowAsync<TaskCanceledException>().ConfigureAwait(false);
         }
 
         /// <summary>

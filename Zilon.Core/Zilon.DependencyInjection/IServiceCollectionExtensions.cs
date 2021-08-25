@@ -8,9 +8,9 @@ namespace Zilon.DependencyInjection
 {
     public static class IServiceCollectionExtensions
     {
-        public static void RegisterStaticObjectFactoringFromCore(this IServiceCollection serviceRegistry)
+        public static void RegisterStaticObjectFactoringFromCore(this IServiceCollection serviceCollection)
         {
-            serviceRegistry.AddSingleton<IStaticObjectFactoryCollector>(diFactory =>
+            serviceCollection.AddSingleton<IStaticObjectFactoryCollector>(diFactory =>
             {
                 var factories = diFactory.GetServices<IStaticObjectFactory>().ToArray();
                 return new StaticObjectFactoryCollector(factories);
@@ -21,7 +21,7 @@ namespace Zilon.DependencyInjection
                 ImplementationGatheringHelper.GetImplementations<IStaticObjectFactory>(coreAssembly);
             foreach (var factoryType in allStaticObjectFactoryTypes)
             {
-                serviceRegistry.AddSingleton(typeof(IStaticObjectFactory), factoryType);
+                serviceCollection.AddSingleton(typeof(IStaticObjectFactory), factoryType);
             }
         }
     }

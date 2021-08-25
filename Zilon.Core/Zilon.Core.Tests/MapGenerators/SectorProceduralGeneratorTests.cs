@@ -28,7 +28,7 @@ namespace Zilon.Core.Tests.MapGenerators
         /// Тест проверяет, что для различных карт в виде змейки генерация работает без ошибок.
         /// </summary>
         [Test]
-        public void Create_DifferentMaps_NoExceptions()
+        public async Task Create_DifferentMaps_NoExceptions()
         {
             // ARRANGE
             var roomGenerator = new TestSnakeRoomGenerator();
@@ -45,7 +45,7 @@ namespace Zilon.Core.Tests.MapGenerators
             };
 
             // ASSERT
-            act.Should().NotThrow();
+            await act.Should().NotThrowAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace Zilon.Core.Tests.MapGenerators
         private static ISectorGenerator CreateGenerator(
             IMapFactory mapFactory)
         {
-            var staticObstaclesGeneratorMock = new Mock<IStaticObstaclesGenerator>();
+            var staticObstaclesGeneratorMock = new Mock<IStaticObjectsGenerator>();
             var staticObstaclesGenerator = staticObstaclesGeneratorMock.Object;
 
             var monsterGeneratorMock = new Mock<IMonsterGenerator>();

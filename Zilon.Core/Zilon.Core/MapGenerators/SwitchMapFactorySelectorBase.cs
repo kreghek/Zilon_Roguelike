@@ -1,4 +1,6 @@
-﻿using Zilon.Core.Schemes;
+﻿using System;
+
+using Zilon.Core.Schemes;
 using Zilon.Core.World;
 
 namespace Zilon.Core.MapGenerators
@@ -12,6 +14,8 @@ namespace Zilon.Core.MapGenerators
         /// Экземпляр фабрики, генерирующей карты на основе клеточного автомата.
         /// </summary>
         protected abstract IMapFactory CellularAutomatonMapFactory { get; }
+
+        protected abstract IMapFactory OpenMapFactory { get; }
 
         /// <summary>
         /// Экземпляр фабрики, генерирующий карты на основе прямоугольных комнат.
@@ -30,7 +34,7 @@ namespace Zilon.Core.MapGenerators
         {
             if (sectorNode is null)
             {
-                throw new System.ArgumentNullException(nameof(sectorNode));
+                throw new ArgumentNullException(nameof(sectorNode));
             }
 
             var sectorScheme = sectorNode.SectorScheme;
@@ -49,6 +53,9 @@ namespace Zilon.Core.MapGenerators
 
                 case SchemeSectorMapGenerator.CellularAutomaton:
                     return CellularAutomatonMapFactory;
+
+                case SchemeSectorMapGenerator.Open:
+                    return OpenMapFactory;
 
                 //TODO Прописать для всех схем конкретный генератор.
                 // После явного прописывания здесь нужно будет выбрасывать исключение.

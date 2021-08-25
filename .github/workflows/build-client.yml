@@ -1,0 +1,77 @@
+name: Build game clients
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*.*.*'
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - master
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build:
+    name: Build client ${{ matrix.project }} ${{ matrix.configuration }} ${{ matrix.runtime }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project:
+          - Zilon.TextClient
+          - CDT.LAST.MonoGameClient
+        configuration:
+          - Release
+          - Debug
+        runtime:
+          - win-x64
+          - linux-x64
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup .NET5
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0.201'
+
+      - name: Setup .NET 3.1
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.nuget/packages
+          # Look to see if there is a cache hit for the corresponding requirements file
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Publish ${{ matrix.project }} ${{ matrix.configuration }} ${{ matrix.runtime }}
+        if: ${{ contains(matrix.configuration, 'Release') }}
+        run: dotnet publish Zilon.Core/${{ matrix.project }}/${{ matrix.project }}.csproj --configuration ${{ matrix.configuration }} --framework net5.0 --output bin --runtime ${{ matrix.runtime }} --self-contained true /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
+
+      - name: Publish ${{ matrix.project }} ${{ matrix.configuration }} ${{ matrix.runtime }}
+        if: ${{ contains(matrix.configuration, 'Debug') }}
+        run: dotnet publish Zilon.Core/${{ matrix.project }}/${{ matrix.project }}.csproj --configuration ${{ matrix.configuration }} --framework net5.0 --output bin --runtime ${{ matrix.runtime }} --no-self-contained
+
+      # This step is nessesary because CopySchemeCatalogToClientBin target in csproj doesn't perform in CI/CD.
+      - name: Copy scheme catalog into bin directory for ${{ matrix.project }}
+        if: ${{ contains(matrix.project, 'MonoGameClient') }}
+        run: cp -a /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes/. /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/bin/Content/Schemes/
+
+      - name: Write version to file
+        uses: DamianReeves/write-file-action@v1.0
+        with:
+          path: bin/version.txt
+          contents: |
+            ver.2.5.8.${{ github.run_number }}
+            ${{ github.sha }}
+          write-mode: overwrite
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.project }}-${{ matrix.configuration }}-${{ matrix.runtime }}
+          path: bin

@@ -26,8 +26,8 @@ namespace Zilon.Core.Persons.Auxiliary.Tests
         {
             // ARRANGE
 
-            var сonditionModuleMock = new Mock<IConditionModule>();
-            сonditionModuleMock.SetupGet(x => x.Items).Returns(Array.Empty<IPersonEffect>());
+            var сonditionModuleMock = new Mock<IConditionsModule>();
+            сonditionModuleMock.SetupGet(x => x.Items).Returns(Array.Empty<IPersonCondition>());
             var сonditionModule = сonditionModuleMock.Object;
 
             var stat = new SurvivalStat(0, 0, 1);
@@ -42,7 +42,7 @@ namespace Zilon.Core.Persons.Auxiliary.Tests
                 eventLogService);
 
             // ARRANGE
-            сonditionModuleMock.Verify(x => x.Add(It.IsAny<IPersonEffect>()));
+            сonditionModuleMock.Verify(x => x.Add(It.IsAny<IPersonCondition>()));
         }
     }
 }

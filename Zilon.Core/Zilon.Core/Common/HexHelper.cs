@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Zilon.Core.Common
@@ -161,10 +162,10 @@ namespace Zilon.Core.Common
                 R = r;
             }
 
-            public int Q { get; set; }
-            public int R { get; set; }
+            public int Q { get; }
+            public int R { get; }
 
-            [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+            [ExcludeFromCodeCoverage]
             public override int GetHashCode()
             {
                 unchecked
@@ -176,25 +177,25 @@ namespace Zilon.Core.Common
                 }
             }
 
-            [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+            [ExcludeFromCodeCoverage]
             public bool Equals(AxialCoords other)
             {
                 return Q == other.Q && R == other.R;
             }
 
-            [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+            [ExcludeFromCodeCoverage]
             public override bool Equals(object obj)
             {
                 return obj is AxialCoords coords && Equals(coords);
             }
 
-            [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+            [ExcludeFromCodeCoverage]
             public static bool operator ==(AxialCoords left, AxialCoords right)
             {
                 return left.Equals(right);
             }
 
-            [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+            [ExcludeFromCodeCoverage]
             public static bool operator !=(AxialCoords left, AxialCoords right)
             {
                 return !(left == right);

@@ -1,0 +1,41 @@
+{
+  "Name": {
+    "Ru": "Желчник",
+    "En": "Gallbladder"
+  },
+  "Hp": 10,
+  "CombatActs": [
+    {
+      "Efficient": {
+        "Dice": 6,
+        "Count": 2,
+        "Modifiers": {
+          "ResultBuff": 2
+        }
+      },
+      "Range": {
+        "Min": 1,
+        "Max": 4
+      },
+      "Effect": "Damage",
+      "Targets": "Enemy",
+      "Offence": {
+        "Type": "Tactical",
+        "Impact": "Kinetic"
+      },
+      "IsMelee": true,
+      "Tags": [
+        "slash"
+      ]
+    }
+  ],
+  "DropTableSids": [
+    "survival-medkit",
+    "default",
+    "default-evil-hour"
+  ],
+  "BaseScore": 100,
+  "Tags": [
+    "beast"
+  ]
+}

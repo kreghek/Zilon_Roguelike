@@ -16,7 +16,8 @@
           "Type": "Defeats",
           "Value": 4
         }
-      ]
+      ],
+      "MaxValue": 1
     },
     {
       "Rules": [

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-using JetBrains.Annotations;
-
 namespace Zilon.Core.Tactics
 {
     /// <summary>
@@ -20,13 +18,11 @@ namespace Zilon.Core.Tactics
         /// <summary>
         /// Контейнер, который пытались открыть.
         /// </summary>
-        [PublicAPI]
         public IStaticObject Container { get; }
 
         /// <summary>
         /// Результат открытия. <see cref="SuccessOpenContainerResult">SuccessOpenContainerResult</see>, открытие прошло успешно.
         /// </summary>
-        [PublicAPI]
         public IOpenContainerResult Result { get; }
     }
 }

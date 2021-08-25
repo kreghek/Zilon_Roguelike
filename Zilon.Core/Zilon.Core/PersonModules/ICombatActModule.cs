@@ -6,9 +6,11 @@ namespace Zilon.Core.PersonModules
 {
     public interface ICombatActModule : IPersonModule
     {
+        bool IsCombatMode { get; set; }
+
         /// <summary>
-        /// Рассчёт всех действий, используемых в бою.
+        /// Gets all available combat act.
         /// </summary>
-        IEnumerable<ITacticalAct> CalcCombatActs();
+        IEnumerable<ICombatAct> GetCurrentCombatActs();
     }
 }

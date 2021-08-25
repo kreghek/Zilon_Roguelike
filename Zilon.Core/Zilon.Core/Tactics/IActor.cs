@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Zilon.Core.Graphs;
+using Zilon.Core.MapGenerators;
 using Zilon.Core.Persons;
 using Zilon.Core.Props;
 using Zilon.Core.Tactics.Behaviour;
@@ -31,6 +32,12 @@ namespace Zilon.Core.Tactics
         IActorTaskSource<ISectorTaskSourceContext> TaskSource { get; }
 
         /// <summary>
+        /// Форсированное перемещение актёра в указанный узел карты.
+        /// </summary>
+        /// <param name="targetNode"> Целевой узел карты. </param>
+        void ForcedMoveToNode(IGraphNode targetNode);
+
+        /// <summary>
         /// Добыча ресурса из залежей.
         /// </summary>
         /// <param name="deposit"> Целевые залежи. </param>
@@ -43,12 +50,20 @@ namespace Zilon.Core.Tactics
         /// <param name="targetNode"> Целевой узел карты. </param>
         void MoveToNode(IGraphNode targetNode);
 
+        void MoveToOtherSector(ISector sector, SectorTransition sectorTransition);
+
         /// <summary>
         /// Открытие контейнера актёром.
         /// </summary>
         /// <param name="container"> Целевой контейнер в секторе. </param>
         /// <param name="method"> Метод открытия контейнера. </param>
         void OpenContainer(IStaticObject container, IOpenContainerMethod method);
+
+        /// <summary>
+        /// Method-wrapper (mb temp) to raise event.
+        /// Event are nesessary to run animation and sound in clients.
+        /// </summary>
+        void PerformTransfer();
 
         void SwitchTaskSource(IActorTaskSource<ISectorTaskSourceContext> actorTaskSource);
 
@@ -57,14 +72,14 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="targetNode"> Узел карты, в которую прозошло действие. </param>
         /// <param name="tacticalAct"> Тактическое действие, совершаемое над целью. </param>
-        void UseAct(IGraphNode targetNode, ITacticalAct tacticalAct);
+        void UseAct(IGraphNode targetNode, ICombatAct tacticalAct);
 
         void UseProp(IProp usedProp);
 
         /// <summary>
         /// Происходит, когда актёр переместился.
         /// </summary>
-        event EventHandler? Moved;
+        event EventHandler<ActorMoveEventArgs>? Moved;
 
         /// <summary>
         /// Происходит, когда актёр открывает контейнер в секторе.
@@ -90,5 +105,8 @@ namespace Zilon.Core.Tactics
         /// Выстреливает, когда актёр использует предмет.
         /// </summary>
         event EventHandler<UsedPropEventArgs>? UsedProp;
+
+        event EventHandler? PropTransferPerformed;
+        event EventHandler? BeginTransitionToOtherSector;
     }
 }

@@ -1,0 +1,69 @@
+{
+  "FractionSid": "player",
+  "Name": {
+    "Ru": "Вор",
+    "En": "Thief"
+  },
+  "Description": {
+    "Ru": "Ваш отец был вором. Это был его договор с обществом.\n\"Если я что-то украл, значит я заслужил это по праву.\"\nВы глубоко прониклись этой философией. Теперь вы на месте своего отца.",
+    "En": "Your father was a thief. It was his contract with society.\n\" If I stole something, then I deserve it by right.\"\nYou deeply imbued with this philosophy. Now you are in your father's place."
+  },
+  "HeadEquipments": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "knitted-hat",
+        "Weight": 1
+      }
+    ]
+  },
+  "BodyEquipments": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "work-clothes",
+        "Weight": 1
+      }
+    ]
+  },
+  "MainHandEquipments": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "knife",
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "cudgel",
+        "Weight": 1
+      }
+    ]
+  },
+  "InventoryProps": {
+    "Rolls": 1,
+    "Records": [
+      {
+        "SchemeSid": "med-kit",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "packed-food",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": "water-bottle",
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Weight": 1
+      },
+      {
+        "SchemeSid": null,
+        "Weight": 4
+      }
+    ]
+  }
+}

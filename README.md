@@ -11,6 +11,8 @@
 [![Coverage Status](https://coveralls.io/repos/github/kreghek/Zilon_Roguelike/badge.svg?branch=master)](https://coveralls.io/github/kreghek/Zilon_Roguelike?branch=master)
 [![codecov](https://codecov.io/gh/kreghek/Zilon_Roguelike/branch/master/graph/badge.svg?token=mSMGtnXFOZ)](https://codecov.io/gh/kreghek/Zilon_Roguelike)
 ![GitHub branch checks state](https://img.shields.io/github/checks-status/kreghek/Zilon_Roguelike/master?label=Github%20Actions)
+[![CodeScene Code Health](https://codescene.io/projects/13325/status-badges/code-health)](https://codescene.io/projects/13325)
+[![CodeScene System Mastery](https://codescene.io/projects/13325/status-badges/system-mastery)](https://codescene.io/projects/13325)
 
 ![Poster A3 horizontal](https://user-images.githubusercontent.com/2405499/58764985-41faf600-8598-11e9-9220-277923ca7f5b.png)
 
@@ -45,22 +47,19 @@ GamePlay Video
 
 We strive to launch a project with one button. But now there are a few manual steps that must be performed before the game can be launched from the editor.
 
-1. **Clone the repository https://github.com/kreghek/Zilon_Roguelike_Plugins into Zilon.Client/Assets/ Plugins.**
-[Zenject](https://github.com/modesttree/Zenject) and [SQLiter](https://assetstore.unity.com/packages/tools/integration/sqliter-20660) must be installed into the `Assets/Plugins` folder. The fastest way is to clone the https://github.com/kreghek/Zilon_Roguelike_Plugins repository into `Assets/Plugins`. The project started before there was a package manager in Unity. And I didn't want to store other assets' source code inside my own repository. Perhaps someday these dependencies will be loaded through the package manager.
-
-2. **Run the publish_core_to_plugins.bat script.**
-Into the same `Assets/Plugins` folder, you need to publish the core functionality developed in a separate *Zilon.Core* project. The easiest way is to run the `publish_core_to_plugins.bat` script in the root of the project.
-
-3. *Optional*. **Set the `ZILON_LIV_SCHEME_CATALOG` environment variable to specify the full path to `\Zilon.Client\Assets\Resources\Schemes`**.
+1. *Optional*. **Set the `ZILON_LIV_SCHEME_CATALOG` environment variable to specify the full path to `\Zilon.Client\Assets\Resources\Schemes`**.
 This is needed to run tests in Zilon.Core. The path must be complete, that is, it must begin, for example, with `C:\MyProjects\Zilon_Roguelike` for Windows and `/home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes` for Linux.
 
-4. *Optional*. **Install the Specflow for Visual Studio 2019 extension**.
+2. *Optional*. **Install the Test Generator NUnit extension for Visual Studio 2019**.
+It will help to create NUnit tests from contextual menu in visual studio.
+
+3. *Optional*. **Install the Specflow for Visual Studio 2019 extension**.
 It is necessary for convenient editing of specifications, written in *Gherkin*. Unfortunately, we do not see a way to install this tool within the project yet. Easiest way to find it in `Visual Studio / Extensions / Manage Extensions`
 
-5. **Open `Assets/Zilon/Scenes/globe-selection` scene**.
-The game must start from this or from `title` scenes. Because to start playing you must generate and select a game globe first. By default empty scene will be selected.
+4. *Optional*. **Install the ResX extension for Visual Studio 2019**.
+The easies way to add or change localized string and other resources in the game. See https://github.com/dotnet/ResXResourceManager.
 
-6. **Now you can click `Play` button in Unity editor**.
+5. **Now you can launch the game from Visual Studio or `bin` directory after build**.
 You are awesome!
 
 ## Contributing

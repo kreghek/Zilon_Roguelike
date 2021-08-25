@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.World
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Zilon.Core.World
 {
     /// <summary>
     /// Common metrics and restrictions of a globe. Looks like The Globe Laws.
@@ -6,13 +8,13 @@
     /// <remarks>
     /// This class only for constant values. Do not place calculation methods here.
     /// </remarks>
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverage]
     public static class GlobeMetrics
     {
         /// <summary>
         /// Duration of idle. Depends on <see cref="OneIterationLength" />.
         /// </summary>
-        public static int IdleDuration => OneIterationLength / 3;
+        public static int IdleDuration => OneIterationLength;
 
         /// <summary>
         /// Max value for any monster's move cost. Actually, lowest possible monster move speed in game.

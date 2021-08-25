@@ -40,7 +40,7 @@ namespace Zilon.Core.Client
         public event EventHandler? ActiveActorChanged;
 
         /// <inheritdoc />
-        public ITacticalAct? TacticalAct { get; set; }
+        public ICombatAct? TacticalAct { get; set; }
 
         /// <inheritdoc />
         public bool CanPlayerGivesCommand => _commandPool.IsEmpty && !_animationBlockerService.HasBlockers &&

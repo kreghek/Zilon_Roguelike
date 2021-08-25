@@ -1,6 +1,6 @@
 {
   "Hp": 10,
-  "PrimaryAct": {
+  "CombatActs": [ {
     "Efficient": {
       "Dice": 3,
       "Count": 1
@@ -15,6 +15,6 @@
     },
 	"Effect": "Damage",
 	"Targets": "Enemy",
-  },
+  } ],
   "DropTableSids": [ "survival" ]
 }

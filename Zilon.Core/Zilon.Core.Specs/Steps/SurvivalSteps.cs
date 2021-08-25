@@ -94,6 +94,20 @@ namespace Zilon.Core.Specs.Steps
             FeatureContextBase.AddResourceToActor(propScheme, 1, actor);
         }
 
+        [Then(@"Актёр под эффектами (.*)")]
+        [Then(@"actor is under effects (.*)")]
+        public void ThenActorIsunderEffects(string effectNames)
+        {
+            var effectNameList = effectNames
+                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(x => x.Trim()).ToArray();
+
+            foreach (var effectName in effectNameList)
+            {
+                ThenАктёрПодЭффектом(effectName);
+            }
+        }
+
         [Then(@"Актёр под эффектом (.*)")]
         public void ThenАктёрПодЭффектом(string effectName)
         {
@@ -105,8 +119,8 @@ namespace Zilon.Core.Specs.Steps
 
             if (stat != SurvivalStatType.Undefined)
             {
-                var сondition = actor.Person.GetModule<IConditionModule>().Items
-                    .OfType<SurvivalStatHazardEffect>()
+                var сondition = actor.Person.GetModule<IConditionsModule>().Items
+                    .OfType<SurvivalStatHazardCondition>()
                     .SingleOrDefault(x => x.Type == stat);
 
                 сondition.Should().NotBeNull();
@@ -114,7 +128,8 @@ namespace Zilon.Core.Specs.Steps
             }
             else
             {
-                var сonditions = actor.Person.GetModule<IConditionModule>().Items.OfType<SurvivalStatHazardEffect>();
+                var сonditions = actor.Person.GetModule<IConditionsModule>().Items
+                    .OfType<SurvivalStatHazardCondition>();
                 сonditions.Should().BeEmpty();
             }
         }

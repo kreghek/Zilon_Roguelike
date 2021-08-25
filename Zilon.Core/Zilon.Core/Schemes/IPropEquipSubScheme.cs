@@ -17,6 +17,8 @@ namespace Zilon.Core.Schemes
         /// </summary>
         IPropArmorItemSubScheme?[]? Armors { get; }
 
+        IPropEquipRestrictions? EquipRestrictions { get; }
+
         /// <summary>
         /// Правила, которые будут срабатывать при экипировке предмета.
         /// </summary>

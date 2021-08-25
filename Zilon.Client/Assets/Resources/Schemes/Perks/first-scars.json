@@ -4,7 +4,8 @@
     "En": "First Scars"
   },
   "Description": {
-    "Ru": "Шрамы горорят о том, сколько ударов точно можно выдержать."
+    "Ru": "Шрамы говорят о том, какие удары этот человек точно выдержал.",
+    "En": "The scars tell us what kind of wounds this man has withstood."
   },
   "Levels": [
     {
@@ -19,7 +20,8 @@
           "Type": "ReceiveHits",
           "Value": 10
         }
-      ]
+      ],
+      "MaxValue": 1
     },
     {
       "Rules": [
@@ -33,7 +35,8 @@
           "Type": "ReceiveHits",
           "Value": 30
         }
-      ]
+      ],
+      "MaxValue": 1
     },
     {
       "Rules": [
@@ -47,7 +50,8 @@
           "Type": "ReceiveHits",
           "Value": 150
         }
-      ]
+      ],
+      "MaxValue": 1
     }
   ]
 }

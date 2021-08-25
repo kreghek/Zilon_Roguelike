@@ -1,4 +1,6 @@
-﻿namespace Zilon.Core.Schemes
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Zilon.Core.Schemes
 {
     /// <summary>
     /// Схема предмета.
@@ -23,7 +25,7 @@
         /// <summary>
         /// Теги предмета. Используются для описания и для некоторых правил.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+        [SuppressMessage(
             "Performance",
             "CA1819:Properties should not return arrays",
             Justification = "Свойство нужно для десериализации")]

@@ -1,0 +1,17 @@
+{
+  "Tags": [ "weapon", "mace" ],
+  "Equip": {
+    "ActSids": [
+      "bludgeon"
+    ],
+    "SlotTypes": [ "Hand" ]
+  },
+  "Name": {
+    "Ru": "Дубинка",
+	"En": "Cudgel"
+  },
+  "Description":
+  {
+    "Ru": "Просто массивное сучковатое полено,\nудобное для хвата одной рукой."
+  }
+}

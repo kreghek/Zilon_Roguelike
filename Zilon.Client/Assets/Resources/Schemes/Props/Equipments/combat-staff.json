@@ -1,0 +1,19 @@
+{
+  "Tags": [ "weapon", "staff" ],
+  "Equip": {
+    "ActSids": [
+      "swing"
+    ],
+    "SlotTypes": [ "Hand" ],
+	"EquipRestrictions": { "PropHandUsage": "TwoHanded" }
+  },
+  "Name": {
+    "En": "Combat Staff",
+    "Ru": "Боевой посох"
+  },
+  "Description":
+  {
+    "Ru": "Оружие монахов и бродяг. Прочная длинная палка.\nХорошо работает на дальних дистанциях.",
+	"En": "Weapons of monks and vagabonds. Sturdy long stick.\nWorks well over long distances."
+  },
+}

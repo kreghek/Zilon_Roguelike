@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Zilon.Bot.Players
 {
@@ -14,7 +15,7 @@ namespace Zilon.Bot.Players
 
         public ILogicStateTrigger Trigger { get; }
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public override string ToString()
         {
             return $"{Trigger}: {NextState}";

@@ -15,10 +15,14 @@
     "Effect": "Damage",
     "Targets": "Enemy",
     "HitCount": 1,
+    "IsMelee": true,
     "Offence": {
       "Type": "Fury",
       "Impact": "Kinetic",
       "ApRank": 3
-    }
+    },
+    "Tags": [
+      "pierce"
+    ]
   }
 }

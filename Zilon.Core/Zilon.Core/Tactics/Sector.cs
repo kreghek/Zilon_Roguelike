@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-
-using JetBrains.Annotations;
 
 using Zilon.Core.Diseases;
 using Zilon.Core.Graphs;
@@ -61,13 +60,18 @@ namespace Zilon.Core.Tactics
         [ExcludeFromCodeCoverage]
         public NationalUnityEventService? NationalUnityEventService { get; set; }
 
-        private void Actor_Moved(object sender, EventArgs e)
+        private void Actor_Moved(object? sender, EventArgs e)
         {
+            if (sender is null)
+            {
+                throw new InvalidOperationException("The handler can work only for instance. Sender can't be null.");
+            }
+
             var actor = (IActor)sender;
             UpdateFowData(actor);
         }
 
-        private void ActorManager_Added(object sender, ManagerItemsChangedEventArgs<IActor> e)
+        private void ActorManager_Added(object? sender, ManagerItemsChangedEventArgs<IActor> e)
         {
             foreach (var actor in e.Items)
             {
@@ -83,14 +87,15 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void ActorManager_Remove(object sender, ManagerItemsChangedEventArgs<IActor> e)
+        private void ActorManager_Remove(object? sender, ManagerItemsChangedEventArgs<IActor> e)
         {
-            // Когда актёры удалены из сектора, мы перестаём мониторить события на них.
             foreach (var actor in e.Items)
             {
                 ReleaseNodes(actor, Map);
 
-                if (actor.Person.GetModuleSafe<ISurvivalModule>() != null)
+                // Stop to handle actors' events then they leaves the sector.
+                var survivalModule = actor.Person.GetModuleSafe<ISurvivalModule>();
+                if (survivalModule != null)
                 {
                     actor.Person.GetModule<ISurvivalModule>().Dead -= ActorState_Dead;
                 }
@@ -99,7 +104,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void ActorState_Dead(object sender, EventArgs e)
+        private void ActorState_Dead(object? sender, EventArgs e)
         {
             var actor = ActorManager.Items.Single(x =>
                 ReferenceEquals(x.Person.GetModuleSafe<ISurvivalModule>(), sender));
@@ -169,9 +174,15 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void LootContainer_ItemsRemoved(object sender, PropStoreEventArgs e)
+        private void LootContainer_ItemsRemoved(object? sender, PropStoreEventArgs e)
         {
+            if (sender is null)
+            {
+                throw new InvalidOperationException("The handler can work only for instance. Sender can't be null.");
+            }
+
             var container = (IPropContainer)sender;
+
             if (!container.Content.CalcActualItems().Any())
             {
                 var staticObject =
@@ -188,7 +199,7 @@ namespace Zilon.Core.Tactics
                 throw new ArgumentNullException(nameof(actor));
             }
 
-            if (!(actor.Person is MonsterPerson monsterPerson))
+            if (actor.Person is not MonsterPerson monsterPerson)
             {
                 return;
             }
@@ -223,7 +234,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void StaticObjectManager_Added(object sender, ManagerItemsChangedEventArgs<IStaticObject> e)
+        private void StaticObjectManager_Added(object? sender, ManagerItemsChangedEventArgs<IStaticObject> e)
         {
             foreach (var container in e.Items)
             {
@@ -239,7 +250,7 @@ namespace Zilon.Core.Tactics
             }
         }
 
-        private void StaticObjectManager_Remove(object sender, ManagerItemsChangedEventArgs<IStaticObject> e)
+        private void StaticObjectManager_Remove(object? sender, ManagerItemsChangedEventArgs<IStaticObject> e)
         {
             foreach (var container in e.Items)
             {
@@ -265,7 +276,7 @@ namespace Zilon.Core.Tactics
                     continue;
                 }
 
-                var combatActs = combatActModule.CalcCombatActs();
+                var combatActs = combatActModule.GetCurrentCombatActs();
 
                 foreach (var act in combatActs)
                 {
@@ -278,7 +289,7 @@ namespace Zilon.Core.Tactics
         {
             foreach (var actor in ActorManager.Items.ToArray())
             {
-                var сonditions = actor.Person.GetModuleSafe<IConditionModule>();
+                var сonditions = actor.Person.GetModuleSafe<IConditionsModule>();
 
                 if (сonditions is null)
                 {
@@ -293,7 +304,7 @@ namespace Zilon.Core.Tactics
                 // Items изменяется. Они должны падать, если убрать ToArray и выполняться, если его вернуть.
                 foreach (var сondition in сonditions.Items.ToArray())
                 {
-                    if (сondition is ISurvivalStatEffect actorEffect &&
+                    if (сondition is ISurvivalStatCondition actorEffect &&
                         actor.Person.GetModuleSafe<ISurvivalModule>() != null)
                     {
                         actorEffect.Apply(actor.Person.GetModule<ISurvivalModule>());

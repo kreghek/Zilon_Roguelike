@@ -39,8 +39,7 @@ namespace Zilon.Core.Tests.Commands
                     Consumable = true,
                     CommonRules = new[]
                     {
-                        new ConsumeCommonRule(ConsumeCommonRuleType.Health, PersonRuleLevel.Lesser,
-                            PersonRuleDirection.Positive)
+                        new ConsumeCommonRule(ConsumeCommonRuleType.Health, PersonRuleLevel.Lesser)
                     }
                 }
             };
@@ -77,6 +76,84 @@ namespace Zilon.Core.Tests.Commands
 
             // ASSERT
             canExecute.IsSuccess.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Тест проверяет, что можно экипировать двуручник в слот основной руки.
+        /// </summary>
+        [Test]
+        public void CanExecute_SelectTwoHandedAndMainHandSlot_ReturnsTrue()
+        {
+            // ARRANGE
+            var propScheme = new TestPropScheme
+            {
+                Equip = new TestPropEquipSubScheme
+                {
+                    SlotTypes = new[]
+                    {
+                        EquipmentSlotTypes.Hand
+                    },
+                    EquipRestrictions = new TestPropEquipRestrictions
+                    {
+                        PropHandUsage = PropHandUsage.TwoHanded
+                    }
+                }
+            };
+            var resource = new Equipment(propScheme);
+
+            var equipmentViewModelMock = new Mock<IPropItemViewModel>();
+            equipmentViewModelMock.SetupGet(x => x.Prop).Returns(resource);
+            var equipmentViewModel = equipmentViewModelMock.Object;
+
+            _inventoryStateMock.SetupGet(x => x.SelectedProp).Returns(equipmentViewModel);
+
+            var command = ServiceProvider.GetRequiredService<EquipCommand>();
+            command.SlotIndex = 0;
+
+            // ACT
+            var canExecute = command.CanExecute();
+
+            // ASSERT
+            canExecute.IsSuccess.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Тест проверяет, что нельзя экипировать двуручник в слот дополнительной руки.
+        /// </summary>
+        [Test]
+        public void CanExecute_SelectTwoHandedAndOffHandSlot_ReturnsFalse()
+        {
+            // ARRANGE
+            var propScheme = new TestPropScheme
+            {
+                Equip = new TestPropEquipSubScheme
+                {
+                    SlotTypes = new[]
+                    {
+                        EquipmentSlotTypes.Hand
+                    },
+                    EquipRestrictions = new TestPropEquipRestrictions
+                    {
+                        PropHandUsage = PropHandUsage.TwoHanded
+                    }
+                }
+            };
+            var resource = new Equipment(propScheme);
+
+            var equipmentViewModelMock = new Mock<IPropItemViewModel>();
+            equipmentViewModelMock.SetupGet(x => x.Prop).Returns(resource);
+            var equipmentViewModel = equipmentViewModelMock.Object;
+
+            _inventoryStateMock.SetupGet(x => x.SelectedProp).Returns(equipmentViewModel);
+
+            var command = ServiceProvider.GetRequiredService<EquipCommand>();
+            command.SlotIndex = 1;
+
+            // ACT
+            var canExecute = command.CanExecute();
+
+            // ASSERT
+            canExecute.IsSuccess.Should().BeFalse();
         }
 
         /// <summary>

@@ -4,10 +4,15 @@
     "ActSids": [
       "pierce"
     ],
-    "SlotTypes": [ "Hand" ]
+    "SlotTypes": [ "Hand" ],
+	"EquipRestrictions": { "PropHandUsage": "TwoHanded" }
   },
   "Name": {
     "Ru": "Племенное копьё",
 	"En": "Tribal spear"
+  },
+  "Description":
+  {
+    "Ru": "Древковое оружие. Некоторые приматы используют\nтакие острые палки для охоты."
   }
 }

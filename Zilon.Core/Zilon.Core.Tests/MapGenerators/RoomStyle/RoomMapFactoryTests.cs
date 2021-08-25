@@ -29,7 +29,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         [TestCase(8674)]
         [TestCase(1000)]
         [Parallelizable]
-        public void Create_RealRoomRandom_NoExceptions(int diceSeed)
+        public async Task Create_RealRoomRandom_NoExceptions(int diceSeed)
         {
             // ARRANGE
             var leanerDice = new LinearDice(diceSeed);
@@ -48,7 +48,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             };
 
             // ARRANGE
-            act.Should().NotThrow();
+            await act.Should().NotThrowAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
         /// Тест проверяет, что карта из цепочки комнат строится без ошибок.
         /// </summary>
         [Test]
-        public void Create_SimpleSnakeMaze_NoExceptions()
+        public async Task Create_SimpleSnakeMaze_NoExceptions()
         {
             var roomGenerator = new TestSnakeRoomGenerator();
             var factory = new RoomMapFactory(roomGenerator);
@@ -99,7 +99,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             };
 
             // ARRANGE
-            act.Should().NotThrow();
+            await act.Should().NotThrowAsync().ConfigureAwait(false);
         }
 
         private static ISectorSubScheme CreateSectorScheme()

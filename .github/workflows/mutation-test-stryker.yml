@@ -20,10 +20,10 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '3.1.x'
+        dotnet-version: '5.0.201'
     - name: Setup Stryker
       run: |
-        dotnet tool install -g dotnet-stryker --version 0.22.0
+        dotnet tool install -g dotnet-stryker --version 0.22.4
     - name: Kill the mutants!
       env:
         ZILON_LIV_SCHEME_CATALOG: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes

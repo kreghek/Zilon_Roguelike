@@ -1,15 +1,20 @@
-﻿using Zilon.Core.Persons;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
+using Zilon.Core.Persons;
 
 namespace Zilon.Core.Tactics.ActorInteractionEvents
 {
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverage]
     public class DodgeActorInteractionEvent : ActorInteractionEventBase
     {
-        public DodgeActorInteractionEvent(IActor actor, IActor targetActor, PersonDefenceItem personDefenceItem) :
+        public DodgeActorInteractionEvent(IActor actor, IActor targetActor, PersonDefenceItem personDefenceItem,
+            ActDescription usedActDescription) :
             base(actor)
         {
-            TargetActor = targetActor ?? throw new System.ArgumentNullException(nameof(targetActor));
-            PersonDefenceItem = personDefenceItem ?? throw new System.ArgumentNullException(nameof(personDefenceItem));
+            TargetActor = targetActor ?? throw new ArgumentNullException(nameof(targetActor));
+            PersonDefenceItem = personDefenceItem ?? throw new ArgumentNullException(nameof(personDefenceItem));
+            UsedActDescription = usedActDescription;
         }
 
         public int FactToHitRoll { get; internal set; }
@@ -17,5 +22,6 @@ namespace Zilon.Core.Tactics.ActorInteractionEvents
         public int SuccessToHitRoll { get; internal set; }
 
         public IActor TargetActor { get; }
+        public ActDescription UsedActDescription { get; }
     }
 }

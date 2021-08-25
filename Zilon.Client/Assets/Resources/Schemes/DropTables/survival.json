@@ -2,19 +2,7 @@
   "Rolls": 5,
   "Records": [
     {
-      "SchemeSid": "kalin-cheese",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 5
-    },
-    {
-      "SchemeSid": "tomaton",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 4
-    },
-    {
-      "SchemeSid": "packed-food",
+      "SchemeSid": "raw-meat",
       "MinCount": 1,
       "MaxCount": 1,
       "Weight": 2
@@ -26,61 +14,7 @@
       "Weight": 3
     },
     {
-      "SchemeSid": "northerner-ale",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 3
-    },
-    {
-      "SchemeSid": "med-kit",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 6
-    },
-    {
-      "SchemeSid": "acid",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 1
-    },
-    {
-      "SchemeSid": "dirty-water",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 1
-    },
-    {
-      "SchemeSid": "ethanol",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 1
-    },
-    {
-      "SchemeSid": "potatus",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 1
-    },
-    {
-      "SchemeSid": "raw-meat",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 1
-    },
-    {
-      "SchemeSid": "vege-milk",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 1
-    },
-    {
-      "SchemeSid": "roast",
-      "MinCount": 1,
-      "MaxCount": 1,
-      "Weight": 1
-    },
-    {
-      "SchemeSid": "stew",
+      "SchemeSid": "gall-gland",
       "MinCount": 1,
       "MaxCount": 1,
       "Weight": 1

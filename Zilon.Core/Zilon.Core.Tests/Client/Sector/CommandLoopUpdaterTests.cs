@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,8 +14,12 @@ using Zilon.Core.Commands;
 
 namespace Zilon.Core.Client.Sector.Tests
 {
+    /// <remarks>
+    /// - If tests are parallel they fail in containers of CI/CD randomly. So we set NonParallelizableAttribute implicitly.
+    /// May be this situation occured because CI/CD has few CPU resources.
+    /// </remarks>
     [TestFixture]
-    [Parallelizable(ParallelScope.All)]
+    [Timeout(5000)]
     public class CommandLoopUpdaterTests
     {
         /// <summary>
@@ -23,7 +29,6 @@ namespace Zilon.Core.Client.Sector.Tests
         /// 3. Command processing loop pops the command from pool and executes it.
         /// </summary>
         [Test]
-        [Timeout(5000)]
         public async Task StartAsync_CommandInPoolAfterStart_ExecutesCommand()
         {
             // ARRANGE
@@ -33,7 +38,7 @@ namespace Zilon.Core.Client.Sector.Tests
             contextMock.SetupGet(x => x.CanPlayerGiveCommand).Returns(true);
             var context = contextMock.Object;
 
-            var tcs = new TaskCompletionSource<bool>();
+            var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
 
             var testTask = tcs.Task;
 
@@ -68,7 +73,6 @@ namespace Zilon.Core.Client.Sector.Tests
         /// 3. Wait until Execute() called.
         /// </summary>
         [Test]
-        [Timeout(5000)]
         public async Task StartAsync_CommandInPoolBeforeStart_ExecutesCommand()
         {
             // ARRANGE
@@ -78,7 +82,7 @@ namespace Zilon.Core.Client.Sector.Tests
             contextMock.SetupGet(x => x.CanPlayerGiveCommand).Returns(true);
             var context = contextMock.Object;
 
-            var tcs = new TaskCompletionSource<bool>();
+            var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
             var waitCommandExecutedTask = tcs.Task;
 
             var commandMock = new Mock<ICommand>();
@@ -107,7 +111,6 @@ namespace Zilon.Core.Client.Sector.Tests
         /// The test checks the event of the command processed was raised after command executed.
         /// </summary>
         [Test]
-        [Timeout(5000)]
         public async Task StartAsync_CommandInPoolBeforeStart_RaisesCompleteCommandEvent()
         {
             // ARRANGE
@@ -117,7 +120,7 @@ namespace Zilon.Core.Client.Sector.Tests
             contextMock.SetupGet(x => x.CanPlayerGiveCommand).Returns(true);
             var context = contextMock.Object;
 
-            var tcs = new TaskCompletionSource<bool>();
+            var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
             var eventTask = tcs.Task;
 
             var commandMock = new Mock<ICommand>();
@@ -151,7 +154,6 @@ namespace Zilon.Core.Client.Sector.Tests
         /// execute.
         /// </summary>
         [Test]
-        [Timeout(5000)]
         public async Task StartAsync_CommandIsRepeatableOnce_ExecutesCommandTwice()
         {
             // ARRANGE
@@ -161,7 +163,7 @@ namespace Zilon.Core.Client.Sector.Tests
             contextMock.SetupGet(x => x.CanPlayerGiveCommand).Returns(true);
             var context = contextMock.Object;
 
-            var tcs = new TaskCompletionSource<bool>();
+            var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
             var waitCommandExecutedTask = tcs.Task;
 
             var repeatIteration = 0;
@@ -201,7 +203,6 @@ namespace Zilon.Core.Client.Sector.Tests
         /// The test checks the event of the command processed was raised then the command throws exception.
         /// </summary>
         [Test]
-        [Timeout(5000)]
         public async Task StartAsync_CommandThrowsInvalidOperationException_RaisesErrorOccuredEvent()
         {
             // ARRANGE
@@ -211,7 +212,7 @@ namespace Zilon.Core.Client.Sector.Tests
             contextMock.SetupGet(x => x.CanPlayerGiveCommand).Returns(true);
             var context = contextMock.Object;
 
-            var tcs = new TaskCompletionSource<bool>();
+            var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
             var eventWasInvokedTask = tcs.Task;
 
             var commandMock = new Mock<ICommand>();
@@ -222,7 +223,7 @@ namespace Zilon.Core.Client.Sector.Tests
             commandPool.Push(command);
 
             var commandLoopUpdater = new CommandLoopUpdater(context, commandPool);
-            ErrorOccuredEventArgs expectedRaisedErrorArgs = null;
+            ErrorOccuredEventArgs? expectedRaisedErrorArgs = null;
             var raiseCount = 0;
             commandLoopUpdater.ErrorOccured += (s, e) =>
             {
@@ -249,38 +250,97 @@ namespace Zilon.Core.Client.Sector.Tests
             raiseCount.Should().Be(1);
         }
 
+        [Test]
+        public async Task StopAsync_StopAfterStart_CommandsAreNotRequestedAfterStop()
+        {
+            // ARRANGE
+
+            var contextMock = new Mock<ICommandLoopContext>();
+            contextMock.SetupGet(x => x.HasNextIteration).Returns(true);
+            contextMock.SetupGet(x => x.CanPlayerGiveCommand).Returns(true);
+            var context = contextMock.Object;
+
+            var command = Mock.Of<ICommand>();
+
+            var commandPoolMock = new Mock<ICommandPool>();
+            var semaphore = new SemaphoreSlim(0, 1);
+            commandPoolMock.Setup(x => x.Pop()).Returns(() =>
+            {
+                Task.Delay(100).Wait();
+                semaphore.Release();
+                return command;
+            });
+            var commandPool = commandPoolMock.Object;
+
+            var commandLoop = new CommandLoopUpdater(context, commandPool);
+
+            // ACT
+            var commandLoopTask = commandLoop.StartAsync(CancellationToken.None);
+            AggregateException? commandLoopTaskException = null;
+
+            await semaphore.WaitAsync().ConfigureAwait(false);
+
+            await commandLoop.StopAsync().ConfigureAwait(false);
+
+            Func<Task> act = async () =>
+            {
+                await commandLoopTask.ContinueWith(task => commandLoopTaskException = task.Exception,
+                    TaskContinuationOptions.OnlyOnFaulted).ConfigureAwait(false);
+            };
+
+            // ASSERT
+            commandPoolMock.Verify(x => x.Pop(), Times.AtMost(2));
+
+            await act.Should().ThrowAsync<TaskCanceledException>().ConfigureAwait(false);
+            commandLoopTaskException.Should().BeNull();
+        }
+
         private sealed class TestCommandPool : ICommandPool
         {
-            private readonly object _lockObject;
+            private readonly SemaphoreSlim _semaphore;
 
-            private ICommand _storedCommand;
+            private ICommand? _storedCommand;
 
             public TestCommandPool()
             {
-                _lockObject = new object();
+                _semaphore = new SemaphoreSlim(1, 1);
             }
 
             public bool IsEmpty { get; }
 
-            public ICommand Pop()
+            public ICommand? Pop()
             {
-                lock (_lockObject)
+                _semaphore.Wait();
+
+                try
                 {
                     var commandToPop = _storedCommand;
                     _storedCommand = null;
                     return commandToPop;
                 }
+                finally
+                {
+                    _semaphore.Release();
+                }
             }
 
             public void Push(ICommand command)
             {
-                lock (_lockObject)
+                _semaphore.Wait();
+
+                try
                 {
                     _storedCommand = command;
                 }
+                finally
+                {
+                    _semaphore.Release();
+                }
             }
 
-            public event EventHandler CommandPushed;
+            public event EventHandler? CommandPushed;
         }
     }
 }
+
+#nullable disable

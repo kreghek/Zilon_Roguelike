@@ -1,0 +1,23 @@
+{
+  "Name": {
+    "En": "Vege milk",
+	"Ru": "Растительное молоко"
+  },
+  "Description":{
+	"Ru": "Фактически, это белый мутный растительный сок с весьма специфическим запахом.\nНемного утоляет жажду.",
+	"En": "In fact, it is a white, cloudy vegetable juice with a very peculiar smell.\nIt quenches your thirst a little."
+  },
+  "Use": {
+    "Consumable": true,
+    "CommonRules": [
+      {
+        "Type": "Thirst",
+        "Level": "Normal"
+      },
+	  {
+        "Type": "Health",
+        "Level": "Lesser"
+      }
+    ]
+  }
+}

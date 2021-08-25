@@ -9,16 +9,20 @@
       "Count": 1
     },
     "Range": {
-      "Min": 1,
-      "Max": 1
+      "Min": 2,
+      "Max": 2
     },
     "Effect": "Damage",
     "Targets": "Enemy",
     "HitCount": 1,
+    "IsMelee": true,
     "Offence": {
       "Type": "Fury",
       "Impact": "Kinetic",
       "ApRank": 2
-    }
+    },
+    "Tags": [
+      "chop"
+    ]
   }
 }

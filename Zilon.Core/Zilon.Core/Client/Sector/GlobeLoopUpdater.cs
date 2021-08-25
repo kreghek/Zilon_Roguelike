@@ -1,35 +1,25 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
-
-using JetBrains.Annotations;
 
 namespace Zilon.Core.Client.Sector
 {
     public sealed class GlobeLoopUpdater : IDisposable, IGlobeLoopUpdater
     {
-        [NotNull] private readonly IAnimationBlockerService _animationBlockerService;
+        private readonly IAnimationBlockerService _animationBlockerService;
 
-        [NotNull] private readonly IGlobeLoopContext _gameLoopContext;
+        private readonly IGlobeLoopContext _gameLoopContext;
 
         private CancellationTokenSource? _cancellationTokenSource;
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public GlobeLoopUpdater(
             IGlobeLoopContext gameLoopContext,
             IAnimationBlockerService animationBlockerService)
         {
             _gameLoopContext = gameLoopContext;
             _animationBlockerService = animationBlockerService;
-        }
-
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-        public void Dispose()
-        {
-            if (_cancellationTokenSource != null)
-            {
-                _cancellationTokenSource.Dispose();
-            }
         }
 
         private async Task StartGameLoopUpdateAsync(CancellationToken cancelToken)
@@ -55,6 +45,15 @@ namespace Zilon.Core.Client.Sector
             }
         }
 
+        [ExcludeFromCodeCoverage]
+        public void Dispose()
+        {
+            if (_cancellationTokenSource != null)
+            {
+                _cancellationTokenSource.Dispose();
+            }
+        }
+
         public bool IsStarted { get; private set; }
 
         public event EventHandler<ErrorOccuredEventArgs>? ErrorOccured;
@@ -74,13 +73,17 @@ namespace Zilon.Core.Client.Sector
             IsStarted = true;
         }
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public void Stop()
         {
             if (_cancellationTokenSource != null)
             {
                 _cancellationTokenSource.Cancel();
             }
+
+            // Is started set to false if _cancellationTokenSource is null.
+            // In regular curciut IsStarted set to false in ContinueWith then update task are cancelled.
+            IsStarted = false;
         }
     }
 }

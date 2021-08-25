@@ -11,20 +11,14 @@
         "Ru": "Испытательный"
       },
       "IsStart": true,
-      "RegularMonsterSids": [
-        "rat",
-        "bat"
-      ],
-      "RareMonsterSids": null,
-      "ChampionMonsterSids": null,
-      "RegionMonsterCount": 2,
+      "RegionMonsterCount": 0,
       "TransSectorSids": [
         {
           "SectorLevelSid": "boss-sector"
         }
       ],
-      "TotalChestCount": 20,
-      "RegionChestCountRatio": 9,
+      "TotalChestCount": 0,
+      "RegionChestCountRatio": 0,
       "ChestDropTableSids": [
         "survival",
         "default"
@@ -43,27 +37,21 @@
         "Ru": "Конец Испытательного"
       },
       "RegularMonsterSids": [
-        "rat",
-        "bat"
+        "predator"
       ],
-      "RareMonsterSids": null,
-      "ChampionMonsterSids": [
-        "rat-mutant",
-        "moon-rat"
-      ],
-      "MinRegionMonsterCount": 5,
-      "RegionMonsterCount": 10,
-      "TotalChestCount": 20,
-      "RegionChestCountRatio": 9,
+      "MinRegionMonsterCount": 1,
+      "RegionMonsterCount": 1,
+      "TotalChestCount": 0,
+      "RegionChestCountRatio": 0,
       "ChestDropTableSids": [
         "survival",
         "default"
       ],
       "MapGeneratorOptions": {
         "MapGenerator": "CellularAutomaton",
-        "MapWidth": 25,
-        "MapHeight": 25,
-        "ChanceToStartAlive": 45
+        "MapWidth": 35,
+        "MapHeight": 35,
+        "ChanceToStartAlive": 35
       },
       "TransSectorSids": [
         {

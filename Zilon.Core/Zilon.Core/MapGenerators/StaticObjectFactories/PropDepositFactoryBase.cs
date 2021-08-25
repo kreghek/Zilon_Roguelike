@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using Zilon.Core.Schemes;
 using Zilon.Core.StaticObjectModules;
@@ -11,21 +12,24 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
     {
         private readonly IDropResolver _dropResolver;
         private readonly string _dropTableSchemeSid;
+        private readonly bool _isSightBlocks;
         private readonly ISchemeService _schemeService;
         private readonly string[] _toolTags;
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         protected PropDepositFactoryBase(
             string[] toolTags,
             string dropTableSchemeSid,
             PropContainerPurpose propContainerPurpose,
             ISchemeService schemeService,
-            IDropResolver dropResolver)
+            IDropResolver dropResolver,
+            bool isSightBlocks)
         {
             _toolTags = toolTags ?? throw new ArgumentNullException(nameof(toolTags));
             _dropTableSchemeSid = dropTableSchemeSid ?? throw new ArgumentNullException(nameof(dropTableSchemeSid));
             _schemeService = schemeService ?? throw new ArgumentNullException(nameof(schemeService));
             _dropResolver = dropResolver ?? throw new ArgumentNullException(nameof(dropResolver));
+            _isSightBlocks = isSightBlocks;
             Purpose = propContainerPurpose;
         }
 
@@ -33,7 +37,7 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
 
         protected abstract int ExhausingValue { get; }
 
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
         public PropContainerPurpose Purpose { get; }
 
         public IStaticObject Create(ISector sector, HexNode node, int id)
@@ -43,7 +47,7 @@ namespace Zilon.Core.MapGenerators.StaticObjectFactories
                 throw new ArgumentNullException(nameof(sector));
             }
 
-            var staticObject = new StaticObject(node, Purpose, id);
+            var staticObject = new StaticObject(node, Purpose, id, _isSightBlocks);
 
             // Все залежи изначально имеют пустой модуль контейнера.
             // Он будет заполняться по мере добычи.

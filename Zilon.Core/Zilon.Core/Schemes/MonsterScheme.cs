@@ -33,11 +33,11 @@
         public int Hp { get; private set; }
 
         /// <summary>
-        /// Основное действие монстра.
+        /// Monster combat acts.
         /// </summary>
-        [JsonConverter(typeof(ConcreteTypeConverter<TacticalActStatsSubScheme>))]
+        [JsonConverter(typeof(ConcreteTypeConverter<TacticalActStatsSubScheme?[]?>))]
         [JsonProperty]
-        public ITacticalActStatsSubScheme? PrimaryAct { get; private set; }
+        public ITacticalActStatsSubScheme?[]? CombatActs { get; private set; }
 
         /// <inheritdoc />
         [JsonProperty]
@@ -45,6 +45,6 @@
 
         /// <inheritdoc />
         [JsonProperty]
-        public float? MoveSpeedFactor { get; }
+        public float? MoveSpeedFactor { get; private set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Zilon.Core.StaticObjectModules;
 using Zilon.Core.Tactics;
@@ -19,22 +20,22 @@ namespace Zilon.Bot.Players.Triggers
         {
             if (actor is null)
             {
-                throw new System.ArgumentNullException(nameof(actor));
+                throw new ArgumentNullException(nameof(actor));
             }
 
             if (context is null)
             {
-                throw new System.ArgumentNullException(nameof(context));
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (currentState is null)
             {
-                throw new System.ArgumentNullException(nameof(currentState));
+                throw new ArgumentNullException(nameof(currentState));
             }
 
             if (strategyData is null)
             {
-                throw new System.ArgumentNullException(nameof(strategyData));
+                throw new ArgumentNullException(nameof(strategyData));
             }
 
             var staticObjectManager = context.Sector.StaticObjectManager;

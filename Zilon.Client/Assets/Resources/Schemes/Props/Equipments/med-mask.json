@@ -1,0 +1,20 @@
+{
+  "Equip": {
+    "SlotTypes": [ "Aux" ],
+    "Armors": [
+      {
+        "Impact": "Kinetic",
+        "AbsorbtionLevel": "Lesser",
+        "ArmorRank": 1
+      }
+    ]
+  },
+  "Name": {
+    "En": "Medical Mask",
+    "Ru": "Мед. маска"
+  },
+  "Description":
+  {
+    "Ru": "Многослойная полоска ткани, защищающая владельца.\nЕсли правильно её носить."
+  }
+}

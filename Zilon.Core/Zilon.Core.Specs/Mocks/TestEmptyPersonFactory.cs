@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 
 using Zilon.Core.PersonGeneration;
 using Zilon.Core.PersonModules;
 using Zilon.Core.Persons;
 using Zilon.Core.Schemes;
+using Zilon.Core.Scoring;
 
 namespace Zilon.Core.Specs.Mocks
 {
@@ -18,6 +20,8 @@ namespace Zilon.Core.Specs.Mocks
             _survivalRandomSource =
                 survivalRandomSource ?? throw new ArgumentNullException(nameof(survivalRandomSource));
         }
+
+        public IPlayerEventLogService PlayerEventLogService { get; set; }
 
         public IPerson Create(string personSchemeSid, IFraction fraction)
         {
@@ -41,7 +45,7 @@ namespace Zilon.Core.Specs.Mocks
             var equipmentModule = new EquipmentModule(personScheme.Slots);
             person.AddModule(equipmentModule);
 
-            var сonditionModule = new ConditionModule();
+            var сonditionModule = new ConditionsModule();
             person.AddModule(сonditionModule);
 
             var evolutionModule = new EvolutionModule(_schemeService);
@@ -51,9 +55,13 @@ namespace Zilon.Core.Specs.Mocks
                 сonditionModule, evolutionModule, equipmentModule);
             person.AddModule(survivalModule);
 
-            var defaultActScheme = _schemeService.GetScheme<ITacticalActScheme>(person.Scheme.DefaultAct);
-            var combatActModule =
-                new CombatActModule(defaultActScheme, equipmentModule, сonditionModule, evolutionModule);
+            var defaultActScheme = _schemeService.GetScheme<ITacticalActScheme>(person.Scheme.DefaultActs.First());
+            var defaultActSchemes = new[] { defaultActScheme };
+            var combatActModule = new CombatActModule(
+                defaultActSchemes,
+                equipmentModule,
+                сonditionModule,
+                evolutionModule);
             person.AddModule(combatActModule);
 
             var combatStatsModule = new CombatStatsModule(evolutionModule, equipmentModule);

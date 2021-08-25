@@ -1,0 +1,36 @@
+{
+  "Name": {
+    "Ru": "Удар ножом",
+    "En": "Stab"
+  },
+  "Description": {
+    "Ru": "Сильный, но долгий удар.\nМожет быть настолько сильным, что отбросит противника.\nНо чтобы дать почувстставать противнику кулак на его лице, нужно подойти поближе.\nА вам - хорошо.",
+    "En": "A strong but long hit with a hand!.\nMay be so strong that it knocks the enemy back.\nBut in order to feel the enemy's fist on his face, you need to come closer.\nAnd you are good."
+  },
+  "Stats": {
+    "Efficient": {
+      "Dice": 3,
+      "Count": 1,
+      "Modifiers": {
+        "ResultBuff": 1
+      }
+    },
+    "Range": {
+      "Min": 1,
+      "Max": 1
+    },
+    "Effect": "Damage",
+    "Targets": "Enemy",
+    "HitCount": 1,
+    "IsMelee": true,
+    "Duration": 0.75,
+    "Offence": {
+      "Type": "Tactical",
+      "Impact": "Kinetic",
+      "ApRank": 2
+    },
+    "Tags": [
+      "slash"
+    ]
+  }
+}

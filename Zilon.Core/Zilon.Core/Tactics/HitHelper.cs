@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using JetBrains.Annotations;
-
 using Zilon.Core.Components;
 using Zilon.Core.Persons;
 
@@ -34,7 +32,7 @@ namespace Zilon.Core.Tactics
         /// </summary>
         /// <param name="defenceItem"> Проверяемая оборона. </param>
         /// <returns> Возвращает число, указывающее минимальный бросок на пробитие обороны. </returns>
-        public static int CalcSuccessToHit([CanBeNull] PersonDefenceItem? defenceItem)
+        public static int CalcSuccessToHit(PersonDefenceItem? defenceItem)
         {
             // При броске в 1 - неудачная нападение, даже если нет обороны.
             // Приравнивается к обороне уровня None
