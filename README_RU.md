@@ -28,6 +28,11 @@
 - Вы подхватите болезнь, которая сильно ослабит вас, что не будет сил отбиться даже от голодной крысы.
 - Вы напишите команду "dead" в тесктовом вариенте игры.
 
+## Как поиграть
+
+- [Github releases](https://github.com/kreghek/Zilon_Roguelike/releases) - релиы стабильны и поэтому предпочтительны.
+- [Nightly build](https://nightly.link/kreghek/Zilon_Roguelike/workflows/nightly-build/master) - ночная сборка включает самые свежие изменения, но может содержать ошибки и черновые механики.
+
 ## Присоединяйтесь к нам
 
 [Группа проекта в VK](https://vk.com/last_imperial_vagabond)

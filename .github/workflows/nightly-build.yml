@@ -14,9 +14,9 @@ jobs:
           - CDT.LAST.MonoGameClient
         configuration:
           - Release
-          - Debug
         runtime:
           - win-x64
+          - linux-x64
     steps:
       - uses: actions/checkout@v2
 
@@ -39,16 +39,10 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Publish ${{ matrix.project }} ${{ matrix.configuration }} ${{ matrix.runtime }}
-        if: ${{ contains(matrix.configuration, 'Release') }}
         run: dotnet publish Zilon.Core/${{ matrix.project }}/${{ matrix.project }}.csproj --configuration ${{ matrix.configuration }} --framework net5.0 --output bin --runtime ${{ matrix.runtime }} --self-contained true /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
-
-      - name: Publish ${{ matrix.project }} ${{ matrix.configuration }} ${{ matrix.runtime }}
-        if: ${{ contains(matrix.configuration, 'Debug') }}
-        run: dotnet publish Zilon.Core/${{ matrix.project }}/${{ matrix.project }}.csproj --configuration ${{ matrix.configuration }} --framework net5.0 --output bin --runtime ${{ matrix.runtime }} --no-self-contained
 
       # This step is nessesary because CopySchemeCatalogToClientBin target in csproj doesn't perform in CI/CD.
       - name: Copy scheme catalog into bin directory for ${{ matrix.project }}
-        if: ${{ contains(matrix.project, 'MonoGameClient') }}
         run: cp -a /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes/. /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/bin/Content/Schemes/
 
       - name: Write version to file
@@ -62,5 +56,5 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.project }}-${{ matrix.configuration }}-${{ matrix.runtime }}
+          name: LAST-${{ matrix.runtime }}
           path: bin

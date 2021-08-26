@@ -34,6 +34,11 @@ Reasons why you will die:
 
 [The Rules](https://last-imperial-vagabond.github.io/LAST_IMPERIAL_VAGABOND.github.io/)
 
+## Play the game
+
+- [Github releases](https://github.com/kreghek/Zilon_Roguelike/releases) are stable so they are prefered.
+- [Nightly build](https://nightly.link/kreghek/Zilon_Roguelike/workflows/nightly-build/master) is newly but can has a bugs and a draft features.
+
 ## Join us
 
 [Project group at VK](https://vk.com/last_imperial_vagabond)
