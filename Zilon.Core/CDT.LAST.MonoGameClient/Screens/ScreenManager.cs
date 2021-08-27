@@ -8,13 +8,13 @@ namespace CDT.LAST.MonoGameClient.Screens
         {
         }
 
-        public GameSceneBase? ActiveScreen { get; set; }
+        public IScreen? ActiveScreen { get; set; }
 
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
 
-            if (ActiveScreen != null)
+            if (ActiveScreen is not null)
             {
                 ActiveScreen.Draw(gameTime);
             }
@@ -29,10 +29,10 @@ namespace CDT.LAST.MonoGameClient.Screens
                 return;
             }
 
-            if (ActiveScreen.TargetScene != null)
+            if (ActiveScreen.TargetScreen is not null)
             {
-                ActiveScreen = ActiveScreen.TargetScene;
-                ActiveScreen.TargetScene = null;
+                ActiveScreen = ActiveScreen.TargetScreen;
+                ActiveScreen.TargetScreen = null;
             }
 
             ActiveScreen.Update(gameTime);

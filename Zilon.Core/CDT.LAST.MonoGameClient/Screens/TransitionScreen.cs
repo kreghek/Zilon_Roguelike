@@ -10,7 +10,7 @@ using Zilon.Core.World;
 
 namespace CDT.LAST.MonoGameClient.Screens
 {
-    internal class TransitionScreen : GameSceneBase
+    internal class TransitionScreen : GameScreenBase
     {
         private readonly IPlayer _player;
         private readonly SpriteBatch _spriteBatch;
@@ -42,7 +42,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
                     if (playerPersonSectorNode != null)
                     {
-                        TargetScene = new MainScreen(Game, _spriteBatch);
+                        TargetScreen = new MainScreen(Game, _spriteBatch);
                         _targetSceneInitialized = true;
                     }
                 }

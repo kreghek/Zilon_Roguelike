@@ -16,7 +16,7 @@ using Zilon.Core.World;
 
 namespace CDT.LAST.MonoGameClient.Screens
 {
-    internal class GlobeSelectionScreen : GameSceneBase
+    internal class GlobeSelectionScreen : GameScreenBase
     {
         private const string START_LOCATION_SID = "intro";
 
@@ -132,7 +132,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             await RegenerateGlobeAsync().ConfigureAwait(false);
 
-            TargetScene = new MainScreen(Game, _spriteBatch);
+            TargetScreen = new MainScreen(Game, _spriteBatch);
         }
 
         private async Task RegenerateGlobeAsync()

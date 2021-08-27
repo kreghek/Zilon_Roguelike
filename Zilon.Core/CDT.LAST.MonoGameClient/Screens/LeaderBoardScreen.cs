@@ -16,7 +16,7 @@ namespace CDT.LAST.MonoGameClient.Screens
     /// <summary>
     /// The leaderboard screen displays all the results of all played users.
     /// </summary>
-    public class LeaderBoardScreen : GameSceneBase
+    internal class LeaderBoardScreen : GameScreenBase
     {
         private const int GO_TO_MAIN_MENU_BUTTON_POSITION_Y = 150;
 
@@ -29,10 +29,6 @@ namespace CDT.LAST.MonoGameClient.Screens
         private const int ROW_STEP = 50;
 
         private const int FIRST_TABLE_ROW_POSITION_Y = GO_TO_MAIN_MENU_BUTTON_POSITION_Y + ROW_STEP;
-
-        private const int SCORE_TABLE_HEADERS_ROW_OFFSET_Y = 2;
-
-        private const int TABLE_RESULTS_OFFSET_Y = 3;
 
         private const int RANK_COLUMN_WIDTH = 30;
         private const int NAME_COLUMN_WIDTH = 150;
@@ -51,7 +47,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         private readonly Color _tableHeaderColor = Color.White;
 
         private readonly Color _tableResultsColor = Color.White;
-        private readonly IUiContentStorage uiContentStorage;
+        private readonly IUiContentStorage _uiContentStorage;
 
         /// <inheritdoc />
         public LeaderBoardScreen(Game game, SpriteBatch spriteBatch)
@@ -61,14 +57,14 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             var serviceScope = ((LivGame)Game).ServiceProvider;
 
-            uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
+            _uiContentStorage = serviceScope.GetRequiredService<IUiContentStorage>();
 
             _dbContext = serviceScope.GetRequiredService<DbContext>();
 
             _goToMainMenuButton = new TextButton(
                 UiResources.MainMenuButtonTitle,
-                uiContentStorage.GetButtonTexture(),
-                uiContentStorage.GetButtonFont(),
+                _uiContentStorage.GetButtonTexture(),
+                _uiContentStorage.GetButtonFont(),
                 new Rectangle(
                     0,
                     0,
@@ -78,7 +74,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             _leaderBoardRecords = _dbContext.GetLeaderBoard(new LeaderboardLimit(limit: 10));
 
-            _font = uiContentStorage.GetButtonFont();
+            _font = _uiContentStorage.GetButtonFont();
         }
 
         /// <inheritdoc />
@@ -88,7 +84,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             _spriteBatch.Begin();
 
-            var scoresFont = uiContentStorage.GetScoresFont();
+            var scoresFont = _uiContentStorage.GetScoresFont();
             var titleSize = scoresFont.MeasureString(UiResources.LeaderboardMenuTitle);
 
             _spriteBatch.DrawString(
@@ -187,14 +183,9 @@ namespace CDT.LAST.MonoGameClient.Screens
                 _tableResultsColor);
         }
 
-        private static int GetRowVerticalPositionOffset(int indexY)
-        {
-            return FIRST_TABLE_ROW_POSITION_Y + ROW_STEP * indexY;
-        }
-
         private void GoToMainMenuButtonClickHandler(object? sender, EventArgs e)
         {
-            TargetScene = new TitleScreen(Game, _spriteBatch);
+            TargetScreen = new TitleScreen(Game, _spriteBatch);
         }
     }
 }

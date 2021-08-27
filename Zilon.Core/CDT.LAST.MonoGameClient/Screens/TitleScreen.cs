@@ -13,7 +13,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace CDT.LAST.MonoGameClient.Screens
 {
-    internal class TitleScreen : GameSceneBase
+    internal class TitleScreen : GameScreenBase
     {
         private const string TITLETEXT = "LAST IMPERIAL VAGABOND";
         private readonly GlobeSelectionScreen _globeGenerationScene;
@@ -131,12 +131,12 @@ namespace CDT.LAST.MonoGameClient.Screens
 
         private void LeaderBoardButton_OnClick(object? sender, EventArgs e)
         {
-            TargetScene = new LeaderBoardScreen(Game, _spriteBatch);
+            TargetScreen = new LeaderBoardScreen(Game, _spriteBatch);
         }
 
         private void StartButtonClickHandler(object? sender, EventArgs e)
         {
-            TargetScene = _globeGenerationScene;
+            TargetScreen = _globeGenerationScene;
         }
 
         private void SwitchLanguageButtonClickHandler(object? sender, EventArgs e)

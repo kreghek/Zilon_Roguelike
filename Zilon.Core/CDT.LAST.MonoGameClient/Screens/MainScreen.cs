@@ -29,7 +29,7 @@ using Zilon.Core.World;
 
 namespace CDT.LAST.MonoGameClient.Screens
 {
-    internal class MainScreen : GameSceneBase
+    internal class MainScreen : GameScreenBase
     {
         private const int STAT_ROW_HEIGHT = 16;
         private const int STAT_NUMS_X_POSITION = 32;
@@ -479,7 +479,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
                     HandleScreenChanging();
 
-                    TargetScene = new ScoresScreen(Game, _spriteBatch);
+                    TargetScreen = new ScoresScreen(Game, _spriteBatch);
                 }
                 else
                 {
@@ -538,7 +538,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             HandleScreenChanging();
 
             _isTransitionPerforming = true;
-            TargetScene = new TransitionScreen(Game, _spriteBatch);
+            TargetScreen = new TransitionScreen(Game, _spriteBatch);
         }
 
         private void UpdateCurrentSectorOrPerformTransition(ISector? sectorWithPlayerPerson,

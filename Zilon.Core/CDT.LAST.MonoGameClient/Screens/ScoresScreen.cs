@@ -25,7 +25,7 @@ namespace CDT.LAST.MonoGameClient.Screens
     /// <summary>
     /// Scores screen to show a user's score when a character died.
     /// </summary>
-    internal class ScoresScreen : GameSceneBase
+    internal class ScoresScreen : GameScreenBase
     {
         private const int RESTART_BUTTON_POSITION_X = 150;
 
@@ -216,7 +216,7 @@ namespace CDT.LAST.MonoGameClient.Screens
 
             _scoreManager.ResetScores();
 
-            TargetScene = new LeaderBoardScreen(Game, _spriteBatch);
+            TargetScreen = new LeaderBoardScreen(Game, _spriteBatch);
         }
 
         private void InitButtons()
