@@ -88,7 +88,7 @@ namespace CDT.LAST.MonoGameClient.Screens
             _personEffectsPanel =
                 new PersonConditionsPanel(_uiState, screenX: game.GraphicsDevice.Viewport.Bounds.Center.X, screenY: 8,
                     _uiContentStorage, uiSoundStorage,
-                    soundtrackManager, GraphicsDevice);
+                    soundtrackManager, Game.GraphicsDevice);
 
             _personEquipmentModal = new PersonPropsModalDialog(
                 _uiContentStorage,

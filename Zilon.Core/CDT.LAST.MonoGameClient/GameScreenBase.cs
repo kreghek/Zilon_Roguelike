@@ -4,23 +4,23 @@ using Microsoft.Xna.Framework;
 
 namespace CDT.LAST.MonoGameClient
 {
-
     /// <summary>
     /// This is the base class for all game scenes.
     /// </summary>
-    internal abstract class GameScreenBase : DrawableGameComponent, IScreen
+    internal abstract class GameScreenBase : IScreen
     {
         /// <summary>
         /// List of child GameComponents
         /// </summary>
         private readonly List<GameComponent> _components;
 
+        protected Game Game { get; }
+
         public GameScreenBase(Game game)
-            : base(game)
         {
             _components = new List<GameComponent>();
-            Visible = false;
-            Enabled = false;
+
+            Game = game;
         }
 
         public IScreen? TargetScreen { get; set; }
@@ -28,7 +28,7 @@ namespace CDT.LAST.MonoGameClient
         /// <summary>
         /// Allows the game component draw your content in game screen
         /// </summary>
-        public override void Draw(GameTime gameTime)
+        public virtual void Draw(GameTime gameTime)
         {
             // Draw the child GameComponents (if drawable)
             for (var i = 0; i < _components.Count; i++)
@@ -40,15 +40,13 @@ namespace CDT.LAST.MonoGameClient
                     component.Draw(gameTime);
                 }
             }
-
-            base.Draw(gameTime);
         }
 
         /// <summary>
         /// Allows the game component to update itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        public override void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
         {
             // Update the child GameComponents
             for (var i = 0; i < _components.Count; i++)
@@ -58,8 +56,6 @@ namespace CDT.LAST.MonoGameClient
                     _components[i].Update(gameTime);
                 }
             }
-
-            base.Update(gameTime);
         }
     }
 }

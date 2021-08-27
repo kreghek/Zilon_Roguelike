@@ -18,17 +18,11 @@ namespace CDT.LAST.MonoGameClient.Screens
     /// </summary>
     internal class LeaderBoardScreen : GameScreenBase
     {
-        private const int GO_TO_MAIN_MENU_BUTTON_POSITION_Y = 150;
-
         private const int BUTTON_WIDTH = 100;
 
         private const int BUTTON_HEIGHT = 20;
 
         private const int LEADERBOARD_MENU_TITLE_POSITION_Y = 50;
-
-        private const int ROW_STEP = 50;
-
-        private const int FIRST_TABLE_ROW_POSITION_Y = GO_TO_MAIN_MENU_BUTTON_POSITION_Y + ROW_STEP;
 
         private const int RANK_COLUMN_WIDTH = 30;
         private const int NAME_COLUMN_WIDTH = 150;
