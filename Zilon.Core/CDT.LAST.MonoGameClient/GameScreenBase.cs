@@ -14,14 +14,14 @@ namespace CDT.LAST.MonoGameClient
         /// </summary>
         private readonly List<GameComponent> _components;
 
-        protected Game Game { get; }
-
         public GameScreenBase(Game game)
         {
             _components = new List<GameComponent>();
 
             Game = game;
         }
+
+        protected Game Game { get; }
 
         public IScreen? TargetScreen { get; set; }
 
