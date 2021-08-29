@@ -13,7 +13,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     /// Infinite animation of transition.
     /// It may be complete only througt DropBlocker in the blocker service.
     /// </summary>
-    public sealed class ActorSectorTransitionMoveEngine : IActorStateEngine
+    internal sealed class ActorSectorTransitionMoveEngine : IActorStateEngine
     {
         private const double ANIMATION_DURATION_SECONDS = 0.5;
         private readonly ICommandBlocker _animationBlocker;

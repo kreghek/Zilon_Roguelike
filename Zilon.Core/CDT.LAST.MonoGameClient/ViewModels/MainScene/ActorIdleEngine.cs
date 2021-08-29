@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    public sealed class ActorIdleEngine : IActorStateEngine
+    internal sealed class ActorIdleEngine : IActorStateEngine
     {
         private const double IDLE_CYCLE_DURATION_SECONDS = 0.75;
         private readonly SpriteContainer _graphicsRoot;

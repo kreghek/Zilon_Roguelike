@@ -282,26 +282,33 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
         public override void Update(GameTime gameTime)
         {
-            if (_actorStateEngineList.Any())
-            {
-                var activeStateEngine = _actorStateEngineList.First();
-                activeStateEngine.Update(gameTime);
-
-                if (activeStateEngine.IsComplete)
-                {
-                    _actorStateEngineList.Remove(activeStateEngine);
-
-                    if (!_actorStateEngineList.Any())
-                    {
-                        AddStateEngine(new ActorIdleEngine(_graphicsRoot.RootSprite));
-                    }
-
-                    ResetActorRootSpritePosition();
-                }
-            }
+            HandleStateEngines(gameTime);
 
             var keyboard = Keyboard.GetState();
             _graphicsRoot.ShowOutlined = keyboard.IsKeyDown(Keys.LeftAlt) || IsGraphicsOutlined;
+        }
+
+        private void HandleStateEngines(GameTime gameTime)
+        {
+            if (!_actorStateEngineList.Any())
+            {
+                return;
+            }
+
+            var activeStateEngine = _actorStateEngineList.First();
+            activeStateEngine.Update(gameTime);
+
+            if (activeStateEngine.IsComplete)
+            {
+                _actorStateEngineList.Remove(activeStateEngine);
+
+                if (!_actorStateEngineList.Any())
+                {
+                    AddStateEngine(new ActorIdleEngine(_graphicsRoot.RootSprite));
+                }
+
+                ResetActorRootSpritePosition();
+            }
         }
 
         private void Actor_BeginTransitionToOtherSector(object? sender, EventArgs e)

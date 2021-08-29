@@ -9,7 +9,7 @@ using Zilon.Core.Persons;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 {
-    public sealed class HumanoidGraphics : SpriteContainer, IActorGraphics
+    internal sealed class HumanoidGraphics : SpriteContainer, IActorGraphics
     {
         private readonly IEquipmentModule _equipmentModule;
 

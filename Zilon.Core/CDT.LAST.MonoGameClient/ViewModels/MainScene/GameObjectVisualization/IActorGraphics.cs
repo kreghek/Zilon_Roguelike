@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 {
-    public interface IActorGraphics
+    internal interface IActorGraphics
     {
         Vector2 HitEffectPosition { get; }
         SpriteContainer RootSprite { get; }

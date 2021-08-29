@@ -9,7 +9,7 @@ namespace CDT.LAST.MonoGameClient.Engine
     /// Basic sprite entity (renderable image).
     /// https://github.com/RonenNess/MonoGame-Sprites/blob/master/MonoSprites/Source/Sprite.cs
     /// </summary>
-    public class Sprite : Renderable
+    internal class Sprite : Renderable
     {
         /// <summary>
         /// If true, will also flip rotation on X and Y axis when there's a flip.

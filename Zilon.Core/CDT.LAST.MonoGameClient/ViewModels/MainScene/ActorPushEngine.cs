@@ -9,7 +9,7 @@ using Zilon.Core.Client.Sector;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    public sealed class ActorPushEngine : IActorStateEngine
+    internal sealed class ActorPushEngine : IActorStateEngine
     {
         private const float ANIMATION_DURATION_SECONDS = 2f;
         private readonly IAnimationBlockerService _animationBlockerService;

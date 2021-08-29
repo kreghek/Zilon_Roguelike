@@ -9,7 +9,7 @@ namespace CDT.LAST.MonoGameClient.Engine
     /// Sprite that flip Y if flipped X.
     /// Used to render sprites, rotated on 90/-90 degrees.
     /// </summary>
-    public sealed class InvertedFlipXSprite : Sprite
+    internal sealed class InvertedFlipXSprite : Sprite
     {
         public InvertedFlipXSprite(Sprite copyFrom, bool includeChildren) : base(copyFrom, includeChildren)
         {
