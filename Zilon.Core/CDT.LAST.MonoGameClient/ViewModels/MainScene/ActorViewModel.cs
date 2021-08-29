@@ -288,29 +288,6 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
             _graphicsRoot.ShowOutlined = keyboard.IsKeyDown(Keys.LeftAlt) || IsGraphicsOutlined;
         }
 
-        private void HandleStateEngines(GameTime gameTime)
-        {
-            if (!_actorStateEngineList.Any())
-            {
-                return;
-            }
-
-            var activeStateEngine = _actorStateEngineList.First();
-            activeStateEngine.Update(gameTime);
-
-            if (activeStateEngine.IsComplete)
-            {
-                _actorStateEngineList.Remove(activeStateEngine);
-
-                if (!_actorStateEngineList.Any())
-                {
-                    AddStateEngine(new ActorIdleEngine(_graphicsRoot.RootSprite));
-                }
-
-                ResetActorRootSpritePosition();
-            }
-        }
-
         private void Actor_BeginTransitionToOtherSector(object? sender, EventArgs e)
         {
             var serviceScope = ((LivGame)_game).ServiceProvider;
@@ -504,6 +481,29 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 
             var impactSoundEffect = _personSoundStorage.GetImpactEffect(person);
             return impactSoundEffect.CreateInstance();
+        }
+
+        private void HandleStateEngines(GameTime gameTime)
+        {
+            if (!_actorStateEngineList.Any())
+            {
+                return;
+            }
+
+            var activeStateEngine = _actorStateEngineList.First();
+            activeStateEngine.Update(gameTime);
+
+            if (activeStateEngine.IsComplete)
+            {
+                _actorStateEngineList.Remove(activeStateEngine);
+
+                if (!_actorStateEngineList.Any())
+                {
+                    AddStateEngine(new ActorIdleEngine(_graphicsRoot.RootSprite));
+                }
+
+                ResetActorRootSpritePosition();
+            }
         }
 
         private void PersonEquipmentModule_EquipmentChanged(object? sender, EquipmentChangedEventArgs e)
