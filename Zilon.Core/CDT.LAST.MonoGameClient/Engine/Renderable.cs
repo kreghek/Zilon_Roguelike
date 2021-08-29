@@ -56,7 +56,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         /// </summary>
         /// <param name="copyFrom">Object to copy properties from.</param>
         /// <param name="includeChildren">If true, will also clone children.</param>
-        public Renderable(Renderable copyFrom, bool includeChildren): this()
+        public Renderable(Renderable copyFrom, bool includeChildren) : this()
         {
             // copy basics
             Visible = copyFrom.Visible;
