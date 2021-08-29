@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 {
-    public sealed class MonoGraphics : SpriteContainer, IActorGraphics
+    internal sealed class MonoGraphics : SpriteContainer, IActorGraphics
     {
         private readonly SpriteContainer _hitlighted;
         private readonly SpriteContainer _outline;

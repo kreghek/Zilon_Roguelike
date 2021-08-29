@@ -14,7 +14,7 @@ using Zilon.Core.Schemes;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene.GameObjectVisualization
 {
-    public sealed class HumanoidSprite : SpriteContainer
+    internal sealed class HumanoidSprite : SpriteContainer
     {
         private readonly IEquipmentModule _equipmentModule;
         private readonly IEnumerable<BodyPart> _humanBodyParts;

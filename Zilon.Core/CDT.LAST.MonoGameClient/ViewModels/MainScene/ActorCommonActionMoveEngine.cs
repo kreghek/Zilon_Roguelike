@@ -13,7 +13,7 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
     /// Use for actions without any specific.
     /// Or when it is too boring to create new engine :)
     /// </summary>
-    public sealed class ActorCommonActionMoveEngine : IActorStateEngine
+    internal sealed class ActorCommonActionMoveEngine : IActorStateEngine
     {
         private const double ANIMATION_DURATION_SECONDS = 0.5;
         private readonly ICommandBlocker _animationBlocker;

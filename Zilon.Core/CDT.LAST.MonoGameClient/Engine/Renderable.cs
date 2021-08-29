@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,12 +10,12 @@ namespace CDT.LAST.MonoGameClient.Engine
     /// <summary>
     /// A renderable entity.
     /// </summary>
-    public class Renderable
+    internal class Renderable
     {
         /// <summary>
         /// Child entities.
         /// </summary>
-        protected List<Renderable> _children = new List<Renderable>();
+        protected IList<Renderable> _children;
 
         // currently calculated z-index, including parents.
         private float _finalZindex;
@@ -22,7 +23,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         /// <summary>
         /// Local transformations (color, position, rotation..).
         /// </summary>
-        protected SpriteTransformation _localTrans = new SpriteTransformation();
+        protected SpriteTransformation _localTrans;
 
         // do we need to update transformations?
         private bool _needUpdateTransformations;
@@ -31,7 +32,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         /// World transformations (local transformations + parent's world transformations).
         /// These are the actual transformations that will apply when drawing the entity.
         /// </summary>
-        private SpriteTransformation _worldTrans = new SpriteTransformation();
+        private SpriteTransformation _worldTrans;
 
         private float _zindex;
 
@@ -45,6 +46,9 @@ namespace CDT.LAST.MonoGameClient.Engine
         /// </summary>
         public Renderable()
         {
+            _children = new List<Renderable>();
+            _localTrans = new SpriteTransformation();
+            _worldTrans = new SpriteTransformation();
         }
 
         /// <summary>
@@ -52,7 +56,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         /// </summary>
         /// <param name="copyFrom">Object to copy properties from.</param>
         /// <param name="includeChildren">If true, will also clone children.</param>
-        public Renderable(Renderable copyFrom, bool includeChildren)
+        public Renderable(Renderable copyFrom, bool includeChildren): this()
         {
             // copy basics
             Visible = copyFrom.Visible;
@@ -190,7 +194,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         /// <summary>
         /// Parent entity.
         /// </summary>
-        protected Renderable? _parent { get; set; }
+        protected Renderable? Parent { get; set; }
 
         /// <summary>
         /// Add a child entity to this renderable.
@@ -199,14 +203,14 @@ namespace CDT.LAST.MonoGameClient.Engine
         public void AddChild(Renderable child)
         {
             // if child already got a parent throw exception
-            if (child._parent != null)
+            if (child.Parent != null)
             {
                 throw new Exception("Renderable to add as child already have a parent!");
             }
 
             // add child
             _children.Add(child);
-            child._parent = this;
+            child.Parent = this;
 
             // update child transformations (since now it got a new parent)
             child.UpdateTransformations();
@@ -239,12 +243,12 @@ namespace CDT.LAST.MonoGameClient.Engine
             if (_needUpdateTransformations)
             {
                 // create world transformations (merged with parent)
-                _worldTrans = _parent != null
-                    ? SpriteTransformation.Compose(_parent._worldTrans, _localTrans)
+                _worldTrans = Parent != null
+                    ? SpriteTransformation.Compose(Parent._worldTrans, _localTrans)
                     : _localTrans;
 
                 // calculate final zindex
-                _finalZindex = _parent != null ? _parent._finalZindex + Zindex : Zindex;
+                _finalZindex = Parent != null ? Parent._finalZindex + Zindex : Zindex;
 
                 // notify all childrens that they also need update
                 foreach (var child in _children)
@@ -292,14 +296,14 @@ namespace CDT.LAST.MonoGameClient.Engine
         public void RemoveChild(Renderable child)
         {
             // if child don't belong to this entity throw exception
-            if (child._parent != this)
+            if (child.Parent != this)
             {
                 throw new Exception("Renderable to remove is not a child of this renderable!");
             }
 
             // remove child
             _children.Remove(child);
-            child._parent = null;
+            child.Parent = null;
 
             // update child transformations (since now it no longer got a parent)
             child.UpdateTransformations();

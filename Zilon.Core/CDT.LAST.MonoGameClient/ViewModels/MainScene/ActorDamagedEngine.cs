@@ -8,7 +8,7 @@ using Zilon.Core.Client.Sector;
 
 namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
 {
-    public sealed class ActorDamagedEngine : IActorStateEngine
+    internal sealed class ActorDamagedEngine : IActorStateEngine
     {
         private const float ANIMATION_DURATION_SECONDS = 1f;
         private const int HIT_DISTANCE = 12;

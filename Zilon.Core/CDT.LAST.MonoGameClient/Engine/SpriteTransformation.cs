@@ -7,7 +7,7 @@ namespace CDT.LAST.MonoGameClient.Engine
     /// <summary>
     /// Renderable transformations - position, scale, rotation, color, etc.
     /// </summary>
-    public class SpriteTransformation
+    internal class SpriteTransformation
     {
         // identity transformation object.
 
@@ -42,11 +42,13 @@ namespace CDT.LAST.MonoGameClient.Engine
         /// <returns>Cloned transformations.</returns>
         public SpriteTransformation Clone()
         {
-            var ret = new SpriteTransformation();
-            ret.Color = Color;
-            ret.Rotation = Rotation;
-            ret.Scale = Scale;
-            ret.Position = Position;
+            var ret = new SpriteTransformation
+            {
+                Color = Color,
+                Rotation = Rotation,
+                Scale = Scale,
+                Position = Position
+            };
             return ret;
         }
 
