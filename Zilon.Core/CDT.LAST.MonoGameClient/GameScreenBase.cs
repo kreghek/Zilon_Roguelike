@@ -12,7 +12,7 @@ namespace CDT.LAST.MonoGameClient
         /// <summary>
         /// List of child GameComponents
         /// </summary>
-        private readonly List<GameComponent> _components;
+        private readonly IList<GameComponent> _components;
 
         public GameScreenBase(Game game)
         {

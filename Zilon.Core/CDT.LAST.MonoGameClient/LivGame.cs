@@ -91,11 +91,11 @@ namespace CDT.LAST.MonoGameClient
             uiSoundStorage.LoadContent(Content);
             UiThemeManager.SoundStorage = uiSoundStorage;
 
-            var sceneManager = new ScreenManager(this);
-            var titleScene = new TitleScreen(this, _spriteBatch);
-            sceneManager.ActiveScreen = titleScene;
+            var screenManager = new ScreenManager(this);
+            var titleScreen = new TitleScreen(this, _spriteBatch);
+            screenManager.ActiveScreen = titleScreen;
 
-            Components.Add(sceneManager);
+            Components.Add(screenManager);
 
             var font = Content.Load<SpriteFont>("Fonts/Main");
 #if DEBUG
