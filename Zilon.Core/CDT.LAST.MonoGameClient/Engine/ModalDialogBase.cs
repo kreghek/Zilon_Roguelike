@@ -89,7 +89,7 @@ namespace CDT.LAST.MonoGameClient.Engine
             var state = Keyboard.GetState();
 
             // If they hit esc, exit
-            if (state.IsKeyDown(Keys.C))
+            if (state.IsKeyDown(Keys.Escape))
             {
                 Close();
             }
