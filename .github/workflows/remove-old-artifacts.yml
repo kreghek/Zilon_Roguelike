@@ -1,6 +1,9 @@
 name: Remove old artifacts
 
-on: [push]
+on:
+  schedule:
+    # Nightly
+    - cron: '0 0 * * *'
 
 jobs:
   remove-old-artifacts:
