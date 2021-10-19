@@ -56,5 +56,5 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: LAST-${{ matrix.runtime }}
+          name: LAST-${{ matrix.runtime }}-v2.5.8-dev${{ github.run_number }}
           path: bin
