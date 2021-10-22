@@ -32,27 +32,6 @@ namespace CDT.LAST.MonoGameClient.Engine
         public Vector2 Scale = Vector2.One;
 
         /// <summary>
-        /// Get the identity transformations.
-        /// </summary>
-        public static SpriteTransformation Identity { get; } = new SpriteTransformation();
-
-        /// <summary>
-        /// Clone the transformations.
-        /// </summary>
-        /// <returns>Cloned transformations.</returns>
-        public SpriteTransformation Clone()
-        {
-            var ret = new SpriteTransformation
-            {
-                Color = Color,
-                Rotation = Rotation,
-                Scale = Scale,
-                Position = Position
-            };
-            return ret;
-        }
-
-        /// <summary>
         /// Merge two transformations into one.
         /// </summary>
         /// <param name="a">First transformation.</param>
@@ -90,7 +69,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         /// <param name="a">Color a to multiply.</param>
         /// <param name="b">Color b to multiply.</param>
         /// <returns>Result color.</returns>
-        public static Color MultiplyColors(Color a, Color b)
+        private static Color MultiplyColors(Color a, Color b)
         {
             return new Color(
                 a.R / 255f * (b.R / 255f),
@@ -104,7 +83,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         /// </summary>
         /// <param name="point">Vector to transform.</param>
         /// <returns>Transformed vector.</returns>
-        public Vector2 TransformVector(Vector2 point)
+        private Vector2 TransformVector(Vector2 point)
         {
             var result = Vector2.Transform(point, Matrix.CreateRotationZ(Rotation * Math.Sign(Scale.X)));
             result *= Scale;

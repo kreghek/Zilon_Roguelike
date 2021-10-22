@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,12 +9,12 @@ namespace CDT.LAST.MonoGameClient.Engine
     /// <summary>
     /// A renderable entity.
     /// </summary>
-    internal class Renderable
+    internal abstract class Renderable
     {
         /// <summary>
         /// Child entities.
         /// </summary>
-        protected IList<Renderable> _children;
+        protected readonly IList<Renderable> Children;
 
         // currently calculated z-index, including parents.
         private float _finalZindex;
@@ -23,7 +22,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         /// <summary>
         /// Local transformations (color, position, rotation..).
         /// </summary>
-        protected SpriteTransformation _localTrans;
+        private readonly SpriteTransformation _localTrans;
 
         // do we need to update transformations?
         private bool _needUpdateTransformations;
@@ -39,41 +38,16 @@ namespace CDT.LAST.MonoGameClient.Engine
         /// <summary>
         /// If true, will normalize Z-index to always be between 0-1 values (note: this divide the final z-index by max float).
         /// </summary>
-        public bool NormalizeZindex = false;
+        protected bool NormalizeZindex = false;
 
         /// <summary>
         /// Create the new renderable entity with default values.
         /// </summary>
         public Renderable()
         {
-            _children = new List<Renderable>();
+            Children = new List<Renderable>();
             _localTrans = new SpriteTransformation();
             _worldTrans = new SpriteTransformation();
-        }
-
-        /// <summary>
-        /// Clone an existing renderable object.
-        /// </summary>
-        /// <param name="copyFrom">Object to copy properties from.</param>
-        /// <param name="includeChildren">If true, will also clone children.</param>
-        public Renderable(Renderable copyFrom, bool includeChildren) : this()
-        {
-            // copy basics
-            Visible = copyFrom.Visible;
-            Zindex = copyFrom.Zindex;
-            _localTrans = copyFrom._localTrans.Clone();
-
-            // clone children
-            if (includeChildren)
-            {
-                foreach (var child in copyFrom._children)
-                {
-                    AddChild(child.Clone(true));
-                }
-            }
-
-            // update transformations
-            UpdateTransformations();
         }
 
         /// <summary>
@@ -209,21 +183,12 @@ namespace CDT.LAST.MonoGameClient.Engine
             }
 
             // add child
-            _children.Add(child);
+            Children.Add(child);
             child.Parent = this;
 
             // update child transformations (since now it got a new parent)
             child.UpdateTransformations();
-        }
-
-        /// <summary>
-        /// Clone this renderable object.
-        /// </summary>
-        /// <param name="includeChildren">If true, will include children in clone.</param>
-        /// <returns>Cloned object.</returns>
-        public virtual Renderable Clone(bool includeChildren)
-        {
-            return new Renderable(this, includeChildren);
+            AfterAddChild(child);
         }
 
         /// <summary>
@@ -250,8 +215,8 @@ namespace CDT.LAST.MonoGameClient.Engine
                 // calculate final zindex
                 _finalZindex = Parent != null ? Parent._finalZindex + Zindex : Zindex;
 
-                // notify all childrens that they also need update
-                foreach (var child in _children)
+                // notify all children that they also need update
+                foreach (var child in Children)
                 {
                     child.UpdateTransformations();
                 }
@@ -264,20 +229,10 @@ namespace CDT.LAST.MonoGameClient.Engine
             DoDraw(spriteBatch, _finalZindex);
 
             // draw children
-            foreach (var child in _children)
+            foreach (var child in Children)
             {
                 child.Draw(spriteBatch);
             }
-        }
-
-        /// <summary>
-        /// Get child by index.
-        /// </summary>
-        /// <param name="index">Child index to get.</param>
-        /// <returns>Return child.</returns>
-        public Renderable GetChild(int index)
-        {
-            return _children[index];
         }
 
         /// <summary>
@@ -286,7 +241,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         /// <returns> Set of all children of the renderable object. </returns>
         public IEnumerable<Renderable> GetChildren()
         {
-            return _children.ToArray();
+            return Children;
         }
 
         /// <summary>
@@ -302,12 +257,14 @@ namespace CDT.LAST.MonoGameClient.Engine
             }
 
             // remove child
-            _children.Remove(child);
+            Children.Remove(child);
             child.Parent = null;
 
             // update child transformations (since now it no longer got a parent)
             child.UpdateTransformations();
         }
+
+        protected virtual void AfterAddChild(Renderable child) { }
 
         /// <summary>
         /// Do the object-specific drawing function.
@@ -323,7 +280,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         /// <summary>
         /// Called whenever one of the transformations properties change and we need to update world transformations.
         /// </summary>
-        protected void UpdateTransformations()
+        private void UpdateTransformations()
         {
             _needUpdateTransformations = true;
         }

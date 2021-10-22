@@ -11,10 +11,6 @@ namespace CDT.LAST.MonoGameClient.Engine
     /// </summary>
     internal sealed class InvertedFlipXSprite : Sprite
     {
-        public InvertedFlipXSprite(Sprite copyFrom, bool includeChildren) : base(copyFrom, includeChildren)
-        {
-        }
-
         public InvertedFlipXSprite(Texture2D texture) : base(texture)
         {
         }

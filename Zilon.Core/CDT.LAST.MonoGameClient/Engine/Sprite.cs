@@ -14,12 +14,12 @@ namespace CDT.LAST.MonoGameClient.Engine
         /// <summary>
         /// If true, will also flip rotation on X and Y axis when there's a flip.
         /// </summary>
-        public bool EnableRotationFlip = false;
+        protected bool EnableRotationFlip = false;
 
         /// <summary>
         /// Sprite origin / source, eg pivot point for rotation etc.
         /// </summary>
-        public Vector2 Origin = Vector2.One * 0.5f;
+        public Vector2 Origin;
 
         /// <summary>
         /// Optional texture source rectangle.
@@ -39,8 +39,8 @@ namespace CDT.LAST.MonoGameClient.Engine
         public Sprite(Texture2D texture, Point? size = null, Vector2? origin = null, Vector2? position = null,
             Color? color = null, float zindex = 0f, Renderable? parent = null)
         {
-            Size = size ?? Point.Zero;
-            Texture = texture;
+            _size = size ?? Point.Zero;
+            _texture = texture;
             Origin = origin ?? Vector2.One * 0.5f;
             Position = position ?? Vector2.Zero;
             Color = color ?? Color.White;
@@ -52,60 +52,14 @@ namespace CDT.LAST.MonoGameClient.Engine
         }
 
         /// <summary>
-        /// Clone an existing Sprite object.
-        /// </summary>
-        /// <param name="copyFrom">Sprite to copy properties from.</param>
-        /// <param name="includeChildren">If true, will also clone children.</param>
-        public Sprite(Sprite copyFrom, bool includeChildren) : base(copyFrom, includeChildren)
-        {
-            SourceRectangle = copyFrom.SourceRectangle;
-            Origin = copyFrom.Origin;
-            Texture = copyFrom.Texture;
-            Size = copyFrom.Size;
-        }
-
-        /// <summary>
         /// Size, in pixels, we want this sprite to be when rendered.
         /// </summary>
-        public Point Size { get; set; }
+        private readonly Point _size;
 
         /// <summary>
         /// Texture to draw.
         /// </summary>
-        public Texture2D Texture { get; set; }
-
-        /// <summary>
-        /// Clone this sprite object.
-        /// </summary>
-        /// <param name="includeChildren">If true, will include children in clone.</param>
-        /// <returns>Cloned object.</returns>
-        public override Renderable Clone(bool includeChildren)
-        {
-            return new Sprite(this, includeChildren);
-        }
-
-        /// <summary>
-        /// Set a source rectangle from spritesheet.
-        /// </summary>
-        /// <param name="index">Sprite index to pick.</param>
-        /// <param name="spritesCount">Number of sprites on X and Y axis.</param>
-        public void SetSourceFromSpritesheet(Point index, Point spritesCount)
-        {
-            var size = Texture.Bounds.Size / spritesCount;
-            SourceRectangle = new Rectangle(index * size, size);
-        }
-
-        /// <summary>
-        /// Set a source rectangle from spritesheet.
-        /// </summary>
-        /// <param name="index">Sprite index to pick.</param>
-        /// <param name="spritesCount">Number of sprites on X and Y axis.</param>
-        /// <param name="rectSize">Size of the rectangle to set based on number of sprites in sheet.</param>
-        public void SetSourceFromSpritesheet(Point index, Point spritesCount, Point rectSize)
-        {
-            var size = Texture.Bounds.Size / spritesCount;
-            SourceRectangle = new Rectangle(index * size, size * rectSize);
-        }
+        private readonly Texture2D _texture;
 
         /// <summary>
         /// Draw the sprite itself.
@@ -115,35 +69,29 @@ namespace CDT.LAST.MonoGameClient.Engine
         /// <param name="zindex">Final rendering zindex.</param>
         protected override void DoDraw(SpriteBatch spriteBatch, float zindex)
         {
-            // no texture? skip
-            if (Texture == null)
-            {
-                return;
-            }
-
             // if source rect is 0,0, set to texture default size
-            var _srcRect = SourceRectangle ?? new Rectangle(0, 0, 0, 0);
-            if (_srcRect.Width == 0)
+            var srcRect = SourceRectangle ?? new Rectangle(0, 0, 0, 0);
+            if (srcRect.Width == 0)
             {
-                _srcRect.Width = Texture.Width;
+                srcRect.Width = _texture.Width;
             }
 
-            if (_srcRect.Height == 0)
+            if (srcRect.Height == 0)
             {
-                _srcRect.Height = Texture.Height;
+                srcRect.Height = _texture.Height;
             }
 
             // calculate origin point
-            var origin = new Vector2(_srcRect.Width * Origin.X, _srcRect.Height * Origin.Y);
+            var origin = new Vector2(srcRect.Width * Origin.X, srcRect.Height * Origin.Y);
 
             // get scale from transformations
             var scale = WorldTransformations.Scale;
 
             // take desired size into consideration
-            if (Size.X != 0)
+            if (_size.X != 0)
             {
-                scale.X *= (float)Size.X / Texture.Width;
-                scale.Y *= (float)Size.Y / Texture.Height;
+                scale.X *= (float)_size.X / _texture.Width;
+                scale.Y *= (float)_size.Y / _texture.Height;
             }
 
             // get rotation
@@ -164,9 +112,9 @@ namespace CDT.LAST.MonoGameClient.Engine
 
             // draw the sprite
             spriteBatch.Draw(
-                texture: Texture,
+                texture: _texture,
                 position: WorldTransformations.Position,
-                sourceRectangle: _srcRect,
+                sourceRectangle: srcRect,
                 color: WorldTransformations.Color,
                 rotation: flipResult.Rotation,
                 origin: origin,
