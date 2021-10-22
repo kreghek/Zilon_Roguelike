@@ -9,7 +9,7 @@ namespace CDT.LAST.MonoGameClient.GameComponents
     internal class FpsCounter : DrawableGameComponent
     {
         private const int MAXIMUM_SAMPLES = 100;
-        
+
         private readonly SpriteFont _font;
         private readonly Queue<double> _sampleBuffer;
         private readonly SpriteBatch _spriteBatch;
@@ -23,7 +23,7 @@ namespace CDT.LAST.MonoGameClient.GameComponents
         }
 
         private double _averageFramesPerSecond;
-        private double _currentFramesPerSecond ;
+        private double _currentFramesPerSecond;
 
         public override void Draw(GameTime gameTime)
         {
@@ -39,19 +39,19 @@ namespace CDT.LAST.MonoGameClient.GameComponents
             var shadowOffset = new Vector2(SHADOW_OFFSET, SHADOW_OFFSET);
 
             _spriteBatch.Begin();
-            
+
             _spriteBatch.DrawString(
                 _font,
                 fps,
                 textPositionWithMargin - shadowOffset,
                 Color.Black);
-            
+
             _spriteBatch.DrawString(
                 _font,
                 fps,
                 textPositionWithMargin,
                 Color.White);
-            
+
             _spriteBatch.End();
         }
 
