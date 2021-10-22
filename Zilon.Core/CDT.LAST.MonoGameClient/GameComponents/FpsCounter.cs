@@ -14,6 +14,9 @@ namespace CDT.LAST.MonoGameClient.GameComponents
         private readonly Queue<double> _sampleBuffer;
         private readonly SpriteBatch _spriteBatch;
 
+        private double _averageFramesPerSecond;
+        private double _currentFramesPerSecond;
+
         public FpsCounter(Game game, SpriteBatch spriteBatch, SpriteFont font) : base(game)
         {
             _spriteBatch = spriteBatch;
@@ -21,9 +24,6 @@ namespace CDT.LAST.MonoGameClient.GameComponents
 
             _sampleBuffer = new Queue<double>();
         }
-
-        private double _averageFramesPerSecond;
-        private double _currentFramesPerSecond;
 
         public override void Draw(GameTime gameTime)
         {
