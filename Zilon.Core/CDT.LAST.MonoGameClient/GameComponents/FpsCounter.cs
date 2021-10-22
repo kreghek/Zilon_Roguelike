@@ -8,7 +8,8 @@ namespace CDT.LAST.MonoGameClient.GameComponents
 {
     internal class FpsCounter : DrawableGameComponent
     {
-        public const int MAXIMUM_SAMPLES = 100;
+        private const int MAXIMUM_SAMPLES = 100;
+        
         private readonly SpriteFont _font;
         private readonly Queue<double> _sampleBuffer;
         private readonly SpriteBatch _spriteBatch;
@@ -21,53 +22,56 @@ namespace CDT.LAST.MonoGameClient.GameComponents
             _sampleBuffer = new Queue<double>();
         }
 
-        public double AverageFramesPerSecond { get; private set; }
-        public double CurrentFramesPerSecond { get; private set; }
-
-        public long TotalFrames { get; private set; }
-        public double TotalSeconds { get; private set; }
+        private double _averageFramesPerSecond;
+        private double _currentFramesPerSecond ;
 
         public override void Draw(GameTime gameTime)
         {
             UpdateInner(gameTime);
 
-            var fps = $"FPS: {AverageFramesPerSecond:00.00}";
+            var fps = $"FPS: {_averageFramesPerSecond:00.00}";
             var size = _font.MeasureString(fps);
 
+            const int SHADOW_OFFSET = 1;
+            const int TEXT_MARGIN = 1;
+            var textPosition = new Vector2(Game.GraphicsDevice.Viewport.Bounds.Right - size.X, 0);
+            var textPositionWithMargin = textPosition + new Vector2(-TEXT_MARGIN, TEXT_MARGIN);
+            var shadowOffset = new Vector2(SHADOW_OFFSET, SHADOW_OFFSET);
+
             _spriteBatch.Begin();
+            
             _spriteBatch.DrawString(
                 _font,
                 fps,
-                new Vector2(Game.GraphicsDevice.Viewport.Bounds.Right - size.X - 1 - 1, 1 - 1),
+                textPositionWithMargin - shadowOffset,
                 Color.Black);
+            
             _spriteBatch.DrawString(
                 _font,
                 fps,
-                new Vector2(Game.GraphicsDevice.Viewport.Bounds.Right - size.X - 1, 1),
+                textPositionWithMargin,
                 Color.White);
+            
             _spriteBatch.End();
         }
 
-        public void UpdateInner(GameTime gameTime)
+        private void UpdateInner(GameTime gameTime)
         {
             base.Update(gameTime);
 
-            CurrentFramesPerSecond = 1.0f / gameTime.ElapsedGameTime.TotalSeconds;
+            _currentFramesPerSecond = 1.0f / gameTime.ElapsedGameTime.TotalSeconds;
 
-            _sampleBuffer.Enqueue(CurrentFramesPerSecond);
+            _sampleBuffer.Enqueue(_currentFramesPerSecond);
 
             if (_sampleBuffer.Count > MAXIMUM_SAMPLES)
             {
                 _sampleBuffer.Dequeue();
-                AverageFramesPerSecond = _sampleBuffer.Average(i => i);
+                _averageFramesPerSecond = _sampleBuffer.Average(i => i);
             }
             else
             {
-                AverageFramesPerSecond = CurrentFramesPerSecond;
+                _averageFramesPerSecond = _currentFramesPerSecond;
             }
-
-            TotalFrames++;
-            TotalSeconds += gameTime.ElapsedGameTime.TotalSeconds;
         }
     }
 }

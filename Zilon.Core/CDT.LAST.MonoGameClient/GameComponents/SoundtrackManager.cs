@@ -35,12 +35,12 @@ namespace CDT.LAST.MonoGameClient.GameComponents
         private bool _backgroundTrackStarted;
 
         private string? _state;
-        private Song? titleSong;
+        private Song? _titleSong;
         public bool IsInitialized { get; private set; }
 
         public void Initialize(Song song)
         {
-            titleSong = song;
+            _titleSong = song;
             IsInitialized = true;
         }
 
@@ -74,11 +74,11 @@ namespace CDT.LAST.MonoGameClient.GameComponents
                         _backgroundTrackStarted = true;
                         if (MediaPlayer.State != MediaState.Playing)
                         {
-                            if (titleSong is not null)
+                            if (_titleSong is not null)
                             {
                                 MediaPlayer.IsRepeating = true;
                                 MediaPlayer.Volume = 0.75f;
-                                MediaPlayer.Play(titleSong, TimeSpan.Zero);
+                                MediaPlayer.Play(_titleSong, TimeSpan.Zero);
                             }
                         }
                     }
