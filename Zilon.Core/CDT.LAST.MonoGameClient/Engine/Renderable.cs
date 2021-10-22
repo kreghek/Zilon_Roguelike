@@ -253,7 +253,7 @@ namespace CDT.LAST.MonoGameClient.Engine
             // if child don't belong to this entity throw exception
             if (child.Parent != this)
             {
-                throw new Exception("Renderable to remove is not a child of this renderable!");
+                throw new InvalidOperationException("Renderable to remove is not a child of this renderable!");
             }
 
             // remove child
