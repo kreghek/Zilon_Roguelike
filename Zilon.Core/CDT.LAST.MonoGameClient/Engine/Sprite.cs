@@ -12,6 +12,16 @@ namespace CDT.LAST.MonoGameClient.Engine
     internal class Sprite : Renderable
     {
         /// <summary>
+        /// Size, in pixels, we want this sprite to be when rendered.
+        /// </summary>
+        private readonly Point _size;
+
+        /// <summary>
+        /// Texture to draw.
+        /// </summary>
+        private readonly Texture2D _texture;
+
+        /// <summary>
         /// If true, will also flip rotation on X and Y axis when there's a flip.
         /// </summary>
         protected bool EnableRotationFlip = false;
@@ -50,16 +60,6 @@ namespace CDT.LAST.MonoGameClient.Engine
                 parent.AddChild(this);
             }
         }
-
-        /// <summary>
-        /// Size, in pixels, we want this sprite to be when rendered.
-        /// </summary>
-        private readonly Point _size;
-
-        /// <summary>
-        /// Texture to draw.
-        /// </summary>
-        private readonly Texture2D _texture;
 
         /// <summary>
         /// Draw the sprite itself.
