@@ -19,7 +19,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         /// <summary>
         /// Child entities.
         /// </summary>
-        protected readonly IList<Renderable> Children;
+        private readonly IList<Renderable> _children;
 
         // currently calculated z-index, including parents.
         private float _finalZindex;
@@ -43,9 +43,9 @@ namespace CDT.LAST.MonoGameClient.Engine
         /// <summary>
         /// Create the new renderable entity with default values.
         /// </summary>
-        public Renderable()
+        protected Renderable()
         {
-            Children = new List<Renderable>();
+            _children = new List<Renderable>();
             _localTrans = new SpriteTransformation();
             _worldTrans = new SpriteTransformation();
         }
@@ -168,7 +168,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         /// <summary>
         /// Parent entity.
         /// </summary>
-        protected Renderable? Parent { get; set; }
+        private Renderable? Parent { get; set; }
 
         /// <summary>
         /// Add a child entity to this renderable.
@@ -183,7 +183,7 @@ namespace CDT.LAST.MonoGameClient.Engine
             }
 
             // add child
-            Children.Add(child);
+            _children.Add(child);
             child.Parent = this;
 
             // update child transformations (since now it got a new parent)
@@ -216,7 +216,7 @@ namespace CDT.LAST.MonoGameClient.Engine
                 _finalZindex = Parent != null ? Parent._finalZindex + Zindex : Zindex;
 
                 // notify all children that they also need update
-                foreach (var child in Children)
+                foreach (var child in _children)
                 {
                     child.UpdateTransformations();
                 }
@@ -229,7 +229,7 @@ namespace CDT.LAST.MonoGameClient.Engine
             DoDraw(spriteBatch, _finalZindex);
 
             // draw children
-            foreach (var child in Children)
+            foreach (var child in _children)
             {
                 child.Draw(spriteBatch);
             }
@@ -241,7 +241,7 @@ namespace CDT.LAST.MonoGameClient.Engine
         /// <returns> Set of all children of the renderable object. </returns>
         public IEnumerable<Renderable> GetChildren()
         {
-            return Children;
+            return _children;
         }
 
         /// <summary>
@@ -253,11 +253,11 @@ namespace CDT.LAST.MonoGameClient.Engine
             // if child don't belong to this entity throw exception
             if (child.Parent != this)
             {
-                throw new Exception("Renderable to remove is not a child of this renderable!");
+                throw new InvalidOperationException("Renderable to remove is not a child of this renderable!");
             }
 
             // remove child
-            Children.Remove(child);
+            _children.Remove(child);
             child.Parent = null;
 
             // update child transformations (since now it no longer got a parent)
