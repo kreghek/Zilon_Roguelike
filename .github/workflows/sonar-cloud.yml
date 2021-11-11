@@ -4,8 +4,8 @@ on:
   # Trigger analysis when pushing in master or pull requests, and when creating
   # a pull request.
   push:
-    branches-ignore:
-      - dependabot/nuget/**
+    branches:
+      - '!dependabot/nuget/**'
   pull_request:
     branches:
       - master
