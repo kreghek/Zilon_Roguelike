@@ -9,6 +9,7 @@ on:
   pull_request:
     branches:
       - master
+      - '!dependabot/nuget/**'
     types:
       - opened
       - synchronize
