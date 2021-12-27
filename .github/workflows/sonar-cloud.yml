@@ -39,7 +39,6 @@ jobs:
         
       - name: Convert ReSharper report to Sonar Report
         run: dotnet-reqube -i ReSharperReport.xml -o SonarQubeReport.json -d Zilon.Core
-        working-directory: ${{env.working-directory}}
 
       - name: sonarscan-dotnet
         uses: highbyte/sonarscan-dotnet@v2.1.2
