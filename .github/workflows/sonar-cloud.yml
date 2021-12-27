@@ -38,7 +38,7 @@ jobs:
         run: dotnet tool install --global dotnet-reqube
         
       - name: Convert ReSharper report to Sonar Report
-        run: dotnet-reqube -i ReSharperReport.xml -o $GITHUB_WORKSPACE/SonarQubeReport.json -d $GITHUB_WORKSPACE/Zilon.Core
+        run: dotnet-reqube -i ReSharperReport.xml -o $GITHUB_WORKSPACE/AnalysisResults/SonarQubeReport.json -d $GITHUB_WORKSPACE/AnalysisResults
 
       - name: sonarscan-dotnet
         uses: highbyte/sonarscan-dotnet@v2.1.2
@@ -51,4 +51,4 @@ jobs:
           sonarOrganization: kreghek
           dotnetBuildArguments: ./Zilon.Core/Zilon.Core.sln
           dotnetDisableTests: true
-          sonarBeginArguments: /d:sonar.externalIssuesReportPaths=$GITHUB_WORKSPACE/SonarQubeReport.json
+          sonarBeginArguments: /d:sonar.externalIssuesReportPaths=$GITHUB_WORKSPACE/AnalysisResults/SonarQubeReport.json
