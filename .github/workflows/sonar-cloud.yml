@@ -30,7 +30,7 @@ jobs:
       - name: Setup ReSharper Command Line Tools
         run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2021.1.2
       
-      - name: Clean up codebase via ReSharper Command Line Tools
+      - name: Inspect codebase via ReSharper Command Line Tools
         run: jb inspectcode ./Zilon.Core/Zilon.Core.sln --swea -s=INFO -o=ReSharperReport.xml
         working-directory: ${{env.working-directory}}
 
@@ -38,7 +38,8 @@ jobs:
         run: dotnet tool install --global dotnet-reqube
         
       - name: Convert ReSharper report to Sonar Report
-        run: dotnet-reqube -i ReSharperReport.xml -o SonarQubeReport.json -d ./Zilon.Core
+        run: dotnet-reqube -i ReSharperReport.xml -o SonarQubeReport.json -d Zilon.Core
+        working-directory: ${{env.working-directory}}
 
       - name: sonarscan-dotnet
         uses: highbyte/sonarscan-dotnet@v2.1.2
