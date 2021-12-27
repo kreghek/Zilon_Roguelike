@@ -38,7 +38,7 @@ jobs:
         run: dotnet tool install --global dotnet-reqube
         
       - name: Convert report from ReSharper to SonarQube format
-        run: dotnet-reqube -i $GITHUB_WORKSPACE/AnalysisResults/ReSharperReport.xml -o $GITHUB_WORKSPACE/AnalysisResults/SonarQubeReport.json
+        run: dotnet-reqube -i $GITHUB_WORKSPACE/AnalysisResults/ReSharperReport.xml
 
       - name: sonarscan-dotnet
         uses: highbyte/sonarscan-dotnet@v2.1.2
