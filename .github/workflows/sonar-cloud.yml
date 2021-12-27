@@ -23,7 +23,7 @@ jobs:
     name: SonarCloud
     runs-on: ubuntu-latest
     env:
-      working-directory : ./
+      working-directory : $GITHUB_WORKSPACE
     steps:
       - uses: actions/checkout@v2
       
@@ -31,14 +31,13 @@ jobs:
         run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2021.1.2
       
       - name: Inspect codebase via ReSharper Command Line Tools
-        run: jb inspectcode ./Zilon.Core/Zilon.Core.sln --swea -s=INFO -o=ReSharperReport.xml
-        working-directory: ${{env.working-directory}}
+        run: jb inspectcode $GITHUB_WORKSPACE/Zilon.Core/Zilon.Core.sln --swea -s=INFO -o=$GITHUB_WORKSPACE/AnalysisResults/ReSharperReport.xml
 
       - name: Setup ReSharper to Sonar Converter
         run: dotnet tool install --global dotnet-reqube
         
       - name: Convert ReSharper report to Sonar Report
-        run: dotnet-reqube -i ReSharperReport.xml -o SonarQubeReport.json -d Zilon.Core
+        run: dotnet-reqube -i ReSharperReport.xml -o $GITHUB_WORKSPACE/SonarQubeReport.json -d $GITHUB_WORKSPACE/Zilon.Core
 
       - name: sonarscan-dotnet
         uses: highbyte/sonarscan-dotnet@v2.1.2
@@ -51,4 +50,4 @@ jobs:
           sonarOrganization: kreghek
           dotnetBuildArguments: ./Zilon.Core/Zilon.Core.sln
           dotnetDisableTests: true
-          sonarBeginArguments: /d:sonar.externalIssuesReportPaths=SonarQubeReport.json
+          sonarBeginArguments: /d:sonar.externalIssuesReportPaths=$GITHUB_WORKSPACE/SonarQubeReport.json
