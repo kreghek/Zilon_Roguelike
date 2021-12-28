@@ -33,7 +33,7 @@ jobs:
 
       - name: Inspect codebase via ReSharper Command Line Tools
         # use --absolute_paths to work around a issues https://github.com/olsh/dotnet-reqube/issues/9 + https://youtrack.jetbrains.com/issue/RSRP-484145
-        run: jb inspectcode $GITHUB_WORKSPACE/Zilon.Core/Zilon.Core.sln --swea -s=INFO -o=$GITHUB_WORKSPACE/AnalysisResults/ReSharperReport.xml -a
+        run: jb inspectcode $GITHUB_WORKSPACE/Zilon.Core/Zilon.Core.sln --swea --severity=INFO --output=$GITHUB_WORKSPACE/AnalysisResults/ReSharperReport.xml --absolute_paths
 
       - name: Setup ReSharper to Sonar Converter
         run: dotnet tool install --global dotnet-reqube
