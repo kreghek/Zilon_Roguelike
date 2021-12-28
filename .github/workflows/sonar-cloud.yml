@@ -45,6 +45,8 @@ jobs:
       - name: sonarscan-dotnet
         uses: highbyte/sonarscan-dotnet@v2.1.2
         with:
+          # Fix warning "Shallow clone detected during the analysis"
+          fetch-depth: '0'
           # The key of the SonarQube project
           sonarProjectKey: kreghek_Zilon_Roguelike
           # The name of the SonarQube project
