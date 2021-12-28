@@ -241,7 +241,13 @@ namespace CDT.LAST.MonoGameClient.Engine
         /// <returns> Set of all children of the renderable object. </returns>
         public IEnumerable<Renderable> GetChildren()
         {
+            Test();
             return _children;
+        }
+
+        public void Test()
+        {
+            // R# test
         }
 
         /// <summary>
