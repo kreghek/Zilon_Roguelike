@@ -32,14 +32,14 @@ jobs:
         run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2021.1.2
 
       - name: Inspect codebase via ReSharper Command Line Tools
-        # use --absolute_paths to fix a issues https://github.com/olsh/dotnet-reqube/issues/9 + https://youtrack.jetbrains.com/issue/RSRP-484145
-        run: jb inspectcode $GITHUB_WORKSPACE/Zilon.Core/Zilon.Core.sln --swea --severity=INFO --output=$GITHUB_WORKSPACE/AnalysisResults/ReSharperReport.xml --absolute_paths
+        # use --absolute_paths to work around a issues https://github.com/olsh/dotnet-reqube/issues/9 + https://youtrack.jetbrains.com/issue/RSRP-484145
+        run: jb inspectcode $GITHUB_WORKSPACE/Zilon.Core/Zilon.Core.sln --swea -s=INFO -o=$GITHUB_WORKSPACE/AnalysisResults/ReSharperReport.xml -a
 
       - name: Setup ReSharper to Sonar Converter
         run: dotnet tool install --global dotnet-reqube
 
       - name: Convert report from ReSharper to SonarQube format
-        run: dotnet-reqube --input $GITHUB_WORKSPACE/AnalysisResults/ReSharperReport.xml --output SonarQubeReport.json --directory $GITHUB_WORKSPACE/AnalysisResults
+        run: dotnet-reqube -i $GITHUB_WORKSPACE/AnalysisResults/ReSharperReport.xml -o SonarQubeReport.json -d $GITHUB_WORKSPACE/AnalysisResults
 
       - name: sonarscan-dotnet
         uses: highbyte/sonarscan-dotnet@v2.1.2
