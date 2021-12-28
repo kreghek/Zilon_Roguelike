@@ -28,13 +28,47 @@ jobs:
       working-directory : $GITHUB_WORKSPACE
     steps:
       - uses: actions/checkout@v2
+      
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.11
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~\sonar\cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache SonarCloud scanner
+        id: cache-sonar-scanner
+        uses: actions/cache@v1
+        with:
+          path: .\.sonar\scanner
+          key: ${{ runner.os }}-sonar-scanner
+          restore-keys: ${{ runner.os }}-sonar-scanner
+      - name: Install SonarCloud scanner
+        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+        shell: powershell
+        run: |
+          New-Item -Path .\.sonar\scanner -ItemType Directory
+          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        shell: powershell
+        run: |
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"kreghek_Zilon_Roguelike" /o:"kreghek" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
 
       - name: Setup ReSharper Command Line Tools
         run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2021.1.2
 
       - name: Inspect codebase via ReSharper Command Line Tools
         # use --absolute_paths to work around a issues https://github.com/olsh/dotnet-reqube/issues/9 + https://youtrack.jetbrains.com/issue/RSRP-484145
-        run: jb inspectcode $GITHUB_WORKSPACE/Zilon.Core/Zilon.Core.sln --swea --severity=INFO --output=$GITHUB_WORKSPACE/AnalysisResults/ReSharperReport.xml --absolute-paths
+        run: jb inspectcode $GITHUB_WORKSPACE/Zilon.Core/Zilon.Core.sln --swea --severity=INFO --output=$GITHUB_WORKSPACE/AnalysisResults/ReSharperReport.xml --absolute-paths --build
 
       - name: Setup ReSharper to Sonar Converter
         run: dotnet tool install --global dotnet-reqube
@@ -42,16 +76,10 @@ jobs:
       - name: Convert report from ReSharper to SonarQube format
         run: dotnet-reqube -i $GITHUB_WORKSPACE/AnalysisResults/ReSharperReport.xml -o "<ProjectName>.dll.ReSharper.RoslynCA.json" -f Roslyn --sonar-dir ".sonarqube"
 
-      - name: sonarscan-dotnet
-        uses: highbyte/sonarscan-dotnet@v2.1.2
-        with:
-          # Fix warning "Shallow clone detected during the analysis"
-          fetch-depth: '0'
-          # The key of the SonarQube project
-          sonarProjectKey: kreghek_Zilon_Roguelike
-          # The name of the SonarQube project
-          sonarProjectName:  Zilon Roguelike
-          # The name of the SonarQube organization in SonarCloud. For hosted SonarQube, skip this setting.
-          sonarOrganization: kreghek
-          dotnetBuildArguments: ./Zilon.Core/Zilon.Core.sln
-          dotnetDisableTests: true
+      - name: End Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        shell: powershell
+        run: |
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
