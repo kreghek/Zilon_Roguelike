@@ -27,16 +27,16 @@ jobs:
       working-directory : $GITHUB_WORKSPACE
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: Setup ReSharper Command Line Tools
         run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2021.1.2
-      
+
       - name: Inspect codebase via ReSharper Command Line Tools
         run: jb inspectcode $GITHUB_WORKSPACE/Zilon.Core/Zilon.Core.sln --swea -s=INFO -o=$GITHUB_WORKSPACE/AnalysisResults/ReSharperReport.xml -a
 
       - name: Setup ReSharper to Sonar Converter
         run: dotnet tool install --global dotnet-reqube
-        
+
       - name: Convert report from ReSharper to SonarQube format
         run: dotnet-reqube -i $GITHUB_WORKSPACE/AnalysisResults/ReSharperReport.xml -o SonarQubeReport.json -d $GITHUB_WORKSPACE/AnalysisResults
 
