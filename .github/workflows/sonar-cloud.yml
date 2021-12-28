@@ -5,6 +5,7 @@ on:
   # a pull request.
   push:
     branches:
+      - master
       - '!dependabot/nuget/**'
   pull_request:
     branches:
