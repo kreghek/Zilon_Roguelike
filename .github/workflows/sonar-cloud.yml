@@ -9,6 +9,7 @@ on:
   pull_request:
     branches:
       - master
+      - '!dependabot/nuget/**'
     types:
       - opened
       - synchronize
@@ -22,11 +23,26 @@ jobs:
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
+    env:
+      working-directory : $GITHUB_WORKSPACE
     steps:
       - uses: actions/checkout@v2
 
+      - name: Setup ReSharper Command Line Tools
+        run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2021.1.2
+
+      - name: Inspect codebase via ReSharper Command Line Tools
+        # use --absolute_paths to work around a issues https://github.com/olsh/dotnet-reqube/issues/9 + https://youtrack.jetbrains.com/issue/RSRP-484145
+        run: jb inspectcode $GITHUB_WORKSPACE/Zilon.Core/Zilon.Core.sln --swea --severity=INFO --output=$GITHUB_WORKSPACE/AnalysisResults/ReSharperReport.xml --absolute-paths
+
+      - name: Setup ReSharper to Sonar Converter
+        run: dotnet tool install --global dotnet-reqube
+
+      - name: Convert report from ReSharper to SonarQube format
+        run: dotnet-reqube -i $GITHUB_WORKSPACE/AnalysisResults/ReSharperReport.xml -o SonarQubeReport.json -d $GITHUB_WORKSPACE/AnalysisResults
+
       - name: sonarscan-dotnet
-        uses: highbyte/sonarscan-dotnet@v2.1.1-beta
+        uses: highbyte/sonarscan-dotnet@v2.1.2
         with:
           # The key of the SonarQube project
           sonarProjectKey: kreghek_Zilon_Roguelike
@@ -36,3 +52,4 @@ jobs:
           sonarOrganization: kreghek
           dotnetBuildArguments: ./Zilon.Core/Zilon.Core.sln
           dotnetDisableTests: true
+          sonarBeginArguments: /d:sonar.externalIssuesReportPaths=$GITHUB_WORKSPACE/AnalysisResults/SonarQubeReport.json
