@@ -28,10 +28,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '5.0.100'
+
+    - name: Setup .NET 6
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+
     - name: Run ${{ matrix.test_suite }} in Release and collect coverage
       env:
         ZILON_LIV_SCHEME_CATALOG: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes
@@ -40,6 +42,7 @@ jobs:
       run: |
         cd ./Zilon.Core
         dotnet test ${{ matrix.test_suite }}.sln --configuration Release /p:CollectCoverage=true /p:CoverletOutput=${{env.TEST_RESULT_PATH}} /p:CoverletOutputFormat=\"cobertura,json\" /p:MergeWith="${{env.TEST_RESULT_PATH}}coverage.json" /p:SkipAutoProps=true /p:ExcludeByAttribute=\"Obsolete,GeneratedCode,CompilerGenerated\" /p:ExcludeByFile="**/Zilon.Core.Tests.Common/*.cs" /maxcpucount:1
+
     - name: Publish coverage report to codecov.io
       uses: codecov/codecov-action@v1
       with:
