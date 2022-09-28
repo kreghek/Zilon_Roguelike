@@ -1,4 +1,4 @@
-name: Build game client
+name: Build game clients
 
 on:
   workflow_dispatch:
@@ -62,11 +62,11 @@ jobs:
 
       - name: Publish ${{ matrix.project }} ${{ matrix.configuration }} ${{ matrix.runtime }}
         if: ${{ contains(matrix.configuration, 'Release') }}
-        run: dotnet publish Zilon.Core/${{ matrix.project }}/${{ matrix.project }}.csproj --configuration ${{ matrix.configuration }} --framework net5.0 --output bin --runtime ${{ matrix.runtime }} --self-contained true /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
+        run: dotnet publish Zilon.Core/${{ matrix.project }}/${{ matrix.project }}.csproj --configuration ${{ matrix.configuration }} --framework net6.0 --output bin --runtime ${{ matrix.runtime }} --self-contained true /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
 
       - name: Publish ${{ matrix.project }} ${{ matrix.configuration }} ${{ matrix.runtime }}
         if: ${{ contains(matrix.configuration, 'Debug') }}
-        run: dotnet publish Zilon.Core/${{ matrix.project }}/${{ matrix.project }}.csproj --configuration ${{ matrix.configuration }} --framework net5.0 --output bin --runtime ${{ matrix.runtime }} --no-self-contained
+        run: dotnet publish Zilon.Core/${{ matrix.project }}/${{ matrix.project }}.csproj --configuration ${{ matrix.configuration }} --framework net6.0 --output bin --runtime ${{ matrix.runtime }} --no-self-contained
 
       # This step is nessesary because CopySchemeCatalogToClientBin target in csproj doesn't perform in CI/CD.
       - name: Copy scheme catalog into bin directory for ${{ matrix.project }}
