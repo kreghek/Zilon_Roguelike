@@ -12,23 +12,20 @@ namespace Zilon.Core.Benchmark
 {
     public class Config : ManualConfig
     {
-        public Config(string buildNumber, int iterationCount, string monoRuntimeName, string monoRuntimePath,
-            string artifactPath)
+        public Config(string buildNumber, int iterationCount, string artifactPath)
         {
-            Add(Job.Default.With(CoreRuntime.Core20).With(Platform.X64).With(Jit.RyuJit)
-                .WithIterationCount(iterationCount));
-            Add(Job.Default.With(CoreRtRuntime.CoreRt20).With(Platform.X64).With(Jit.RyuJit)
+            AddJob(Job.Default.WithRuntime(CoreRuntime.Core60).WithPlatform(Platform.X64).WithJit(Jit.RyuJit)
                 .WithIterationCount(iterationCount));
 
-            Add(ConsoleLogger.Default);
-            Add(TargetMethodColumn.Method,
+            AddLogger(ConsoleLogger.Default);
+            AddColumn(TargetMethodColumn.Method,
                 JobCharacteristicColumn.AllColumns.Single(x => x.ColumnName == "Runtime"),
                 JobCharacteristicColumn.AllColumns.Single(x => x.ColumnName == "Jit"),
                 StatisticColumn.Mean,
                 StatisticColumn.Median,
                 StatisticColumn.StdDev);
-            Add(new JsonExporter(fileNameSuffix: $"-{buildNumber}", indentJson: true, excludeMeasurements: false));
-            Add(EnvironmentAnalyser.Default);
+            AddExporter(new JsonExporter(fileNameSuffix: $"-{buildNumber}", indentJson: true, excludeMeasurements: false));
+            AddAnalyser(EnvironmentAnalyser.Default);
             UnionRule = ConfigUnionRule.AlwaysUseLocal;
             ArtifactsPath = artifactPath;
         }

@@ -24,7 +24,7 @@ namespace Zilon.Core.Benchmarks.Common
             var monoPath = ArgumentHelper.GetProgramArgument(args, "MONO_PATH");
             var artifactPath = ArgumentHelper.GetProgramArgument(args, "ARTIFACT_PATH");
 
-            var config = new Config(buildNumber, iterationCount, monoName, monoPath, artifactPath);
+            var config = new Config(buildNumber, iterationCount, artifactPath);
 
             return config;
         }
