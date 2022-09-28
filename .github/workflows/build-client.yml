@@ -32,15 +32,24 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup .NET5
+      - name: Setup .NET 6
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '5.0.201'
+          dotnet-version: 6.0.x
 
-      - name: Setup .NET 3.1
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '3.1.x'
+      - name: Setup Wine
+        run: |
+          sudo apt update
+          sudo apt install wine64 p7zip-full
+          wget -qO- https://raw.githubusercontent.com/MonoGame/MonoGame/master/Tools/MonoGame.Effect.Compiler/mgfxc_wine_setup.sh | sh
+          cd ~/.winemonogame/drive_c/windows/system32
+
+          DOTNET_URL="https://download.visualstudio.microsoft.com/download/pr/44d08222-aaa9-4d35-b24b-d0db03432ab7/52a4eb5922afd19e8e0d03e0dbbb41a0/dotnet-sdk-6.0.302-win-x64.zip"
+          curl "https://download.visualstudio.microsoft.com/download/pr/44d08222-aaa9-4d35-b24b-d0db03432ab7/52a4eb5922afd19e8e0d03e0dbbb41a0/dotnet-sdk-6.0.302-win-x64.zip" --output "dotnet-sdk.zip"
+
+          7z x "dotnet-sdk.zip" -y
+
+          rm dotnet-sdk.zip
 
       - uses: actions/cache@v2
         with:
