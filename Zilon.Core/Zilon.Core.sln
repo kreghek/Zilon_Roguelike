@@ -85,6 +85,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{EE7426
 		..\.github\workflows\build-client.yml = ..\.github\workflows\build-client.yml
 		..\.github\workflows\coverage-codecov.yml = ..\.github\workflows\coverage-codecov.yml
 		..\.github\workflows\coverage-coveralls.yml = ..\.github\workflows\coverage-coveralls.yml
+		..\.github\workflows\coverage-report-generator.yml = ..\.github\workflows\coverage-report-generator.yml
 	EndProjectSection
 EndProject
 Global
