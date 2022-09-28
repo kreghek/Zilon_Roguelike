@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.13.2" />
     <PackageReference Include="JetBrains.Annotations">
         <Version>2022.1.0</Version>
         <ExcludeAssets>runtime; build</ExcludeAssets>
@@ -21,7 +21,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Zilon.Bot.Players.NetCore\Zilon.Bot.Players.NetCore.csproj" />
     <ProjectReference Include="..\Zilon.Bot.Players\Zilon.Bot.Players.csproj" />
-    <ProjectReference Include="..\Zilon.Core.Benchmarks.Common\Zilon.Core.Benchmarks.Common.csproj" />
     <ProjectReference Include="..\Zilon.Core.Tests.Common\Zilon.Core.Tests.Common.csproj" />
     <ProjectReference Include="..\Zilon.Core\Zilon.Core.csproj" />
     <ProjectReference Include="..\Zilon.Emulation.Common\Zilon.Emulation.Common.csproj" />

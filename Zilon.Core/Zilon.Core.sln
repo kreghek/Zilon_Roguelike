@@ -58,8 +58,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.DiTests", "Zilon
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Benchs", "Benchs", "{F8EA35C7-A141-4A26-BD17-1656979D9635}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Benchmarks.Common", "Zilon.Core.Benchmarks.Common\Zilon.Core.Benchmarks.Common.csproj", "{4B14021B-1C05-47A2-89C6-ACA7310BC999}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Benchmarks.CreateSector", "Zilon.Core.Benchmarks.CreateSector\Zilon.Core.Benchmarks.CreateSector.csproj", "{FDED5B7E-C77E-46D7-8327-30E2F594C5C8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConsoleClients", "ConsoleClients", "{C6FA8EA5-A468-41E0-B315-25AA2443F293}"
@@ -82,6 +80,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDT.LAST.Outliner", "CDT.LA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{EE742614-C46F-4492-B596-A71ABE1D252B}"
 	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\bench.yml = ..\.github\workflows\bench.yml
 		..\.github\workflows\bot-tests.yml = ..\.github\workflows\bot-tests.yml
 		..\.github\workflows\build-client.yml = ..\.github\workflows\build-client.yml
 		..\.github\workflows\codeql-analysis.yml = ..\.github\workflows\codeql-analysis.yml
@@ -157,10 +156,6 @@ Global
 		{9D36570D-7A47-4814-8986-A9E9374FB3F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D36570D-7A47-4814-8986-A9E9374FB3F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9D36570D-7A47-4814-8986-A9E9374FB3F6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4B14021B-1C05-47A2-89C6-ACA7310BC999}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4B14021B-1C05-47A2-89C6-ACA7310BC999}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4B14021B-1C05-47A2-89C6-ACA7310BC999}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4B14021B-1C05-47A2-89C6-ACA7310BC999}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FDED5B7E-C77E-46D7-8327-30E2F594C5C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FDED5B7E-C77E-46D7-8327-30E2F594C5C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDED5B7E-C77E-46D7-8327-30E2F594C5C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -214,7 +209,6 @@ Global
 		{E9CE6565-6024-41E5-8552-B7021234708C} = {A3B88E0E-94FE-44BE-B147-3A31C9A6F034}
 		{1F6F4A58-B945-4E1F-9860-ADDB296EA57B} = {ED8E92CD-C200-4104-9FBF-50CDE07CB98C}
 		{9D36570D-7A47-4814-8986-A9E9374FB3F6} = {A3B88E0E-94FE-44BE-B147-3A31C9A6F034}
-		{4B14021B-1C05-47A2-89C6-ACA7310BC999} = {F8EA35C7-A141-4A26-BD17-1656979D9635}
 		{FDED5B7E-C77E-46D7-8327-30E2F594C5C8} = {F8EA35C7-A141-4A26-BD17-1656979D9635}
 		{A5564869-FEFE-4A4F-ABA0-1C6E0C53B5B3} = {C6FA8EA5-A468-41E0-B315-25AA2443F293}
 		{17EF4DE9-8F84-46ED-9597-FF824672921A} = {C6FA8EA5-A468-41E0-B315-25AA2443F293}
