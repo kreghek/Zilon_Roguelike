@@ -1,6 +1,7 @@
-name: Build game clients
+name: Build game client
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
