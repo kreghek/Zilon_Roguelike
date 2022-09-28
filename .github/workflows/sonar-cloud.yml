@@ -27,7 +27,7 @@ jobs:
     env:
       working-directory : $GITHUB_WORKSPACE
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Setup ReSharper Command Line Tools
         run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2021.1.2
@@ -43,7 +43,7 @@ jobs:
         run: dotnet-reqube -i $GITHUB_WORKSPACE/AnalysisResults/ReSharperReport.xml -o SonarQubeReport.json -d $GITHUB_WORKSPACE/AnalysisResults
 
       - name: sonarscan-dotnet
-        uses: highbyte/sonarscan-dotnet@v2.1.2
+        uses: highbyte/sonarscan-dotnet@v2.1.3
         with:
           # Fix warning "Shallow clone detected during the analysis"
           fetch-depth: '0'
