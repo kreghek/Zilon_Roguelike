@@ -30,12 +30,12 @@ jobs:
           - Zilon.Bot.Players.DevelopmentTests
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '5.0.201'
+    - name: Setup .NET 6
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
 
     - name: Run ${{ matrix.test_suite }} in ${{ matrix.configuration }}
       env:

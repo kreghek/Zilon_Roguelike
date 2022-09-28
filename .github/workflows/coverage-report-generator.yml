@@ -51,7 +51,7 @@ jobs:
         dotnet tool install -g dotnet-reportgenerator-globaltool
         reportgenerator "-reports:${{env.TEST_RESULT_PATH}}coverage.cobertura.xml" "-targetdir:${{ env.REPORT_RESULT_PATH }}" -reporttypes:${{ matrix.report_format }}
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: Report${{ matrix.test_suite }}
         path: ${{ env.REPORT_RESULT_PATH }}

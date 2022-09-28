@@ -82,6 +82,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDT.LAST.Outliner", "CDT.LA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{EE742614-C46F-4492-B596-A71ABE1D252B}"
 	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\bot-tests.yml = ..\.github\workflows\bot-tests.yml
 		..\.github\workflows\build-client.yml = ..\.github\workflows\build-client.yml
 		..\.github\workflows\coverage-codecov.yml = ..\.github\workflows\coverage-codecov.yml
 		..\.github\workflows\coverage-coveralls.yml = ..\.github\workflows\coverage-coveralls.yml
