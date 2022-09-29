@@ -33,7 +33,7 @@ namespace Zilon.Core.Tactics.Tests
             var targetObject = new NotHandleTarget();
 
             // ACT
-            Action act = () =>
+            var act = () =>
             {
                 selector.GetHandler(targetObject);
             };

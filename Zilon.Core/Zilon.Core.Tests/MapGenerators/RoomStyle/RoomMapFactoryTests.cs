@@ -42,7 +42,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var sectorFactoryOptions = new SectorMapFactoryOptions(sectorScheme.MapGeneratorOptions);
 
             // ACT
-            Func<Task> act = async () =>
+            var act = async () =>
             {
                 await factory.CreateAsync(sectorFactoryOptions).ConfigureAwait(false);
             };
@@ -93,7 +93,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var sectorFactoryOptions = new SectorMapFactoryOptions(sectorScheme.MapGeneratorOptions);
 
             // ACT
-            Func<Task> act = async () =>
+            var act = async () =>
             {
                 await factory.CreateAsync(sectorFactoryOptions).ConfigureAwait(false);
             };

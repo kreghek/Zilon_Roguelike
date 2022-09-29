@@ -96,7 +96,7 @@ namespace Zilon.Core.World.NameGeneration
                         1)]; // determines if we should select a name from male or female, and randomly picks
             var last = _last[_dice.Roll(0, _last.Count - 1)]; // gets the last name
 
-            List<string> middles = new List<string>();
+            var middles = new List<string>();
 
             for (var i = 0; i < middle; i++)
             {
@@ -118,7 +118,7 @@ namespace Zilon.Core.World.NameGeneration
 
             var b = new StringBuilder();
             b.Append(first + " "); // put a space after our names;
-            foreach (string m in middles)
+            foreach (var m in middles)
             {
                 b.Append(m + " ");
             }
@@ -173,7 +173,7 @@ namespace Zilon.Core.World.NameGeneration
         /// <returns>List of strings of names</returns>
         public List<string> RandomNames(int number, int maxMiddleNames, Sex? sex, bool? initials)
         {
-            List<string> names = new List<string>(number);
+            var names = new List<string>(number);
 
             for (var i = 0; i < number; i++)
             {

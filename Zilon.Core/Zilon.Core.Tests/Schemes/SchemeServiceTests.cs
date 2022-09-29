@@ -28,7 +28,7 @@ namespace Zilon.Core.Tests.Schemes
             // ARRANGE
 
             // ACT
-            Action createService = () =>
+            var createService = () =>
             {
                 CreateSchemeService();
             };
@@ -76,7 +76,7 @@ namespace Zilon.Core.Tests.Schemes
             foreach (var schemeType in schemeTypes)
             {
                 // ReSharper disable once ConvertToLocalFunction
-                Action act = () =>
+                var act = () =>
                 {
                     var method = typeof(SchemeService).GetMethod(nameof(SchemeService.GetScheme));
                     if (method is null)
@@ -120,7 +120,7 @@ namespace Zilon.Core.Tests.Schemes
             foreach (var schemeType in schemeTypes)
             {
                 // ReSharper disable once ConvertToLocalFunction
-                Action act = () =>
+                var act = () =>
                 {
                     var method = typeof(SchemeService).GetMethod(nameof(ISchemeService.GetSchemes));
                     if (method == null)
@@ -171,7 +171,7 @@ namespace Zilon.Core.Tests.Schemes
 
         private static void CheckDropTableScheme(IDropTableScheme dropTableScheme, ISchemeService schemeService)
         {
-            Action act = () =>
+            var act = () =>
             {
                 foreach (var record in dropTableScheme.Records)
                 {

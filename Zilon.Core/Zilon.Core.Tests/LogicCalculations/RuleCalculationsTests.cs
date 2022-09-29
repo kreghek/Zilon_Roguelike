@@ -20,7 +20,7 @@ namespace Zilon.Core.LogicCalculations.Tests
             PersonRuleLevel level)
         {
             // ACT
-            Action act = () =>
+            var act = () =>
             {
                 var _ = RuleCalculations.CalcEfficientByRuleLevel(currentModifier, level);
             };

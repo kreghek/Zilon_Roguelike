@@ -39,7 +39,7 @@ namespace Zilon.Core.Tests.MapGenerators
             var sectorNode = CreateSectorNode(sectorScheme);
 
             // ACT
-            Func<Task> act = async () =>
+            var act = async () =>
             {
                 await generator.GenerateAsync(sectorNode).ConfigureAwait(false);
             };

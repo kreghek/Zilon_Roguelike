@@ -56,7 +56,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             var getActorTaskTask = taskSource.GetActorTaskAsync(actor, context);
             taskSource.DropIntentionWaiting();
 
-            Func<Task> act = async () =>
+            var act = async () =>
             {
                 var _ = await getActorTaskTask.ConfigureAwait(false);
             };

@@ -65,7 +65,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var graphMap = new SectorHexMap();
 
             // ACT
-            Action act = () =>
+            var act = () =>
             {
                 var rooms = generator.GenerateRoomsInGrid(20, 2, 20, Array.Empty<SectorTransition>());
                 var edgeHash = new HashSet<string>();
@@ -90,7 +90,7 @@ namespace Zilon.Core.Tests.MapGenerators.RoomStyle
             var graphMap = new SectorHexMap();
 
             // ACT
-            Action act = () =>
+            var act = () =>
             {
                 var rooms = generator.GenerateRoomsInGrid(20, 2, 20, Array.Empty<SectorTransition>());
                 var edgeHash = new HashSet<string>();

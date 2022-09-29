@@ -68,7 +68,7 @@ namespace Zilon.Core.Commands
             }
 
             if (act.Constrains?.EnergyCost > 0 && activeActorViewModel.Actor.Person.GetModule<ISurvivalModule>().Stats
-                .SingleOrDefault(x => x.Type == SurvivalStatType.Energy)?.Value < 0)
+                    .SingleOrDefault(x => x.Type == SurvivalStatType.Energy)?.Value < 0)
             {
                 return CanExecuteCheckResult.CreateFailed("The energy is critically low.");
             }

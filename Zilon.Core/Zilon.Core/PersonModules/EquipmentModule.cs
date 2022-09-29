@@ -31,18 +31,18 @@ namespace Zilon.Core.PersonModules
             }
 
             if (!EquipmentCarrierHelper.CheckDualCompability(
-                equipmentModule: this,
-                equipment,
-                slotIndex))
+                    equipmentModule: this,
+                    equipment,
+                    slotIndex))
             {
                 throw new InvalidOperationException(
                     $"Попытка экипировать предмет {equipment}, несовместимый с текущий экипировкой.");
             }
 
             if (!EquipmentCarrierHelper.CheckShieldCompability(
-                equipmentCarrier: this,
-                equipment,
-                slotIndex))
+                    equipmentCarrier: this,
+                    equipment,
+                    slotIndex))
             {
                 throw new InvalidOperationException("Попытка экипировать два щита.");
             }

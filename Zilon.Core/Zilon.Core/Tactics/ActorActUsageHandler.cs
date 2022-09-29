@@ -375,14 +375,13 @@ namespace Zilon.Core.Tactics
                     {
                         return 7;
                     }
-                    else if (apRankDiff <= -7)
+
+                    if (apRankDiff <= -7)
                     {
                         return 1;
                     }
-                    else
-                    {
-                        throw new InvalidOperationException();
-                    }
+
+                    throw new InvalidOperationException();
             }
         }
 

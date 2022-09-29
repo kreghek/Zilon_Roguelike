@@ -143,7 +143,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         {
             var currentLanguage = Thread.CurrentThread.CurrentUICulture;
             if (string.Equals(currentLanguage.TwoLetterISOLanguageName, "en",
-                StringComparison.InvariantCultureIgnoreCase))
+                    StringComparison.InvariantCultureIgnoreCase))
             {
                 var newCulture = CultureInfo.GetCultureInfo("ru-RU");
                 Thread.CurrentThread.CurrentCulture = newCulture;

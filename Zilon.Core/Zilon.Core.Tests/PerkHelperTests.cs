@@ -20,7 +20,7 @@ namespace Zilon.Core.Tests
             int primaryLevel, int subLevel)
         {
             // ACT
-            Action act = () =>
+            var act = () =>
             {
                 PerkHelper.ConvertLevelSubsToTotal(perkScheme, primaryLevel, subLevel);
             };
