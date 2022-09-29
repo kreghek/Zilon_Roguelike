@@ -1,9 +1,9 @@
-name: Code Linter
+name: Autoformat code
 
-on:
-  push:
-    branches:
-      - main
+on: push
+#  push:
+#    branches:
+#      - main
 
 jobs:
   # Set the job key. The key is displayed as the job name

@@ -75,13 +75,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{EE742614-C46F-4492-B596-A71ABE1D252B}"
 	ProjectSection(SolutionItems) = preProject
 		..\.github\workflows\bench.yml = ..\.github\workflows\bench.yml
+		..\.github\workflows\autoformat-code.yml = ..\.github\workflows\autoformat-code.yml
+		..\.github\workflows\autoformat-schemes.yml = ..\.github\workflows\autoformat-schemes.yml
 		..\.github\workflows\bot-tests.yml = ..\.github\workflows\bot-tests.yml
 		..\.github\workflows\build-client.yml = ..\.github\workflows\build-client.yml
 		..\.github\workflows\codeql-analysis.yml = ..\.github\workflows\codeql-analysis.yml
 		..\.github\workflows\coverage-codecov.yml = ..\.github\workflows\coverage-codecov.yml
 		..\.github\workflows\coverage-coveralls.yml = ..\.github\workflows\coverage-coveralls.yml
 		..\.github\workflows\coverage-report-generator.yml = ..\.github\workflows\coverage-report-generator.yml
-		..\.github\workflows\linter.yml = ..\.github\workflows\linter.yml
 		..\.github\workflows\sonar-cloud.yml = ..\.github\workflows\sonar-cloud.yml
 	EndProjectSection
 EndProject

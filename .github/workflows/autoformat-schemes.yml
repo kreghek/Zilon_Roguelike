@@ -1,6 +1,9 @@
-name: Format Json Schemes
+name: Autoformat Json Schemes
 
 on: push
+#  push:
+#    branches:
+#      - main
 
 jobs:
   # Set the job key. The key is displayed as the job name
@@ -14,7 +17,7 @@ jobs:
       working-directory : ./
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: git pull
       # to fix error with permissions
       # source: https://github.com/actions/virtual-environments/issues/599#issuecomment-605558600
