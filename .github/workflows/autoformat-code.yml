@@ -1,9 +1,9 @@
 name: Autoformat code
 
-on: push
-#  push:
-#    branches:
-#      - main
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   # Set the job key. The key is displayed as the job name
