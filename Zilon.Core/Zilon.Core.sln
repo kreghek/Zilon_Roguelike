@@ -7,11 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core", "Zilon.Core\Zi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Tests", "Zilon.Core.Tests\Zilon.Core.Tests.csproj", "{0192DB6B-EAE2-430A-BC52-148EEC878151}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deploy", "Deploy", "{F057B496-9EBB-49B9-8B3F-ECBF7B08CA18}"
-	ProjectSection(SolutionItems) = preProject
-		CreateAppSettings.ps1 = CreateAppSettings.ps1
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zilon.Core.Tests.Common", "Zilon.Core.Tests.Common\Zilon.Core.Tests.Common.csproj", "{53AF1D62-18D8-4252-B09A-1CC50724BE92}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A3B88E0E-94FE-44BE-B147-3A31C9A6F034}"
@@ -25,7 +20,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A77E8F14-A1DC-4EE6-8F92-577AA8BF9257}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		nunit3-console.psess = nunit3-console.psess
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Emulation", "Emulation", "{ED8E92CD-C200-4104-9FBF-50CDE07CB98C}"
