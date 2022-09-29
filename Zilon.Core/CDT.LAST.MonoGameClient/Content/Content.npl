@@ -1,0 +1,91 @@
+{
+	"root": "../../CDT.LAST.GameContent/Content/",
+	"references": [],
+	"content":
+	{
+		"textures":
+		{
+			"path": "Sprites/*.png",
+			"recursive": "True",
+			"action": "build",
+			"importer": "TextureImporter",
+			"processor": "TextureProcessor",
+			"processorParam":
+			{
+				"ColorKeyColor": "255,0,255,255",
+				"ColorKeyEnabled": "True",
+				"GenerateMipmaps": "False",
+				"PremultiplyAlpha": "True",
+				"ResizeToPowerOfTwo": "False",
+				"MakeSquare": "False",
+				"TextureFormat": "Color"
+			}
+		},
+		
+		"music":
+		{
+			"path": "Audio/Music/*.wav",
+			"recursive": "True",
+			"action": "build",
+			"importer": "WavImporter",
+			"processor": "SongProcessor",
+			"processorParam":
+			{
+				"Quality": "Low"
+			}
+		},
+		
+		"ui":
+        {
+            "path": "Audio/UiSounds/*.mp3",
+            "recursive": "True",
+            "action": "build",
+            "importer": "Mp3Importer",
+            "processor": "SoundEffectProcessor",
+            "processorParam":
+            {
+                "Quality": "Low"
+            }
+        },
+        
+        "game_object_sounds":
+        {
+            "path": "Audio/GameObjectSounds/*.mp3",
+            "recursive": "True",
+            "action": "build",
+            "importer": "Mp3Importer",
+            "processor": "SoundEffectProcessor",
+            "processorParam":
+            {
+                "Quality": "Low"
+            }
+        },
+		
+		"fonts":
+		{
+			"path": "Fonts/*.spritefont",
+			"recursive": "True",
+			"action": "build",
+			"importer": "FontDescriptionImporter",
+			"processor": "FontDescriptionProcessor",
+			"processorParam":
+			{
+				"PremultiplyAlpha": "True",
+				"TextureFormat": "Compressed"
+			}
+		},
+		
+		"effects":
+		{
+			"path": "Effects/*.fx",
+			"recursive": "True",
+			"action": "build",
+			"importer": "EffectImporter",
+			"processor": "EffectProcessor",
+			"processorParam":
+			{
+				"DebugMode": "Auto"
+			}
+		}
+	}
+}

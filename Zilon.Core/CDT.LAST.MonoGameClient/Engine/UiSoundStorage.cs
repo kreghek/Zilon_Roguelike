@@ -30,9 +30,9 @@ namespace CDT.LAST.MonoGameClient.Engine
 
         public void LoadContent(ContentManager contentManager)
         {
-            _buttonClickSoundEffect = contentManager.Load<SoundEffect>("Audio/ButtonClick");
-            _buttonHoverSoundEffect = contentManager.Load<SoundEffect>("Audio/ButtonHover");
-            _alertEffect = contentManager.Load<SoundEffect>("Audio/CriticalPersonConditionAlert");
+            _buttonClickSoundEffect = contentManager.Load<SoundEffect>("Audio/UiSounds/ButtonClick");
+            _buttonHoverSoundEffect = contentManager.Load<SoundEffect>("Audio/UiSounds/ButtonHover");
+            _alertEffect = contentManager.Load<SoundEffect>("Audio/UiSounds/CriticalPersonConditionAlert");
 
             ContentWasLoaded = true;
         }

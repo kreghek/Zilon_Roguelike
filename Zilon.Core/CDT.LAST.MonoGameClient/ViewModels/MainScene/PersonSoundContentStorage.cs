@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -193,31 +194,48 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         /// <inheritdoc />
         public void LoadContent(ContentManager contentManager)
         {
+            var soundEffectPath = Path.Combine("Audio", "GameObjectSounds");
+            
+            SoundEffect LoadSkillStartSoundEffect(string effectName)
+            {
+                return contentManager.Load<SoundEffect>(Path.Combine(soundEffectPath, effectName));
+            }
+            
+            SoundEffect LoadImpactSoundEffect(string effectName)
+            {
+                return contentManager.Load<SoundEffect>(Path.Combine(soundEffectPath, effectName));
+            }
+            
+            SoundEffect LoadDeathSoundEffect(string effectName)
+            {
+                return contentManager.Load<SoundEffect>(Path.Combine(soundEffectPath, "Deaths", effectName));
+            }
+            
             _deathDict = new Dictionary<string, SoundEffect>
             {
-                ["human"] = contentManager.Load<SoundEffect>("Audio/Deaths/HumanDeath"),
-                ["dog"] = contentManager.Load<SoundEffect>("Audio/Deaths/DogDeath"),
-                ["pig"] = contentManager.Load<SoundEffect>("Audio/Deaths/PigDeath"),
-                ["insect"] = contentManager.Load<SoundEffect>("Audio/Deaths/InsectDeath"),
-                ["skeleton"] = contentManager.Load<SoundEffect>("Audio/Deaths/SkeletonDeath")
+                ["human"] = LoadDeathSoundEffect("HumanDeath"),
+                ["dog"] = LoadDeathSoundEffect("DogDeath"),
+                ["pig"] = LoadDeathSoundEffect("PigDeath"),
+                ["insect"] = LoadDeathSoundEffect("InsectDeath"),
+                ["skeleton"] = LoadDeathSoundEffect("SkeletonDeath")
             };
 
             _impactDict = new Dictionary<string, SoundEffect>
             {
-                ["human"] = contentManager.Load<SoundEffect>("Audio/HumanImpact"),
-                ["monster"] = contentManager.Load<SoundEffect>("Audio/HunterImpact")
+                ["human"] = LoadImpactSoundEffect("HumanImpact"),
+                ["monster"] = LoadImpactSoundEffect("HunterImpact")
             };
 
             _swordHitEffect = contentManager.Load<SoundEffect>("Audio/SwordHitEffect");
 
             _actStartDict = new Dictionary<string, SoundEffect>
             {
-                ["bite"] = contentManager.Load<SoundEffect>("Audio/HunterHitEffect"),
-                ["pig-bite"] = contentManager.Load<SoundEffect>("Audio/PigHitEffect"),
-                ["punch"] = contentManager.Load<SoundEffect>("Audio/PunchStartHitEffect"),
-                ["slash"] = contentManager.Load<SoundEffect>("Audio/SwordStartHitEffect"),
-                ["pierce"] = contentManager.Load<SoundEffect>("Audio/SpearPierceEffect"),
-                ["swing"] = contentManager.Load<SoundEffect>("Audio/CombatStaffSwing")
+                ["bite"] = LoadSkillStartSoundEffect("HunterHitEffect"),
+                ["pig-bite"] = LoadSkillStartSoundEffect("PigHitEffect"),
+                ["punch"] = LoadSkillStartSoundEffect("PunchStartHitEffect"),
+                ["slash"] = LoadSkillStartSoundEffect("SwordStartHitEffect"),
+                ["pierce"] = LoadSkillStartSoundEffect("SpearPierceEffect"),
+                ["swing"] = LoadSkillStartSoundEffect("CombatStaffSwing")
             };
             _defaultStartHitEffect = _actStartDict["punch"];
 

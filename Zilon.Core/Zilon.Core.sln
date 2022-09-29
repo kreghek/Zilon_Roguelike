@@ -84,6 +84,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{EE7426
 		..\.github\workflows\sonar-cloud.yml = ..\.github\workflows\sonar-cloud.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDT.LAST.GameContent", "CDT.LAST.GameContent\CDT.LAST.GameContent.csproj", "{011587ED-63CA-4087-ABA7-C2A27A09D892}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -186,6 +188,10 @@ Global
 		{F77D9810-02C7-45DC-8A80-CC21B625742C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F77D9810-02C7-45DC-8A80-CC21B625742C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F77D9810-02C7-45DC-8A80-CC21B625742C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{011587ED-63CA-4087-ABA7-C2A27A09D892}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{011587ED-63CA-4087-ABA7-C2A27A09D892}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{011587ED-63CA-4087-ABA7-C2A27A09D892}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{011587ED-63CA-4087-ABA7-C2A27A09D892}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
