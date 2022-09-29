@@ -30,9 +30,9 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Setup .NET 6
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 6.0.x
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
 
     - name: Run ${{ matrix.test_suite }} in Release and collect coverage
       env:
@@ -50,37 +50,3 @@ jobs:
         path-to-lcov: ${{env.TEST_RESULT_PATH}}coverage.info
         parallel: true
         flag-name: ${{ matrix.test_suite }}
-
-  test_debug:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        test_suite:
-          - Zilon.Core.UnitTests
-          - Zilon.Core.FunctionalTests
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '5.0.100'
-    - name: Run ${{ matrix.test_suite }} in Debug
-      env:
-        ZILON_LIV_SCHEME_CATALOG: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes
-        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-        DOTNET_CLI_TELEMETRY_OUTPUT: 1
-      run: |
-        cd ./Zilon.Core
-        dotnet test ${{ matrix.test_suite }}.sln --configuration Debug
-
-  finish:
-    needs: test_release
-    runs-on: ubuntu-latest
-    steps:
-    - name: Coveralls Finished
-      uses: coverallsapp/github-action@v1.1.2
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        parallel-finished: true

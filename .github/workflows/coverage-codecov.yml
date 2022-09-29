@@ -27,12 +27,12 @@ jobs:
           - Zilon.Core.FunctionalTests
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Setup .NET 6
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 6.0.x
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
 
     - name: Run ${{ matrix.test_suite }} in Release and collect coverage
       env:
@@ -51,27 +51,3 @@ jobs:
         working-directory: ${{env.TEST_RESULT_PATH}}
         files: ./coverage.cobertura.xml
         fail_ci_if_error: true
-
-  test_debug:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        test_suite:
-          - Zilon.Core.UnitTests
-          - Zilon.Core.FunctionalTests
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '5.0.100'
-    - name: Run ${{ matrix.test_suite }} in Debug
-      env:
-        ZILON_LIV_SCHEME_CATALOG: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes
-        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-        DOTNET_CLI_TELEMETRY_OUTPUT: 1
-      run: |
-        cd ./Zilon.Core
-        dotnet test ${{ matrix.test_suite }}.sln --configuration Debug
