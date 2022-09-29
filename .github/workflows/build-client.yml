@@ -84,8 +84,8 @@ jobs:
             ${{ github.sha }}
           write-mode: overwrite
 
-# TODO upload artifacts only on manual trigger
-#      - uses: actions/upload-artifact@v3
-#        with:
-#          name: ${{ matrix.project }}-${{ matrix.configuration }}-${{ matrix.runtime }}.${{ env.build_version }}
-#          path: bin
+      - uses: actions/upload-artifact@v3
+        if: env.GITHUB_EVENT_NAME == workflow_dispatch
+        with:
+          name: ${{ matrix.project }}-${{ matrix.configuration }}-${{ matrix.runtime }}.${{ env.build_version }}
+          path: bin
