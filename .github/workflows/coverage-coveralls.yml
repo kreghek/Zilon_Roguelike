@@ -44,9 +44,19 @@ jobs:
         dotnet test ${{ matrix.test_suite }}.sln --configuration Release /p:CollectCoverage=true /p:CoverletOutput=${{env.TEST_RESULT_PATH}} /p:CoverletOutputFormat=\"lcov,json\" /p:MergeWith="${{env.TEST_RESULT_PATH}}coverage.json" /p:SkipAutoProps=true /p:ExcludeByAttribute=\"Obsolete,GeneratedCode,CompilerGenerated\" /p:ExcludeByFile="**/Zilon.Core.Tests.Common/*.cs" /maxcpucount:1
 
     - name: Publish coverage report to coveralls.io
-      uses: coverallsapp/github-action@v1
+      uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: ${{env.TEST_RESULT_PATH}}coverage.info
         parallel: true
         flag-name: ${{ matrix.test_suite }}
+  
+  finish:
+    needs: test_release
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        parallel-finished: true
