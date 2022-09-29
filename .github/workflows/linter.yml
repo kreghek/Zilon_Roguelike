@@ -21,12 +21,16 @@ jobs:
         - Zilon.Core
       fail-fast: false
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+
       - run: git pull
+
       - run: dotnet tool install --global dotnet-format --version 5.0.211103
+
       - name: Format codebase ${{ matrix.solution }}
         run: dotnet-format Zilon.Core/${{ matrix.solution }}.sln --fix-whitespace --fix-style --verbosity detailed
         working-directory: ${{env.working-directory}}
+
       - name: Commit changes
         uses: EndBug/add-and-commit@v5
         with:
@@ -47,17 +51,22 @@ jobs:
     needs: [dotnet-format-core-lint]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+
       - run: git pull
+
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: '5.0.100'
+          dotnet-version: '6.0.x'
+
       - name: Setup ReSharper Command Line Tools
-        run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2021.1.2
+        run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2022.2.3
+
       - name: Clean up codebase via ReSharper Command Line Tools
         run: jb cleanupcode --profile="Full Cleanup" Zilon.Core.sln
         working-directory: ${{env.working-directory}}
+
       - name: Commit changes
         uses: EndBug/add-and-commit@v5
         with:

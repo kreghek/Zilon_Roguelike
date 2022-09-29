@@ -30,12 +30,12 @@ jobs:
           - Html
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Setup .NET 6
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 6.0.x
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
 
     - name: Run ${{ matrix.test_suite }} in Release and collect coverage
       env:
@@ -68,11 +68,13 @@ jobs:
           - Html
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+    - uses: actions/checkout@v3
+
+    - name: Setup .NET 6
+      uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '5.0.100'
+        dotnet-version: 6.0.x
+
     - name: Run ${{ matrix.test_suite }} in Debug
       env:
         ZILON_LIV_SCHEME_CATALOG: /home/runner/work/Zilon_Roguelike/Zilon_Roguelike/Zilon.Client/Assets/Resources/Schemes

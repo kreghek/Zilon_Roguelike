@@ -81,10 +81,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{EE7426
 		..\.github\workflows\coverage-codecov.yml = ..\.github\workflows\coverage-codecov.yml
 		..\.github\workflows\coverage-coveralls.yml = ..\.github\workflows\coverage-coveralls.yml
 		..\.github\workflows\coverage-report-generator.yml = ..\.github\workflows\coverage-report-generator.yml
+		..\.github\workflows\linter.yml = ..\.github\workflows\linter.yml
 		..\.github\workflows\sonar-cloud.yml = ..\.github\workflows\sonar-cloud.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDT.LAST.GameContent", "CDT.LAST.GameContent\CDT.LAST.GameContent.csproj", "{011587ED-63CA-4087-ABA7-C2A27A09D892}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDT.LAST.GameContent", "CDT.LAST.GameContent\CDT.LAST.GameContent.csproj", "{011587ED-63CA-4087-ABA7-C2A27A09D892}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
