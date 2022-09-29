@@ -18,14 +18,14 @@ namespace Zilon.Core.Persons
             return !PerkHelper.HasNextLevel(perk.Scheme, currentLevel);
         }
 
-        public void ApplyProgress(IJobProgress progress, IEvolutionModule evolutionData)
+        public void ApplyProgress(IJobProgress progress, IEvolutionModule? evolutionData)
         {
             if (progress is null)
             {
                 throw new ArgumentNullException(nameof(progress));
             }
 
-            if (evolutionData == null)
+            if (evolutionData is null)
             {
                 return;
             }
