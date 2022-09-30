@@ -19,6 +19,8 @@ jobs:
   build:
     name: Build client ${{ matrix.project }} ${{ matrix.configuration }} ${{ matrix.runtime }}
     runs-on: ubuntu-latest
+    env:
+      build_version : ver.2.5.9.${{ github.run_number }}
     strategy:
       matrix:
         project:
@@ -78,11 +80,12 @@ jobs:
         with:
           path: bin/version.txt
           contents: |
-            ver.2.5.8.${{ github.run_number }}
+            ${{ env.build_version }}
             ${{ github.sha }}
           write-mode: overwrite
 
       - uses: actions/upload-artifact@v3
+        if: env.GITHUB_EVENT_NAME == workflow_dispatch
         with:
-          name: ${{ matrix.project }}-${{ matrix.configuration }}-${{ matrix.runtime }}
+          name: ${{ matrix.project }}-${{ matrix.configuration }}-${{ matrix.runtime }}.${{ env.build_version }}
           path: bin

@@ -52,7 +52,7 @@ namespace Zilon.Core.Tests.Persons
             var carrier = new EquipmentModule(slotSchemes);
 
             // ACT
-            Action act = () =>
+            var act = () =>
             {
                 carrier[ARMOR_SLOT] = armorEquipment;
             };
@@ -153,7 +153,7 @@ namespace Zilon.Core.Tests.Persons
 
             // ACT
             carrier[CHANGED_SLOT] = pistol1;
-            Action act = () =>
+            var act = () =>
             {
                 carrier[CHANGED_SLOT] = pistol2;
             };
@@ -216,7 +216,7 @@ namespace Zilon.Core.Tests.Persons
             var carrier = new EquipmentModule(slotSchemes);
 
             // ACT
-            Action act = () =>
+            var act = () =>
             {
                 carrier[PISTOL_SLOT1] = pistolEquipment1;
                 carrier[PISTOL_SLOT2] = pistolEquipment2;
@@ -278,7 +278,7 @@ namespace Zilon.Core.Tests.Persons
             var carrier = new EquipmentModule(slotSchemes);
 
             // ACT
-            Action act = () =>
+            var act = () =>
             {
                 carrier[SHIELD_SLOT1] = shieldEquipment1;
                 carrier[SHIELD_SLOT2] = shieldEquipment2;
@@ -336,7 +336,7 @@ namespace Zilon.Core.Tests.Persons
             var carrier = new EquipmentModule(slotSchemes);
 
             // ACT
-            Action act = () =>
+            var act = () =>
             {
                 carrier[SWORD_SLOT1] = swordEquipment1;
                 carrier[SWORD_SLOT2] = swordEquipment2;
@@ -406,7 +406,7 @@ namespace Zilon.Core.Tests.Persons
             var carrier = new EquipmentModule(slotSchemes);
 
             // ACT
-            Action act = () =>
+            var act = () =>
             {
                 carrier[swordSlot1] = pistolEquipment1;
                 carrier[swordSlot2] = sheildEquipment2;
@@ -477,7 +477,7 @@ namespace Zilon.Core.Tests.Persons
             var carrier = new EquipmentModule(slotSchemes);
 
             // ACT
-            Action act = () =>
+            var act = () =>
             {
                 carrier[swordSlot1] = pistolEquipment1;
                 carrier[swordSlot2] = sheildEquipment2;
@@ -544,7 +544,7 @@ namespace Zilon.Core.Tests.Persons
                 var carrier = new EquipmentModule(slotSchemes);
 
                 // ACT
-                Action act = () =>
+                var act = () =>
                 {
                     carrier[slotIndex1] = equipment1;
                     carrier[slotIndex2] = equipment2;
@@ -622,7 +622,7 @@ namespace Zilon.Core.Tests.Persons
             var carrier = new EquipmentModule(slotSchemes);
 
             // ACT
-            Action act = () =>
+            var act = () =>
             {
                 carrier[SWORD_SLOT1] = swordEquipment1;
                 carrier[SWORD_SLOT2] = sheildEquipment2;

@@ -77,7 +77,7 @@ namespace Zilon.Core.Tests.Tactics.Behaviour
             // Создаём саму команду
             _attackTask = new AttackTask(_actor, taskContext, target, tacticalAct, actService);
 
-            Action act = () =>
+            var act = () =>
             {
                 // ACT
                 _attackTask.Execute();

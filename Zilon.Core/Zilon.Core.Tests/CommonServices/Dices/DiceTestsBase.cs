@@ -29,7 +29,7 @@ namespace Zilon.Core.Tests.CommonServices.Dices
 
             // ACT
             var seq = new int[count];
-            Action act = () =>
+            var act = () =>
             {
                 for (var i = 0; i < seq.Length; i++)
                 {

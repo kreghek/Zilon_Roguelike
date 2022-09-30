@@ -65,47 +65,56 @@ namespace CDT.LAST.MonoGameClient.Screens
             var font = Game.Content.Load<SpriteFont>("Fonts/Main");
             var titleFont = Game.Content.Load<SpriteFont>("Fonts/Scores");
 
+            DrawLogo(titleFont: titleFont, demoMarkerFont: font);
+            
+            DrawTitleMenu(font);
+
+            _spriteBatch.End();
+        }
+
+        private void DrawTitleMenu(SpriteFont font)
+        {
             const int BUTTON_WIDTH = 100;
             const int BUTTON_HEIGHT = 20;
-
-            var logoSize = titleFont.MeasureString(TITLETEXT);
-
-            _spriteBatch.DrawString(titleFont, TITLETEXT,
-                new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - logoSize.X / 2, 100), Color.White);
-            _spriteBatch.DrawString(font, "(demo)",
-                new Vector2(Game.GraphicsDevice.Viewport.Bounds.Center.X - logoSize.X / 2 + logoSize.X, 100),
-                Color.Wheat);
+            
+            const int BUTTON_CENTER_X = BUTTON_WIDTH / 2;
+            
+            var buttonPositionX = Game.GraphicsDevice.Viewport.Bounds.Center.X - BUTTON_CENTER_X;
 
             _startButton.Title = UiResources.StartGameButtonTitle;
-            _startButton.Rect = new Rectangle(Game.GraphicsDevice.Viewport.Bounds.Center.X - BUTTON_WIDTH / 2, 150,
-                BUTTON_WIDTH, BUTTON_HEIGHT);
+            _startButton.Rect = new Rectangle(buttonPositionX, 150, BUTTON_WIDTH, BUTTON_HEIGHT);
             _startButton.Draw(_spriteBatch);
 
             _switchLanguageButton.Title = UiResources.SwitchLanguagebuttonTitle;
-            _switchLanguageButton.Rect = new Rectangle(Game.GraphicsDevice.Viewport.Bounds.Center.X - BUTTON_WIDTH / 2,
-                200, BUTTON_WIDTH, BUTTON_HEIGHT);
+            _switchLanguageButton.Rect = new Rectangle(buttonPositionX, 200, BUTTON_WIDTH, BUTTON_HEIGHT);
             _switchLanguageButton.Draw(_spriteBatch);
 
             _spriteBatch.DrawString(font, Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName,
                 new Vector2(_switchLanguageButton.Rect.Right + 5, _switchLanguageButton.Rect.Top), Color.White);
 
             _switchResolutionButton.Title = UiResources.SwitchResolutionButtonTitle;
-            _switchResolutionButton.Rect =
-                new Rectangle(Game.GraphicsDevice.Viewport.Bounds.Center.X - BUTTON_WIDTH / 2, 250, BUTTON_WIDTH,
-                    BUTTON_HEIGHT);
+            _switchResolutionButton.Rect = new Rectangle(buttonPositionX, 250, BUTTON_WIDTH, BUTTON_HEIGHT);
             _switchResolutionButton.Draw(_spriteBatch);
 
             _leaderBoardButton.Title = UiResources.LeaderBoardButtonTitle;
-            _leaderBoardButton.Rect = new Rectangle(Game.GraphicsDevice.Viewport.Bounds.Center.X - BUTTON_WIDTH / 2,
-                300, BUTTON_WIDTH, BUTTON_HEIGHT);
+            _leaderBoardButton.Rect = new Rectangle(buttonPositionX, 300, BUTTON_WIDTH, BUTTON_HEIGHT);
             _leaderBoardButton.Draw(_spriteBatch);
 
             var graphicsManager = ((LivGame)Game).Graphics;
             _spriteBatch.DrawString(font,
                 $"{graphicsManager.PreferredBackBufferWidth} x {graphicsManager.PreferredBackBufferHeight}",
                 new Vector2(_switchResolutionButton.Rect.Right + 5, _switchResolutionButton.Rect.Top), Color.White);
+        }
 
-            _spriteBatch.End();
+        private void DrawLogo(SpriteFont titleFont, SpriteFont demoMarkerFont)
+        {
+            var logoSize = titleFont.MeasureString(TITLETEXT);
+
+            var logoCenterX = logoSize.X / 2;
+            var logoPosition = Game.GraphicsDevice.Viewport.Bounds.Center.X - logoCenterX;
+
+            _spriteBatch.DrawString(titleFont, TITLETEXT, new Vector2(logoPosition, 100), Color.White);
+            _spriteBatch.DrawString(demoMarkerFont, "(demo)", new Vector2(logoPosition + logoSize.X, 100), Color.Wheat);
         }
 
         public override void Update(GameTime gameTime)
@@ -143,7 +152,7 @@ namespace CDT.LAST.MonoGameClient.Screens
         {
             var currentLanguage = Thread.CurrentThread.CurrentUICulture;
             if (string.Equals(currentLanguage.TwoLetterISOLanguageName, "en",
-                StringComparison.InvariantCultureIgnoreCase))
+                    StringComparison.InvariantCultureIgnoreCase))
             {
                 var newCulture = CultureInfo.GetCultureInfo("ru-RU");
                 Thread.CurrentThread.CurrentCulture = newCulture;

@@ -1,4 +1,4 @@
-name: Code Linter
+name: Autoformat code
 
 on:
   push:

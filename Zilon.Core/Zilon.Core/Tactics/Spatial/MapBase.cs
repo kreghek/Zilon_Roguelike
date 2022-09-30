@@ -38,7 +38,7 @@ namespace Zilon.Core.Tactics.Spatial
 
         private bool IsNodeAvailableForActor(IGraphNode targetNode, IActor actor)
         {
-            if (!_nodeBlockers.TryGetValue(targetNode, out IList<IPassMapBlocker> blockers))
+            if (!_nodeBlockers.TryGetValue(targetNode, out var blockers))
             {
                 return true;
             }
@@ -133,7 +133,7 @@ namespace Zilon.Core.Tactics.Spatial
         /// <param name="blocker">Блокер, который занимает узел.</param>
         public void HoldNode(IGraphNode node, IPassMapBlocker blocker)
         {
-            if (!_nodeBlockers.TryGetValue(node, out IList<IPassMapBlocker> blockers))
+            if (!_nodeBlockers.TryGetValue(node, out var blockers))
             {
                 blockers = new List<IPassMapBlocker>(1);
                 _nodeBlockers.Add(node, blockers);

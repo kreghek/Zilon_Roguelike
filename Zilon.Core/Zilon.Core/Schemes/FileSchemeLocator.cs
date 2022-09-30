@@ -60,7 +60,7 @@ namespace Zilon.Core.Schemes
             {
                 var sid = Path.GetFileNameWithoutExtension(filePath);
                 var serialized = File.ReadAllText(filePath);
-                string fileFolder = GetRelativePath(path, filePath, sid);
+                var fileFolder = GetRelativePath(path, filePath, sid);
 
                 var schemeFile = new SchemeFile(serialized, fileFolder, sid);
 

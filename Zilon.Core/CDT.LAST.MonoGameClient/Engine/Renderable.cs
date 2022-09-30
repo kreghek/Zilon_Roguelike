@@ -12,14 +12,14 @@ namespace CDT.LAST.MonoGameClient.Engine
     internal abstract class Renderable
     {
         /// <summary>
-        /// Local transformations (color, position, rotation..).
-        /// </summary>
-        private readonly SpriteTransformation _localTrans;
-
-        /// <summary>
         /// Child entities.
         /// </summary>
         private readonly IList<Renderable> _children;
+
+        /// <summary>
+        /// Local transformations (color, position, rotation..).
+        /// </summary>
+        private readonly SpriteTransformation _localTrans;
 
         // currently calculated z-index, including parents.
         private float _finalZindex;

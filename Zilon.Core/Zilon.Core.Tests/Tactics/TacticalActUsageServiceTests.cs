@@ -205,7 +205,7 @@ namespace Zilon.Core.Tests.Tactics
 
             // ACT
 
-            Action act = () =>
+            var act = () =>
             {
                 actUsageService.UseOn(actor, actTargetInfo, usedActs, sector);
             };

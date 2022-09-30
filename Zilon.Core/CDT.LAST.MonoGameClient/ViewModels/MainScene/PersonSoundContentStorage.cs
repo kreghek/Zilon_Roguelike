@@ -195,22 +195,22 @@ namespace CDT.LAST.MonoGameClient.ViewModels.MainScene
         public void LoadContent(ContentManager contentManager)
         {
             var soundEffectPath = Path.Combine("Audio", "GameObjectSounds");
-            
+
             SoundEffect LoadSkillStartSoundEffect(string effectName)
             {
                 return contentManager.Load<SoundEffect>(Path.Combine(soundEffectPath, effectName));
             }
-            
+
             SoundEffect LoadImpactSoundEffect(string effectName)
             {
                 return contentManager.Load<SoundEffect>(Path.Combine(soundEffectPath, effectName));
             }
-            
+
             SoundEffect LoadDeathSoundEffect(string effectName)
             {
                 return contentManager.Load<SoundEffect>(Path.Combine(soundEffectPath, "Deaths", effectName));
             }
-            
+
             _deathDict = new Dictionary<string, SoundEffect>
             {
                 ["human"] = LoadDeathSoundEffect("HumanDeath"),

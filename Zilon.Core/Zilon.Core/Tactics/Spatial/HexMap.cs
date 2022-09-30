@@ -193,7 +193,7 @@ namespace Zilon.Core.Tactics.Spatial
             const int CELLWIDTH = 4;
 
             var matrix = _segmentDict.First().Value;
-            using StreamWriter file = new StreamWriter(fileName);
+            using var file = new StreamWriter(fileName);
 
             file.Write(" ".PadLeft(CELLWIDTH, ' '));
             for (var x = 0; x < _segmentSize; x++)
