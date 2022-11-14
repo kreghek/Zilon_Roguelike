@@ -5,28 +5,3 @@ updates:
   schedule:
     interval: weekly
   open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: Microsoft.CodeAnalysis.Analyzers
-    versions:
-    - "> 2.6.1"
-  - dependency-name: Microsoft.CodeAnalysis.Common
-    versions:
-    - "> 2.9.0"
-  - dependency-name: Microsoft.CodeAnalysis.CSharp
-    versions:
-    - "> 2.9.0"
-  - dependency-name: Microsoft.CodeAnalysis.VersionCheckAnalyzer
-    versions:
-    - "> 2.9.3"
-  - dependency-name: Microsoft.DotNet.PlatformAbstractions
-    versions:
-    - "> 2.1.0"
-  - dependency-name: Microsoft.NetFramework.Analyzers
-    versions:
-    - "> 2.9.3"
-  - dependency-name: System.Management
-    versions:
-    - "> 4.5.0"
-  - dependency-name: System.Runtime.Extensions
-    versions:
-    - "> 4.3.0"
