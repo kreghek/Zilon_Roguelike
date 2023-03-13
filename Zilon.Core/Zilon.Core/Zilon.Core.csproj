@@ -23,7 +23,7 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Newtonsoft.Json">
-            <Version>13.0.2</Version>
+            <Version>13.0.3</Version>
         </PackageReference>
         <PackageReference Include="System.Drawing.Common">
             <Version>6.0.0</Version>
